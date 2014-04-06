@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ciubex="http://schemas.android.com/apk/res/ro.ciubex.dscautorename" >
+
+    <PreferenceCategory android:title="@string/general_settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="enableAutoRename"
+            android:summary="@string/enable_desc"
+            android:title="@string/enable_title" />
+
+        <ro.ciubex.dscautorename.preference.SeekBarPreference
+            android:defaultValue="3"
+            android:key="renameServiceStartDelay"
+            android:summary="@string/rename_service_start_delay_desc"
+            android:title="@string/rename_service_start_delay_title"
+            ciubex:maxValue="30"
+            ciubex:minValue="2"
+            ciubex:units="@string/seconds_unit" />
+
+        <EditTextPreference
+            android:defaultValue="@string/original_image_prefix"
+            android:key="originalImagePrefix"
+            android:summary="@string/original_image_prefix_desc"
+            android:title="@string/original_image_prefix_title" />
+        <EditTextPreference
+            android:defaultValue="@string/file_name_format"
+            android:key="fileNameFormat"
+            android:summary="@string/file_name_format_desc"
+            android:title="@string/file_name_format_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/other_settings" >
+        <Preference
+            android:key="fileRenameCount"
+            android:persistent="false"
+            android:summary="@string/file_rename_count_desc"
+            android:title="@string/file_rename_count_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/about_section" >
+        <Preference
+            android:key="buildVersion"
+            android:persistent="false"
+            android:summary="@string/build_version_desc"
+            android:title="@string/build_version_title" />
+        <Preference
+            android:key="licensePref"
+            android:persistent="false"
+            android:summary="@string/license_desc"
+            android:title="@string/license_title" />
+        <Preference
+            android:key="donatePref"
+            android:persistent="false"
+            android:summary="@string/donate_desc"
+            android:title="@string/donate_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

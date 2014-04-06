@@ -1,0 +1,49 @@
+<resources>
+
+    <!-- Strings related to Settings -->
+    <string name="general_settings">General settings</string>
+    <string name="enable_title">Enable auto rename service.</string>
+    <string name="enable_desc">By checking this option, images are automatically renamed after being taken.</string>
+    <string name="rename_service_start_delay_title">Rename service start delay</string>
+    <string name="rename_service_start_delay_desc">Start rename service after</string>
+    <string name="seconds_unit">seconds</string>
+    <string name="original_image_prefix">DSC_</string>
+    <string name="original_image_prefix_title">The original image name prefix.</string>
+    <string name="original_image_prefix_desc">Change original image name prefix: %1$s\n(e.g. %1$s001.JPG)</string>
+    <string name="file_name_format_title">Renamed file name format.</string>
+    <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
+    <string name="file_name_format">yyyyMMdd_HHmmss</string>
+    <string name="other_settings">Other settings</string>
+    <string name="file_rename_count_title">Number of renamed files: %d</string>
+    <string name="file_rename_count_desc">Touch to reset the number of renamed files.</string>
+    <string name="file_rename_count_confirmation">Do you want to reset the renamed files counter?</string>
+    <string name="ok">OK</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <!-- About -->
+    <string name="about_section">About</string>
+    <string name="build_version_title">Build version</string>
+    <string name="build_version_desc">1</string>
+    <string name="license_title">Open source licenses</string>
+    <string name="license_desc">License details for open source software</string>
+    <string name="donate_title">Donate</string>
+    <string name="donate_desc">Please make a donation if you appreciate this application.</string>
+    <string name="donate_confirmation">If you appreciate this application, please do a donation!\nPressing YES button, you will be sent using your default browser to a PayPal donnation page.\nThank you for using this application!</string>
+    <string name="donate_url"><Data><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=claudiu_ciobotariu%40yahoo%2ecom&lc=RO&item_name=Ciubex&item_number=DSCAutoRename%20Donation&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted]]></Data></string>
+    <string name="about_text"><Data>
+<![CDATA[This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/><br/>
+The file rename format use Java date and time format parameters:<br/>
+- yyyy for years;<br/>
+- MM for month;<br/>
+- dd for day;<br/>
+- HH for hour;<br/>
+- mm for minutes;<br/>
+- ss for seconds;<br/>
+- SSS for miliseconds.<br/>
+See more format information on: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/><br/>
+The rename service, if is enabled, automatically is triggered when the image file is saved on the device media storage.<br/><br/>
+The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.
+]]>
+</Data></string>
+
+</resources>
