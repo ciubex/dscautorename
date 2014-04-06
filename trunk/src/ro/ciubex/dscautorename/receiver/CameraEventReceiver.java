@@ -50,16 +50,17 @@ public class CameraEventReceiver extends BroadcastReceiver {
 			mApplication = (DSCApplication) appCtx;
 		}
 		if (mApplication != null && mApplication.isAutoRenameEnabled()) {
-			if (!mApplication.isRenameFileAsyncTaskRunning()) {
-				mApplication.setRenameFileAsyncTaskRunning(true);
-				// wait for 3 seconds to run the thread.
+			if (!mApplication.isRenameFileTaskBusy()) {
+				mApplication.setRenameFileTaskBusy(true);
+				long delayMillis = mApplication.getRenameServiceStartDelay() * 1000;
+				// wait couple of seconds to run the thread.
 				new Handler().postDelayed(new Runnable() {
 
 					@Override
 					public void run() {
 						new RenameFileAsyncTask(mApplication).execute();
 					}
-				}, 3000);
+				}, delayMillis);
 			}
 		}
 	}

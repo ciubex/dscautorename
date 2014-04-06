@@ -40,13 +40,25 @@ import android.util.Log;
  * @author Claudiu Ciobotariu
  * 
  */
-public class RenameFileAsyncTask extends AsyncTask<Void, Void, Void> {
+public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private final String TAG = getClass().getName();
 	private DSCApplication mApplication;
 	private ContentResolver mContentResolver;
+	private Listener mListener;
+
+	public interface Listener {
+		public void onTaskStarted();
+
+		public void onTaskFinished(int count);
+	}
 
 	public RenameFileAsyncTask(DSCApplication application) {
+		this(application, null);
+	}
+
+	public RenameFileAsyncTask(DSCApplication application, Listener listener) {
 		this.mApplication = application;
+		this.mListener = listener;
 	}
 
 	/**
@@ -57,12 +69,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Void> {
 	 * @return Is returned a void value.
 	 */
 	@Override
-	protected Void doInBackground(Void... params) {
+	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
+		int count = 0;
 		if (mContentResolver != null) {
-			int count = 0;
 			List<DSCImage> list = getImageList();
-			while (!list.isEmpty()) {
+			while (!list.isEmpty() && !mApplication.isRenameFileTaskCanceled()) {
 				for (DSCImage dscImage : list) {
 					String oldFileName = dscImage.getmData();
 					if (oldFileName != null) {
@@ -81,12 +93,40 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Void> {
 				}
 				list = getImageList();
 			}
-			mApplication.setRenameFileAsyncTaskRunning(false);
+			mApplication.setRenameFileTaskBusy(false);
 			if (count > 0) {
 				mApplication.increaseFileRenameCount(count);
 			}
 		}
-		return null;
+		return count;
+	}
+
+	/**
+	 * Runs on the UI thread before doInBackground(Params...).
+	 */
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		if (mListener != null) {
+			mListener.onTaskStarted();
+		}
+	}
+
+	/**
+	 * Runs on the UI thread after doInBackground(Params...). The specified
+	 * result is the value returned by doInBackground(Params...).
+	 * 
+	 * @param result
+	 *            The result of the operation computed by
+	 *            doInBackground(Params...).
+	 */
+	@Override
+	protected void onPostExecute(Integer count) {
+		super.onPostExecute(count);
+		if (mListener != null) {
+			mListener.onTaskFinished(count);
+		}
+		mApplication.setRenameFileTaskCanceled(false);
 	}
 
 	/**
