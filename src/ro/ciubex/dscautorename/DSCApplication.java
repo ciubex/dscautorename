@@ -36,6 +36,8 @@ import android.preference.PreferenceManager;
 public class DSCApplication extends Application {
 	private Locale mLocale;
 	private SharedPreferences mSharedPreferences;
+	private static boolean mRenameFileTaskCanceled;
+	private static boolean mRenameFileTaskBusy;
 
 	/**
 	 * Called when the application is starting, before any activity, service, or
@@ -105,8 +107,8 @@ public class DSCApplication extends Application {
 	 * 
 	 * @return True if the rename file async task is running.
 	 */
-	public boolean isRenameFileAsyncTaskRunning() {
-		return mSharedPreferences.getBoolean("renameFileAsyncTaskState", false);
+	public boolean isRenameFileTaskBusy() {
+		return mRenameFileTaskBusy;
 	}
 
 	/**
@@ -115,8 +117,27 @@ public class DSCApplication extends Application {
 	 * @param flag
 	 *            The rename file async task running state.
 	 */
-	public void setRenameFileAsyncTaskRunning(boolean flag) {
-		saveBooleanValue("renameFileAsyncTaskState", flag);
+	public void setRenameFileTaskBusy(boolean flag) {
+		DSCApplication.mRenameFileTaskBusy = flag;
+	}
+
+	/**
+	 * Obtain the rename file task cancel boolean value.
+	 * 
+	 * @return The rename file task cancel boolean value.
+	 */
+	public boolean isRenameFileTaskCanceled() {
+		return mRenameFileTaskCanceled;
+	}
+
+	/**
+	 * Set the rename file task cancel flag.
+	 * 
+	 * @param flag
+	 *            The rename file task cancel boolean value.
+	 */
+	public void setRenameFileTaskCanceled(boolean flag) {
+		DSCApplication.mRenameFileTaskCanceled = flag;
 	}
 
 	/**
@@ -141,6 +162,15 @@ public class DSCApplication extends Application {
 			int oldValue = getFileRenameCount();
 			saveIntegerValue("fileRenameCount", oldValue + value);
 		}
+	}
+
+	/**
+	 * Obtain the delay for starting the rename service.
+	 * 
+	 * @return The delay for starting the rename service.
+	 */
+	public int getRenameServiceStartDelay() {
+		return mSharedPreferences.getInt("renameServiceStartDelay", 3);
 	}
 
 	/**

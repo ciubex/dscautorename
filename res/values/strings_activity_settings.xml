@@ -14,12 +14,20 @@
     <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="other_settings">Other settings</string>
+    <string name="manually_start_title">Start manually rename service</string>
+    <string name="manually_start_desc">Touch to start manually rename service</string>
+    <string name="manually_service_running">Manually rename service is running.</string>
+    <string name="manually_file_rename_count_0">No file was renamed.</string>
+    <string name="manually_file_rename_count_1">One file was renamed.</string>
+    <string name="manually_file_rename_count_more">%d files were renamed.</string>
     <string name="file_rename_count_title">Number of renamed files: %d</string>
     <string name="file_rename_count_desc">Touch to reset the number of renamed files.</string>
     <string name="file_rename_count_confirmation">Do you want to reset the renamed files counter?</string>
     <string name="ok">OK</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="please_wait">Please wait&#8230;</string>
     <!-- About -->
     <string name="about_section">About</string>
     <string name="build_version_title">Build version</string>
