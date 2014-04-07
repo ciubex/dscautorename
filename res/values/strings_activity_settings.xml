@@ -3,15 +3,19 @@
     <!-- Strings related to Settings -->
     <string name="general_settings">General settings</string>
     <string name="enable_title">Enable auto rename service.</string>
-    <string name="enable_desc">By checking this option, images are automatically renamed after being taken.</string>
+    <string name="enable_desc">By checking this option, files are automatically renamed after being taken.</string>
     <string name="rename_service_start_delay_title">Rename service start delay</string>
     <string name="rename_service_start_delay_desc">Start rename service after</string>
     <string name="seconds_unit">seconds</string>
-    <string name="original_image_prefix">DSC_</string>
-    <string name="original_image_prefix_title">The original image name prefix.</string>
-    <string name="original_image_prefix_desc">Change original image name prefix: %1$s\n(e.g. %1$s001.JPG)</string>
+    <string name="rename_video_enabled_title">Enable video file rename</string>
+    <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
+    <string name="original_file_prefix">DSC_,MOV_</string>
+    <string name="original_file_prefix_title">The original file name prefix.</string>
+    <string name="original_file_prefix_desc">Change original file name prefix: %1$s\n(e.g. %1$s001.JPG)\nYou can use comma to separate different prefixes.</string>
+    <string name="original_file_prefix_desc_2">Change original file name prefix: %1$s,%2$s&#8230;\n(e.g. %1$s001.JPG, %2$s004.mp4 &#8230;)\nYou can use comma to separate different prefixes.</string>
     <string name="file_name_format_title">Renamed file name format.</string>
     <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
+    <string name="file_name_format_desc_2">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG %2$s.mp4 &#8230;)</string>
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="other_settings">Other settings</string>
     <string name="manually_start_title">Start manually rename service</string>
@@ -50,7 +54,9 @@ The file rename format use Java date and time format parameters:<br/>
 - SSS for miliseconds.<br/>
 See more format information on: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/><br/>
 The rename service, if is enabled, automatically is triggered when the image file is saved on the device media storage.<br/><br/>
-The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.
+The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.<br/>
+<br/>
+For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
 ]]>
 </Data></string>
 

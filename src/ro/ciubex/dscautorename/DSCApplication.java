@@ -18,6 +18,7 @@
  */
 package ro.ciubex.dscautorename;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -78,8 +79,16 @@ public class DSCApplication extends Application {
 	 * @return The formated file name.
 	 */
 	public String getFileName(Date date) {
-		String newFileName = new SimpleDateFormat(getFileNameFormat(), mLocale)
-				.format(date);
+		DateFormat df = null;
+		String fileNameFormat = getFileNameFormat();
+		try {
+			df = new SimpleDateFormat(fileNameFormat, mLocale);
+		} catch (Exception e) {
+			fileNameFormat = getString(R.string.file_name_format);
+			df = new SimpleDateFormat(fileNameFormat, mLocale);
+			saveStringValue("fileNameFormat", fileNameFormat);
+		}
+		String newFileName = df.format(date);
 		return newFileName;
 	}
 
@@ -93,13 +102,54 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Obtain the original image name prefix.
+	 * Check if the video files should renamed too.
 	 * 
-	 * @return The original image name prefix.
+	 * @return True if the video files should be renamed.
 	 */
-	public String getOriginalImagePrefix() {
-		return mSharedPreferences.getString("originalImagePrefix",
-				getString(R.string.original_image_prefix));
+	public boolean isRenameVideoEnabled() {
+		return mSharedPreferences.getBoolean("renameVideoEnabled", true);
+	}
+
+	/**
+	 * Obtain the original file name prefix.
+	 * 
+	 * @return The original file name prefix.
+	 */
+	public String[] getOriginalFilePrefix() {
+		String value = mSharedPreferences.getString("originalFilePrefix",
+				getString(R.string.original_file_prefix));
+		if (value.length() < 1) {
+			value = getString(R.string.original_file_prefix);
+			saveStringValue("originalFilePrefix", value);
+		}
+		return value.split(",");
+	}
+
+	/**
+	 * Validate original file prefix.
+	 */
+	public void validateOriginalFilePrefix() {
+		String value = mSharedPreferences.getString("originalFilePrefix",
+				getString(R.string.original_file_prefix));
+		String[] array = value.split(",");
+		String temp;
+		StringBuilder sBuilder = new StringBuilder("");
+		for (int i = 0; i < array.length; i++) {
+			temp = array[i].trim();
+			if (temp.length() > 0) {
+				if (i > 0) {
+					sBuilder.append(',');
+				}
+				sBuilder.append(temp);
+			}
+		}
+		String result = sBuilder.toString();
+		if (result.length() < 1) {
+			saveStringValue("originalFilePrefix",
+					getString(R.string.original_file_prefix));
+		} else if (!value.equals(result)) {
+			saveStringValue("originalFilePrefix", result);
+		}
 	}
 
 	/**
@@ -174,16 +224,16 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Store a boolean value on the shared preferences.
+	 * Store a string value on the shared preferences.
 	 * 
 	 * @param key
 	 *            The shared preference key.
 	 * @param value
-	 *            The boolean value to be saved.
+	 *            The string value to be saved.
 	 */
-	private void saveBooleanValue(String key, boolean value) {
+	private void saveStringValue(String key, String value) {
 		Editor editor = mSharedPreferences.edit();
-		editor.putBoolean(key, value);
+		editor.putString(key, value);
 		editor.commit();
 	}
 

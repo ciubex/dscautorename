@@ -19,17 +19,16 @@
 package ro.ciubex.dscautorename.task;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.model.DSCImage;
+import ro.ciubex.dscautorename.model.OriginalData;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -45,6 +44,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private DSCApplication mApplication;
 	private ContentResolver mContentResolver;
 	private Listener mListener;
+	private List<OriginalData> mListFiles;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -73,15 +73,19 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		mContentResolver = mApplication.getContentResolver();
 		int count = 0;
 		if (mContentResolver != null) {
-			List<DSCImage> list = getImageList();
-			while (!list.isEmpty() && !mApplication.isRenameFileTaskCanceled()) {
-				for (DSCImage dscImage : list) {
-					String oldFileName = dscImage.getmData();
+			populateAllListFiles();
+			while (!mListFiles.isEmpty()
+					&& !mApplication.isRenameFileTaskCanceled()) {
+				for (OriginalData data : mListFiles) {
+					String oldFileName = data.getData();
 					if (oldFileName != null) {
 						File oldFile = getFile(oldFileName);
 						if (oldFile != null && oldFile.exists()) {
-							if (renameFile(oldFile, oldFileName)) {
+							if (renameFile(data.getId(), data.getUri(),
+									oldFile, oldFileName)) {
 								count++;
+							} else {
+								rollbackMediaStoreData(data);
 							}
 						} else {
 							Log.e(TAG, "The file:" + oldFileName
@@ -91,7 +95,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 						Log.e(TAG, "The content resolver does not exist.");
 					}
 				}
-				list = getImageList();
+				populateAllListFiles();
 			}
 			mApplication.setRenameFileTaskBusy(false);
 			if (count > 0) {
@@ -126,28 +130,32 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (mListener != null) {
 			mListener.onTaskFinished(count);
 		}
+		mListFiles.clear();
+		mListFiles = null;
 		mApplication.setRenameFileTaskCanceled(false);
 	}
 
 	/**
 	 * Rename the old file with provided new name.
 	 * 
+	 * @param id
+	 *            The ID of the file to be updated
 	 * @param oldFile
 	 *            The old file to be renamed.
 	 * @param oldFileName
 	 *            The old file name.
 	 */
-	private boolean renameFile(File oldFile, String oldFileName) {
+	private boolean renameFile(int id, Uri uri, File oldFile, String oldFileName) {
 		boolean success = false;
 		int index = 0;
 		String newFileName;
 		File newFile;
 		do {
-			newFileName = getNewFileName(oldFile, oldFileName, index);
+			newFileName = getNewFileName(oldFile, index);
 			newFile = new File(oldFile.getParentFile(), newFileName);
 			index++;
 		} while (newFile.exists());
-		success = updateMediaStoreImages(oldFileName, newFile);
+		success = setNewFileToMediaStoreData(id, uri, oldFileName, newFile);
 		if (success) {
 			success = oldFile.renameTo(newFile);
 			if (!success) {
@@ -160,65 +168,70 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Update the Media Store Image with the new file name.
+	 * Update the Media Store data with the new file name.
 	 * 
+	 * @param id
+	 *            The ID of the file to be updated
 	 * @param oldFileName
-	 *            The old image file name.
+	 *            The old file name.
 	 * @param newFileName
-	 *            The new image file name.
-	 * @return True if the image file name was updated.
+	 *            The new file name.
+	 * @return True if the file name was updated.
 	 */
-	private boolean updateMediaStoreImages(String oldFileName, File newFile) {
-		String oldImageId = getOldImageId(oldFileName);
-		boolean result = false;
-		if (oldImageId != null && oldImageId.length() > 0) {
-			ContentValues contentValues = new ContentValues();
-			contentValues.put(MediaStore.MediaColumns.DATA,
-					newFile.getAbsolutePath());
-			contentValues.put(MediaStore.MediaColumns.TITLE,
-					removeExtensionFileName(newFile.getName()));
-			contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME,
-					newFile.getName());
-			try {
-				int count = mContentResolver.update(
-						MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-						contentValues, "_id=" + oldImageId, null);
-				result = (count == 1);
-			} catch (Exception ex) {
-				Log.e(TAG,
-						"Cannot be updated the content resolver: "
-								+ MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-										.toString() + " Exception: "
-								+ ex.getMessage(), ex);
-			}
-		} else {
-			Log.e(TAG, "No image id for file: " + oldFileName);
-		}
+	private boolean setNewFileToMediaStoreData(int id, Uri uri,
+			String oldFileName, File newFile) {
+		boolean result = updateMediaStoreData(id, uri,
+				newFile.getAbsolutePath(),
+				removeExtensionFileName(newFile.getName()), newFile.getName());
 		return result;
 	}
 
 	/**
-	 * Get the old image id.
+	 * Put back the old data info on the DB, usually this is invoked when the
+	 * file cannot be renamed.
 	 * 
-	 * @param oldFileName
-	 *            The old file name.
-	 * @return The image id.
+	 * @param data
+	 *            The original details object.
+	 * @return True if the data information was stored on DB.
 	 */
-	private String getOldImageId(String oldFileName) {
-		Cursor cursor;
-		for (cursor = MediaStore.Images.Media.query(mContentResolver,
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-				new String[] { MediaStore.MediaColumns._ID },
-				(new StringBuilder()).append(MediaStore.MediaColumns.DATA)
-						.append("='").append(oldFileName).append("'")
-						.toString(), null, null); cursor == null
-				|| !cursor.moveToNext();) {
-			return null;
-		}
+	private boolean rollbackMediaStoreData(OriginalData data) {
+		boolean result = updateMediaStoreData(data.getId(), data.getUri(),
+				data.getData(), data.getTitle(), data.getDisplayName());
+		return result;
+	}
 
-		String imageId = cursor.getString(0);
-		cursor.close();
-		return imageId;
+	/**
+	 * Update media store files with following data details.
+	 * 
+	 * @param id
+	 *            The file ID.
+	 * @param data
+	 *            The file data, normally this is the file path.
+	 * @param title
+	 *            The file title, usually is the file name without path and
+	 *            extension.
+	 * @param displayName
+	 *            The file display name, usually is the file name without the
+	 *            path.
+	 * @return True if the file information was stored on DB.
+	 */
+	private boolean updateMediaStoreData(int id, Uri uri, String data,
+			String title, String displayName) {
+		boolean result = false;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(MediaStore.MediaColumns.DATA, data);
+		contentValues.put(MediaStore.MediaColumns.TITLE, title);
+		contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
+		try {
+			int count = mContentResolver.update(uri, contentValues,
+					"_id=" + id, null);
+			result = (count == 1);
+		} catch (Exception ex) {
+			Log.e(TAG,
+					"Cannot be updated the content resolver: " + uri.toString()
+							+ " Exception: " + ex.getMessage(), ex);
+		}
+		return result;
 	}
 
 	/**
@@ -241,22 +254,18 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * 
 	 * @param file
 	 *            The file to be renamed.
-	 * @param fullFileName
-	 *            The old file name.
 	 * @param index
 	 *            The index used to generate a unique file name if the file is
 	 *            already exist.
 	 */
-	private String getNewFileName(File file, String fullFileName, int index) {
+	private String getNewFileName(File file, int index) {
+		String oldFileName = file.getName();
 		long milliseconds = file.lastModified();
-		String pattern = mApplication.getFileNameFormat();
-		Locale locale = mApplication.getLocale();
-		String newFileName = new SimpleDateFormat(pattern, locale)
-				.format(new Date(milliseconds));
+		String newFileName = mApplication.getFileName(new Date(milliseconds));
 		if (index > 0) {
 			newFileName += "_" + index;
 		}
-		newFileName += getFileExtension(fullFileName);
+		newFileName += getFileExtension(oldFileName);
 		return newFileName;
 	}
 
@@ -292,32 +301,61 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Obtain a list with all images ready to be renamed.
-	 * 
-	 * @return A list with all images ready to be renamed.
+	 * Populate the list files accordingly with user choice.
 	 */
-	private List<DSCImage> getImageList() {
-		List<DSCImage> list = new ArrayList<DSCImage>();
+	private void populateAllListFiles() {
+		if (mListFiles == null) {
+			mListFiles = new ArrayList<OriginalData>();
+		} else {
+			mListFiles.clear();
+		}
+		populateListFiles(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		if (mApplication.isRenameVideoEnabled()) {
+			populateListFiles(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+		}
+	}
+
+	/**
+	 * Obtain a list with all files ready to be renamed.
+	 * 
+	 * @param uri
+	 *            The URI, using the content:// scheme, for the content to
+	 *            retrieve.
+	 */
+	private void populateListFiles(Uri uri) {
+		String[] array = mApplication.getOriginalFilePrefix();
 		Cursor cursor = null;
 		String[] columns = new String[] { MediaStore.MediaColumns._ID,
-				MediaStore.MediaColumns.DATA };
-		String where = MediaStore.MediaColumns.DATA + " LIKE ?";
-		String whereArg = "%" + mApplication.getOriginalImagePrefix() + "%";
-
-		String[] selectionArgs = new String[] { whereArg };
+				MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.TITLE,
+				MediaStore.MediaColumns.DISPLAY_NAME };
+		StringBuilder where = new StringBuilder();
+		String[] selectionArgs = new String[array.length];
+		int index;
+		for (index = 0; index < array.length; index++) {
+			if (index > 0) {
+				where.append(" OR ");
+			}
+			where.append(MediaStore.MediaColumns.DATA).append(" LIKE ?");
+			selectionArgs[index] = "%" + array[index] + "%";
+		}
 		try {
-			cursor = mContentResolver.query(
-					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns,
-					where, selectionArgs, null);
+			cursor = mContentResolver.query(uri, columns, where.toString(),
+					selectionArgs, null);
 			if (cursor != null) {
 				int id;
-				String data;
+				String data, title, displayName;
 				while (cursor.moveToNext()) {
 					id = cursor.getInt(cursor
 							.getColumnIndex(MediaStore.MediaColumns._ID));
 					data = cursor.getString(cursor
 							.getColumnIndex(MediaStore.MediaColumns.DATA));
-					list.add(new DSCImage(id, data));
+					title = cursor.getString(cursor
+							.getColumnIndex(MediaStore.MediaColumns.TITLE));
+					displayName = cursor
+							.getString(cursor
+									.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+					mListFiles.add(new OriginalData(id, uri, data, title,
+							displayName));
 				}
 			}
 		} catch (Exception ex) {
@@ -327,6 +365,5 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				cursor.close();
 			}
 		}
-		return list;
 	}
 }

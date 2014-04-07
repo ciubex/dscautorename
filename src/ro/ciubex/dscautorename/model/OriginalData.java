@@ -18,36 +18,68 @@
  */
 package ro.ciubex.dscautorename.model;
 
+import android.net.Uri;
+
 /**
- * The model used to store image DB informations.
+ * The model used to store image or video DB informations.
  * 
  * @author Claudiu Ciobotariu
  * 
  */
-public class DSCImage {
+public class OriginalData {
 	private int mId;
+	private Uri mUri;
 	private String mData;
+	private String mTitle;
+	private String mDisplayName;
 
-	public DSCImage(int id, String data) {
+	public OriginalData(int id, Uri uri, String data, String title,
+			String displayName) {
 		this.mId = id;
+		this.mUri = uri;
 		this.mData = data;
+		this.mTitle = title;
+		this.mDisplayName = displayName;
 	}
 
 	/**
 	 * @return the id
 	 */
-	public int getmId() {
+	public int getId() {
 		return mId;
+	}
+
+	/**
+	 * @return the Uri
+	 */
+	public Uri getUri() {
+		return mUri;
 	}
 
 	/**
 	 * @return the data
 	 */
-	public String getmData() {
+	public String getData() {
 		return mData;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * @return the mTitle
+	 */
+	public String getTitle() {
+		return mTitle;
+	}
+
+	/**
+	 * @return the mDisplayName
+	 */
+	public String getDisplayName() {
+		return mDisplayName;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -55,10 +87,13 @@ public class DSCImage {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + mId;
+		result = prime * result + ((mUri == null) ? 0 : mUri.hashCode());
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
@@ -69,13 +104,21 @@ public class DSCImage {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof DSCImage)) {
+		if (!(obj instanceof OriginalData)) {
 			return false;
 		}
-		DSCImage other = (DSCImage) obj;
+		OriginalData other = (OriginalData) obj;
 		if (mId != other.mId) {
+			return false;
+		}
+		if (mUri == null) {
+			if (other.mUri != null) {
+				return false;
+			}
+		} else if (!mUri.equals(other.mUri)) {
 			return false;
 		}
 		return true;
 	}
+
 }

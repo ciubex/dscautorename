@@ -8,6 +8,11 @@
             android:key="enableAutoRename"
             android:summary="@string/enable_desc"
             android:title="@string/enable_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="renameVideoEnabled"
+            android:summary="@string/rename_video_enabled_desc"
+            android:title="@string/rename_video_enabled_title" />
 
         <ro.ciubex.dscautorename.preference.SeekBarPreference
             android:defaultValue="3"
@@ -19,10 +24,10 @@
             ciubex:units="@string/seconds_unit" />
 
         <EditTextPreference
-            android:defaultValue="@string/original_image_prefix"
-            android:key="originalImagePrefix"
-            android:summary="@string/original_image_prefix_desc"
-            android:title="@string/original_image_prefix_title" />
+            android:defaultValue="@string/original_file_prefix"
+            android:key="originalFilePrefix"
+            android:summary="@string/original_file_prefix_desc"
+            android:title="@string/original_file_prefix_title" />
         <EditTextPreference
             android:defaultValue="@string/file_name_format"
             android:key="fileNameFormat"
