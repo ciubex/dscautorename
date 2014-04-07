@@ -50,7 +50,16 @@ public class CameraEventReceiver extends BroadcastReceiver {
 			mApplication = (DSCApplication) appCtx;
 		}
 		if (mApplication != null && mApplication.isAutoRenameEnabled()) {
-			if (!mApplication.isRenameFileTaskBusy()) {
+			String action = intent.getAction();
+			boolean isVideo = ("android.hardware.action.NEW_VIDEO"
+					.equals(action) || "com.android.camera.NEW_VIDEO"
+					.equals(action));
+			boolean isPicture = ("android.hardware.action.NEW_PICTURE"
+					.equals(action) || "com.android.camera.NEW_PICTURE"
+					.equals(action));
+			boolean process = isPicture
+					|| (isVideo && mApplication.isRenameVideoEnabled());
+			if (process && !mApplication.isRenameFileTaskBusy()) {
 				mApplication.setRenameFileTaskBusy(true);
 				long delayMillis = mApplication.getRenameServiceStartDelay() * 1000;
 				// wait couple of seconds to run the thread.

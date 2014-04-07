@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="2"
-    android:versionName="1.1" >
+    android:versionCode="4"
+    android:versionName="1.3" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -38,9 +37,12 @@
             android:permission="android.permission.CAMERA" >
             <intent-filter>
                 <action android:name="com.android.camera.NEW_PICTURE" />
+                <action android:name="com.android.camera.NEW_VIDEO" />
                 <action android:name="android.hardware.action.NEW_PICTURE" />
+                <action android:name="android.hardware.action.NEW_VIDEO" />
 
                 <data android:mimeType="image/*" />
+                <data android:mimeType="video/*" />
             </intent-filter>
         </receiver>
     </application>

@@ -48,7 +48,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener {
 	private final String TAG = getClass().getName();
 	private DSCApplication mApplication;
-	private EditTextPreference mOriginalImagePrefix;
+	private EditTextPreference mOriginalFilePrefix;
 	private EditTextPreference mFileNameFormat;
 	private Preference mManuallyStartRename;
 	private Preference mFileRenameCount;
@@ -73,7 +73,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Initialize preferences controls.
 	 */
 	private void initPreferences() {
-		mOriginalImagePrefix = (EditTextPreference) findPreference("originalImagePrefix");
+		mOriginalFilePrefix = (EditTextPreference) findPreference("originalFilePrefix");
 		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
@@ -165,6 +165,9 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
+		if ("originalFilePrefix".equals(key)) {
+			mApplication.validateOriginalFilePrefix();
+		}
 		prepareSummaries();
 	}
 
@@ -172,13 +175,23 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Prepare preferences summaries
 	 */
 	private void prepareSummaries() {
-		mOriginalImagePrefix.setSummary(mApplication.getString(
-				R.string.original_image_prefix_desc,
-				mApplication.getOriginalImagePrefix()));
-		mFileNameFormat.setSummary(mApplication.getString(
-				R.string.file_name_format_desc,
-				mApplication.getFileNameFormat(),
-				mApplication.getFileName(new Date())));
+		Date now = new Date();
+		String[] originalArr = mApplication.getOriginalFilePrefix();
+		String newFileName = mApplication.getFileName(now);
+		String txt1, txt2;
+		if (originalArr.length > 1) {
+			txt1 = mApplication.getString(R.string.original_file_prefix_desc_2,
+					originalArr[0], originalArr[1]);
+			txt2 = mApplication.getString(R.string.file_name_format_desc_2,
+					mApplication.getFileNameFormat(), newFileName);
+		} else {
+			txt1 = mApplication.getString(R.string.original_file_prefix_desc,
+					originalArr[0]);
+			txt2 = mApplication.getString(R.string.file_name_format_desc,
+					mApplication.getFileNameFormat(), newFileName);
+		}
+		mOriginalFilePrefix.setSummary(txt1);
+		mFileNameFormat.setSummary(txt2);
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
