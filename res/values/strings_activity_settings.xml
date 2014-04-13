@@ -24,6 +24,8 @@
     <string name="manually_file_rename_count_0">No file was renamed.</string>
     <string name="manually_file_rename_count_1">One file was renamed.</string>
     <string name="manually_file_rename_count_more">%d files were renamed.</string>
+    <string name="manually_file_rename_progress_1">%1$d of %2$d files was renamed.</string>
+    <string name="manually_file_rename_progress_more">%1$d of %2$d files were renamed.</string>
     <string name="file_rename_count_title">Number of renamed files: %d</string>
     <string name="file_rename_count_desc">Touch to reset the number of renamed files.</string>
     <string name="file_rename_count_confirmation">Do you want to reset the renamed files counter?</string>

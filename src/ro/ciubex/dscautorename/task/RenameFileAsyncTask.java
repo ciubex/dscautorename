@@ -45,9 +45,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private ContentResolver mContentResolver;
 	private Listener mListener;
 	private List<OriginalData> mListFiles;
+	private int mPosition, mCount;
 
 	public interface Listener {
 		public void onTaskStarted();
+
+		public void onTaskUpdate(int position, int count);
 
 		public void onTaskFinished(int count);
 	}
@@ -71,11 +74,13 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
-		int count = 0;
+		mPosition = 0;
 		if (mContentResolver != null) {
 			populateAllListFiles();
 			while (!mListFiles.isEmpty()
 					&& !mApplication.isRenameFileTaskCanceled()) {
+				mPosition = 0;
+				publishProgress();
 				for (OriginalData data : mListFiles) {
 					String oldFileName = data.getData();
 					if (oldFileName != null) {
@@ -83,7 +88,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 						if (oldFile != null && oldFile.exists()) {
 							if (renameFile(data.getId(), data.getUri(),
 									oldFile, oldFileName)) {
-								count++;
+								mPosition++;
 							} else {
 								rollbackMediaStoreData(data);
 							}
@@ -94,15 +99,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					} else {
 						Log.e(TAG, "The content resolver does not exist.");
 					}
+					publishProgress();
+				}
+				if (mPosition > 0) {
+					mApplication.increaseFileRenameCount(mPosition);
 				}
 				populateAllListFiles();
 			}
 			mApplication.setRenameFileTaskBusy(false);
-			if (count > 0) {
-				mApplication.increaseFileRenameCount(count);
-			}
 		}
-		return count;
+		return mPosition;
 	}
 
 	/**
@@ -117,10 +123,25 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
+	 * Runs on the UI thread after publishProgress(Progress...) is invoked. The
+	 * specified values are the values passed to publishProgress(Progress...).
+	 * 
+	 * @param values
+	 *            Not used.
+	 */
+	@Override
+	protected void onProgressUpdate(Void... values) {
+		super.onProgressUpdate(values);
+		if (mListener != null) {
+			mListener.onTaskUpdate(mPosition, mCount);
+		}
+	}
+
+	/**
 	 * Runs on the UI thread after doInBackground(Params...). The specified
 	 * result is the value returned by doInBackground(Params...).
 	 * 
-	 * @param result
+	 * @param count
 	 *            The result of the operation computed by
 	 *            doInBackground(Params...).
 	 */
@@ -313,6 +334,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (mApplication.isRenameVideoEnabled()) {
 			populateListFiles(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
 		}
+		mCount = mListFiles.size();
 	}
 
 	/**
