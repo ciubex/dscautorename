@@ -301,8 +301,33 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	@Override
 	public void onTaskStarted() {
-		showProgressDialog(mApplication
-				.getString(R.string.manually_service_running));
+		showProgressDialog(
+				mApplication.getString(R.string.manually_service_running), 0);
+	}
+
+	/**
+	 * Method invoked from the rename task when an update is required.
+	 * 
+	 * @param position
+	 *            Current number of renamed files.
+	 * @param count
+	 *            The number of total files to be renamed.
+	 */
+	@Override
+	public void onTaskUpdate(int position, int count) {
+		if (mProgressDialog != null) {
+			String message = mApplication.getString(
+					position == 1 ? R.string.manually_file_rename_progress_1
+							: R.string.manually_file_rename_progress_more,
+					position, count);
+			if (position == 0) {
+				hideProgressDialog();
+				showProgressDialog(message, count);
+			} else {
+				mProgressDialog.setMessage(message);
+				mProgressDialog.setProgress(position);
+			}
+		}
 	}
 
 	/**
@@ -345,7 +370,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * @param message
 	 *            The message displayed inside of progress dialog.
 	 */
-	private void showProgressDialog(String message) {
+	private void showProgressDialog(String message, int max) {
 		hideProgressDialog();
 		mProgressDialog = new ProgressDialog(this);
 		mProgressDialog.setTitle(R.string.please_wait);
@@ -360,6 +385,11 @@ public class SettingsActivity extends PreferenceActivity implements
 						mApplication.setRenameFileTaskCanceled(true);
 					}
 				});
+		if (max > 0) {
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setMax(max);
+		}
 		mProgressDialog.show();
 	}
 
