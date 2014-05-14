@@ -23,10 +23,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
 import android.app.Application;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * This is the application class for the DSC Auto Rename application.
@@ -35,10 +38,15 @@ import android.preference.PreferenceManager;
  * 
  */
 public class DSCApplication extends Application {
+	private final String TAG = getClass().getName();
 	private Locale mLocale;
 	private SharedPreferences mSharedPreferences;
+	private static boolean mRenameFileRequested;
 	private static boolean mRenameFileTaskCanceled;
-	private static boolean mRenameFileTaskBusy;
+	private static boolean mRenameFileTaskRunning;
+	public static final int SERVICE_TYPE_DISABLED = 0;
+	public static final int SERVICE_TYPE_CAMERA = 1;
+	public static final int SERVICE_TYPE_CONTENT = 2;
 
 	/**
 	 * Called when the application is starting, before any activity, service, or
@@ -50,6 +58,7 @@ public class DSCApplication extends Application {
 		mLocale = Locale.getDefault();
 		mSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
+		checkRegisteredServiceType(true);
 	}
 
 	/**
@@ -87,6 +96,7 @@ public class DSCApplication extends Application {
 			fileNameFormat = getString(R.string.file_name_format);
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 			saveStringValue("fileNameFormat", fileNameFormat);
+			Log.e(TAG, "getFileName: " + date, e);
 		}
 		String newFileName = df.format(date);
 		return newFileName;
@@ -98,7 +108,7 @@ public class DSCApplication extends Application {
 	 * @return True if the service is enabled.
 	 */
 	public boolean isAutoRenameEnabled() {
-		return mSharedPreferences.getBoolean("enableAutoRename", true);
+		return SERVICE_TYPE_DISABLED != getServiceType();
 	}
 
 	/**
@@ -153,22 +163,22 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Check if the rename file async task is running.
+	 * Check if rename file is requested.
 	 * 
-	 * @return True if the rename file async task is running.
+	 * @return the renameFileRequested
 	 */
-	public boolean isRenameFileTaskBusy() {
-		return mRenameFileTaskBusy;
+	public boolean isRenameFileRequested() {
+		return DSCApplication.mRenameFileRequested;
 	}
 
 	/**
-	 * Set the rename file async task running state.
+	 * Set renameFileRequest flag.
 	 * 
-	 * @param flag
-	 *            The rename file async task running state.
+	 * @param renameFileRequested
+	 *            the renameFileRequested to set
 	 */
-	public void setRenameFileTaskBusy(boolean flag) {
-		DSCApplication.mRenameFileTaskBusy = flag;
+	public void setRenameFileRequested(boolean renameFileRequested) {
+		DSCApplication.mRenameFileRequested = renameFileRequested;
 	}
 
 	/**
@@ -177,7 +187,7 @@ public class DSCApplication extends Application {
 	 * @return The rename file task cancel boolean value.
 	 */
 	public boolean isRenameFileTaskCanceled() {
-		return mRenameFileTaskCanceled;
+		return DSCApplication.mRenameFileTaskCanceled;
 	}
 
 	/**
@@ -188,6 +198,25 @@ public class DSCApplication extends Application {
 	 */
 	public void setRenameFileTaskCanceled(boolean flag) {
 		DSCApplication.mRenameFileTaskCanceled = flag;
+	}
+
+	/**
+	 * Check if rename file task is running.
+	 * 
+	 * @return the renameFileTaskRunning
+	 */
+	public boolean isRenameFileTaskRunning() {
+		return DSCApplication.mRenameFileTaskRunning;
+	}
+
+	/**
+	 * Set rename file task is running flag.
+	 * 
+	 * @param renameFileTaskRunning
+	 *            the renameFileTaskRunning to set
+	 */
+	public void setRenameFileTaskRunning(boolean renameFileTaskRunning) {
+		DSCApplication.mRenameFileTaskRunning = renameFileTaskRunning;
 	}
 
 	/**
@@ -221,6 +250,101 @@ public class DSCApplication extends Application {
 	 */
 	public int getRenameServiceStartDelay() {
 		return mSharedPreferences.getInt("renameServiceStartDelay", 3);
+	}
+
+	/**
+	 * Obtain the selected service type.
+	 * 
+	 * @return Disabled = 0, camera = 1 or content = 2.
+	 */
+	public int getServiceType() {
+		String strValue = mSharedPreferences.getString("serviceType", "1");
+		int value = 1;
+		try {
+			value = Integer.parseInt(strValue);
+		} catch (NumberFormatException e) {
+			Log.e(TAG, "getServiceType: " + strValue, e);
+		}
+		return value;
+	}
+
+	/**
+	 * Obtain the registered service type.
+	 * 
+	 * @return The registered service type: disabled = 0, camera = 1 or content
+	 *         = 2. -1 is returning for the first time.
+	 */
+	public int getRegisteredServiceType() {
+		return mSharedPreferences.getInt("registeredServiceType", -1);
+	}
+
+	/**
+	 * Save the registered service type value.
+	 * 
+	 * @param value
+	 *            The registered service type value.
+	 */
+	public void setRegisteredServiceType(int value) {
+		saveIntegerValue("registeredServiceType", value);
+	}
+
+	/**
+	 * Check if the registered service type was changed.
+	 * 
+	 * @return True if the registered service type was changed.
+	 */
+	public boolean checkRegisteredServiceType(boolean force) {
+		int serviceType = getServiceType();
+		int regServiceType = getRegisteredServiceType();
+		boolean changed = force || (serviceType != regServiceType);
+		if (changed) {
+			updateRegisteredServiceType(serviceType, regServiceType);
+		}
+		return changed;
+	}
+
+	/**
+	 * Update registered service type according with specified service type.
+	 * 
+	 * @param serviceType
+	 *            The specified service type to be registered.
+	 * @param regServiceType
+	 *            The current service type registered.
+	 */
+	private void updateRegisteredServiceType(int serviceType, int regServiceType) {
+		if (SERVICE_TYPE_CONTENT == regServiceType) {
+			unregisterMediaStorageContentObserver();
+		}
+		if (SERVICE_TYPE_CONTENT == serviceType) {
+			registerMediaStorageContentObserver();
+		}
+		saveIntegerValue("registeredServiceType", serviceType);
+	}
+
+	/**
+	 * Method used to dynamically register a content observer service used to
+	 * launch automatically rename service.
+	 */
+	private void registerMediaStorageContentObserver() {
+		try {
+			startService(new Intent(this, MediaStorageObserverService.class));
+		} catch (Exception e) {
+			Log.e(TAG,
+					"registerMediaStorageContentObserver: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Method used to unregister the content observer service.
+	 */
+	private void unregisterMediaStorageContentObserver() {
+		try {
+			stopService(new Intent(this, MediaStorageObserverService.class));
+		} catch (Exception e) {
+			Log.e(TAG,
+					"unregisterMediaStorageContentObserver: " + e.getMessage(),
+					e);
+		}
 	}
 
 	/**

@@ -62,6 +62,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public RenameFileAsyncTask(DSCApplication application, Listener listener) {
 		this.mApplication = application;
 		this.mListener = listener;
+		mApplication.setRenameFileTaskRunning(true);
 	}
 
 	/**
@@ -75,38 +76,53 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
 		mPosition = 0;
+		boolean success;
 		if (mContentResolver != null) {
 			populateAllListFiles();
-			while (!mListFiles.isEmpty()
-					&& !mApplication.isRenameFileTaskCanceled()) {
-				mPosition = 0;
-				publishProgress();
-				for (OriginalData data : mListFiles) {
-					String oldFileName = data.getData();
-					if (oldFileName != null) {
-						File oldFile = getFile(oldFileName);
-						if (oldFile != null && oldFile.exists()) {
-							if (renameFile(data.getId(), data.getUri(),
-									oldFile, oldFileName)) {
-								mPosition++;
+			while (mApplication.isRenameFileRequested()) {
+				mApplication.setRenameFileRequested(false);
+				if (!mListFiles.isEmpty()
+						&& !mApplication.isRenameFileTaskCanceled()) {
+					mPosition = 0;
+					publishProgress();
+					for (OriginalData data : mListFiles) {
+						String oldFileName = data.getData();
+						if (oldFileName != null) {
+							File oldFile = getFile(oldFileName);
+							if (oldFile != null) {
+								success = oldFile.canRead()
+										&& oldFile.canWrite();
+								if (success) {
+									success = renameFile(data.getId(),
+											data.getUri(), oldFile, oldFileName);
+									if (success) {
+										mPosition++;
+									} else {
+										rollbackMediaStoreData(data);
+										Log.d(TAG, "rollback: " + data.getId()
+												+ ", " + oldFileName);
+									}
+								} else {
+									Log.e(TAG,
+											"File is not reable and writable: "
+													+ oldFileName);
+								}
 							} else {
-								rollbackMediaStoreData(data);
+								Log.e(TAG, "The file:" + oldFileName
+										+ " does not exist.");
 							}
 						} else {
-							Log.e(TAG, "The file:" + oldFileName
-									+ " does not exist.");
+							Log.e(TAG, "oldFileName is null.");
 						}
-					} else {
-						Log.e(TAG, "The content resolver does not exist.");
+						publishProgress();
 					}
-					publishProgress();
+					if (mPosition > 0) {
+						mApplication.increaseFileRenameCount(mPosition);
+					}
+					populateAllListFiles();
 				}
-				if (mPosition > 0) {
-					mApplication.increaseFileRenameCount(mPosition);
-				}
-				populateAllListFiles();
+				mApplication.setRenameFileTaskRunning(false);
 			}
-			mApplication.setRenameFileTaskBusy(false);
 		}
 		return mPosition;
 	}
@@ -171,19 +187,30 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		int index = 0;
 		String newFileName;
 		File newFile;
+		boolean exist = false;
 		do {
 			newFileName = getNewFileName(oldFile, index);
 			newFile = new File(oldFile.getParentFile(), newFileName);
 			index++;
-		} while (newFile.exists());
-		success = setNewFileToMediaStoreData(id, uri, oldFileName, newFile);
-		if (success) {
-			success = oldFile.renameTo(newFile);
-			if (!success) {
-				Log.e(TAG, "The file " + oldFileName + " cannot be renamed!");
+			exist = newFile.exists();
+		} while (exist && index < 1000);
+		if (!exist) {
+			success = setNewFileToMediaStoreData(id, uri, oldFileName, newFile);
+			if (success) {
+				success = oldFile.renameTo(newFile);
+				if (!success) {
+					Log.e(TAG, "The file " + oldFileName + " (id:" + id
+							+ ") cannot be renamed!");
+				} else {
+					Log.d(TAG, "File renamed: " + id + ", " + oldFileName
+							+ ", " + newFileName);
+				}
+			} else {
+				Log.e(TAG, "The file cannot be renamed: " + oldFileName);
 			}
 		} else {
-			Log.e(TAG, "The file cannot be renamed: " + oldFileName);
+			Log.e(TAG, "The file cannot be renamed: " + oldFileName + " to "
+					+ newFileName);
 		}
 		return success;
 	}
@@ -245,7 +272,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
 		try {
 			int count = mContentResolver.update(uri, contentValues,
-					"_id=" + id, null);
+					MediaStore.MediaColumns._ID + "=?",
+					new String[] { "" + id });
 			result = (count == 1);
 		} catch (Exception ex) {
 			Log.e(TAG,
@@ -331,8 +359,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			mListFiles.clear();
 		}
 		populateListFiles(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		populateListFiles(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
 		if (mApplication.isRenameVideoEnabled()) {
 			populateListFiles(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+			populateListFiles(MediaStore.Video.Media.INTERNAL_CONTENT_URI);
 		}
 		mCount = mListFiles.size();
 	}
@@ -350,22 +380,37 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		String[] columns = new String[] { MediaStore.MediaColumns._ID,
 				MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.TITLE,
 				MediaStore.MediaColumns.DISPLAY_NAME };
-		StringBuilder where = new StringBuilder();
-		String[] selectionArgs = new String[array.length];
-		int index;
-		for (index = 0; index < array.length; index++) {
-			if (index > 0) {
-				where.append(" OR ");
+		StringBuilder where = new StringBuilder("");
+		String[] selectionArgs = null;
+		String temp;
+		int index, length = array.length;
+		if (length > 0) {
+			selectionArgs = new String[length];
+			for (index = 0; index < length; index++) {
+				temp = array[index].trim();
+				if (temp.length() > 0) {
+					if (index > 0) {
+						where.append(" OR ");
+					}
+					where.append(MediaStore.MediaColumns.DATA)
+							.append(" LIKE ?");
+					selectionArgs[index] = "%" + temp + "%";
+				}
 			}
-			where.append(MediaStore.MediaColumns.DATA).append(" LIKE ?");
-			selectionArgs[index] = "%" + array[index] + "%";
 		}
 		try {
-			cursor = mContentResolver.query(uri, columns, where.toString(),
+			String selection = null;
+			if (where.length() > 0) {
+				selection = where.toString();
+			} else {
+				selectionArgs = null;
+			}
+			cursor = mContentResolver.query(uri, columns, selection,
 					selectionArgs, null);
 			if (cursor != null) {
 				int id;
 				String data, title, displayName;
+				OriginalData originalData;
 				while (cursor.moveToNext()) {
 					id = cursor.getInt(cursor
 							.getColumnIndex(MediaStore.MediaColumns._ID));
@@ -376,8 +421,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					displayName = cursor
 							.getString(cursor
 									.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
-					mListFiles.add(new OriginalData(id, uri, data, title,
-							displayName));
+					originalData = new OriginalData(id, uri, data, title,
+							displayName);
+					mListFiles.add(originalData);
 				}
 			}
 		} catch (Exception ex) {

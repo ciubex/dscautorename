@@ -1,12 +1,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="5"
-    android:versionName="1.4" >
+    android:versionCode="7"
+    android:versionName="2.1" >
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
@@ -32,9 +34,15 @@
             android:label="@string/app_name" />
 
         <receiver
+            android:name="ro.ciubex.dscautorename.receiver.BootEventReceiver"
+            android:enabled="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        <receiver
             android:name="ro.ciubex.dscautorename.receiver.CameraEventReceiver"
-            android:enabled="true"
-            android:permission="android.permission.CAMERA" >
+            android:enabled="true">
             <intent-filter>
                 <action android:name="com.android.camera.NEW_PICTURE" />
                 <action android:name="com.android.camera.NEW_VIDEO" />
@@ -45,6 +53,10 @@
                 <data android:mimeType="video/*" />
             </intent-filter>
         </receiver>
+
+        <service
+            android:name="ro.ciubex.dscautorename.receiver.MediaStorageObserverService"
+            android:enabled="true" />
     </application>
 
 </manifest>

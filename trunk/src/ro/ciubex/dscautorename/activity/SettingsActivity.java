@@ -34,6 +34,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.util.Log;
@@ -48,6 +49,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener {
 	private final String TAG = getClass().getName();
 	private DSCApplication mApplication;
+	private ListPreference mServiceTypeList;
 	private EditTextPreference mOriginalFilePrefix;
 	private EditTextPreference mFileNameFormat;
 	private Preference mManuallyStartRename;
@@ -73,6 +75,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Initialize preferences controls.
 	 */
 	private void initPreferences() {
+		mServiceTypeList = (ListPreference) findPreference("serviceType");
 		mOriginalFilePrefix = (EditTextPreference) findPreference("originalFilePrefix");
 		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
@@ -167,6 +170,8 @@ public class SettingsActivity extends PreferenceActivity implements
 			String key) {
 		if ("originalFilePrefix".equals(key)) {
 			mApplication.validateOriginalFilePrefix();
+		} else if ("serviceType".equals(key)) {
+			mApplication.checkRegisteredServiceType(false);
 		}
 		prepareSummaries();
 	}
@@ -192,6 +197,17 @@ public class SettingsActivity extends PreferenceActivity implements
 		}
 		mOriginalFilePrefix.setSummary(txt1);
 		mFileNameFormat.setSummary(txt2);
+		switch (mApplication.getServiceType()) {
+		case DSCApplication.SERVICE_TYPE_CAMERA:
+			mServiceTypeList.setSummary(R.string.service_choice_1);
+			break;
+		case DSCApplication.SERVICE_TYPE_CONTENT:
+			mServiceTypeList.setSummary(R.string.service_choice_2);
+			break;
+		default:
+			mServiceTypeList.setSummary(R.string.service_choice_0);
+			break;
+		}
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
@@ -219,7 +235,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Start the rename service.
 	 */
 	protected void onManuallyStartRename() {
-		new RenameFileAsyncTask(mApplication, this).execute();
+		mApplication.setRenameFileRequested(true);
+		if (!mApplication.isRenameFileTaskRunning()) {
+			new RenameFileAsyncTask(mApplication, this).execute();
+		}
 	}
 
 	/**
