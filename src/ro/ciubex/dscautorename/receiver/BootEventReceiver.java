@@ -19,20 +19,17 @@
 package ro.ciubex.dscautorename.receiver;
 
 import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 
 /**
- * Define a receiver when is take picture.
+ * This broadcast receiver is used only when the Media observer is enabled.
  * 
  * @author Claudiu Ciobotariu
  * 
  */
-public class CameraEventReceiver extends BroadcastReceiver {
-	private DSCApplication mApplication;
+public class BootEventReceiver extends BroadcastReceiver {
 
 	/**
 	 * This method is called when the BroadcastReceiver is receiving an Intent
@@ -44,38 +41,16 @@ public class CameraEventReceiver extends BroadcastReceiver {
 	 *            The Intent being received.
 	 */
 	@Override
-	public void onReceive(final Context context, final Intent intent) {
+	public void onReceive(Context context, Intent intent) {
+		DSCApplication application = null;
 		Context appCtx = context.getApplicationContext();
 		if (appCtx instanceof DSCApplication) {
-			mApplication = (DSCApplication) appCtx;
+			application = (DSCApplication) appCtx;
 		}
-		if (mApplication != null
-				&& DSCApplication.SERVICE_TYPE_CAMERA == mApplication
+		if (application != null
+				&& DSCApplication.SERVICE_TYPE_CONTENT == application
 						.getServiceType()) {
-			String action = intent.getAction();
-			boolean isVideo = ("android.hardware.action.NEW_VIDEO"
-					.equals(action) || "com.android.camera.NEW_VIDEO"
-					.equals(action));
-			boolean isPicture = ("android.hardware.action.NEW_PICTURE"
-					.equals(action) || "com.android.camera.NEW_PICTURE"
-					.equals(action));
-			boolean process = isPicture
-					|| (isVideo && mApplication.isRenameVideoEnabled());
-			if (process) {
-				mApplication.setRenameFileRequested(true);
-				if (!mApplication.isRenameFileTaskRunning()) {
-					long delayMillis = mApplication
-							.getRenameServiceStartDelay() * 1000;
-					// wait couple of seconds to run the thread.
-					new Handler().postDelayed(new Runnable() {
-
-						@Override
-						public void run() {
-							new RenameFileAsyncTask(mApplication).execute();
-						}
-					}, delayMillis);
-				}
-			}
+			application.checkRegisteredServiceType(true);
 		}
 	}
 

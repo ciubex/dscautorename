@@ -121,4 +121,19 @@ public class OriginalData {
 		return true;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder("OriginalData");
+		builder.append(" [Uri=").append(mUri).append(", Id=").append(mId)
+				.append(", Data=").append(mData).append(", DisplayName=")
+				.append(mDisplayName).append(", Title=").append(mTitle)
+				.append("]");
+		return builder.toString();
+	}
+
 }

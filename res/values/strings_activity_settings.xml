@@ -2,8 +2,21 @@
 
     <!-- Strings related to Settings -->
     <string name="general_settings">General settings</string>
-    <string name="enable_title">Enable auto rename service.</string>
-    <string name="enable_desc">By checking this option, files are automatically renamed after being taken.</string>
+    <string name="enable_title">Auto rename service trigger.</string>
+    <string name="enable_desc">Files are automatically renamed after the trigger occur.</string>
+    <string-array name="service_type_labels">
+        <item>Disabled</item>
+        <item>Camera events: pictures or videos taken.</item>
+        <item>Media content observer: pictures or videos saved.</item>
+    </string-array>
+    <string-array name="service_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="service_choice_0">The auto rename service is disabled.</string>
+    <string name="service_choice_1">The auto rename service is triggered by camera events.</string>
+    <string name="service_choice_2">The auto rename service is triggered by media content events.</string>
     <string name="rename_service_start_delay_title">Rename service start delay</string>
     <string name="rename_service_start_delay_desc">Start rename service after</string>
     <string name="seconds_unit">seconds</string>
@@ -57,6 +70,7 @@ The file rename format use Java date and time format parameters:<br/>
 See more format information on: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/><br/>
 The rename service, if is enabled, automatically is triggered when the image file is saved on the device media storage.<br/><br/>
 The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.<br/>
+In some cases, the camera do not send any message, so is possibile to select as a trigger the media content events, but this imply a permanently running service in background.<br/>
 <br/>
 For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
 ]]>
