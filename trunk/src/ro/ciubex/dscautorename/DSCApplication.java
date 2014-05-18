@@ -25,9 +25,14 @@ import java.util.Locale;
 
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
 import android.app.Application;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
+import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -40,6 +45,7 @@ import android.util.Log;
 public class DSCApplication extends Application {
 	private final String TAG = getClass().getName();
 	private Locale mLocale;
+	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
 	private static boolean mRenameFileRequested;
 	private static boolean mRenameFileTaskCanceled;
@@ -47,6 +53,10 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_DISABLED = 0;
 	public static final int SERVICE_TYPE_CAMERA = 1;
 	public static final int SERVICE_TYPE_CONTENT = 2;
+
+	public interface ProgressCancelListener {
+		public void onProgressCancel();
+	}
 
 	/**
 	 * Called when the application is starting, before any activity, service, or
@@ -59,6 +69,40 @@ public class DSCApplication extends Application {
 		mSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		checkRegisteredServiceType(true);
+	}
+
+	/**
+	 * Check if is enabled folder scanning.
+	 * 
+	 * @return True if is enabled folder scanning.
+	 */
+	public boolean isEnabledFolderScanning() {
+		return mSharedPreferences.getBoolean("enabledFolderScanning", false);
+	}
+
+	/**
+	 * Get the folder used for scanning files.
+	 * 
+	 * @return The folder user for scanning files.
+	 */
+	public String getFolderScanning() {
+		String folder = mSharedPreferences.getString("folderScanning", "");
+		if (folder.length() < 2) {
+			folder = Environment.getExternalStorageDirectory()
+					.getAbsolutePath() + "/DCIM";
+			setFolderScanning(folder);
+		}
+		return folder;
+	}
+
+	/**
+	 * Set the folder used for scanning files.
+	 * 
+	 * @param folder
+	 *            The folder name to save.
+	 */
+	public void setFolderScanning(String folder) {
+		saveStringValue("folderScanning", folder);
 	}
 
 	/**
@@ -385,5 +429,96 @@ public class DSCApplication extends Application {
 		Editor editor = mSharedPreferences.edit();
 		editor.remove(key);
 		editor.commit();
+	}
+
+	/**
+	 * This will show a progress dialog using a context and the message to be
+	 * showed on the progress dialog.
+	 * 
+	 * @param listener
+	 *            The listener class which should listen for cancel.
+	 * @param context
+	 *            The context where should be displayed the progress dialog.
+	 * @param message
+	 *            The message displayed inside of progress dialog.
+	 */
+	public void showProgressDialog(final ProgressCancelListener listener,
+			Context context, String message, int max) {
+		hideProgressDialog();
+		mProgressDialog = new ProgressDialog(context);
+		mProgressDialog.setTitle(R.string.please_wait);
+		mProgressDialog.setMessage(message);
+		mProgressDialog.setCancelable(false);
+		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
+				getString(R.string.cancel),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						if (listener != null) {
+							listener.onProgressCancel();
+						}
+					}
+				});
+		if (max > 0) {
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setMax(max);
+		}
+		if (!mProgressDialog.isShowing()) {
+			mProgressDialog.show();
+		}
+	}
+
+	/**
+	 * Hide the progress dialog.
+	 */
+	public void hideProgressDialog() {
+		if (mProgressDialog != null) {
+			mProgressDialog.dismiss();
+		}
+		mProgressDialog = null;
+	}
+
+	/**
+	 * Set the message on the progress dialog.
+	 * 
+	 * @param message
+	 *            The message to be set.
+	 */
+	public void setProgressDialogMessage(String message) {
+		if (mProgressDialog != null) {
+			mProgressDialog.setMessage(message);
+		}
+	}
+
+	/**
+	 * Set the progress position for the progress dialog.
+	 * 
+	 * @param position
+	 *            The progress position.
+	 */
+	public void setProgressDialogProgress(int position) {
+		if (mProgressDialog != null) {
+			mProgressDialog.setProgress(position);
+		}
+	}
+
+	/**
+	 * Check for pro version.
+	 * 
+	 * @return True if pro version exist.
+	 */
+	public boolean isProPresent() {
+		PackageManager pm = getPackageManager();
+		boolean success = false;
+		try {
+			success = (PackageManager.SIGNATURE_MATCH == pm.checkSignatures(
+					this.getPackageName(), "ro.ciubex.dscautorenamepro"));
+			Log.d(TAG, "isProPresent: " + success);
+		} catch (Exception e) {
+			Log.e(TAG, "isProPresent: " + e.getMessage(), e);
+		}
+		return success;
 	}
 }

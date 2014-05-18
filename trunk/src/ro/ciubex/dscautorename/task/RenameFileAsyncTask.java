@@ -77,10 +77,15 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		mContentResolver = mApplication.getContentResolver();
 		mPosition = 0;
 		boolean success;
+		String filterPath;
+		boolean enableFilter;
+		boolean skipFile;
 		if (mContentResolver != null) {
-			populateAllListFiles();
+			enableFilter = mApplication.isEnabledFolderScanning();
+			filterPath = mApplication.getFolderScanning();
 			while (mApplication.isRenameFileRequested()) {
 				mApplication.setRenameFileRequested(false);
+				populateAllListFiles();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
 					mPosition = 0;
@@ -90,22 +95,35 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 						if (oldFileName != null) {
 							File oldFile = getFile(oldFileName);
 							if (oldFile != null) {
-								success = oldFile.canRead()
-										&& oldFile.canWrite();
-								if (success) {
-									success = renameFile(data.getId(),
-											data.getUri(), oldFile, oldFileName);
+								skipFile = false;
+								if (enableFilter) {
+									skipFile = !oldFile.getAbsolutePath()
+											.startsWith(filterPath);
+								}
+								if (!skipFile) {
+									success = oldFile.canRead()
+											&& oldFile.canWrite();
 									if (success) {
-										mPosition++;
+										success = renameFile(data.getId(),
+												data.getUri(), oldFile,
+												oldFileName);
+										if (success) {
+											mPosition++;
+										} else {
+											rollbackMediaStoreData(data);
+											Log.d(TAG,
+													"rollback: " + data.getId()
+															+ ", "
+															+ oldFileName);
+										}
 									} else {
-										rollbackMediaStoreData(data);
-										Log.d(TAG, "rollback: " + data.getId()
-												+ ", " + oldFileName);
+										Log.e(TAG,
+												"File is not reable and writable: "
+														+ oldFileName);
 									}
 								} else {
-									Log.e(TAG,
-											"File is not reable and writable: "
-													+ oldFileName);
+									Log.d(TAG, "Skip rename file: "
+											+ oldFileName);
 								}
 							} else {
 								Log.e(TAG, "The file:" + oldFileName
@@ -167,7 +185,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (mListener != null) {
 			mListener.onTaskFinished(count);
 		}
-		mListFiles.clear();
+		if (mListFiles != null) {
+			mListFiles.clear();
+		}
 		mListFiles = null;
 		mApplication.setRenameFileTaskCanceled(false);
 	}

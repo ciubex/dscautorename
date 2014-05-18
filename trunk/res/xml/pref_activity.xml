@@ -10,7 +10,8 @@
             android:key="serviceType"
             android:summary="@string/enable_desc"
             android:title="@string/enable_title" />
-        <CheckBoxPreference
+
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="renameVideoEnabled"
             android:summary="@string/rename_video_enabled_desc"
@@ -24,6 +25,19 @@
             ciubex:maxValue="30"
             ciubex:minValue="2"
             ciubex:units="@string/seconds_unit" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="enabledFolderScanning"
+            android:summary="@string/enable_filter_folder_desc"
+            android:title="@string/enable_filter_folder_title" />
+
+        <Preference
+            android:dependency="enabledFolderScanning"
+            android:key="folderScanningPref"
+            android:persistent="false"
+            android:summary="@string/filter_folder_desc"
+            android:title="@string/filter_folder_title" />
 
         <EditTextPreference
             android:defaultValue="@string/original_file_prefix"

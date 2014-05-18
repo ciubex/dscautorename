@@ -4,6 +4,7 @@
     <string name="general_settings">General settings</string>
     <string name="enable_title">Auto rename service trigger.</string>
     <string name="enable_desc">Files are automatically renamed after the trigger occur.</string>
+
     <string-array name="service_type_labels">
         <item>Disabled</item>
         <item>Camera events: pictures or videos taken.</item>
@@ -14,6 +15,7 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
     <string name="service_choice_0">The auto rename service is disabled.</string>
     <string name="service_choice_1">The auto rename service is triggered by camera events.</string>
     <string name="service_choice_2">The auto rename service is triggered by media content events.</string>
@@ -22,6 +24,10 @@
     <string name="seconds_unit">seconds</string>
     <string name="rename_video_enabled_title">Enable video file rename</string>
     <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
+    <string name="enable_filter_folder_title">Rename within a folder</string>
+    <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
+    <string name="filter_folder_title">Select a folder.</string>
+    <string name="filter_folder_desc">/</string>
     <string name="original_file_prefix">DSC_,MOV_</string>
     <string name="original_file_prefix_title">The original file name prefix.</string>
     <string name="original_file_prefix_desc">Change original file name prefix: %1$s\n(e.g. %1$s001.JPG)\nYou can use comma to separate different prefixes.</string>
@@ -47,6 +53,9 @@
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
     <string name="please_wait">Please wait&#8230;</string>
+    <string name="loading_wait">Loading&#8230;</string>
+    <string name="no_folders">No folders</string>
+    
     <!-- About -->
     <string name="about_section">About</string>
     <string name="build_version_title">Build version</string>
@@ -55,8 +64,10 @@
     <string name="license_desc">License details for open source software</string>
     <string name="donate_title">Donate</string>
     <string name="donate_desc">Please make a donation if you appreciate this application.</string>
-    <string name="donate_confirmation">If you appreciate this application, please do a donation!\nPressing YES button, you will be sent using your default browser to a PayPal donnation page.\nThank you for using this application!</string>
-    <string name="donate_url"><Data><![CDATA[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=claudiu_ciobotariu%40yahoo%2ecom&lc=RO&item_name=Ciubex&item_number=DSCAutoRename%20Donation&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted]]></Data></string>
+    <string name="donate_confirmation">If you appreciate this application, please do a donation buying DSC Auto Rename PRO!\nPressing YES button, you will be sent to DSC Auto Rename PRO from Google Play Store.\nThank you for using this application!</string>
+    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
+    <string name="thank_you_title">Thank you for donation!</string>
+    <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
     <string name="about_text"><Data>
 <![CDATA[This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/><br/>
 The file rename format use Java date and time format parameters:<br/>

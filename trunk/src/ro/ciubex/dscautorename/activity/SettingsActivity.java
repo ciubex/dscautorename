@@ -22,9 +22,9 @@ import java.util.Date;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
+import ro.ciubex.dscautorename.dialog.SelectFolderDialog;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,18 +46,20 @@ import android.util.Log;
  * 
  */
 public class SettingsActivity extends PreferenceActivity implements
-		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener {
+		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener,
+		DSCApplication.ProgressCancelListener {
 	private final String TAG = getClass().getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
 	private EditTextPreference mOriginalFilePrefix;
 	private EditTextPreference mFileNameFormat;
+	private Preference mFolderScanningPref;
 	private Preference mManuallyStartRename;
 	private Preference mFileRenameCount;
 	private Preference mBuildVersion;
 	private Preference mLicensePref;
 	private Preference mDonatePref;
-	private ProgressDialog mProgressDialog;
+	private AlertDialog mFolderAlertDialog;
 
 	/**
 	 * Method called when the activity is created
@@ -69,14 +71,15 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication = (DSCApplication) getApplication();
 		initPreferences();
 		initCommands();
+		checkProVersion();
 	}
-
 	/**
 	 * Initialize preferences controls.
 	 */
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
 		mOriginalFilePrefix = (EditTextPreference) findPreference("originalFilePrefix");
+		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
 		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
@@ -89,6 +92,15 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Initialize the preference commands.
 	 */
 	private void initCommands() {
+		mFolderScanningPref
+				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						onFolderScanningPref();
+						return true;
+					}
+				});
 		mManuallyStartRename
 				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -135,6 +147,15 @@ public class SettingsActivity extends PreferenceActivity implements
 					}
 				});
 	}
+	
+	private void checkProVersion() {
+		if (mApplication.isProPresent()) {
+			mDonatePref.setEnabled(false);
+			mDonatePref.setTitle(R.string.thank_you_title);
+			mDonatePref.setSummary(R.string.thank_you_desc);
+		}
+	}
+
 
 	/**
 	 * Prepare all informations when the activity is resuming
@@ -208,6 +229,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			mServiceTypeList.setSummary(R.string.service_choice_0);
 			break;
 		}
+		mFolderScanningPref.setSummary(mApplication.getFolderScanning());
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
@@ -232,9 +254,16 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
+	 * Start to select a folder.
+	 */
+	private void onFolderScanningPref() {
+		new SelectFolderDialog(this, mApplication).show();
+	}
+
+	/**
 	 * Start the rename service.
 	 */
-	protected void onManuallyStartRename() {
+	private void onManuallyStartRename() {
 		mApplication.setRenameFileRequested(true);
 		if (!mApplication.isRenameFileTaskRunning()) {
 			new RenameFileAsyncTask(mApplication, this).execute();
@@ -320,7 +349,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	@Override
 	public void onTaskStarted() {
-		showProgressDialog(
+		mApplication.showProgressDialog(this, this,
 				mApplication.getString(R.string.manually_service_running), 0);
 	}
 
@@ -334,18 +363,16 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	@Override
 	public void onTaskUpdate(int position, int count) {
-		if (mProgressDialog != null) {
-			String message = mApplication.getString(
-					position == 1 ? R.string.manually_file_rename_progress_1
-							: R.string.manually_file_rename_progress_more,
-					position, count);
-			if (position == 0) {
-				hideProgressDialog();
-				showProgressDialog(message, count);
-			} else {
-				mProgressDialog.setMessage(message);
-				mProgressDialog.setProgress(position);
-			}
+		String message = mApplication.getString(
+				position == 1 ? R.string.manually_file_rename_progress_1
+						: R.string.manually_file_rename_progress_more,
+				position, count);
+		if (position == 0) {
+			mApplication.hideProgressDialog();
+			mApplication.showProgressDialog(this, this, message, count);
+		} else {
+			mApplication.setProgressDialogMessage(message);
+			mApplication.setProgressDialogProgress(position);
 		}
 	}
 
@@ -376,49 +403,12 @@ public class SettingsActivity extends PreferenceActivity implements
 				.setTitle(R.string.app_name).setMessage(message)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setNeutralButton(R.string.ok, null);
-		hideProgressDialog();
+		mApplication.hideProgressDialog();
 		dialog.show();
 	}
 
-	/**
-	 * This will show a progress dialog using a context and the message to be
-	 * showed on the progress dialog.
-	 * 
-	 * @param context
-	 *            The context where should be displayed the progress dialog.
-	 * @param message
-	 *            The message displayed inside of progress dialog.
-	 */
-	private void showProgressDialog(String message, int max) {
-		hideProgressDialog();
-		mProgressDialog = new ProgressDialog(this);
-		mProgressDialog.setTitle(R.string.please_wait);
-		mProgressDialog.setMessage(message);
-		mProgressDialog.setCancelable(false);
-		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-				getString(R.string.cancel),
-				new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						mApplication.setRenameFileTaskCanceled(true);
-					}
-				});
-		if (max > 0) {
-			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			mProgressDialog.setIndeterminate(false);
-			mProgressDialog.setMax(max);
-		}
-		mProgressDialog.show();
-	}
-
-	/**
-	 * Hide the progress dialog.
-	 */
-	private void hideProgressDialog() {
-		if (mProgressDialog != null) {
-			mProgressDialog.dismiss();
-		}
-		mProgressDialog = null;
+	@Override
+	public void onProgressCancel() {
+		mApplication.setRenameFileTaskCanceled(true);
 	}
 }
