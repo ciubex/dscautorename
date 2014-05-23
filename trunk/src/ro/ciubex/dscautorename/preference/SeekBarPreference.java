@@ -40,7 +40,7 @@ import android.widget.TextView;
  */
 public class SeekBarPreference extends Preference implements
 		OnSeekBarChangeListener {
-	private final String TAG = getClass().getName();
+	private static final String TAG = SeekBarPreference.class.getName();
 
 	private static final String PREFERENCE_NS = "http://schemas.android.com/apk/res/ro.ciubex.dscautorename";
 	private static final int DEFAULT_VALUE = 0;

@@ -40,7 +40,7 @@ import android.util.Log;
  * 
  */
 public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
-	private final String TAG = getClass().getName();
+	private final static String TAG = RenameFileAsyncTask.class.getName();
 	private DSCApplication mApplication;
 	private ContentResolver mContentResolver;
 	private Listener mListener;
@@ -104,8 +104,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 									success = oldFile.canRead()
 											&& oldFile.canWrite();
 									if (success) {
-										success = renameFile(data.getId(),
-												data.getUri(), oldFile,
+										success = renameFile(data, oldFile,
 												oldFileName);
 										if (success) {
 											mPosition++;
@@ -139,6 +138,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					populateAllListFiles();
 				}
+				doQuery(mContentResolver,
+						MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 				mApplication.setRenameFileTaskRunning(false);
 			}
 		}
@@ -195,27 +196,30 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	/**
 	 * Rename the old file with provided new name.
 	 * 
-	 * @param id
-	 *            The ID of the file to be updated
+	 * @param data
+	 *            Original data information.
 	 * @param oldFile
 	 *            The old file to be renamed.
 	 * @param oldFileName
 	 *            The old file name.
 	 */
-	private boolean renameFile(int id, Uri uri, File oldFile, String oldFileName) {
+	private boolean renameFile(OriginalData data, File oldFile,
+			String oldFileName) {
 		boolean success = false;
 		int index = 0;
 		String newFileName;
 		File newFile;
 		boolean exist = false;
 		do {
-			newFileName = getNewFileName(oldFile, index);
+			newFileName = getNewFileName(data, oldFile, index);
 			newFile = new File(oldFile.getParentFile(), newFileName);
 			index++;
 			exist = newFile.exists();
 		} while (exist && index < 1000);
 		if (!exist) {
-			success = setNewFileToMediaStoreData(id, uri, oldFileName, newFile);
+			int id = data.getId();
+			success = setNewFileToMediaStoreData(id, data.getUri(),
+					oldFileName, newFile);
 			if (success) {
 				success = oldFile.renameTo(newFile);
 				if (!success) {
@@ -321,16 +325,21 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	/**
 	 * Rename the file provided as parameter.
 	 * 
+	 * @param data
+	 *            Original data information.
 	 * @param file
 	 *            The file to be renamed.
 	 * @param index
 	 *            The index used to generate a unique file name if the file is
 	 *            already exist.
 	 */
-	private String getNewFileName(File file, int index) {
+	private String getNewFileName(OriginalData data, File file, int index) {
 		String oldFileName = file.getName();
-		long milliseconds = file.lastModified();
-		String newFileName = mApplication.getFileName(new Date(milliseconds));
+		long dateadded = data.getDateAdded();
+		if (dateadded < 9999999999L) {
+			dateadded = dateadded * 1000;
+		}
+		String newFileName = mApplication.getFileName(new Date(dateadded));
 		if (index > 0) {
 			newFileName += "_" + index;
 		}
@@ -399,7 +408,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		Cursor cursor = null;
 		String[] columns = new String[] { MediaStore.MediaColumns._ID,
 				MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.TITLE,
-				MediaStore.MediaColumns.DISPLAY_NAME };
+				MediaStore.MediaColumns.DISPLAY_NAME,
+				MediaStore.MediaColumns.DATE_ADDED };
 		StringBuilder where = new StringBuilder("");
 		String[] selectionArgs = null;
 		String temp;
@@ -429,6 +439,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					selectionArgs, null);
 			if (cursor != null) {
 				int id;
+				long dateAdded;
 				String data, title, displayName;
 				OriginalData originalData;
 				while (cursor.moveToNext()) {
@@ -441,8 +452,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					displayName = cursor
 							.getString(cursor
 									.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+					dateAdded = cursor
+							.getLong(cursor
+									.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED));
 					originalData = new OriginalData(id, uri, data, title,
-							displayName);
+							displayName, dateAdded);
 					mListFiles.add(originalData);
 				}
 			}
@@ -450,6 +464,45 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			Log.e(TAG, "getImageList Exception: " + ex.getMessage(), ex);
 		} finally {
 			if (cursor != null && !cursor.isClosed()) {
+				cursor.close();
+			}
+		}
+	}
+
+	/**
+	 * This is an utility method used to show columns and values from a table.
+	 * 
+	 * @param cr
+	 *            The application ContentResolver
+	 * @param uri
+	 *            The database URI path.
+	 */
+	private void doQuery(ContentResolver cr, Uri uri) {
+		Cursor cursor = cr.query(uri, null, null, null, null);
+		if (cursor != null) {
+			cursor.moveToFirst();
+			int rows = cursor.getCount();
+			int cols = cursor.getColumnCount();
+			int i, j;
+			String rowVal;
+			Log.i(TAG, uri.getPath());
+			for (i = 0; i < rows; i++) {
+				rowVal = "row[" + i + "]:";
+				for (j = 0; j < cols; j++) {
+					if (j > 0) {
+						rowVal += ", ";
+					}
+					try {
+						rowVal += cursor.getColumnName(j) + ": "
+								+ cursor.getString(j);
+					} catch (Exception e) {
+						Log.e(TAG, "[" + j + "]:" + e.getMessage());
+					}
+				}
+				Log.i(TAG, rowVal);
+				cursor.moveToNext();
+			}
+			if (!cursor.isClosed()) {
 				cursor.close();
 			}
 		}
