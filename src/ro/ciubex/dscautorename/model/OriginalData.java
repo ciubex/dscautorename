@@ -32,14 +32,16 @@ public class OriginalData {
 	private String mData;
 	private String mTitle;
 	private String mDisplayName;
+	private long mDateAdded;
 
 	public OriginalData(int id, Uri uri, String data, String title,
-			String displayName) {
+			String displayName, long dateAdded) {
 		this.mId = id;
 		this.mUri = uri;
 		this.mData = data;
 		this.mTitle = title;
 		this.mDisplayName = displayName;
+		this.mDateAdded = dateAdded;
 	}
 
 	/**
@@ -75,6 +77,13 @@ public class OriginalData {
 	 */
 	public String getDisplayName() {
 		return mDisplayName;
+	}
+
+	/**
+	 * @return the mDateAdded
+	 */
+	public long getDateAdded() {
+		return mDateAdded;
 	}
 
 	/*
@@ -132,7 +141,7 @@ public class OriginalData {
 		builder.append(" [Uri=").append(mUri).append(", Id=").append(mId)
 				.append(", Data=").append(mData).append(", DisplayName=")
 				.append(mDisplayName).append(", Title=").append(mTitle)
-				.append("]");
+				.append(", DateAdded=").append(mDateAdded).append("]");
 		return builder.toString();
 	}
 

@@ -48,7 +48,7 @@ import android.util.Log;
 public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener,
 		DSCApplication.ProgressCancelListener {
-	private final String TAG = getClass().getName();
+	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
 	private EditTextPreference mOriginalFilePrefix;
@@ -59,7 +59,6 @@ public class SettingsActivity extends PreferenceActivity implements
 	private Preference mBuildVersion;
 	private Preference mLicensePref;
 	private Preference mDonatePref;
-	private AlertDialog mFolderAlertDialog;
 
 	/**
 	 * Method called when the activity is created
@@ -73,6 +72,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		initCommands();
 		checkProVersion();
 	}
+
 	/**
 	 * Initialize preferences controls.
 	 */
@@ -147,7 +147,7 @@ public class SettingsActivity extends PreferenceActivity implements
 					}
 				});
 	}
-	
+
 	private void checkProVersion() {
 		if (mApplication.isProPresent()) {
 			mDonatePref.setEnabled(false);
@@ -155,7 +155,6 @@ public class SettingsActivity extends PreferenceActivity implements
 			mDonatePref.setSummary(R.string.thank_you_desc);
 		}
 	}
-
 
 	/**
 	 * Prepare all informations when the activity is resuming
