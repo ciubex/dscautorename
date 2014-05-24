@@ -36,6 +36,17 @@
     <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
     <string name="file_name_format_desc_2">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG %2$s.mp4 &#8230;)</string>
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
+    <string name="rename_file_using_title">Rename file using the date and time when:</string>
+    <string name="rename_file_using_desc">the file was added to the media provider.</string>
+    <string-array name="rename_file_using_labels">
+        <item>the file was added to the media provider (for testing).</item>
+        <item>the file was last modified (old way).</item>
+    </string-array>
+    <string-array name="rename_file_using_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    
     <string name="other_settings">Other settings</string>
     <string name="manually_start_title">Start manually rename service</string>
     <string name="manually_start_desc">Touch to start manually rename service</string>

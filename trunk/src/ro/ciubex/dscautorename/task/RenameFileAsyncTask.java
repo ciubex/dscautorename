@@ -335,16 +335,42 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private String getNewFileName(OriginalData data, File file, int index) {
 		String oldFileName = file.getName();
-		long dateadded = data.getDateAdded();
-		if (dateadded < 9999999999L) {
-			dateadded = dateadded * 1000;
+		long milliseconds = file.lastModified();
+		if (mApplication.getRenameFileDateType() == 1) {
+			milliseconds = getDateAdded(data, file);
 		}
-		String newFileName = mApplication.getFileName(new Date(dateadded));
+		String newFileName = mApplication.getFileName(new Date(milliseconds));
 		if (index > 0) {
 			newFileName += "_" + index;
 		}
 		newFileName += getFileExtension(oldFileName);
 		return newFileName;
+	}
+
+	/**
+	 * Obtain and calculate in milliseconds the date and time when the file was
+	 * added to media storage.
+	 * 
+	 * @param data
+	 *            Original data.
+	 * @param file
+	 *            The file object.
+	 * @return The date and time in milliseconds when file was added.
+	 */
+	private long getDateAdded(OriginalData data, File file) {
+		long milliseconds = data.getDateAdded();
+		String temp = String.valueOf(milliseconds);
+		if (temp.length() == 10) {
+			milliseconds = milliseconds * 1000;
+		} else if (temp.length() > 13) {
+			temp = temp.substring(0, 13);
+			try {
+				milliseconds = Long.parseLong(temp);
+			} catch (Exception e) {
+				milliseconds = file.lastModified();
+			}
+		}
+		return milliseconds;
 	}
 
 	/**
