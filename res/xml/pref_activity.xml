@@ -49,6 +49,14 @@
             android:key="fileNameFormat"
             android:summary="@string/file_name_format_desc"
             android:title="@string/file_name_format_title" />
+        
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/rename_file_using_labels"
+            android:entryValues="@array/rename_file_using_values"
+            android:key="renameFileDateType"
+            android:summary="@string/rename_file_using_desc"
+            android:title="@string/rename_file_using_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/other_settings" >
         <Preference

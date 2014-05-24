@@ -364,6 +364,14 @@ public class DSCApplication extends Application {
 		}
 		saveIntegerValue("registeredServiceType", serviceType);
 	}
+	
+	/**
+	 * Obtain which date should be used to rename
+	 * @return
+	 */
+	public int getRenameFileDateType() {
+		return mSharedPreferences.getInt("renameFileDateType", 1);
+	}
 
 	/**
 	 * Method used to dynamically register a content observer service used to
