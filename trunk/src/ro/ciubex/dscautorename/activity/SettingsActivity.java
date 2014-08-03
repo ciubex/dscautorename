@@ -23,6 +23,8 @@ import java.util.Date;
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.dialog.SelectFolderDialog;
+import ro.ciubex.dscautorename.dialog.SelectPrefixDialog;
+import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -51,7 +53,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
-	private EditTextPreference mOriginalFilePrefix;
+	private Preference mDefinePrefixes;
 	private EditTextPreference mFileNameFormat;
 	private Preference mFolderScanningPref;
 	private Preference mManuallyStartRename;
@@ -78,7 +80,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
-		mOriginalFilePrefix = (EditTextPreference) findPreference("originalFilePrefix");
+		mDefinePrefixes = (Preference) findPreference("definePrefixes");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
 		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
@@ -92,6 +94,15 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Initialize the preference commands.
 	 */
 	private void initCommands() {
+		mDefinePrefixes
+				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						onDefinePrefixes();
+						return true;
+					}
+				});
 		mFolderScanningPref
 				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -188,9 +199,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if ("originalFilePrefix".equals(key)) {
-			mApplication.validateOriginalFilePrefix();
-		} else if ("serviceType".equals(key)) {
+		if ("serviceType".equals(key)) {
 			mApplication.checkRegisteredServiceType(false);
 		}
 		prepareSummaries();
@@ -201,22 +210,15 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void prepareSummaries() {
 		Date now = new Date();
-		String[] originalArr = mApplication.getOriginalFilePrefix();
+		FilePrefix[] originalArr = mApplication.getOriginalFilePrefix();
 		String newFileName = mApplication.getFileName(now);
-		String txt1, txt2;
-		if (originalArr.length > 1) {
-			txt1 = mApplication.getString(R.string.original_file_prefix_desc_2,
-					originalArr[0], originalArr[1]);
-			txt2 = mApplication.getString(R.string.file_name_format_desc_2,
-					mApplication.getFileNameFormat(), newFileName);
-		} else {
-			txt1 = mApplication.getString(R.string.original_file_prefix_desc,
-					originalArr[0]);
-			txt2 = mApplication.getString(R.string.file_name_format_desc,
-					mApplication.getFileNameFormat(), newFileName);
-		}
-		mOriginalFilePrefix.setSummary(txt1);
-		mFileNameFormat.setSummary(txt2);
+		String summary = mApplication.getString(
+				R.string.define_file_prefix_desc, originalArr[0].getBefore());
+		mDefinePrefixes.setSummary(summary);
+		summary = mApplication.getString(R.string.file_name_format_desc,
+				mApplication.getFileNameFormat(), originalArr[0].getAfter()
+						+ newFileName);
+		mFileNameFormat.setSummary(summary);
 		switch (mApplication.getServiceType()) {
 		case DSCApplication.SERVICE_TYPE_CAMERA:
 			mServiceTypeList.setSummary(R.string.service_choice_1);
@@ -250,6 +252,13 @@ public class SettingsActivity extends PreferenceActivity implements
 					ex);
 		}
 		return version;
+	}
+
+	/**
+	 * When the user click on define prefixes preferences.
+	 */
+	private void onDefinePrefixes() {
+		new SelectPrefixDialog(this, mApplication).show();
 	}
 
 	/**

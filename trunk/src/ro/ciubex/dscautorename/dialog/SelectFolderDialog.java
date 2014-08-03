@@ -27,31 +27,32 @@ import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.adpater.FileListAdapter;
 import ro.ciubex.dscautorename.model.FileItem;
 import ro.ciubex.dscautorename.task.FolderScannAsyncTask;
-import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 /**
+ * A dialog used to show a list of folders and files.
+ * 
  * @author Claudiu Ciobotariu
  * 
  */
-public class SelectFolderDialog extends Dialog implements OnClickListener,
+public class SelectFolderDialog extends BaseDialog implements
 		FolderScannAsyncTask.Responder {
-	private DSCApplication mApplication;
-	private List<FileItem> mFiles;
+
 	private File mCurrentFolder;
 	private ListView mFilesListView;
-	protected Button btnOk, btnCancel;
+	private FileListAdapter mFileListAdapter;
+	private List<FileItem> mFiles;
+	private boolean mIsFolderScanning;
 
 	public SelectFolderDialog(Context context, DSCApplication application) {
-		super(context);
+		super(context, application);
 		setContentView(R.layout.select_folder_dialog_layout);
-		mApplication = application;
+		this.mFiles = new ArrayList<FileItem>();
+		mFileListAdapter = new FileListAdapter(context);
 	}
 
 	/*
@@ -62,7 +63,7 @@ public class SelectFolderDialog extends Dialog implements OnClickListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		initDialog();
+		initDialog(BUTTON_OK | BUTTON_CANCEL);
 		initFilesList();
 	}
 
@@ -79,23 +80,13 @@ public class SelectFolderDialog extends Dialog implements OnClickListener,
 	}
 
 	/**
-	 * Initialize the dialog.
-	 */
-	private void initDialog() {
-		btnOk = (Button) findViewById(R.id.btnOk);
-		btnOk.setOnClickListener(this);
-		btnCancel = (Button) findViewById(R.id.btnCancel);
-		btnCancel.setOnClickListener(this);
-	}
-
-	/**
 	 * Initialize the list o files and files list view.
 	 */
 	private void initFilesList() {
 		mCurrentFolder = new File(mApplication.getFolderScanning());
-		mFiles = new ArrayList<FileItem>();
 		mFilesListView = (ListView) findViewById(R.id.folderList);
 		mFilesListView.setEmptyView(findViewById(R.id.emptyFolderList));
+		mFilesListView.setAdapter(mFileListAdapter);
 		mFilesListView
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -114,12 +105,18 @@ public class SelectFolderDialog extends Dialog implements OnClickListener,
 	 *            Position on the list of selected folder.
 	 */
 	private void setSelectedFolder(int position) {
-		if (position > -1 && position < mFiles.size()) {
-			FileItem fileItem = mFiles.get(position);
-			if (fileItem != null) {
-				if (fileItem.isDirectory()) {
-					mCurrentFolder = fileItem.getFile();
-					startFolderScanningTask();
+		if (mIsFolderScanning) {
+			Context context = getContext();
+			mApplication.showProgressDialog(null, context,
+					context.getString(R.string.loading_wait), 0);
+		} else {
+			if (position > -1 && position < mFileListAdapter.getCount()) {
+				FileItem fileItem = mFileListAdapter.getItem(position);
+				if (fileItem != null) {
+					if (fileItem.isDirectory()) {
+						mCurrentFolder = fileItem.getFile();
+						startFolderScanningTask();
+					}
 				}
 			}
 		}
@@ -144,9 +141,7 @@ public class SelectFolderDialog extends Dialog implements OnClickListener,
 	 */
 	@Override
 	public void startFolderScanning() {
-		Context context = getContext();
-		mApplication.showProgressDialog(null, context,
-				context.getString(R.string.loading_wait), 0);
+		mIsFolderScanning = true;
 	}
 
 	/**
@@ -156,9 +151,11 @@ public class SelectFolderDialog extends Dialog implements OnClickListener,
 	public void endFolderScanning(int result) {
 		if (result > -1) {
 			updateDialogTitle();
-			FileListAdapter adapter = new FileListAdapter(getContext(), mFiles);
-			mFilesListView.setAdapter(adapter);
+			mFileListAdapter.clear();
+			mFileListAdapter.addAll(mFiles);
+			mFileListAdapter.notifyDataSetChanged();
 		}
+		mIsFolderScanning = false;
 		mApplication.hideProgressDialog();
 	}
 
@@ -173,7 +170,7 @@ public class SelectFolderDialog extends Dialog implements OnClickListener,
 		if (btnOk == view) {
 			mApplication.setFolderScanning(mCurrentFolder.getAbsolutePath());
 		}
-		dismiss();
+		super.onClick(view);
 	}
 
 }

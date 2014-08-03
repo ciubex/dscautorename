@@ -18,6 +18,7 @@
  */
 package ro.ciubex.dscautorename.adpater;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ro.ciubex.dscautorename.R;
@@ -40,10 +41,10 @@ public class FileListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private List<FileItem> mFiles;
 
-	public FileListAdapter(Context context, List<FileItem> files) {
+	public FileListAdapter(Context context) {
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		this.mFiles = files;
+		this.mFiles = new ArrayList<FileItem>();
 	}
 
 	/*
@@ -63,7 +64,7 @@ public class FileListAdapter extends BaseAdapter {
 	 */
 	@Override
 	public FileItem getItem(int position) {
-		if (position > -1 && position < mFiles.size()) {
+		if (position > -1 && position < getCount()) {
 			return mFiles.get(position);
 		}
 		return null;
@@ -141,8 +142,27 @@ public class FileListAdapter extends BaseAdapter {
 	 * View holder for item list elements
 	 * 
 	 */
-	static class ViewHolder {
+	private class ViewHolder {
 		ImageView itemIcon;
 		TextView itemText;
+	}
+
+	/**
+	 * Clear the list.
+	 */
+	public void clear() {
+		if (!mFiles.isEmpty()) {
+			mFiles.clear();
+		}
+	}
+
+	/**
+	 * Add a new file list to the adapter.
+	 * 
+	 * @param files
+	 *            The new file list to be added.
+	 */
+	public void addAll(List<FileItem> files) {
+		mFiles.addAll(files);
 	}
 }

@@ -26,15 +26,17 @@ import android.net.Uri;
  * @author Claudiu Ciobotariu
  * 
  */
-public class OriginalData {
+public class FileRenameData {
 	private int mId;
 	private Uri mUri;
 	private String mData;
 	private String mTitle;
 	private String mDisplayName;
 	private long mDateAdded;
+	private String mPrefixBefore;
+	private String mPrefixAfter;
 
-	public OriginalData(int id, Uri uri, String data, String title,
+	public FileRenameData(int id, Uri uri, String data, String title,
 			String displayName, long dateAdded) {
 		this.mId = id;
 		this.mUri = uri;
@@ -86,6 +88,22 @@ public class OriginalData {
 		return mDateAdded;
 	}
 
+	public String getPrefixBefore() {
+		return mPrefixBefore;
+	}
+
+	public void setPrefixBefore(String prefixBefore) {
+		this.mPrefixBefore = prefixBefore;
+	}
+
+	public String getPrefixAfter() {
+		return mPrefixAfter;
+	}
+
+	public void setPrefixAfter(String prefixAfter) {
+		this.mPrefixAfter = prefixAfter;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -113,10 +131,10 @@ public class OriginalData {
 		if (obj == null) {
 			return false;
 		}
-		if (!(obj instanceof OriginalData)) {
+		if (!(obj instanceof FileRenameData)) {
 			return false;
 		}
-		OriginalData other = (OriginalData) obj;
+		FileRenameData other = (FileRenameData) obj;
 		if (mId != other.mId) {
 			return false;
 		}
