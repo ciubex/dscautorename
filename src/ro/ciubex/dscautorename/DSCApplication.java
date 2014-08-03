@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
 import android.app.Application;
 import android.app.ProgressDialog;
@@ -147,6 +148,21 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Obtain a demo extension based on provided file name prefix.
+	 * 
+	 * @param fileNamePrefix
+	 *            Provided file name prefix.
+	 * @return A demo extension.
+	 */
+	public String getDemoExtension(String fileNamePrefix) {
+		String ext = ".JPG";
+		if (fileNamePrefix != null && fileNamePrefix.indexOf("DSC") < 0) {
+			ext = ".MP4";
+		}
+		return ext;
+	}
+
+	/**
 	 * Check if the service is enabled.
 	 * 
 	 * @return True if the service is enabled.
@@ -169,41 +185,66 @@ public class DSCApplication extends Application {
 	 * 
 	 * @return The original file name prefix.
 	 */
-	public String[] getOriginalFilePrefix() {
+	public FilePrefix[] getOriginalFilePrefix() {
 		String value = mSharedPreferences.getString("originalFilePrefix",
 				getString(R.string.original_file_prefix));
 		if (value.length() < 1) {
 			value = getString(R.string.original_file_prefix);
 			saveStringValue("originalFilePrefix", value);
 		}
-		return value.split(",");
+		String[] arr = value.split(",");
+		FilePrefix[] fp = new FilePrefix[arr.length];
+		for (int i = 0; i < arr.length; i++) {
+			fp[i] = new FilePrefix(arr[i]);
+		}
+		return fp;
 	}
 
 	/**
-	 * Validate original file prefix.
+	 * Update a file prefix.
+	 * 
+	 * @param filePrefix
+	 *            File prefix to be updated.
+	 * @param position
+	 *            Position of updated file prefix.
 	 */
-	public void validateOriginalFilePrefix() {
-		String value = mSharedPreferences.getString("originalFilePrefix",
-				getString(R.string.original_file_prefix));
-		String[] array = value.split(",");
-		String temp;
-		StringBuilder sBuilder = new StringBuilder("");
-		for (int i = 0; i < array.length; i++) {
-			temp = array[i].trim();
-			if (temp.length() > 0) {
-				if (i > 0) {
-					sBuilder.append(',');
-				}
-				sBuilder.append(temp);
+	public void saveFilePrefix(FilePrefix filePrefix, int position) {
+		FilePrefix[] arr = getOriginalFilePrefix();
+		FilePrefix fp;
+		int index;
+		int len = arr.length;
+		StringBuilder sb = new StringBuilder();
+		for (index = 0; index < len; index++) {
+			if (position == index) {
+				fp = filePrefix;
+			} else {
+				fp = arr[index];
 			}
+			if (index > 0) {
+				sb.append(',');
+			}
+			sb.append(fp.toString());
 		}
-		String result = sBuilder.toString();
-		if (result.length() < 1) {
-			saveStringValue("originalFilePrefix",
-					getString(R.string.original_file_prefix));
-		} else if (!value.equals(result)) {
-			saveStringValue("originalFilePrefix", result);
+		if (position == -1) {
+			if (sb.length() > 0) {
+				sb.append(',');
+			}
+			sb.append(filePrefix.toString());
 		}
+		if (sb.length() < 1) {
+			sb.append(getString(R.string.original_file_prefix));
+		}
+		saveFilePrefix(sb.toString());
+	}
+
+	/**
+	 * Save the files prefixes on the shared preferences..
+	 * 
+	 * @param filePrefixes
+	 *            The file prefixes to be saved.
+	 */
+	public void saveFilePrefix(String filePrefixes) {
+		saveStringValue("originalFilePrefix", filePrefixes);
 	}
 
 	/**
@@ -302,12 +343,25 @@ public class DSCApplication extends Application {
 	 * @return Disabled = 0, camera = 1 or content = 2.
 	 */
 	public int getServiceType() {
-		String strValue = mSharedPreferences.getString("serviceType", "1");
-		int value = 1;
+		return getIntValue("serviceType", 1);
+	}
+
+	/**
+	 * Obtain a valid integer value from shared preference.
+	 * 
+	 * @param key
+	 *            The key.
+	 * @param defaultValue
+	 *            The default value.
+	 * @return Value of the key.
+	 */
+	private int getIntValue(String key, int defaultValue) {
+		String strValue = mSharedPreferences.getString(key, "" + defaultValue);
+		int value = defaultValue;
 		try {
 			value = Integer.parseInt(strValue);
 		} catch (NumberFormatException e) {
-			Log.e(TAG, "getServiceType: " + strValue, e);
+			Log.e(TAG, "getIntValue(" + key + "): " + strValue, e);
 		}
 		return value;
 	}
@@ -364,13 +418,14 @@ public class DSCApplication extends Application {
 		}
 		saveIntegerValue("registeredServiceType", serviceType);
 	}
-	
+
 	/**
 	 * Obtain which date should be used to rename
+	 * 
 	 * @return
 	 */
 	public int getRenameFileDateType() {
-		return mSharedPreferences.getInt("renameFileDateType", 1);
+		return getIntValue("renameFileDateType", 1);
 	}
 
 	/**

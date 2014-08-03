@@ -28,16 +28,26 @@
     <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
     <string name="filter_folder_title">Select a folder.</string>
     <string name="filter_folder_desc">/</string>
+    <string name="original_file_prefix_from">DSC_</string>
+    <string name="original_file_prefix_to"></string>
     <string name="original_file_prefix">DSC_,MOV_</string>
-    <string name="original_file_prefix_title">The original file name prefix.</string>
-    <string name="original_file_prefix_desc">Change original file name prefix: %1$s\n(e.g. %1$s001.JPG)\nYou can use comma to separate different prefixes.</string>
-    <string name="original_file_prefix_desc_2">Change original file name prefix: %1$s,%2$s&#8230;\n(e.g. %1$s001.JPG, %2$s004.mp4 &#8230;)\nYou can use comma to separate different prefixes.</string>
+    <string name="define_file_prefix_title">Define files name prefixes</string>
+    <string name="define_file_prefix_desc">The file name prefixes to be used for rename (\"DSC_\" or \"MOV_\"), e.g. %s001.JPG</string>
+    <string name="prefix_dialog_title_add">Add file name prefixes</string>
+    <string name="prefix_dialog_title_editor">Edit file name prefixes</string>
+    <string name="prefix_dialog_prefix_top">Change file name prefixes</string>
+    <string name="prefix_dialog_prefix_from">before rename prefix:</string>
+    <string name="prefix_dialog_prefix_to">after rename prefix:</string>
+    <string name="prefix_dialog_prefix_bottom">Old file name example:\n\t %1$s001%3$s\nRenamed file name example:\n\t %2$s%3$s</string>
+    <string name="prefix_validation_error_old_empty">Old prefix cannot be empty.</string>
+    <string name="prefix_validation_error_old_prefix">Old prefix already exist, change the text with a new one.</string>
+    <string name="prefix_validation_error_new_prefix">The new prefix should not be a part of an original prefix, the above or existing defined prefix!</string>
     <string name="file_name_format_title">Renamed file name format.</string>
     <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
-    <string name="file_name_format_desc_2">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG %2$s.mp4 &#8230;)</string>
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Rename file using the date and time when:</string>
     <string name="rename_file_using_desc">the file was added to the media provider.</string>
+
     <string-array name="rename_file_using_labels">
         <item>the file was added to the media provider (for testing).</item>
         <item>the file was last modified (old way).</item>
@@ -46,7 +56,7 @@
         <item>0</item>
         <item>1</item>
     </string-array>
-    
+
     <string name="other_settings">Other settings</string>
     <string name="manually_start_title">Start manually rename service</string>
     <string name="manually_start_desc">Touch to start manually rename service</string>
@@ -63,10 +73,17 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
+    <string name="add">Add</string>
+    <string name="delete">Delete</string>
     <string name="please_wait">Please wait&#8230;</string>
     <string name="loading_wait">Loading&#8230;</string>
     <string name="no_folders">No folders</string>
-    
+    <string name="no_prefix">No prefix defined</string>
+    <string name="list_info_press">Add or delete items.</string>
+    <string name="prefix_list_all_selected">At least one prefix should be left unchecked!</string>
+    <string name="prefix_list_no_selection">Select at least one prefix to delete!</string>
+    <string name="prefix_list_confirmation">Do you want to remove selected prefixes?</string>
+
     <!-- About -->
     <string name="about_section">About</string>
     <string name="build_version_title">Build version</string>

@@ -23,7 +23,6 @@ import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 
 /**
  * Define a receiver when is take picture.
@@ -64,16 +63,7 @@ public class CameraEventReceiver extends BroadcastReceiver {
 			if (process) {
 				mApplication.setRenameFileRequested(true);
 				if (!mApplication.isRenameFileTaskRunning()) {
-					long delayMillis = mApplication
-							.getRenameServiceStartDelay() * 1000;
-					// wait couple of seconds to run the thread.
-					new Handler().postDelayed(new Runnable() {
-
-						@Override
-						public void run() {
-							new RenameFileAsyncTask(mApplication).execute();
-						}
-					}, delayMillis);
+					new RenameFileAsyncTask(mApplication).execute();
 				}
 			}
 		}

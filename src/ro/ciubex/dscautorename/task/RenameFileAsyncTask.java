@@ -22,9 +22,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.model.OriginalData;
+import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.model.FileRenameData;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -44,8 +47,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private DSCApplication mApplication;
 	private ContentResolver mContentResolver;
 	private Listener mListener;
-	private List<OriginalData> mListFiles;
+	private List<FileRenameData> mListFiles;
 	private int mPosition, mCount;
+	private Locale mLocale;
+	private FilePrefix[] mFilesPrefixes;
+	private Pattern[] mPatterns;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -62,7 +68,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public RenameFileAsyncTask(DSCApplication application, Listener listener) {
 		this.mApplication = application;
 		this.mListener = listener;
+		mLocale = mApplication.getLocale();
 		mApplication.setRenameFileTaskRunning(true);
+		mFilesPrefixes = mApplication.getOriginalFilePrefix();
 	}
 
 	/**
@@ -82,15 +90,17 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		boolean skipFile;
 		if (mContentResolver != null) {
 			enableFilter = mApplication.isEnabledFolderScanning();
-			filterPath = mApplication.getFolderScanning();
 			while (mApplication.isRenameFileRequested()) {
 				mApplication.setRenameFileRequested(false);
+				executeDelay();
+				filterPath = mApplication.getFolderScanning();
+				buildPatterns();
 				populateAllListFiles();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
 					mPosition = 0;
 					publishProgress();
-					for (OriginalData data : mListFiles) {
+					for (FileRenameData data : mListFiles) {
 						String oldFileName = data.getData();
 						if (oldFileName != null) {
 							File oldFile = getFile(oldFileName);
@@ -108,12 +118,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 												oldFileName);
 										if (success) {
 											mPosition++;
-										} else {
-											rollbackMediaStoreData(data);
-											Log.d(TAG,
-													"rollback: " + data.getId()
-															+ ", "
-															+ oldFileName);
 										}
 									} else {
 										Log.e(TAG,
@@ -138,12 +142,48 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					populateAllListFiles();
 				}
-				doQuery(mContentResolver,
-						MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-				mApplication.setRenameFileTaskRunning(false);
 			}
 		}
+		mApplication.setRenameFileTaskRunning(false);
 		return mPosition;
+	}
+
+	/**
+	 * Prepare prefix patterns.
+	 */
+	private void buildPatterns() {
+		int i, len = mFilesPrefixes.length, lst;
+		mPatterns = new Pattern[len];
+		Pattern pattern;
+		FilePrefix filePrefix;
+		String before;
+		for (i = 0; i < len; i++) {
+			filePrefix = mFilesPrefixes[i];
+			before = filePrefix.getBefore().toLowerCase(mLocale);
+			lst = before.length();
+			if (lst == 0) {
+				before = "*";
+			} else if (lst > 0) {
+				if (before.charAt(lst - 1) != '*') {
+					before += "*";
+				}
+			}
+			pattern = Pattern.compile(wildcardToRegex(before));
+			mPatterns[i] = pattern;
+		}
+	}
+
+	/**
+	 * Stop the thread execution.
+	 */
+	private void executeDelay() {
+		long sec = mApplication.getRenameServiceStartDelay();
+		long delayMillis = sec * 1000;
+		try {
+			Thread.sleep(delayMillis);
+		} catch (InterruptedException e) {
+			Log.e(TAG, "InterruptedException", e);
+		}
 	}
 
 	/**
@@ -203,7 +243,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * @param oldFileName
 	 *            The old file name.
 	 */
-	private boolean renameFile(OriginalData data, File oldFile,
+	private boolean renameFile(FileRenameData data, File oldFile,
 			String oldFileName) {
 		boolean success = false;
 		int index = 0;
@@ -218,19 +258,14 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		} while (exist && index < 1000);
 		if (!exist) {
 			int id = data.getId();
-			success = setNewFileToMediaStoreData(id, data.getUri(),
-					oldFileName, newFile);
+			success = oldFile.renameTo(newFile);
 			if (success) {
-				success = oldFile.renameTo(newFile);
-				if (!success) {
-					Log.e(TAG, "The file " + oldFileName + " (id:" + id
-							+ ") cannot be renamed!");
-				} else {
-					Log.d(TAG, "File renamed: " + id + ", " + oldFileName
-							+ ", " + newFileName);
-				}
+				success = setNewFileToMediaStoreData(id, data.getUri(), newFile);
+				Log.d(TAG, "File renamed: " + id + ", " + oldFileName + ", "
+						+ newFileName + ", media updated: " + success);
 			} else {
-				Log.e(TAG, "The file cannot be renamed: " + oldFileName);
+				Log.e(TAG, "The file " + oldFileName + " (id:" + id
+						+ ") cannot be renamed!");
 			}
 		} else {
 			Log.e(TAG, "The file cannot be renamed: " + oldFileName + " to "
@@ -250,25 +285,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *            The new file name.
 	 * @return True if the file name was updated.
 	 */
-	private boolean setNewFileToMediaStoreData(int id, Uri uri,
-			String oldFileName, File newFile) {
+	private boolean setNewFileToMediaStoreData(int id, Uri uri, File newFile) {
 		boolean result = updateMediaStoreData(id, uri,
 				newFile.getAbsolutePath(),
 				removeExtensionFileName(newFile.getName()), newFile.getName());
-		return result;
-	}
-
-	/**
-	 * Put back the old data info on the DB, usually this is invoked when the
-	 * file cannot be renamed.
-	 * 
-	 * @param data
-	 *            The original details object.
-	 * @return True if the data information was stored on DB.
-	 */
-	private boolean rollbackMediaStoreData(OriginalData data) {
-		boolean result = updateMediaStoreData(data.getId(), data.getUri(),
-				data.getData(), data.getTitle(), data.getDisplayName());
 		return result;
 	}
 
@@ -333,15 +353,19 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *            The index used to generate a unique file name if the file is
 	 *            already exist.
 	 */
-	private String getNewFileName(OriginalData data, File file, int index) {
+	private String getNewFileName(FileRenameData data, File file, int index) {
 		String oldFileName = file.getName();
+		String prefix = data.getPrefixAfter();
+		String sufix;
 		long milliseconds = file.lastModified();
 		if (mApplication.getRenameFileDateType() == 1) {
 			milliseconds = getDateAdded(data, file);
 		}
-		String newFileName = mApplication.getFileName(new Date(milliseconds));
+		String newFileName = prefix
+				+ mApplication.getFileName(new Date(milliseconds));
 		if (index > 0) {
-			newFileName += "_" + index;
+			sufix = String.format(mLocale, "%05d", index);
+			newFileName += "_" + sufix;
 		}
 		newFileName += getFileExtension(oldFileName);
 		return newFileName;
@@ -357,7 +381,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *            The file object.
 	 * @return The date and time in milliseconds when file was added.
 	 */
-	private long getDateAdded(OriginalData data, File file) {
+	private long getDateAdded(FileRenameData data, File file) {
 		long milliseconds = data.getDateAdded();
 		String temp = String.valueOf(milliseconds);
 		if (temp.length() == 10) {
@@ -409,7 +433,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private void populateAllListFiles() {
 		if (mListFiles == null) {
-			mListFiles = new ArrayList<OriginalData>();
+			mListFiles = new ArrayList<FileRenameData>();
 		} else {
 			mListFiles.clear();
 		}
@@ -430,60 +454,43 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *            retrieve.
 	 */
 	private void populateListFiles(Uri uri) {
-		String[] array = mApplication.getOriginalFilePrefix();
 		Cursor cursor = null;
 		String[] columns = new String[] { MediaStore.MediaColumns._ID,
 				MediaStore.MediaColumns.DATA, MediaStore.MediaColumns.TITLE,
 				MediaStore.MediaColumns.DISPLAY_NAME,
 				MediaStore.MediaColumns.DATE_ADDED };
-		StringBuilder where = new StringBuilder("");
-		String[] selectionArgs = null;
-		String temp;
-		int index, length = array.length;
-		if (length > 0) {
-			selectionArgs = new String[length];
-			for (index = 0; index < length; index++) {
-				temp = array[index].trim();
-				if (temp.length() > 0) {
-					if (index > 0) {
-						where.append(" OR ");
-					}
-					where.append(MediaStore.MediaColumns.DATA)
-							.append(" LIKE ?");
-					selectionArgs[index] = "%" + temp + "%";
-				}
-			}
-		}
 		try {
-			String selection = null;
-			if (where.length() > 0) {
-				selection = where.toString();
-			} else {
-				selectionArgs = null;
-			}
-			cursor = mContentResolver.query(uri, columns, selection,
-					selectionArgs, null);
+			// doQuery(mContentResolver, uri);
+			cursor = mContentResolver.query(uri, columns, null, null, null);
 			if (cursor != null) {
-				int id;
+				int index, id;
 				long dateAdded;
-				String data, title, displayName;
-				OriginalData originalData;
+				String data, title, displayName, fileName;
+				FileRenameData originalData;
+				FilePrefix filePrefix;
 				while (cursor.moveToNext()) {
-					id = cursor.getInt(cursor
-							.getColumnIndex(MediaStore.MediaColumns._ID));
 					data = cursor.getString(cursor
 							.getColumnIndex(MediaStore.MediaColumns.DATA));
-					title = cursor.getString(cursor
-							.getColumnIndex(MediaStore.MediaColumns.TITLE));
-					displayName = cursor
-							.getString(cursor
-									.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
-					dateAdded = cursor
-							.getLong(cursor
-									.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED));
-					originalData = new OriginalData(id, uri, data, title,
-							displayName, dateAdded);
-					mListFiles.add(originalData);
+					fileName = getFileName(data);
+					index = matchFileNamePrefix(fileName);
+					if (index > -1) {
+						filePrefix = mFilesPrefixes[index];
+						id = cursor.getInt(cursor
+								.getColumnIndex(MediaStore.MediaColumns._ID));
+						title = cursor.getString(cursor
+								.getColumnIndex(MediaStore.MediaColumns.TITLE));
+						displayName = cursor
+								.getString(cursor
+										.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+						dateAdded = cursor
+								.getLong(cursor
+										.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED));
+						originalData = new FileRenameData(id, uri, data, title,
+								displayName, dateAdded);
+						originalData.setPrefixBefore(filePrefix.getBefore());
+						originalData.setPrefixAfter(filePrefix.getAfter());
+						mListFiles.add(originalData);
+					}
 				}
 			}
 		} catch (Exception ex) {
@@ -493,6 +500,87 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				cursor.close();
 			}
 		}
+	}
+
+	/**
+	 * Extract file name based on the full file path.
+	 * 
+	 * @param fullPath
+	 *            Full file path.
+	 * @return File name.
+	 */
+	private String getFileName(String fullPath) {
+		char sep = File.separatorChar;
+		String fileName = fullPath;
+		int idx = fileName.lastIndexOf(sep);
+		if (idx > 0) {
+			fileName = fullPath.substring(idx + 1);
+		}
+		return fileName;
+	}
+
+	/**
+	 * Look on the path and check with existing file name matches.
+	 * 
+	 * @param fileName
+	 *            Path to be checked.
+	 * @return -1 if the path is not matching with a prefix otherwise is
+	 *         returned prefix index.
+	 */
+	private int matchFileNamePrefix(String fileName) {
+		String lower = fileName.toLowerCase(mLocale);
+		int i, len = mPatterns.length;
+		Pattern pattern;
+		for (i = 0; i < len; i++) {
+			pattern = mPatterns[i];
+			if (pattern.matcher(lower).matches()) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * Convert wildcard to a regex expression.
+	 * 
+	 * @param wildcard
+	 *            Wildcard expression to convert.
+	 * @return Converted expression.
+	 */
+	private String wildcardToRegex(String wildcard) {
+		StringBuffer s = new StringBuffer(wildcard.length());
+		s.append('^');
+		for (int i = 0, is = wildcard.length(); i < is; i++) {
+			char c = wildcard.charAt(i);
+			switch (c) {
+			case '*':
+				s.append(".*");
+				break;
+			case '?':
+				s.append(".");
+				break;
+			// escape special regexp-characters
+			case '(':
+			case ')':
+			case '[':
+			case ']':
+			case '$':
+			case '^':
+			case '.':
+			case '{':
+			case '}':
+			case '|':
+			case '\\':
+				s.append("\\");
+				s.append(c);
+				break;
+			default:
+				s.append(c);
+				break;
+			}
+		}
+		s.append('$');
+		return (s.toString());
 	}
 
 	/**

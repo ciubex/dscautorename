@@ -58,16 +58,7 @@ public class MediaStorageContentObserver extends ContentObserver {
 		if (mApplication != null && mApplication.isAutoRenameEnabled()) {
 			mApplication.setRenameFileRequested(true);
 			if (!mApplication.isRenameFileTaskRunning()) {
-				long delayMillis = mApplication.getRenameServiceStartDelay() * 1000;
-				// wait couple of seconds to run the thread.
-				new Handler().postDelayed(new Runnable() {
-
-					@Override
-					public void run() {
-						mApplication.setRenameFileRequested(true);
-						new RenameFileAsyncTask(mApplication).execute();
-					}
-				}, delayMillis);
+				new RenameFileAsyncTask(mApplication).execute();
 			}
 		}
 	}

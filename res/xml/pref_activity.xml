@@ -38,12 +38,12 @@
             android:persistent="false"
             android:summary="@string/filter_folder_desc"
             android:title="@string/filter_folder_title" />
-
-        <EditTextPreference
-            android:defaultValue="@string/original_file_prefix"
-            android:key="originalFilePrefix"
-            android:summary="@string/original_file_prefix_desc"
-            android:title="@string/original_file_prefix_title" />
+        
+        <Preference
+            android:key="definePrefixes"
+            android:persistent="false"
+            android:summary="@string/define_file_prefix_desc"
+            android:title="@string/define_file_prefix_title" />
         <EditTextPreference
             android:defaultValue="@string/file_name_format"
             android:key="fileNameFormat"
