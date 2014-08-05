@@ -19,6 +19,7 @@
 package ro.ciubex.dscautorename.task;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -46,7 +47,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private final static String TAG = RenameFileAsyncTask.class.getName();
 	private DSCApplication mApplication;
 	private ContentResolver mContentResolver;
-	private Listener mListener;
+	private final WeakReference<Listener> mListener;
 	private List<FileRenameData> mListFiles;
 	private int mPosition, mCount;
 	private Locale mLocale;
@@ -59,6 +60,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		public void onTaskUpdate(int position, int count);
 
 		public void onTaskFinished(int count);
+
+		public boolean isFinishing();
 	}
 
 	public RenameFileAsyncTask(DSCApplication application) {
@@ -67,7 +70,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 
 	public RenameFileAsyncTask(DSCApplication application, Listener listener) {
 		this.mApplication = application;
-		this.mListener = listener;
+		this.mListener = new WeakReference<Listener>(listener);
 		mLocale = mApplication.getLocale();
 		mApplication.setRenameFileTaskRunning(true);
 		mFilesPrefixes = mApplication.getOriginalFilePrefix();
@@ -121,7 +124,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 										}
 									} else {
 										Log.e(TAG,
-												"File is not reable and writable: "
+												"File can not be read and write: "
 														+ oldFileName);
 									}
 								} else {
@@ -192,8 +195,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		if (mListener != null) {
-			mListener.onTaskStarted();
+		if (mListener.get() != null) {
+			Listener listener = mListener.get();
+			if (listener != null && !listener.isFinishing()) {
+				listener.onTaskStarted();
+			}
 		}
 	}
 
@@ -207,8 +213,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected void onProgressUpdate(Void... values) {
 		super.onProgressUpdate(values);
-		if (mListener != null) {
-			mListener.onTaskUpdate(mPosition, mCount);
+		if (mListener.get() != null) {
+			Listener listener = mListener.get();
+			if (listener != null && !listener.isFinishing()) {
+				listener.onTaskUpdate(mPosition, mCount);
+			}
 		}
 	}
 
@@ -224,7 +233,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	protected void onPostExecute(Integer count) {
 		super.onPostExecute(count);
 		if (mListener != null) {
-			mListener.onTaskFinished(count);
+			Listener listener = mListener.get();
+			if (listener != null && !listener.isFinishing()) {
+				listener.onTaskFinished(count);
+			}
 		}
 		if (mListFiles != null) {
 			mListFiles.clear();

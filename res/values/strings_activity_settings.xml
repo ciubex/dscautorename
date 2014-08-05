@@ -32,7 +32,7 @@
     <string name="original_file_prefix_to"></string>
     <string name="original_file_prefix">DSC_,MOV_</string>
     <string name="define_file_prefix_title">Define files name prefixes</string>
-    <string name="define_file_prefix_desc">The file name prefixes to be used for rename (\"DSC_\" or \"MOV_\"), e.g. %s001.JPG</string>
+    <string name="define_file_prefix_desc">The file name prefixes used to search files for rename (\"DSC_\" or \"MOV_\"), e.g. %s001.JPG\nWildcards * and ? can be used too.</string>
     <string name="prefix_dialog_title_add">Add file name prefixes</string>
     <string name="prefix_dialog_title_editor">Edit file name prefixes</string>
     <string name="prefix_dialog_prefix_top">Change file name prefixes</string>
