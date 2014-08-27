@@ -22,9 +22,10 @@ import java.util.Date;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
-import ro.ciubex.dscautorename.dialog.SelectFolderDialog;
+import ro.ciubex.dscautorename.dialog.SelectFoldersListDialog;
 import ro.ciubex.dscautorename.dialog.SelectPrefixDialog;
 import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.model.FolderItem;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -210,6 +211,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void prepareSummaries() {
 		Date now = new Date();
+		String temp;
 		FilePrefix[] originalArr = mApplication.getOriginalFilePrefix();
 		String newFileName = mApplication.getFileName(now);
 		String summary = mApplication.getString(
@@ -230,7 +232,16 @@ public class SettingsActivity extends PreferenceActivity implements
 			mServiceTypeList.setSummary(R.string.service_choice_0);
 			break;
 		}
-		mFolderScanningPref.setSummary(mApplication.getFolderScanning());
+		FolderItem[] folders = mApplication.getFoldersScanning();
+		summary = folders[0].toString();
+		if (folders.length > 1) {
+			summary += ", ";
+			temp = folders[1].toString();
+			summary += temp.substring(0,
+					10 < temp.length() ? 10 : temp.length());
+			summary += "...";
+		}
+		mFolderScanningPref.setSummary(summary);
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
@@ -265,7 +276,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Start to select a folder.
 	 */
 	private void onFolderScanningPref() {
-		new SelectFolderDialog(this, mApplication).show();
+		new SelectFoldersListDialog(this, mApplication).show();
 	}
 
 	/**

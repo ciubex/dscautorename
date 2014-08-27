@@ -29,6 +29,7 @@ import java.util.regex.Pattern;
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.model.FileRenameData;
+import ro.ciubex.dscautorename.model.FolderItem;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -49,6 +50,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private ContentResolver mContentResolver;
 	private final WeakReference<Listener> mListener;
 	private List<FileRenameData> mListFiles;
+	private FolderItem[] mFoldersScanning;
 	private int mPosition, mCount;
 	private Locale mLocale;
 	private FilePrefix[] mFilesPrefixes;
@@ -87,16 +89,15 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
 		mPosition = 0;
-		boolean success;
-		String filterPath;
 		boolean enableFilter;
-		boolean skipFile;
 		if (mContentResolver != null) {
 			enableFilter = mApplication.isEnabledFolderScanning();
+			if (enableFilter) {
+				mFoldersScanning = mApplication.getFoldersScanning();
+			}
 			while (mApplication.isRenameFileRequested()) {
 				mApplication.setRenameFileRequested(false);
 				executeDelay();
-				filterPath = mApplication.getFolderScanning();
 				buildPatterns();
 				populateAllListFiles();
 				if (!mListFiles.isEmpty()
@@ -104,41 +105,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					mPosition = 0;
 					publishProgress();
 					for (FileRenameData data : mListFiles) {
-						String oldFileName = data.getData();
-						if (oldFileName != null) {
-							File oldFile = getFile(oldFileName);
-							if (oldFile != null) {
-								skipFile = false;
-								if (enableFilter) {
-									skipFile = !oldFile.getAbsolutePath()
-											.startsWith(filterPath);
-								}
-								if (!skipFile) {
-									success = oldFile.canRead()
-											&& oldFile.canWrite();
-									if (success) {
-										success = renameFile(data, oldFile,
-												oldFileName);
-										if (success) {
-											mPosition++;
-										}
-									} else {
-										Log.e(TAG,
-												"File can not be read and write: "
-														+ oldFileName);
-									}
-								} else {
-									Log.d(TAG, "Skip rename file: "
-											+ oldFileName);
-								}
-							} else {
-								Log.e(TAG, "The file:" + oldFileName
-										+ " does not exist.");
-							}
-						} else {
-							Log.e(TAG, "oldFileName is null.");
-						}
-						publishProgress();
+						renameCurrentFile(data);
 					}
 					if (mPosition > 0) {
 						mApplication.increaseFileRenameCount(mPosition);
@@ -149,6 +116,59 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		}
 		mApplication.setRenameFileTaskRunning(false);
 		return mPosition;
+	}
+
+	/**
+	 * Rename current file.
+	 * 
+	 * @param currentFile
+	 *            Current file data used by the rename process.
+	 */
+	private void renameCurrentFile(FileRenameData currentFile) {
+		String oldFileName = currentFile.getData();
+		boolean skipFile;
+		if (oldFileName != null) {
+			File oldFile = getFile(oldFileName);
+			if (oldFile != null) {
+				skipFile = false;
+				if (mFoldersScanning != null) {
+					skipFile = !checkScanningFolders(oldFile);
+				}
+				if (!skipFile) {
+					if (oldFile.canRead() && oldFile.canWrite()) {
+						if (renameFile(currentFile, oldFile, oldFileName)) {
+							mPosition++;
+						}
+					} else {
+						Log.e(TAG, "File can not be read and write: "
+								+ oldFileName);
+					}
+				} else {
+					Log.d(TAG, "Skip rename file: " + oldFileName);
+				}
+			} else {
+				Log.e(TAG, "The file:" + oldFileName + " does not exist.");
+			}
+		} else {
+			Log.e(TAG, "oldFileName is null.");
+		}
+		publishProgress();
+	}
+
+	/**
+	 * Check if the file is located on scanning folders.
+	 * 
+	 * @param fileToCheck
+	 *            File to be verified if is on a scanning folder.
+	 * @return TRUE if the file is on a scanning folder.
+	 */
+	private boolean checkScanningFolders(File fileToCheck) {
+		for (FolderItem folder : mFoldersScanning) {
+			if (fileToCheck.getAbsolutePath().startsWith(folder.toString())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

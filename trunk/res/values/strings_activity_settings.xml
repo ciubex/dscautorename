@@ -26,6 +26,12 @@
     <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
     <string name="enable_filter_folder_title">Rename within a folder</string>
     <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
+    
+    <string name="folder_list_title">List of scanned folders.</string>
+    <string name="folder_list_all_selected">At least one folder should be left unchecked!</string>
+    <string name="folder_list_no_selection">Select at least one folder to delete!</string>
+    <string name="folder_list_confirmation">Do you want to remove selected folders?</string>
+    
     <string name="filter_folder_title">Select a folder.</string>
     <string name="filter_folder_desc">/</string>
     <string name="original_file_prefix_from">DSC_</string>

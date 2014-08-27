@@ -5,20 +5,12 @@
     android:gravity="center_vertical"
     android:padding="5dp" >
 
-    <ImageView
-        android:id="@+id/itemIcon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="5dp"
-        android:contentDescription="@string/loading_wait"
-        android:src="@drawable/icon_generic_file" >
-    </ImageView>
-
     <TextView
         android:id="@+id/itemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/loading_wait" >
-    </TextView>
+        android:text="@string/loading_wait"
+        android:gravity="center_vertical"
+        android:drawableLeft="@drawable/icon_generic_file"/>
 
 </LinearLayout>

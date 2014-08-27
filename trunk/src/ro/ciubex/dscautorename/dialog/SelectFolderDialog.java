@@ -25,6 +25,7 @@ import java.util.List;
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.adpater.FileListAdapter;
+import ro.ciubex.dscautorename.adpater.FolderListAdapter;
 import ro.ciubex.dscautorename.model.FileItem;
 import ro.ciubex.dscautorename.task.FolderScannAsyncTask;
 import android.content.Context;
@@ -42,15 +43,20 @@ import android.widget.ListView;
 public class SelectFolderDialog extends BaseDialog implements
 		FolderScannAsyncTask.Responder {
 
+	private FolderListAdapter mParentAdapter;
+	private int mFolderIndex;
 	private File mCurrentFolder;
 	private ListView mFilesListView;
 	private FileListAdapter mFileListAdapter;
 	private List<FileItem> mFiles;
 	private boolean mIsFolderScanning;
 
-	public SelectFolderDialog(Context context, DSCApplication application) {
+	public SelectFolderDialog(Context context, DSCApplication application, FolderListAdapter parentAdapter,
+			int folderIndex) {
 		super(context, application);
 		setContentView(R.layout.select_folder_dialog_layout);
+		mParentAdapter = parentAdapter;
+		mFolderIndex = folderIndex;
 		this.mFiles = new ArrayList<FileItem>();
 		mFileListAdapter = new FileListAdapter(context);
 	}
@@ -83,7 +89,12 @@ public class SelectFolderDialog extends BaseDialog implements
 	 * Initialize the list o files and files list view.
 	 */
 	private void initFilesList() {
-		mCurrentFolder = new File(mApplication.getFolderScanning());
+		int index = mFolderIndex;
+		if (mFolderIndex < 0) {
+			index = 0;
+		}
+		String folderName = mApplication.getFoldersScanning()[index].toString();
+		mCurrentFolder = new File(folderName);
 		mFilesListView = (ListView) findViewById(R.id.folderList);
 		mFilesListView.setEmptyView(findViewById(R.id.emptyFolderList));
 		mFilesListView.setAdapter(mFileListAdapter);
@@ -168,7 +179,10 @@ public class SelectFolderDialog extends BaseDialog implements
 	@Override
 	public void onClick(View view) {
 		if (btnOk == view) {
-			mApplication.setFolderScanning(mCurrentFolder.getAbsolutePath());
+			mApplication.setFolderScanning(mFolderIndex,
+					mCurrentFolder.getAbsolutePath());
+			mParentAdapter.updateFolders();
+			mParentAdapter.notifyDataSetChanged();
 		}
 		super.onClick(view);
 	}

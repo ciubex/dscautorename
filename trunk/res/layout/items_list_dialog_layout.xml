@@ -5,13 +5,13 @@
     android:orientation="vertical" >
 
     <ListView
-        android:id="@+id/prefixList"
+        android:id="@+id/itemsList"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         android:layout_weight="1" />
 
     <TextView
-        android:id="@+id/emptyPrefixList"
+        android:id="@+id/emptyItemsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/no_prefix"

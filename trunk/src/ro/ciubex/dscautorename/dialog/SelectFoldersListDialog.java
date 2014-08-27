@@ -5,8 +5,8 @@ package ro.ciubex.dscautorename.dialog;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
-import ro.ciubex.dscautorename.adpater.FilePrefixListAdapter;
-import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.adpater.FolderListAdapter;
+import ro.ciubex.dscautorename.model.FolderItem;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -15,20 +15,22 @@ import android.widget.Button;
 import android.widget.ListView;
 
 /**
- * This is the dialog used to show list of prefixes.
- * 
- * @author Claudiu Ciobotariu
+ * @author Claudiu
  * 
  */
-public class SelectPrefixDialog extends BaseDialog {
-	private FilePrefixListAdapter mAdapter;
+public class SelectFoldersListDialog extends BaseDialog {
+	private FolderListAdapter mAdapter;
 	private ListView mListView;
 	private Button mBtnAdd, mBtnDelete;
 
-	public SelectPrefixDialog(Context context, DSCApplication application) {
+	/**
+	 * @param context
+	 * @param application
+	 */
+	public SelectFoldersListDialog(Context context, DSCApplication application) {
 		super(context, application);
 		setContentView(R.layout.items_list_dialog_layout);
-		mAdapter = new FilePrefixListAdapter(context, application);
+		mAdapter = new FolderListAdapter(context, application);
 	}
 
 	/*
@@ -39,7 +41,7 @@ public class SelectPrefixDialog extends BaseDialog {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setTitle(R.string.define_file_prefix_title);
+		setTitle(R.string.folder_list_title);
 		initDialog(BUTTON_CANCEL);
 		mBtnAdd = (Button) findViewById(R.id.btnAdd);
 		mBtnAdd.setOnClickListener(this);
@@ -55,15 +57,14 @@ public class SelectPrefixDialog extends BaseDialog {
 		mListView = (ListView) findViewById(R.id.itemsList);
 		mListView.setEmptyView(findViewById(R.id.emptyItemsList));
 		mListView.setAdapter(mAdapter);
-		mListView
-				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
-						clickOnItem(position);
-					}
-				});
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				clickOnItem(position);
+			}
+		});
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class SelectPrefixDialog extends BaseDialog {
 	 *            Selected position.
 	 */
 	private void clickOnItem(int position) {
-		new PrefixesEditorDialog(mContext, mApplication, mAdapter, position)
+		new SelectFolderDialog(mContext, mApplication, mAdapter, position)
 				.show();
 	}
 
@@ -99,7 +100,7 @@ public class SelectPrefixDialog extends BaseDialog {
 	 */
 	private void onDelete() {
 		int i = 0, k = 0, len = mAdapter.getCount();
-		FilePrefix item;
+		FolderItem item;
 		for (i = 0; i < len; i++) {
 			item = mAdapter.getItem(i);
 			if (item.isSelected()) {
@@ -107,14 +108,14 @@ public class SelectPrefixDialog extends BaseDialog {
 			}
 		}
 		if (k == 0) {
-			showAlertDialog(R.string.define_file_prefix_title,
-					mContext.getString(R.string.prefix_list_no_selection));
+			showAlertDialog(R.string.folder_list_title,
+					mContext.getString(R.string.folder_list_no_selection));
 		} else if (k == len) {
-			showAlertDialog(R.string.define_file_prefix_title,
-					mContext.getString(R.string.prefix_list_all_selected));
+			showAlertDialog(R.string.folder_list_title,
+					mContext.getString(R.string.folder_list_all_selected));
 		} else {
-			showConfirmationDialog(R.string.define_file_prefix_title,
-					mContext.getString(R.string.prefix_list_confirmation), 0,
+			showConfirmationDialog(R.string.folder_list_title,
+					mContext.getString(R.string.folder_list_confirmation), 0,
 					null);
 		}
 	}
@@ -125,7 +126,7 @@ public class SelectPrefixDialog extends BaseDialog {
 		if (positive) {
 			int i = 0, len = mAdapter.getCount();
 			StringBuilder sb = new StringBuilder();
-			FilePrefix item;
+			FolderItem item;
 			for (i = 0; i < len; i++) {
 				item = mAdapter.getItem(i);
 				if (!item.isSelected()) {
@@ -135,10 +136,9 @@ public class SelectPrefixDialog extends BaseDialog {
 					sb.append(item.toString());
 				}
 			}
-			mApplication.saveFilePrefix(sb.toString());
-			mAdapter.updatePrefixes();
+			mApplication.setFoldersScanning(sb.toString());
+			mAdapter.updateFolders();
 			mAdapter.notifyDataSetChanged();
 		}
 	}
-
 }
