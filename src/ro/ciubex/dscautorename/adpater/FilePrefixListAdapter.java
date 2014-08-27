@@ -87,7 +87,8 @@ public class FilePrefixListAdapter extends BaseAdapter {
 		ViewHolder viewHolder = null;
 		FilePrefix filePrefix = getItem(position);
 		if (view == null) {
-			view = mInflater.inflate(R.layout.dlg_list_item_layout, null);
+			view = mInflater.inflate(R.layout.dlg_list_item_layout, parent,
+					false);
 			viewHolder = initViewHolder(view, filePrefix);
 			view.setTag(viewHolder);
 		} else {
@@ -144,9 +145,9 @@ public class FilePrefixListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				CheckBox cb = (CheckBox) v;
-				FilePrefix fp = (FilePrefix) cb.getTag();
-				if (fp != null) {
-					fp.setSelected(cb.isChecked());
+				Object item = cb.getTag();
+				if (item instanceof FilePrefix) {
+					((FilePrefix) item).setSelected(cb.isChecked());
 				}
 			}
 		});

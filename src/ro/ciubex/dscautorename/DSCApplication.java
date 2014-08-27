@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.model.FolderItem;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
 import android.app.Application;
 import android.app.ProgressDialog;
@@ -86,24 +87,91 @@ public class DSCApplication extends Application {
 	 * 
 	 * @return The folder user for scanning files.
 	 */
-	public String getFolderScanning() {
-		String folder = mSharedPreferences.getString("folderScanning", "");
-		if (folder.length() < 2) {
-			folder = Environment.getExternalStorageDirectory()
+	private String getFolderScanning() {
+		String folders = mSharedPreferences.getString("folderScanning", "");
+		if (folders.length() < 2) {
+			folders = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/DCIM";
-			setFolderScanning(folder);
+			setFoldersScanning(folders);
 		}
-		return folder;
+		return folders;
 	}
 
 	/**
-	 * Set the folder used for scanning files.
+	 * Obtain all folders where the file should be renamed.
 	 * 
-	 * @param folder
-	 *            The folder name to save.
+	 * @return An array with folders restricted for renaming.
 	 */
-	public void setFolderScanning(String folder) {
-		saveStringValue("folderScanning", folder);
+	public FolderItem[] getFoldersScanning() {
+		String stored = getFolderScanning();
+		String[] folders = stored.split(",");
+		FolderItem[] items = new FolderItem[folders.length];
+		for (int i = 0; i < folders.length; i++) {
+			items[i] = new FolderItem(folders[i]);
+		}
+		return items;
+	}
+
+	/**
+	 * Set folders used for scanning files.
+	 * 
+	 * @param folders
+	 *            The folders names to save.
+	 */
+	public void setFoldersScanning(String folders) {
+		saveStringValue("folderScanning", folders);
+	}
+
+	/**
+	 * Set or add a folder used on renaming process.
+	 * 
+	 * @param index
+	 *            Index of the folder on the list. If is -1 the the folder is
+	 *            added.
+	 * @param folder
+	 *            Folder to be stored on the scanning folder
+	 */
+	public void setFolderScanning(int index, String folder) {
+		FolderItem[] folders = getFoldersScanning();
+		int i = 0, len = folders.length;
+		StringBuilder buffer = new StringBuilder();
+		while (i < len) {
+			if (i > 0) {
+				buffer.append(',');
+			}
+			if (i == index) {
+				buffer.append(folder);
+			} else {
+				buffer.append(folders[i]);
+			}
+			i++;
+		}
+		if (index == -1) {
+			buffer.append(',').append(folder);
+		}
+		saveStringValue("folderScanning", buffer.toString());
+	}
+
+	/**
+	 * Remove a scanning folder.
+	 * 
+	 * @param index
+	 *            Index of remmoved scanning folder.
+	 */
+	public void removeFolderScanning(int index) {
+		FolderItem[] folders = getFoldersScanning();
+		int i = 0, len = folders.length;
+		StringBuilder buffer = new StringBuilder();
+		while (i < len) {
+			if (buffer.length() > 0) {
+				buffer.append(',');
+			}
+			if (i != index) {
+				buffer.append(folders[i]);
+			}
+			i++;
+		}
+		saveStringValue("folderScanning", buffer.toString());
 	}
 
 	/**

@@ -25,7 +25,7 @@ package ro.ciubex.dscautorename.model;
 public class FilePrefix {
 	private String mBefore;
 	private String mAfter;
-	private boolean selected;
+	private boolean mSelected;
 
 	public FilePrefix(String string) {
 		fromString(string);
@@ -62,15 +62,16 @@ public class FilePrefix {
 		return mAfter;
 	}
 
+	@Override
 	public String toString() {
 		return mBefore + ":" + mAfter;
 	}
 
 	public boolean isSelected() {
-		return selected;
+		return mSelected;
 	}
 
 	public void setSelected(boolean selected) {
-		this.selected = selected;
+		this.mSelected = selected;
 	}
 }

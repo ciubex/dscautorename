@@ -24,11 +24,12 @@ import java.util.List;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.model.FileItem;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -38,13 +39,39 @@ import android.widget.TextView;
  * 
  */
 public class FileListAdapter extends BaseAdapter {
+	private Context mContext;
+	private Drawable mIconGenericFile, mIconFolderUp, mIconFolder,
+			mIconPicture, mIconMovies, mIconMusic;
+	private static final int ICON_WIDTH = 48;
+	private static final int ICON_HEIGHT = 48;
 	private LayoutInflater mInflater;
 	private List<FileItem> mFiles;
 
 	public FileListAdapter(Context context) {
+		mContext = context;
 		mInflater = (LayoutInflater) context
 				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.mFiles = new ArrayList<FileItem>();
+		initIcons();
+	}
+
+	/**
+	 * Initialize the icons.
+	 */
+	private void initIcons() {
+		Resources res = mContext.getResources();
+		mIconGenericFile = res.getDrawable(R.drawable.icon_generic_file);
+		mIconGenericFile.setBounds(0, 0, ICON_WIDTH, ICON_HEIGHT);
+		mIconFolderUp = res.getDrawable(R.drawable.icon_folder_up);
+		mIconFolderUp.setBounds(0, 0, ICON_WIDTH, ICON_HEIGHT);
+		mIconFolder = res.getDrawable(R.drawable.icon_folder);
+		mIconFolder.setBounds(0, 0, ICON_WIDTH, ICON_HEIGHT);
+		mIconPicture = res.getDrawable(R.drawable.icon_picture);
+		mIconPicture.setBounds(0, 0, ICON_WIDTH, ICON_HEIGHT);
+		mIconMovies = res.getDrawable(R.drawable.icon_movies);
+		mIconMovies.setBounds(0, 0, ICON_WIDTH, ICON_HEIGHT);
+		mIconMusic = res.getDrawable(R.drawable.icon_music);
+		mIconMusic.setBounds(0, 0, ICON_WIDTH, ICON_HEIGHT);
 	}
 
 	/*
@@ -90,7 +117,7 @@ public class FileListAdapter extends BaseAdapter {
 	public View getView(int position, View view, ViewGroup parent) {
 		ViewHolder viewHolder = null;
 		if (view == null) {
-			view = mInflater.inflate(R.layout.list_item_layout, null);
+			view = mInflater.inflate(R.layout.list_item_layout, parent, false);
 			viewHolder = initViewHolder(view);
 			view.setTag(viewHolder);
 		} else {
@@ -98,18 +125,19 @@ public class FileListAdapter extends BaseAdapter {
 		}
 		if (viewHolder != null) {
 			FileItem fileItem = getItem(position);
+			Drawable img = null;
 			if (fileItem != null) {
-				int iconResId = R.drawable.icon_generic_file;
+				img = mIconGenericFile;
 				if (fileItem.isParent()) {
-					iconResId = R.drawable.icon_folder_up;
+					img = mIconFolderUp;
 				} else if (fileItem.isDirectory()) {
-					iconResId = R.drawable.icon_folder;
+					img = mIconFolder;
 				} else if (fileItem.isImage()) {
-					iconResId = R.drawable.icon_picture;
+					img = mIconPicture;
 				} else if (fileItem.isVideo()) {
-					iconResId = R.drawable.icon_movies;
+					img = mIconMovies;
 				} else if (fileItem.isAudio()) {
-					iconResId = R.drawable.icon_music;
+					img = mIconMusic;
 				}
 				String text = "?";
 				if (fileItem.isParent()) {
@@ -118,7 +146,7 @@ public class FileListAdapter extends BaseAdapter {
 					text = fileItem.getFile().getName();
 				}
 				viewHolder.itemText.setText(text);
-				viewHolder.itemIcon.setImageResource(iconResId);
+				viewHolder.itemText.setCompoundDrawables(img, null, null, null);
 			}
 		}
 		return view;
@@ -133,7 +161,6 @@ public class FileListAdapter extends BaseAdapter {
 	 */
 	private ViewHolder initViewHolder(View view) {
 		ViewHolder viewHolder = new ViewHolder();
-		viewHolder.itemIcon = (ImageView) view.findViewById(R.id.itemIcon);
 		viewHolder.itemText = (TextView) view.findViewById(R.id.itemText);
 		return viewHolder;
 	}
@@ -143,7 +170,6 @@ public class FileListAdapter extends BaseAdapter {
 	 * 
 	 */
 	private class ViewHolder {
-		ImageView itemIcon;
 		TextView itemText;
 	}
 
