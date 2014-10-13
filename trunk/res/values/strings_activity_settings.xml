@@ -41,9 +41,8 @@
     <string name="define_file_prefix_desc">The file name prefixes used to search files for rename (\"DSC_\" or \"MOV_\"), e.g. %s001.JPG\nWildcards * and ? can be used too.</string>
     <string name="prefix_dialog_title_add">Add file name prefixes</string>
     <string name="prefix_dialog_title_editor">Edit file name prefixes</string>
-    <string name="prefix_dialog_prefix_top">Change file name prefixes</string>
-    <string name="prefix_dialog_prefix_from">before rename prefix:</string>
-    <string name="prefix_dialog_prefix_to">after rename prefix:</string>
+    <string name="prefix_dialog_prefix_from">1. Before rename prefix:</string>
+    <string name="prefix_dialog_prefix_to">2. After rename prefix:</string>
     <string name="prefix_dialog_prefix_bottom">Old file name example:\n\t %1$s001%3$s\nRenamed file name example:\n\t %2$s%3$s</string>
     <string name="prefix_validation_error_old_empty">Old prefix cannot be empty.</string>
     <string name="prefix_validation_error_old_prefix">Old prefix already exist, change the text with a new one.</string>
@@ -62,6 +61,17 @@
         <item>0</item>
         <item>1</item>
     </string-array>
+    
+    <!-- rename shortcut -->
+    <string name="rename_shortcut">DSC Rename service shortcut</string>
+    <string name="rename_shortcut_name">DSC rename service</string>
+    <string name="create_rename_shortcut">Create DSC rename service shortcut</string>
+    <string name="create_rename_shortcut_desc">Create on your home screen a DSC rename service shortcut to launch the rename service manually.</string>
+    <string name="remove_rename_shortcut">Remove DSC rename service shortcut</string>
+    <string name="remove_rename_shortcut_desc">Remove from your home screen the DSC rename service shortcut</string>
+    <string name="confirmation_rename_dialog">Hide confirmation dialog</string>
+    <string name="confirmation_rename_dialog_desc">Show or not the confirmation dialog when the DSC rename service is launched from shortcut.</string>
+    <string name="confirmation_rename_question">Do you want to start manually the rename service?</string>
 
     <string name="other_settings">Other settings</string>
     <string name="manually_start_title">Start manually rename service</string>

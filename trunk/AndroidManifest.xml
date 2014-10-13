@@ -1,16 +1,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="17"
-    android:versionName="3.2" >
+    android:versionCode="18"
+    android:versionName="3.3" >
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT" />
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -32,17 +33,29 @@
         <activity
             android:name="ro.ciubex.dscautorename.activity.InfoActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name="ro.ciubex.dscautorename.activity.RenameDlgActivity"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Dialog" >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name="ro.ciubex.dscautorename.receiver.BootEventReceiver"
-            android:enabled="true" >
+            android:enabled="true"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
         <receiver
             android:name="ro.ciubex.dscautorename.receiver.CameraEventReceiver"
-            android:enabled="true">
+            android:enabled="true"
+            android:permission="android.permission.CAMERA" >
             <intent-filter>
                 <action android:name="com.android.camera.NEW_PICTURE" />
                 <action android:name="com.android.camera.NEW_VIDEO" />
@@ -51,6 +64,20 @@
 
                 <data android:mimeType="image/*" />
                 <data android:mimeType="video/*" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="ro.ciubex.dscautorename.receiver.ShortcutInstallReceiver"
+            android:permission="com.android.launcher.permission.INSTALL_SHORTCUT" >
+            <intent-filter>
+                <action android:name="com.android.launcher.action.INSTALL_SHORTCUT" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="ro.ciubex.dscautorename.receiver.ShortcutUninstallReceiver"
+            android:permission="com.android.launcher.permission.UNINSTALL_SHORTCUT" >
+            <intent-filter>
+                <action android:name="com.android.launcher.action.UNINSTALL_SHORTCUT" />
             </intent-filter>
         </receiver>
 

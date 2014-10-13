@@ -23,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
 import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.model.FolderItem;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
@@ -45,16 +46,29 @@ import android.util.Log;
  * 
  */
 public class DSCApplication extends Application {
-	private final String TAG = getClass().getName();
+	private static final String TAG = DSCApplication.class.getName();
 	private Locale mLocale;
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
+	private RenameShortcutUpdateListener mShortcutUpdateListener;
 	private static boolean mRenameFileRequested;
 	private static boolean mRenameFileTaskCanceled;
 	private static boolean mRenameFileTaskRunning;
 	public static final int SERVICE_TYPE_DISABLED = 0;
 	public static final int SERVICE_TYPE_CAMERA = 1;
 	public static final int SERVICE_TYPE_CONTENT = 2;
+
+	private static final String KEY_FOLDER_SCANNING = "folderScanning";
+	private static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
+	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
+	private static final String KEY_RENAME_SERVICE_START_CONFIRMATION = "hideRenameServiceStartConfirmation";
+	private static final String KEY_FILE_NAME_FORMAT = "fileNameFormat";
+	private static final String KEY_RENAME_VIDEO_ENABLED = "renameVideoEnabled";
+	private static final String KEY_ORIGINAL_FILE_PREFIX = "originalFilePrefix";
+	private static final String KEY_FILE_RENAME_COUNT = "fileRenameCount";
+	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
+	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
+	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
 
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
@@ -79,7 +93,40 @@ public class DSCApplication extends Application {
 	 * @return True if is enabled folder scanning.
 	 */
 	public boolean isEnabledFolderScanning() {
-		return mSharedPreferences.getBoolean("enabledFolderScanning", false);
+		return mSharedPreferences
+				.getBoolean(KEY_ENABLED_FOLDER_SCANNING, false);
+	}
+
+	/**
+	 * Check if the rename shortcut is created on home screen.
+	 * 
+	 * @return True if the shortcut for rename service is created on home
+	 *         screen.
+	 */
+	public boolean isRenameShortcutCreated() {
+		return mSharedPreferences
+				.getBoolean(KEY_RENAME_SHORTCUT_CREATED, false);
+	}
+
+	/**
+	 * Set the boolean value of created shortcut for rename service.
+	 * 
+	 * @param flag
+	 *            True or False.
+	 */
+	public void setRenameShortcutCreated(boolean flag) {
+		saveBooleanValue(KEY_RENAME_SHORTCUT_CREATED, flag);
+	}
+
+	/**
+	 * Obtain the confirmation flag for the rename service start.
+	 * 
+	 * @return True if the confirmation of rename service start should be
+	 *         hidden.
+	 */
+	public boolean hideRenameServiceStartConfirmation() {
+		return mSharedPreferences.getBoolean(
+				KEY_RENAME_SERVICE_START_CONFIRMATION, false);
 	}
 
 	/**
@@ -88,7 +135,7 @@ public class DSCApplication extends Application {
 	 * @return The folder user for scanning files.
 	 */
 	private String getFolderScanning() {
-		String folders = mSharedPreferences.getString("folderScanning", "");
+		String folders = mSharedPreferences.getString(KEY_FOLDER_SCANNING, "");
 		if (folders.length() < 2) {
 			folders = Environment.getExternalStorageDirectory()
 					.getAbsolutePath() + "/DCIM";
@@ -119,7 +166,7 @@ public class DSCApplication extends Application {
 	 *            The folders names to save.
 	 */
 	public void setFoldersScanning(String folders) {
-		saveStringValue("folderScanning", folders);
+		saveStringValue(KEY_FOLDER_SCANNING, folders);
 	}
 
 	/**
@@ -149,14 +196,14 @@ public class DSCApplication extends Application {
 		if (index == -1) {
 			buffer.append(',').append(folder);
 		}
-		saveStringValue("folderScanning", buffer.toString());
+		saveStringValue(KEY_FOLDER_SCANNING, buffer.toString());
 	}
 
 	/**
 	 * Remove a scanning folder.
 	 * 
 	 * @param index
-	 *            Index of remmoved scanning folder.
+	 *            Index of removed scanning folder.
 	 */
 	public void removeFolderScanning(int index) {
 		FolderItem[] folders = getFoldersScanning();
@@ -171,7 +218,7 @@ public class DSCApplication extends Application {
 			}
 			i++;
 		}
-		saveStringValue("folderScanning", buffer.toString());
+		saveStringValue(KEY_FOLDER_SCANNING, buffer.toString());
 	}
 
 	/**
@@ -189,7 +236,7 @@ public class DSCApplication extends Application {
 	 * @return The file name format.
 	 */
 	public String getFileNameFormat() {
-		return mSharedPreferences.getString("fileNameFormat",
+		return mSharedPreferences.getString(KEY_FILE_NAME_FORMAT,
 				getString(R.string.file_name_format));
 	}
 
@@ -208,7 +255,7 @@ public class DSCApplication extends Application {
 		} catch (Exception e) {
 			fileNameFormat = getString(R.string.file_name_format);
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
-			saveStringValue("fileNameFormat", fileNameFormat);
+			saveStringValue(KEY_FILE_NAME_FORMAT, fileNameFormat);
 			Log.e(TAG, "getFileName: " + date, e);
 		}
 		String newFileName = df.format(date);
@@ -245,7 +292,7 @@ public class DSCApplication extends Application {
 	 * @return True if the video files should be renamed.
 	 */
 	public boolean isRenameVideoEnabled() {
-		return mSharedPreferences.getBoolean("renameVideoEnabled", true);
+		return mSharedPreferences.getBoolean(KEY_RENAME_VIDEO_ENABLED, true);
 	}
 
 	/**
@@ -254,11 +301,11 @@ public class DSCApplication extends Application {
 	 * @return The original file name prefix.
 	 */
 	public FilePrefix[] getOriginalFilePrefix() {
-		String value = mSharedPreferences.getString("originalFilePrefix",
+		String value = mSharedPreferences.getString(KEY_ORIGINAL_FILE_PREFIX,
 				getString(R.string.original_file_prefix));
 		if (value.length() < 1) {
 			value = getString(R.string.original_file_prefix);
-			saveStringValue("originalFilePrefix", value);
+			saveStringValue(KEY_ORIGINAL_FILE_PREFIX, value);
 		}
 		String[] arr = value.split(",");
 		FilePrefix[] fp = new FilePrefix[arr.length];
@@ -312,7 +359,7 @@ public class DSCApplication extends Application {
 	 *            The file prefixes to be saved.
 	 */
 	public void saveFilePrefix(String filePrefixes) {
-		saveStringValue("originalFilePrefix", filePrefixes);
+		saveStringValue(KEY_ORIGINAL_FILE_PREFIX, filePrefixes);
 	}
 
 	/**
@@ -378,7 +425,7 @@ public class DSCApplication extends Application {
 	 * @return Number of renamed files.
 	 */
 	public int getFileRenameCount() {
-		return mSharedPreferences.getInt("fileRenameCount", 0);
+		return mSharedPreferences.getInt(KEY_FILE_RENAME_COUNT, 0);
 	}
 
 	/**
@@ -389,10 +436,10 @@ public class DSCApplication extends Application {
 	 */
 	public void increaseFileRenameCount(int value) {
 		if (value == -1) {
-			removeSharedPreference("fileRenameCount");
+			removeSharedPreference(KEY_FILE_RENAME_COUNT);
 		} else {
 			int oldValue = getFileRenameCount();
-			saveIntegerValue("fileRenameCount", oldValue + value);
+			saveIntegerValue(KEY_FILE_RENAME_COUNT, oldValue + value);
 		}
 	}
 
@@ -402,7 +449,7 @@ public class DSCApplication extends Application {
 	 * @return The delay for starting the rename service.
 	 */
 	public int getRenameServiceStartDelay() {
-		return mSharedPreferences.getInt("renameServiceStartDelay", 3);
+		return mSharedPreferences.getInt(KEY_RENAME_SERVICE_START_DELAY, 3);
 	}
 
 	/**
@@ -441,7 +488,7 @@ public class DSCApplication extends Application {
 	 *         = 2. -1 is returning for the first time.
 	 */
 	public int getRegisteredServiceType() {
-		return mSharedPreferences.getInt("registeredServiceType", -1);
+		return mSharedPreferences.getInt(KEY_REGISTERED_SERVICE_TYPE, -1);
 	}
 
 	/**
@@ -451,7 +498,7 @@ public class DSCApplication extends Application {
 	 *            The registered service type value.
 	 */
 	public void setRegisteredServiceType(int value) {
-		saveIntegerValue("registeredServiceType", value);
+		saveIntegerValue(KEY_REGISTERED_SERVICE_TYPE, value);
 	}
 
 	/**
@@ -484,7 +531,7 @@ public class DSCApplication extends Application {
 		if (SERVICE_TYPE_CONTENT == serviceType) {
 			registerMediaStorageContentObserver();
 		}
-		saveIntegerValue("registeredServiceType", serviceType);
+		saveIntegerValue(KEY_REGISTERED_SERVICE_TYPE, serviceType);
 	}
 
 	/**
@@ -493,7 +540,7 @@ public class DSCApplication extends Application {
 	 * @return
 	 */
 	public int getRenameFileDateType() {
-		return getIntValue("renameFileDateType", 1);
+		return getIntValue(KEY_RENAME_FILE_DATE_TYPE, 1);
 	}
 
 	/**
@@ -533,6 +580,20 @@ public class DSCApplication extends Application {
 	private void saveStringValue(String key, String value) {
 		Editor editor = mSharedPreferences.edit();
 		editor.putString(key, value);
+		editor.commit();
+	}
+
+	/**
+	 * Store a boolean value on the shared preferences.
+	 * 
+	 * @param key
+	 *            The shared preference key.
+	 * @param value
+	 *            The boolean value to be saved.
+	 */
+	private void saveBooleanValue(String key, boolean value) {
+		Editor editor = mSharedPreferences.edit();
+		editor.putBoolean(key, value);
 		editor.commit();
 	}
 
@@ -651,5 +712,66 @@ public class DSCApplication extends Application {
 			Log.e(TAG, "isProPresent: " + e.getMessage(), e);
 		}
 		return success;
+	}
+
+	/**
+	 * Set the rename shortcut update listener.
+	 * 
+	 * @param listener
+	 *            The rename shortcut update listener.
+	 */
+	public void updateShortcutUpdateListener(
+			RenameShortcutUpdateListener listener) {
+		this.mShortcutUpdateListener = listener;
+	}
+
+	/**
+	 * Get the rename shortcut update listener.
+	 * 
+	 * @return The rename shortcut update listener.
+	 */
+	public RenameShortcutUpdateListener getShortcutUpdateListener() {
+		return mShortcutUpdateListener;
+	}
+
+	/**
+	 * Method invoked by the shortcut broadcast.
+	 * 
+	 * @param data
+	 *            Intent data from the shortcut broadcast.
+	 * @param type
+	 *            Type of the event, uninstall or install.
+	 */
+	public void prepareShortcutPref(Intent data,
+			RenameShortcutUpdateListener.TYPE type) {
+		Intent intent = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
+		String name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
+		if (intent != null && name != null && intent.getComponent() != null) {
+			String cls = String.valueOf(intent.getComponent().getClassName());
+			if (cls.indexOf("RenameDlgActivity") > 0) {
+				updateShortcutPref(type);
+			}
+		}
+	}
+
+	/**
+	 * Update the preferences related with the shortcut.
+	 * 
+	 * @param type
+	 *            Type of the event, uninstall or install.
+	 */
+	private void updateShortcutPref(RenameShortcutUpdateListener.TYPE type) {
+		RenameShortcutUpdateListener listener = getShortcutUpdateListener();
+		boolean update = false;
+		if (RenameShortcutUpdateListener.TYPE.INSTALL == type) {
+			setRenameShortcutCreated(true);
+			update = true;
+		} else if (RenameShortcutUpdateListener.TYPE.UNINSTALL == type) {
+			setRenameShortcutCreated(false);
+			update = true;
+		}
+		if (listener != null && update) {
+			listener.updateRenameShortcut();
+		}
 	}
 }
