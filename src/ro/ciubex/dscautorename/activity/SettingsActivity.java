@@ -36,6 +36,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -50,13 +51,15 @@ import android.util.Log;
  */
 public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener,
-		DSCApplication.ProgressCancelListener {
+		DSCApplication.ProgressCancelListener, RenameShortcutUpdateListener {
 	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
 	private Preference mDefinePrefixes;
 	private EditTextPreference mFileNameFormat;
 	private Preference mFolderScanningPref;
+	private Preference mToggleRenameShortcut;
+	private CheckBoxPreference mHideRenameServiceStartConfirmation;
 	private Preference mManuallyStartRename;
 	private Preference mFileRenameCount;
 	private Preference mBuildVersion;
@@ -74,6 +77,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		initPreferences();
 		initCommands();
 		checkProVersion();
+		updateShortcutFields();
 	}
 
 	/**
@@ -83,6 +87,8 @@ public class SettingsActivity extends PreferenceActivity implements
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
 		mDefinePrefixes = (Preference) findPreference("definePrefixes");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
+		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
+		mHideRenameServiceStartConfirmation = (CheckBoxPreference) findPreference("hideRenameServiceStartConfirmation");
 		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
@@ -110,6 +116,15 @@ public class SettingsActivity extends PreferenceActivity implements
 					@Override
 					public boolean onPreferenceClick(Preference preference) {
 						onFolderScanningPref();
+						return true;
+					}
+				});
+		mToggleRenameShortcut
+				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+					@Override
+					public boolean onPreferenceClick(Preference preference) {
+						onToggleRenameShortcut();
 						return true;
 					}
 				});
@@ -176,6 +191,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
+		mApplication.updateShortcutUpdateListener(this);
 		prepareSummaries();
 	}
 
@@ -185,6 +201,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	protected void onPause() {
 		super.onPause();
+		mApplication.updateShortcutUpdateListener(null);
 		getPreferenceScreen().getSharedPreferences()
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
@@ -277,6 +294,16 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void onFolderScanningPref() {
 		new SelectFoldersListDialog(this, mApplication).show();
+	}
+
+	/**
+	 * Invoked when the user click on the "Create rename service shortcut"
+	 * preference.
+	 */
+	private void onToggleRenameShortcut() {
+		boolean isCreated = mApplication.isRenameShortcutCreated();
+		boolean mustCreate = isCreated ? false : true;
+		createOrRemoveRenameShortcut(mustCreate);
 	}
 
 	/**
@@ -429,5 +456,71 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onProgressCancel() {
 		mApplication.setRenameFileTaskCanceled(true);
+	}
+
+	/**
+	 * Create or remove rename shortcut from the home screen.
+	 * 
+	 * @param create
+	 *            True if the shortcut should be created.
+	 */
+	private void createOrRemoveRenameShortcut(boolean create) {
+		String action = create ? RenameShortcutUpdateListener.INSTALL_SHORTCUT
+				: RenameShortcutUpdateListener.UNINSTALL_SHORTCUT;
+
+		Intent shortcutIntent = new Intent();
+		shortcutIntent.setAction(action);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,
+				getActivityIntent());
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+				getString(R.string.rename_shortcut_name));
+		shortcutIntent.putExtra("duplicate", false);
+		if (create) {
+			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+					Intent.ShortcutIconResource.fromContext(
+							getApplicationContext(), R.drawable.ic_manual_rename));
+		}
+		getApplicationContext().sendBroadcast(shortcutIntent);
+	}
+
+	/**
+	 * Create the manually rename service shortcut intent.
+	 * 
+	 * @return The manually rename service shortcut intent.
+	 */
+	private Intent getActivityIntent() {
+		Intent activityIntent = new Intent(getApplicationContext(),
+				RenameDlgActivity.class);
+		activityIntent.setAction(Intent.ACTION_MAIN);
+		activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		activityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		activityIntent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+		return activityIntent;
+	}
+
+	/**
+	 * Update Rename service shortcut fields, descriptions and enabled/disabled
+	 * properties.
+	 */
+	private void updateShortcutFields() {
+		if (mApplication.isRenameShortcutCreated()) {
+			mToggleRenameShortcut.setTitle(R.string.remove_rename_shortcut);
+			mToggleRenameShortcut
+					.setSummary(R.string.remove_rename_shortcut_desc);
+			mHideRenameServiceStartConfirmation.setEnabled(true);
+		} else {
+			mToggleRenameShortcut.setTitle(R.string.create_rename_shortcut);
+			mToggleRenameShortcut
+					.setSummary(R.string.create_rename_shortcut_desc);
+			mHideRenameServiceStartConfirmation.setEnabled(false);
+		}
+	}
+
+	/**
+	 * Method invoked by the rename shortcut broadcast.
+	 */
+	@Override
+	public void updateRenameShortcut() {
+		updateShortcutFields();
 	}
 }

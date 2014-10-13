@@ -38,18 +38,18 @@
             android:persistent="false"
             android:summary="@string/filter_folder_desc"
             android:title="@string/filter_folder_title" />
-        
         <Preference
             android:key="definePrefixes"
             android:persistent="false"
             android:summary="@string/define_file_prefix_desc"
             android:title="@string/define_file_prefix_title" />
+
         <EditTextPreference
             android:defaultValue="@string/file_name_format"
             android:key="fileNameFormat"
             android:summary="@string/file_name_format_desc"
             android:title="@string/file_name_format_title" />
-        
+
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/rename_file_using_labels"
@@ -57,6 +57,18 @@
             android:key="renameFileDateType"
             android:summary="@string/rename_file_using_desc"
             android:title="@string/rename_file_using_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/rename_shortcut" >
+        <Preference
+            android:key="toggleRenameShortcut"
+            android:persistent="false"
+            android:summary="@string/create_rename_shortcut_desc"
+            android:title="@string/create_rename_shortcut" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="hideRenameServiceStartConfirmation"
+            android:summary="@string/confirmation_rename_dialog_desc"
+            android:title="@string/confirmation_rename_dialog" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/other_settings" >
         <Preference
