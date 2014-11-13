@@ -54,12 +54,14 @@
     <string name="rename_file_using_desc">the file was added to the media provider.</string>
 
     <string-array name="rename_file_using_labels">
-        <item>the file was added to the media provider (for testing).</item>
-        <item>the file was last modified (old way).</item>
+        <item>the file was added to the media provider;</item>
+        <item>the file was last modified;</item>
+        <item>EXIF for images/file date or time for clips.</item>
     </string-array>
     <string-array name="rename_file_using_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
     
     <!-- rename shortcut -->

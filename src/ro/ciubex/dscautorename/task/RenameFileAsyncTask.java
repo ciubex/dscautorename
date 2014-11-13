@@ -19,11 +19,15 @@
 package ro.ciubex.dscautorename.task;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import ro.ciubex.dscautorename.DSCApplication;
@@ -33,6 +37,7 @@ import ro.ciubex.dscautorename.model.FolderItem;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -55,6 +60,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private Locale mLocale;
 	private FilePrefix[] mFilesPrefixes;
 	private Pattern[] mPatterns;
+	private static SimpleDateFormat sFormatter;
+	private static ParsePosition position = new ParsePosition(0);
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -74,6 +81,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
 		mLocale = mApplication.getLocale();
+		sFormatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", mLocale);
+		sFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
 		mApplication.setRenameFileTaskRunning(true);
 		mFilesPrefixes = mApplication.getOriginalFilePrefix();
 	}
@@ -389,9 +398,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		String oldFileName = file.getName();
 		String prefix = data.getPrefixAfter();
 		String sufix;
-		long milliseconds = file.lastModified();
-		if (mApplication.getRenameFileDateType() == 1) {
+		long milliseconds = 0;
+		switch (mApplication.getRenameFileDateType()) {
+		case 1:
 			milliseconds = getDateAdded(data, file);
+			break;
+		case 2:
+			milliseconds = getDateFromExif(data, file);
+			break;
+		default:
+			milliseconds = file.lastModified();
 		}
 		String newFileName = prefix
 				+ mApplication.getFileName(new Date(milliseconds));
@@ -401,6 +417,42 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		}
 		newFileName += getFileExtension(oldFileName);
 		return newFileName;
+	}
+
+	/**
+	 * Obtain and calculate in milliseconds the date and time from EXIF meta
+	 * data.
+	 * 
+	 * @param data
+	 *            Original data.
+	 * @param file
+	 *            The file object.
+	 * @return The date and time from EXIF meta data.
+	 */
+	private long getDateFromExif(FileRenameData data, File file) {
+		String dateTimeString = null;
+		long milliseconds = -1;
+		String fileName = file.getAbsolutePath();
+		try {
+			ExifInterface exifInterface = new ExifInterface(fileName);
+			dateTimeString = exifInterface
+					.getAttribute(ExifInterface.TAG_DATETIME);
+			if (dateTimeString != null) {
+				Date datetime = sFormatter.parse(dateTimeString, position);
+				if (datetime != null) {
+					milliseconds = datetime.getTime();
+				}
+			}
+		} catch (IOException e) {
+			Log.e(TAG, "IOException:" + e.getMessage() + " file:" + fileName, e);
+		} catch (Exception e) {
+			Log.e(TAG, "Exception:" + e.getMessage() + " file:" + fileName
+					+ " dateTimeString:" + dateTimeString, e);
+		}
+		if (milliseconds == -1) {
+			milliseconds = getDateAdded(data, file);
+		}
+		return milliseconds;
 	}
 
 	/**
@@ -613,44 +665,5 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		}
 		s.append('$');
 		return (s.toString());
-	}
-
-	/**
-	 * This is an utility method used to show columns and values from a table.
-	 * 
-	 * @param cr
-	 *            The application ContentResolver
-	 * @param uri
-	 *            The database URI path.
-	 */
-	private void doQuery(ContentResolver cr, Uri uri) {
-		Cursor cursor = cr.query(uri, null, null, null, null);
-		if (cursor != null) {
-			cursor.moveToFirst();
-			int rows = cursor.getCount();
-			int cols = cursor.getColumnCount();
-			int i, j;
-			String rowVal;
-			Log.i(TAG, uri.getPath());
-			for (i = 0; i < rows; i++) {
-				rowVal = "row[" + i + "]:";
-				for (j = 0; j < cols; j++) {
-					if (j > 0) {
-						rowVal += ", ";
-					}
-					try {
-						rowVal += cursor.getColumnName(j) + ": "
-								+ cursor.getString(j);
-					} catch (Exception e) {
-						Log.e(TAG, "[" + j + "]:" + e.getMessage());
-					}
-				}
-				Log.i(TAG, rowVal);
-				cursor.moveToNext();
-			}
-			if (!cursor.isClosed()) {
-				cursor.close();
-			}
-		}
 	}
 }
