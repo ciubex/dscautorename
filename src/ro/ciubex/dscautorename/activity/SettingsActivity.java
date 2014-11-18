@@ -55,6 +55,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
+	private ListPreference mRenameFileDateType;
 	private Preference mDefinePrefixes;
 	private EditTextPreference mFileNameFormat;
 	private Preference mFolderScanningPref;
@@ -85,6 +86,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
+		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefinePrefixes = (Preference) findPreference("definePrefixes");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
 		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
@@ -258,6 +260,11 @@ public class SettingsActivity extends PreferenceActivity implements
 					10 < temp.length() ? 10 : temp.length());
 			summary += "...";
 		}
+		// renameFileDateType
+		String arr[] = mApplication.getResources().getStringArray(
+				R.array.rename_file_using_labels);
+		mRenameFileDateType
+				.setSummary(arr[mApplication.getRenameFileDateType()]);
 		mFolderScanningPref.setSummary(summary);
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
@@ -478,7 +485,8 @@ public class SettingsActivity extends PreferenceActivity implements
 		if (create) {
 			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
 					Intent.ShortcutIconResource.fromContext(
-							getApplicationContext(), R.drawable.ic_manual_rename));
+							getApplicationContext(),
+							R.drawable.ic_manual_rename));
 		}
 		getApplicationContext().sendBroadcast(shortcutIntent);
 	}

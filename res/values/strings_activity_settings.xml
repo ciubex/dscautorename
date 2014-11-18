@@ -50,13 +50,13 @@
     <string name="file_name_format_title">Renamed file name format.</string>
     <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
-    <string name="rename_file_using_title">Rename file using the date and time when:</string>
-    <string name="rename_file_using_desc">the file was added to the media provider.</string>
+    <string name="rename_file_using_title">Rename file using:</string>
+    <string name="rename_file_using_desc">date and time when file was last time modified.</string>
 
     <string-array name="rename_file_using_labels">
-        <item>the file was added to the media provider;</item>
-        <item>the file was last modified;</item>
-        <item>EXIF for images/file date or time for clips.</item>
+        <item>date and time when file was added to media provider;</item>
+        <item>date and time when file was last time modified;</item>
+        <item>EXIF for images and for clips use second choise.</item>
     </string-array>
     <string-array name="rename_file_using_values">
         <item>0</item>
