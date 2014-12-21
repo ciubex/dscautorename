@@ -58,6 +58,8 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_CAMERA = 1;
 	public static final int SERVICE_TYPE_CONTENT = 2;
 
+	public static final String SUCCESS = "success";
+
 	private static final String KEY_FOLDER_SCANNING = "folderScanning";
 	private static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
 	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
@@ -69,6 +71,7 @@ public class DSCApplication extends Application {
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
+	private static final String KEY_LAST_RENAME_FINISH_MESSAGE = "lastRenameFinishMessage";
 
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
@@ -773,5 +776,38 @@ public class DSCApplication extends Application {
 		if (listener != null && update) {
 			listener.updateRenameShortcut();
 		}
+	}
+
+	/**
+	 * Save the rename process message.
+	 * 
+	 * @param message
+	 *            Message to be saved.
+	 */
+	public void setLastRenameFinishMessage(String message) {
+		saveStringValue(KEY_LAST_RENAME_FINISH_MESSAGE, message);
+	}
+
+	/**
+	 * Get the last rename process message.
+	 * 
+	 * @return Last rename process message.
+	 */
+	public String getLastRenameFinishMessage() {
+		return mSharedPreferences.getString(KEY_LAST_RENAME_FINISH_MESSAGE,
+				SUCCESS);
+	}
+
+	/**
+	 * Check if the Android version is KitKat or newer.
+	 * 
+	 * @return True if the system is KitKat or newer.
+	 */
+	public boolean isKitKatOrNewer() {
+		// 18 is Android 4.3 - Jelly Bean
+		if (android.os.Build.VERSION.SDK_INT > 18) {
+			return true;
+		}
+		return false;
 	}
 }

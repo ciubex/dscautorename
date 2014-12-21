@@ -31,6 +31,7 @@ import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.model.FileRenameData;
 import ro.ciubex.dscautorename.model.FolderItem;
@@ -62,6 +63,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private Pattern[] mPatterns;
 	private static SimpleDateFormat sFormatter;
 	private static ParsePosition position = new ParsePosition(0);
+	private String mFinishedMessage;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -106,6 +108,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 			while (mApplication.isRenameFileRequested()) {
 				mApplication.setRenameFileRequested(false);
+				mFinishedMessage = DSCApplication.SUCCESS;
 				executeDelay();
 				buildPatterns();
 				populateAllListFiles();
@@ -121,6 +124,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					populateAllListFiles();
 				}
+				mApplication.setLastRenameFinishMessage(mFinishedMessage);
 			}
 		}
 		mApplication.setRenameFileTaskRunning(false);
@@ -149,6 +153,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 							mPosition++;
 						}
 					} else {
+						mFinishedMessage = mApplication
+								.getString(R.string.error_rename_file_no_read_write);
 						Log.e(TAG, "File can not be read and write: "
 								+ oldFileName);
 					}
@@ -305,6 +311,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				Log.d(TAG, "File renamed: " + id + ", " + oldFileName + ", "
 						+ newFileName + ", media updated: " + success);
 			} else {
+				mFinishedMessage = mApplication.getString(
+						R.string.error_rename_file, oldFileName);
 				Log.e(TAG, "The file " + oldFileName + " (id:" + id
 						+ ") cannot be renamed!");
 			}

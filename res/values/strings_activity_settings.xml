@@ -101,6 +101,10 @@
     <string name="prefix_list_all_selected">At least one prefix should be left unchecked!</string>
     <string name="prefix_list_no_selection">Select at least one prefix to delete!</string>
     <string name="prefix_list_confirmation">Do you want to remove selected prefixes?</string>
+    <string name="error_rename_file_no_read_write">File can not be read and write</string>
+    <string name="error_rename_file">The file %s cannot be renamed!</string>
+    <string name="last_error_message">Seems to have file restrictions. Please check application description on Google Play for more detalis. Last rename process error message:\n%s</string>
+    <string name="last_error_message_android_newer">Seems to have a newer Android version which have file restrictions. Please check application description on Google Play for more detalis. Last rename process error message:\n%s</string>
 
     <!-- About -->
     <string name="about_section">About</string>
