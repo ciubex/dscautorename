@@ -84,7 +84,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		this.mListener = new WeakReference<Listener>(listener);
 		mLocale = mApplication.getLocale();
 		sFormatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", mLocale);
-		sFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+		sFormatter.setTimeZone(TimeZone.getDefault());
 		mApplication.setRenameFileTaskRunning(true);
 		mFilesPrefixes = mApplication.getOriginalFilePrefix();
 	}
