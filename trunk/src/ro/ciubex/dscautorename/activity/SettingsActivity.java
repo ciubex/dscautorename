@@ -195,6 +195,7 @@ public class SettingsActivity extends PreferenceActivity implements
 				.registerOnSharedPreferenceChangeListener(this);
 		mApplication.updateShortcutUpdateListener(this);
 		prepareSummaries();
+		checkLastRenameMessage();
 	}
 
 	/**
@@ -452,11 +453,23 @@ public class SettingsActivity extends PreferenceActivity implements
 					R.string.manually_file_rename_count_more, count);
 			break;
 		}
+		mApplication.hideProgressDialog();
+		if (checkLastRenameMessage()) {
+			showAlertDialog(message);
+		}
+	}
+
+	/**
+	 * Display an alert dialog with a custom message.
+	 * 
+	 * @param message
+	 *            Message to be displayed on an alert dialog.
+	 */
+	private void showAlertDialog(String message) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 				.setTitle(R.string.app_name).setMessage(message)
 				.setIcon(android.R.drawable.ic_dialog_alert)
 				.setNeutralButton(R.string.ok, null);
-		mApplication.hideProgressDialog();
 		dialog.show();
 	}
 
@@ -530,5 +543,29 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void updateRenameShortcut() {
 		updateShortcutFields();
+	}
+
+	/**
+	 * Check last rename message.
+	 * 
+	 * @return FALSE if an error occurred on rename process;
+	 */
+	private boolean checkLastRenameMessage() {
+		String message = mApplication.getLastRenameFinishMessage();
+		boolean result = true;
+		if (message != null && message.length() > 0
+				&& !DSCApplication.SUCCESS.equals(message)) {
+			if (mApplication.isKitKatOrNewer()) {
+				message = mApplication.getString(
+						R.string.last_error_message_android_newer, message);
+			} else {
+				message = mApplication.getString(R.string.last_error_message,
+						message);
+			}
+			mApplication.setLastRenameFinishMessage(DSCApplication.SUCCESS);
+			showAlertDialog(message);
+			result = false;
+		}
+		return result;
 	}
 }
