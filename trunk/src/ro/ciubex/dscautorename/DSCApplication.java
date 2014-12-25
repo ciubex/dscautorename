@@ -18,15 +18,19 @@
  */
 package ro.ciubex.dscautorename;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
 import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.model.FolderItem;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
+import ro.ciubex.dscautorename.task.LogThread;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -59,6 +63,10 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_CONTENT = 2;
 
 	public static final String SUCCESS = "success";
+	public static final String LOG_FILE_NAME = "DSC_logs.log";
+	private static File logFile;
+	private static LogThread logFileThread;
+	private static SimpleDateFormat sFormatter;
 
 	private static final String KEY_FOLDER_SCANNING = "folderScanning";
 	private static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
@@ -259,7 +267,7 @@ public class DSCApplication extends Application {
 			fileNameFormat = getString(R.string.file_name_format);
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 			saveStringValue(KEY_FILE_NAME_FORMAT, fileNameFormat);
-			Log.e(TAG, "getFileName: " + date, e);
+			logE(TAG, "getFileName: " + date, e);
 		}
 		String newFileName = df.format(date);
 		return newFileName;
@@ -479,7 +487,7 @@ public class DSCApplication extends Application {
 		try {
 			value = Integer.parseInt(strValue);
 		} catch (NumberFormatException e) {
-			Log.e(TAG, "getIntValue(" + key + "): " + strValue, e);
+			logE(TAG, "getIntValue(" + key + "): " + strValue, e);
 		}
 		return value;
 	}
@@ -554,8 +562,8 @@ public class DSCApplication extends Application {
 		try {
 			startService(new Intent(this, MediaStorageObserverService.class));
 		} catch (Exception e) {
-			Log.e(TAG,
-					"registerMediaStorageContentObserver: " + e.getMessage(), e);
+			logE(TAG, "registerMediaStorageContentObserver: " + e.getMessage(),
+					e);
 		}
 	}
 
@@ -566,7 +574,7 @@ public class DSCApplication extends Application {
 		try {
 			stopService(new Intent(this, MediaStorageObserverService.class));
 		} catch (Exception e) {
-			Log.e(TAG,
+			logE(TAG,
 					"unregisterMediaStorageContentObserver: " + e.getMessage(),
 					e);
 		}
@@ -710,9 +718,9 @@ public class DSCApplication extends Application {
 		try {
 			success = (PackageManager.SIGNATURE_MATCH == pm.checkSignatures(
 					this.getPackageName(), "ro.ciubex.dscautorenamepro"));
-			Log.d(TAG, "isProPresent: " + success);
+			logD(TAG, "isProPresent: " + success);
 		} catch (Exception e) {
-			Log.e(TAG, "isProPresent: " + e.getMessage(), e);
+			logE(TAG, "isProPresent: " + e.getMessage(), e);
 		}
 		return success;
 	}
@@ -809,5 +817,112 @@ public class DSCApplication extends Application {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Send a {@link #ERROR} log message and log the exception.
+	 * 
+	 * @param tag
+	 *            Used to identify the source of a log message. It usually
+	 *            identifies the class or activity where the log call occurs.
+	 * @param msg
+	 *            The message you would like logged.
+	 */
+	public void logE(String tag, String msg) {
+		Log.e(tag, msg);
+		writeLogFile(System.currentTimeMillis(), "ERROR\t" + tag + "\t" + msg);
+	}
+
+	/**
+	 * Send a {@link #ERROR} log message and log the exception.
+	 * 
+	 * @param tag
+	 *            Used to identify the source of a log message. It usually
+	 *            identifies the class or activity where the log call occurs.
+	 * @param msg
+	 *            The message you would like logged.
+	 * @param tr
+	 *            An exception to log
+	 */
+	public void logE(String tag, String msg, Throwable tr) {
+		Log.e(tag, msg, tr);
+		writeLogFile(System.currentTimeMillis(), "ERROR\t" + tag + "\t" + msg
+				+ "\t" + Log.getStackTraceString(tr));
+	}
+
+	/**
+	 * Send a {@link #DEBUG} log message.
+	 * 
+	 * @param tag
+	 *            Used to identify the source of a log message. It usually
+	 *            identifies the class or activity where the log call occurs.
+	 * @param msg
+	 *            The message you would like logged.
+	 */
+	public void logD(String tag, String msg) {
+		Log.d(tag, msg);
+		writeLogFile(System.currentTimeMillis(), "DEBUG\t" + tag + "\t" + msg);
+	}
+
+	/**
+	 * Write the log message to the app log file.
+	 * 
+	 * @param logmessage
+	 *            The log message.
+	 */
+	private void writeLogFile(long milliseconds, String logmessage) {
+		if (checkLogFileThread()) {
+			logFileThread.addLog(sFormatter.format(new Date(milliseconds))
+					+ "\t" + logmessage);
+		}
+	}
+
+	/**
+	 * Check if log file thread exist and create it if not.
+	 */
+	private boolean checkLogFileThread() {
+		if (logFileThread == null) {
+			try {
+				logFile = new File(getExternalCacheDir(),
+						DSCApplication.LOG_FILE_NAME);
+				logFileThread = new LogThread(logFile);
+				sFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS",
+						mLocale);
+				sFormatter.setTimeZone(TimeZone.getDefault());
+				new Thread(logFileThread).start();
+			} catch (Exception e) {
+				logE(TAG, "Exception: " + e.getMessage(), e);
+			}
+		}
+		return logFileThread != null;
+	}
+
+	/**
+	 * Obtain the log file.
+	 * 
+	 * @return The log file.
+	 */
+	public File getLogFile() {
+		return logFile;
+	}
+
+	/**
+	 * Remove log file from disk.
+	 */
+	public void deleteLogFile() {
+		if (logFile != null && logFile.exists()) {
+			try {
+				logFileThread.close();
+				while (!logFileThread.isClosed()) {
+					Thread.sleep(1000);
+				}
+			} catch (IOException e) {
+				Log.e(TAG, "deleteLogFile: " + e.getMessage(), e);
+			} catch (InterruptedException e) {
+				Log.e(TAG, "deleteLogFile: " + e.getMessage(), e);
+			}
+			logFileThread = null;
+			logFile.delete();
+		}
 	}
 }

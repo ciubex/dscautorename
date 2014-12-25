@@ -103,8 +103,12 @@
     <string name="prefix_list_confirmation">Do you want to remove selected prefixes?</string>
     <string name="error_rename_file_no_read_write">File can not be read and write</string>
     <string name="error_rename_file">The file %s cannot be renamed!</string>
-    <string name="last_error_message">Seems to have file restrictions. Please check application description on Google Play for more detalis. Last rename process error message:\n%s</string>
-    <string name="last_error_message_android_newer">Seems to have a newer Android version which have file restrictions. Please check application description on Google Play for more detalis. Last rename process error message:\n%s</string>
+    <string name="last_error_message">Seems to have file restrictions. Please check application description on Google Play for more detalis. Last rename process error message:\n%s\nDo you want to send a report?</string>
+    <string name="last_error_message_android_newer">Seems to have a newer Android version which have file restrictions. Please check application description on Google Play for more detalis. Last rename process error message:\n%sDo you want to send a report?</string>
+    <string name="obtain_logs">Generate log file for report&#8230;</string>
+    <string name="report_subject">Report for DSC Auto Rename</string>
+    <string name="report_body">Description: </string>
+    <string name="send_report">Send report&#8230;</string>
 
     <!-- About -->
     <string name="about_section">About</string>
