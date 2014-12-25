@@ -155,17 +155,19 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					} else {
 						mFinishedMessage = mApplication
 								.getString(R.string.error_rename_file_no_read_write);
-						Log.e(TAG, "File can not be read and write: "
-								+ oldFileName);
+						mApplication.logE(TAG,
+								"File can not be read and write: "
+										+ oldFileName);
 					}
 				} else {
-					Log.d(TAG, "Skip rename file: " + oldFileName);
+					mApplication.logD(TAG, "Skip rename file: " + oldFileName);
 				}
 			} else {
-				Log.e(TAG, "The file:" + oldFileName + " does not exist.");
+				mApplication.logE(TAG, "The file:" + oldFileName
+						+ " does not exist.");
 			}
 		} else {
-			Log.e(TAG, "oldFileName is null.");
+			mApplication.logE(TAG, "oldFileName is null.");
 		}
 		publishProgress();
 	}
@@ -220,7 +222,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		try {
 			Thread.sleep(delayMillis);
 		} catch (InterruptedException e) {
-			Log.e(TAG, "InterruptedException", e);
+			mApplication.logE(TAG, "InterruptedException", e);
 		}
 	}
 
@@ -308,17 +310,18 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			success = oldFile.renameTo(newFile);
 			if (success) {
 				success = setNewFileToMediaStoreData(id, data.getUri(), newFile);
-				Log.d(TAG, "File renamed: " + id + ", " + oldFileName + ", "
-						+ newFileName + ", media updated: " + success);
+				mApplication.logD(TAG, "File renamed: " + id + ", "
+						+ oldFileName + ", " + newFileName
+						+ ", media updated: " + success);
 			} else {
 				mFinishedMessage = mApplication.getString(
 						R.string.error_rename_file, oldFileName);
-				Log.e(TAG, "The file " + oldFileName + " (id:" + id
+				mApplication.logE(TAG, "The file " + oldFileName + " (id:" + id
 						+ ") cannot be renamed!");
 			}
 		} else {
-			Log.e(TAG, "The file cannot be renamed: " + oldFileName + " to "
-					+ newFileName);
+			mApplication.logE(TAG, "The file cannot be renamed: " + oldFileName
+					+ " to " + newFileName);
 		}
 		return success;
 	}
@@ -369,9 +372,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					new String[] { "" + id });
 			result = (count == 1);
 		} catch (Exception ex) {
-			Log.e(TAG,
-					"Cannot be updated the content resolver: " + uri.toString()
-							+ " Exception: " + ex.getMessage(), ex);
+			mApplication.logE(TAG, "Cannot be updated the content resolver: "
+					+ uri.toString() + " Exception: " + ex.getMessage(), ex);
 		}
 		return result;
 	}
@@ -452,10 +454,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				}
 			}
 		} catch (IOException e) {
-			Log.e(TAG, "IOException:" + e.getMessage() + " file:" + fileName, e);
+			mApplication.logE(TAG, "IOException:" + e.getMessage() + " file:"
+					+ fileName, e);
 		} catch (Exception e) {
-			Log.e(TAG, "Exception:" + e.getMessage() + " file:" + fileName
-					+ " dateTimeString:" + dateTimeString, e);
+			mApplication.logE(TAG, "Exception:" + e.getMessage() + " file:"
+					+ fileName + " dateTimeString:" + dateTimeString, e);
 		}
 		if (milliseconds == -1) {
 			milliseconds = getDateAdded(data, file);
@@ -586,7 +589,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				}
 			}
 		} catch (Exception ex) {
-			Log.e(TAG, "getImageList Exception: " + ex.getMessage(), ex);
+			mApplication.logE(TAG, "getImageList Exception: " + ex.getMessage(), ex);
 		} finally {
 			if (cursor != null && !cursor.isClosed()) {
 				cursor.close();

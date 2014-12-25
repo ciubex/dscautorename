@@ -18,7 +18,13 @@
  */
 package ro.ciubex.dscautorename.activity;
 
+import java.io.Closeable;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
@@ -41,7 +47,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 
 /**
  * This is main activity class, actually is a preference activity.
@@ -66,6 +71,9 @@ public class SettingsActivity extends PreferenceActivity implements
 	private Preference mBuildVersion;
 	private Preference mLicensePref;
 	private Preference mDonatePref;
+	private static final int ID_CONFIRMATION_DONATION = 0;
+	private static final int ID_CONFIRMATION_REPORT = 1;
+	private static final int REQUEST_SEND_REPORT = 1;
 
 	/**
 	 * Method called when the activity is created
@@ -284,8 +292,8 @@ public class SettingsActivity extends PreferenceActivity implements
 			version = this.getPackageManager().getPackageInfo(
 					this.getPackageName(), 0).versionName;
 		} catch (NameNotFoundException ex) {
-			Log.e(TAG, "getApplicationVersion Exception: " + ex.getMessage(),
-					ex);
+			mApplication.logE(TAG,
+					"getApplicationVersion Exception: " + ex.getMessage(), ex);
 		}
 		return version;
 	}
@@ -371,30 +379,58 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Method invoked when was pressed the donatePref preference.
 	 */
 	private void onDonatePref() {
+		showConfirmationDialog(getString(R.string.donate_confirmation),
+				ID_CONFIRMATION_DONATION);
+	}
+
+	/**
+	 * Show a confirmation popup dialog.
+	 * 
+	 * @param message
+	 *            Message of the confirmation dialog.
+	 * @param confirmationId
+	 *            ID of the process to be executed if confirmed.
+	 */
+	private void showConfirmationDialog(String message, final int confirmationId) {
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.app_name)
-				.setMessage(R.string.donate_confirmation)
+				.setMessage(message)
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.setPositiveButton(R.string.yes,
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,
 									int whichButton) {
-								openDonationPage();
+								onConfirmation(confirmationId);
 							}
 						}).setNegativeButton(R.string.no, null).show();
 	}
 
 	/**
+	 * Execute proper confirmation process based on received confirmation ID.
+	 * 
+	 * @param confirmationId
+	 *            Received confirmation ID.
+	 */
+	protected void onConfirmation(int confirmationId) {
+		if (confirmationId == ID_CONFIRMATION_DONATION) {
+			confirmedDonationPage();
+		} else if (confirmationId == ID_CONFIRMATION_REPORT) {
+			confirmedSendReport();
+		}
+	}
+
+	/**
 	 * Access the browser to open the donation page.
 	 */
-	private void openDonationPage() {
+	private void confirmedDonationPage() {
 		String url = mApplication.getString(R.string.donate_url);
 		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		try {
 			startActivity(i);
 		} catch (ActivityNotFoundException ex) {
-			Log.e(TAG, "openDonationPage Exception: " + ex.getMessage(), ex);
+			mApplication.logE(TAG,
+					"confirmedDonationPage Exception: " + ex.getMessage(), ex);
 		}
 	}
 
@@ -563,9 +599,121 @@ public class SettingsActivity extends PreferenceActivity implements
 						message);
 			}
 			mApplication.setLastRenameFinishMessage(DSCApplication.SUCCESS);
-			showAlertDialog(message);
+			showConfirmationDialog(message, ID_CONFIRMATION_REPORT);
 			result = false;
 		}
 		return result;
+	}
+
+	/**
+	 * User just confirmed to send a report.
+	 */
+	private void confirmedSendReport() {
+		mApplication.showProgressDialog(this, this,
+				mApplication.getString(R.string.manually_service_running), 0);
+		String message = getString(R.string.report_body);
+		File cahceDir = mApplication.getExternalCacheDir();
+		File logFile = mApplication.getLogFile();
+		File logcatFile = getLogcatFile(cahceDir);
+		String[] TO = { "ciubex@yahoo.com" };
+		Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
+		emailIntent.setType("message/rfc822");
+		emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT,
+				getString(R.string.report_subject));
+		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
+
+		ArrayList<Uri> uris = new ArrayList<Uri>();
+		if (logFile != null && logFile.exists() && logFile.length() > 0) {
+			uris.add(Uri.fromFile(logFile));
+		}
+		uris.add(Uri.fromFile(logcatFile));
+
+		emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+		mApplication.hideProgressDialog();
+		try {
+			startActivityForResult(Intent.createChooser(emailIntent,
+					getString(R.string.send_report)), REQUEST_SEND_REPORT);
+		} catch (ActivityNotFoundException ex) {
+			mApplication.logE(TAG,
+					"confirmedSendReport Exception: " + ex.getMessage(), ex);
+		}
+	}
+
+	/**
+	 * This method is invoked when a child activity is finished and this
+	 * activity is showed again
+	 */
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_SEND_REPORT) {
+			mApplication.deleteLogFile();
+		}
+	}
+
+	/**
+	 * Generate logs file on cache directory.
+	 * 
+	 * @param cahceDir
+	 *            Cache directory where are the logs.
+	 * @return File with the logs.
+	 */
+	private File getLogcatFile(File cahceDir) {
+		File file = new File(cahceDir, "DSC_logcat.log");
+		String filePath = file.getAbsolutePath();
+		List<String> commands = new ArrayList<String>();
+		commands.add("rm -f " + filePath);
+		commands.add("logcat -d -v threadtime -f " + filePath);
+		executeShellCommands(commands);
+		return file;
+	}
+
+	/**
+	 * Execute shell commands method.
+	 * 
+	 * @param command
+	 *            The commands and parameters to be executed.
+	 */
+	private void executeShellCommands(List<String> commands) {
+		Process shell = null;
+		DataOutputStream consoleIn = null;
+		byte[] LS = "\n".getBytes();
+		try {
+			shell = new ProcessBuilder("adb", "shell")
+					.redirectErrorStream(true).start();
+			consoleIn = new DataOutputStream(shell.getOutputStream());
+			for (String command : commands) {
+				consoleIn.write(command.getBytes());
+				consoleIn.write(LS);
+				consoleIn.flush();
+			}
+			shell.waitFor();
+		} catch (IOException e) {
+			mApplication.logE(TAG, "getCurrentProcessLog failed", e);
+		} catch (InterruptedException e) {
+			mApplication.logE(TAG, "getCurrentProcessLog failed", e);
+		} finally {
+			doClose(consoleIn);
+			if (shell != null) {
+				shell.destroy();
+			}
+		}
+	}
+
+	/**
+	 * Close a closeable object.
+	 * 
+	 * @param closeable
+	 *            Object to be close.
+	 */
+	private void doClose(Closeable closeable) {
+		if (closeable != null) {
+			try {
+				closeable.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

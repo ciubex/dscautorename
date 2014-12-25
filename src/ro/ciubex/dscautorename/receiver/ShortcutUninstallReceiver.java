@@ -48,7 +48,7 @@ public class ShortcutUninstallReceiver extends BroadcastReceiver {
 			application = (DSCApplication) appCtx;
 		}
 		if (application != null) {
-			Log.d(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx UNINSTALL");
+			application.logD(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx UNINSTALL");
 			application.prepareShortcutPref(data,
 					RenameShortcutUpdateListener.TYPE.UNINSTALL);
 		}
