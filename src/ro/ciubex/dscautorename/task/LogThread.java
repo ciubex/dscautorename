@@ -80,6 +80,7 @@ public class LogThread implements Runnable, Closeable {
 	public void run() {
 		BufferedWriter bufferedWriter = null;
 		try {
+			createLogFile();
 			bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
 			writeLogs(bufferedWriter);
 		} catch (IOException e) {
@@ -101,7 +102,6 @@ public class LogThread implements Runnable, Closeable {
 	 * @throws IOException
 	 */
 	private void writeLogs(BufferedWriter bufferedWriter) throws IOException {
-		createLogFile();
 		while (!closing) {
 			synchronized (logs) {
 				try {

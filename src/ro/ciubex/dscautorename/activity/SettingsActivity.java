@@ -19,12 +19,12 @@
 package ro.ciubex.dscautorename.activity;
 
 import java.io.Closeable;
-import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
@@ -32,6 +32,7 @@ import ro.ciubex.dscautorename.dialog.SelectFoldersListDialog;
 import ro.ciubex.dscautorename.dialog.SelectPrefixDialog;
 import ro.ciubex.dscautorename.model.FilePrefix;
 import ro.ciubex.dscautorename.model.FolderItem;
+import ro.ciubex.dscautorename.task.CachedFileProvider;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -41,6 +42,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -612,7 +614,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication.showProgressDialog(this, this,
 				mApplication.getString(R.string.manually_service_running), 0);
 		String message = getString(R.string.report_body);
-		File cahceDir = mApplication.getExternalCacheDir();
+		File cahceDir = mApplication.getCacheDir();
 		File logFile = mApplication.getLogFile();
 		File logcatFile = getLogcatFile(cahceDir);
 		String[] TO = { "ciubex@yahoo.com" };
@@ -625,9 +627,11 @@ public class SettingsActivity extends PreferenceActivity implements
 
 		ArrayList<Uri> uris = new ArrayList<Uri>();
 		if (logFile != null && logFile.exists() && logFile.length() > 0) {
-			uris.add(Uri.fromFile(logFile));
+			uris.add(Uri.parse("content://" + CachedFileProvider.AUTHORITY
+					+ "/" + logFile.getName()));
 		}
-		uris.add(Uri.fromFile(logcatFile));
+		uris.add(Uri.parse("content://" + CachedFileProvider.AUTHORITY + "/"
+				+ logcatFile.getName()));
 
 		emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
 		mApplication.hideProgressDialog();
@@ -660,45 +664,49 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * @return File with the logs.
 	 */
 	private File getLogcatFile(File cahceDir) {
-		File file = new File(cahceDir, "DSC_logcat.log");
-		String filePath = file.getAbsolutePath();
-		List<String> commands = new ArrayList<String>();
-		commands.add("rm -f " + filePath);
-		commands.add("logcat -d -v threadtime -f " + filePath);
-		executeShellCommands(commands);
-		return file;
-	}
-
-	/**
-	 * Execute shell commands method.
-	 * 
-	 * @param command
-	 *            The commands and parameters to be executed.
-	 */
-	private void executeShellCommands(List<String> commands) {
+		File logFile = new File(cahceDir, "DSC_logcat.log");
 		Process shell = null;
-		DataOutputStream consoleIn = null;
-		byte[] LS = "\n".getBytes();
+		InputStreamReader reader = null;
+		FileWriter writer = null;
+		char LS = '\n';
+		char[] buffer = new char[10000];
+		String model = Build.MODEL;
+		if (!model.startsWith(Build.MANUFACTURER)) {
+			model = Build.MANUFACTURER + " " + model;
+		}
+		String command = (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) ? "logcat -d -v threadtime ro.ciubex.dscautorename:v dalvikvm:v System.err:v *:s"
+				: "logcat -d -v threadtime";
 		try {
-			shell = new ProcessBuilder("adb", "shell")
-					.redirectErrorStream(true).start();
-			consoleIn = new DataOutputStream(shell.getOutputStream());
-			for (String command : commands) {
-				consoleIn.write(command.getBytes());
-				consoleIn.write(LS);
-				consoleIn.flush();
+			if (!logFile.exists()) {
+				logFile.createNewFile();
 			}
+			shell = Runtime.getRuntime().exec(command);
+			reader = new InputStreamReader(shell.getInputStream());
+			writer = new FileWriter(logFile);
+			writer.write("Android version: " + Build.VERSION.SDK_INT + LS);
+			writer.write("Device: " + model + LS);
+			writer.write("App version: " + mApplication.getVersion() + LS);
+			int n = 0;
+			do {
+				n = reader.read(buffer, 0, buffer.length);
+				if (n == -1) {
+					break;
+				}
+				writer.write(buffer, 0, n);
+			} while (true);
 			shell.waitFor();
 		} catch (IOException e) {
 			mApplication.logE(TAG, "getCurrentProcessLog failed", e);
 		} catch (InterruptedException e) {
 			mApplication.logE(TAG, "getCurrentProcessLog failed", e);
 		} finally {
-			doClose(consoleIn);
+			doClose(writer);
+			doClose(reader);
 			if (shell != null) {
 				shell.destroy();
 			}
 		}
+		return logFile;
 	}
 
 	/**

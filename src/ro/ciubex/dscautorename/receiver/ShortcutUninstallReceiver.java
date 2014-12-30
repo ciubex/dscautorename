@@ -23,7 +23,6 @@ import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 /**
  * Receiver for shortcut uninstall
