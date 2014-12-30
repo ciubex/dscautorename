@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="23"
-    android:versionName="3.7" >
+    android:versionCode="24"
+    android:versionName="3.7.1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -85,6 +85,13 @@
         <service
             android:name="ro.ciubex.dscautorename.receiver.MediaStorageObserverService"
             android:enabled="true" />
+
+        <provider
+            android:name="ro.ciubex.dscautorename.task.CachedFileProvider"
+            android:authorities="ro.ciubex.dscautorename.provider"
+            android:exported="false"
+            android:grantUriPermissions="true" >
+        </provider>
     </application>
 
 </manifest>

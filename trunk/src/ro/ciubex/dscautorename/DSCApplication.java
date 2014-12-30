@@ -39,6 +39,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -55,6 +56,7 @@ public class DSCApplication extends Application {
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
 	private RenameShortcutUpdateListener mShortcutUpdateListener;
+	private static int mVersionCode = -1;
 	private static boolean mRenameFileRequested;
 	private static boolean mRenameFileTaskCanceled;
 	private static boolean mRenameFileTaskRunning;
@@ -883,7 +885,7 @@ public class DSCApplication extends Application {
 	private boolean checkLogFileThread() {
 		if (logFileThread == null) {
 			try {
-				logFile = new File(getExternalCacheDir(),
+				logFile = new File(getCacheDir(),
 						DSCApplication.LOG_FILE_NAME);
 				logFileThread = new LogThread(logFile);
 				sFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS",
@@ -924,5 +926,21 @@ public class DSCApplication extends Application {
 			logFileThread = null;
 			logFile.delete();
 		}
+	}
+	
+	/**
+	 * Retrieve the application version code.
+	 * 
+	 * @return The application version code.
+	 */
+	public int getVersion() {
+		if (mVersionCode == -1) {
+			try {
+				mVersionCode = getPackageManager().getPackageInfo(
+						getPackageName(), 0).versionCode;
+			} catch (NameNotFoundException e) {
+			}
+		}
+		return mVersionCode;
 	}
 }
