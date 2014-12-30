@@ -614,7 +614,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication.showProgressDialog(this, this,
 				mApplication.getString(R.string.manually_service_running), 0);
 		String message = getString(R.string.report_body);
-		File cahceDir = mApplication.getCacheDir();
+		File cahceDir = mApplication.getLogsFolder();
 		File logFile = mApplication.getLogFile();
 		File logcatFile = getLogcatFile(cahceDir);
 		String[] TO = { "ciubex@yahoo.com" };
@@ -634,6 +634,8 @@ public class SettingsActivity extends PreferenceActivity implements
 				+ logcatFile.getName()));
 
 		emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+		emailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		mApplication.hideProgressDialog();
 		try {
 			startActivityForResult(Intent.createChooser(emailIntent,

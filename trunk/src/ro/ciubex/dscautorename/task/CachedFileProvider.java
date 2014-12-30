@@ -21,6 +21,8 @@ package ro.ciubex.dscautorename.task;
 import java.io.File;
 import java.io.FileNotFoundException;
 
+import ro.ciubex.dscautorename.DSCApplication;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -65,6 +67,7 @@ public class CachedFileProvider extends ContentProvider {
 			throws FileNotFoundException {
 		if (1 == uriMatcher.match(uri)) {
 			String fileLocation = getContext().getCacheDir() + File.separator
+					+ DSCApplication.LOGS_FOLDER_NAME + File.separator
 					+ uri.getLastPathSegment();
 			File file = new File(fileLocation);
 			if (file.exists()) {
@@ -94,6 +97,7 @@ public class CachedFileProvider extends ContentProvider {
 		if (1 == uriMatcher.match(uri)) {
 			MatrixCursor cursor = null;
 			File file = new File(getContext().getCacheDir() + File.separator
+					+ DSCApplication.LOGS_FOLDER_NAME + File.separator
 					+ uri.getLastPathSegment());
 			if (file.exists()) {
 				cursor = new MatrixCursor(new String[] {

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="24"
-    android:versionName="3.7.1" >
+    android:versionCode="25"
+    android:versionName="3.7.2" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -91,6 +91,9 @@
             android:authorities="ro.ciubex.dscautorename.provider"
             android:exported="false"
             android:grantUriPermissions="true" >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/fileprovider" />
         </provider>
     </application>
 
