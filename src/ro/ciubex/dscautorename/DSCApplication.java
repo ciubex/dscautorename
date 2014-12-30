@@ -56,6 +56,7 @@ public class DSCApplication extends Application {
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
 	private RenameShortcutUpdateListener mShortcutUpdateListener;
+	private File mLogsFolder;
 	private static int mVersionCode = -1;
 	private static boolean mRenameFileRequested;
 	private static boolean mRenameFileTaskCanceled;
@@ -82,6 +83,8 @@ public class DSCApplication extends Application {
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
 	private static final String KEY_LAST_RENAME_FINISH_MESSAGE = "lastRenameFinishMessage";
+	
+	public static final String LOGS_FOLDER_NAME = "logs";
 
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
@@ -885,8 +888,7 @@ public class DSCApplication extends Application {
 	private boolean checkLogFileThread() {
 		if (logFileThread == null) {
 			try {
-				logFile = new File(getCacheDir(),
-						DSCApplication.LOG_FILE_NAME);
+				logFile = new File(getLogsFolder(), DSCApplication.LOG_FILE_NAME);
 				logFileThread = new LogThread(logFile);
 				sFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS",
 						mLocale);
@@ -927,7 +929,7 @@ public class DSCApplication extends Application {
 			logFile.delete();
 		}
 	}
-	
+
 	/**
 	 * Retrieve the application version code.
 	 * 
@@ -942,5 +944,19 @@ public class DSCApplication extends Application {
 			}
 		}
 		return mVersionCode;
+	}
+
+	/**
+	 * Get logs folder. If is not defined then is initialized and created.
+	 * @return Logs folder.
+	 */
+	public File getLogsFolder() {
+		if (mLogsFolder == null) {
+			mLogsFolder = new File(getCacheDir() + File.separator + DSCApplication.LOGS_FOLDER_NAME);
+			if (!mLogsFolder.exists()) {
+				mLogsFolder.mkdirs();
+			}
+		}
+		return mLogsFolder;
 	}
 }
