@@ -49,6 +49,11 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 /**
  * This is main activity class, actually is a preference activity.
@@ -381,7 +386,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Method invoked when was pressed the donatePref preference.
 	 */
 	private void onDonatePref() {
-		showConfirmationDialog(getString(R.string.donate_confirmation),
+		showConfirmationDialog(getString(R.string.donate_confirmation), false,
 				ID_CONFIRMATION_DONATION);
 	}
 
@@ -390,22 +395,42 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * 
 	 * @param message
 	 *            Message of the confirmation dialog.
+	 * @param messageContainLink
+	 *            A boolean flag which mark if the text contain links.
 	 * @param confirmationId
 	 *            ID of the process to be executed if confirmed.
 	 */
-	private void showConfirmationDialog(String message, final int confirmationId) {
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.app_name)
-				.setMessage(message)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setPositiveButton(R.string.yes,
-						new DialogInterface.OnClickListener() {
+	private void showConfirmationDialog(String message,
+			boolean messageContainLink, final int confirmationId) {
+		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+		alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+		alertDialog.setTitle(R.string.app_name);
+		if (messageContainLink) {
+			ScrollView scrollView = new ScrollView(this);
+			SpannableString spanText = new SpannableString(message);
+			Linkify.addLinks(spanText, Linkify.ALL);
 
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								onConfirmation(confirmationId);
-							}
-						}).setNegativeButton(R.string.no, null).show();
+			TextView textView = new TextView(this);
+			textView.setMovementMethod(LinkMovementMethod.getInstance());
+			textView.setText(spanText);
+
+			scrollView.setPadding(14, 2, 10, 12);
+			scrollView.addView(textView);
+			alertDialog.setView(scrollView);
+		} else {
+			alertDialog.setMessage(message);
+		}
+		alertDialog.setCancelable(false);
+		alertDialog.setPositiveButton(R.string.yes,
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int whichButton) {
+						onConfirmation(confirmationId);
+					}
+				});
+		alertDialog.setNegativeButton(R.string.no, null);
+		AlertDialog alert = alertDialog.create();
+		alert.show();
 	}
 
 	/**
@@ -601,7 +626,7 @@ public class SettingsActivity extends PreferenceActivity implements
 						message);
 			}
 			mApplication.setLastRenameFinishMessage(DSCApplication.SUCCESS);
-			showConfirmationDialog(message, ID_CONFIRMATION_REPORT);
+			showConfirmationDialog(message, true, ID_CONFIRMATION_REPORT);
 			result = false;
 		}
 		return result;
