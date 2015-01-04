@@ -679,7 +679,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_SEND_REPORT) {
-			mApplication.deleteLogFile();
+//			mApplication.deleteLogFile();
 		}
 	}
 

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="26"
-    android:versionName="3.7.3" >
+    android:versionCode="27"
+    android:versionName="3.7.4" >
 
     <uses-sdk
         android:minSdkVersion="8"
