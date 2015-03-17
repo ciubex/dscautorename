@@ -35,6 +35,11 @@ public class FileRenameData {
 	private long mDateAdded;
 	private String mPrefixBefore;
 	private String mPrefixAfter;
+	private String mFullPath;
+	private String mFileTitle;
+	private String mFileTitleZero;
+	private String mFileName;
+	private String mFileNameZero;
 
 	public FileRenameData(int id, Uri uri, String data, String title,
 			String displayName, long dateAdded) {
@@ -102,6 +107,76 @@ public class FileRenameData {
 
 	public void setPrefixAfter(String prefixAfter) {
 		this.mPrefixAfter = prefixAfter;
+	}
+
+	/**
+	 * @return the fullPath
+	 */
+	public String getFullPath() {
+		return mFullPath;
+	}
+
+	/**
+	 * @param fullPath the fullPath to set
+	 */
+	public void setFullPath(String fullPath) {
+		this.mFullPath = fullPath;
+	}
+
+	/**
+	 * @return the fileTitle
+	 */
+	public String getFileTitle() {
+		return mFileTitle;
+	}
+
+	/**
+	 * @param fileTitle the fileTitle to set
+	 */
+	public void setFileTitle(String fileTitle) {
+		this.mFileTitle = fileTitle;
+	}
+
+	/**
+	 * @return the fileTitleZero
+	 */
+	public String getFileTitleZero() {
+		return mFileTitleZero;
+	}
+
+	/**
+	 * @param fileTitleZero the fileTitleZero to set
+	 */
+	public void setFileTitleZero(String fileTitleZero) {
+		this.mFileTitleZero = fileTitleZero;
+	}
+
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName() {
+		return mFileName;
+	}
+
+	/**
+	 * @param fileName the fileName to set
+	 */
+	public void setFileName(String fileName) {
+		this.mFileName = fileName;
+	}
+
+	/**
+	 * @return the fileNameZero
+	 */
+	public String getFileNameZero() {
+		return mFileNameZero;
+	}
+
+	/**
+	 * @param fileNameZero the fileNameZero to set
+	 */
+	public void setFileNameZero(String fileNameZero) {
+		this.mFileNameZero = fileNameZero;
 	}
 
 	/*
