@@ -60,9 +60,14 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private Locale mLocale;
 	private FilePrefix[] mFilesPrefixes;
 	private Pattern[] mPatterns;
-	private static SimpleDateFormat sFormatter;
+	private static SimpleDateFormat mEXIF_Formatter;
 	private static ParsePosition position = new ParsePosition(0);
 	private String mFinishedMessage;
+	private FileRenameData mPreviousFileRenameData;
+	private String mPreviousFileNamePrefix;
+	private int mPreviousFileNamePrefixCount;
+
+	private static final String ZERO_FILE_NAME_SUFIX = "%05d";
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -82,8 +87,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
 		mLocale = mApplication.getLocale();
-		sFormatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", mLocale);
-		sFormatter.setTimeZone(TimeZone.getDefault());
+		mEXIF_Formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", mLocale);
+		mEXIF_Formatter.setTimeZone(TimeZone.getDefault());
 		mApplication.setRenameFileTaskRunning(true);
 		mFilesPrefixes = mApplication.getOriginalFilePrefix();
 	}
@@ -113,6 +118,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				populateAllListFiles();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
+					mPreviousFileNamePrefixCount = 0;
+					mPreviousFileRenameData = null;
 					mPosition = 0;
 					publishProgress();
 					for (FileRenameData data : mListFiles) {
@@ -149,6 +156,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				if (!skipFile) {
 					if (oldFile.canRead() && oldFile.canWrite()) {
 						if (renameFile(currentFile, oldFile, oldFileName)) {
+							mPreviousFileRenameData = currentFile;
 							mPosition++;
 						}
 					} else {
@@ -294,24 +302,44 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private boolean renameFile(FileRenameData data, File oldFile,
 			String oldFileName) {
 		boolean success = false;
-		int index = 0;
 		String newFileName;
 		File newFile;
+		File parentFolder;
 		boolean exist = false;
 		do {
-			newFileName = getNewFileName(data, oldFile, index);
-			newFile = new File(oldFile.getParentFile(), newFileName);
-			index++;
+			newFileName = getNewFileName(data, oldFile);
+			parentFolder = oldFile.getParentFile();
+			newFile = new File(parentFolder, newFileName);
 			exist = newFile.exists();
-		} while (exist && index < 1000);
+		} while (exist && mPreviousFileNamePrefixCount < 1000);
 		if (!exist) {
 			int id = data.getId();
 			success = oldFile.renameTo(newFile);
 			if (success) {
-				success = setNewFileToMediaStoreData(id, data.getUri(), newFile);
+				data.setFullPath(newFile.getAbsolutePath());
+				data.setFileName(newFile.getName());
+				success = updateMediaStoreData(id, data.getUri(),
+						data.getFullPath(), data.getFileTitle(),
+						data.getFileName());
 				mApplication.logD(TAG, "File renamed: " + id + ", "
 						+ oldFileName + ", " + newFileName
 						+ ", media updated: " + success);
+				if (mPreviousFileRenameData != null && mPreviousFileNamePrefixCount == 1) {
+					oldFile = new File(parentFolder,
+							mPreviousFileRenameData.getFileName());
+					newFile = new File(parentFolder,
+							data.getFileNameZero());
+					if (oldFile.renameTo(newFile)) {
+						mApplication.logD(TAG, "ZERO File renamed: " + mPreviousFileRenameData.getId() + ", "
+								+ oldFile.getName() + ", " + newFile.getName()
+								+ ", media updated: true");
+						updateMediaStoreData(mPreviousFileRenameData.getId(),
+								mPreviousFileRenameData.getUri(),
+								newFile.getAbsolutePath(),
+								data.getFileTitleZero(),
+								data.getFileNameZero());
+					}
+				}
 			} else {
 				mFinishedMessage = mApplication.getString(
 						R.string.error_rename_file, oldFileName);
@@ -323,24 +351,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					+ " to " + newFileName);
 		}
 		return success;
-	}
-
-	/**
-	 * Update the Media Store data with the new file name.
-	 * 
-	 * @param id
-	 *            The ID of the file to be updated
-	 * @param oldFileName
-	 *            The old file name.
-	 * @param newFileName
-	 *            The new file name.
-	 * @return True if the file name was updated.
-	 */
-	private boolean setNewFileToMediaStoreData(int id, Uri uri, File newFile) {
-		boolean result = updateMediaStoreData(id, uri,
-				newFile.getAbsolutePath(),
-				removeExtensionFileName(newFile.getName()), newFile.getName());
-		return result;
 	}
 
 	/**
@@ -378,35 +388,19 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * 
-	 * @param fullFilePath
-	 * @return
-	 */
-	private String removeExtensionFileName(String fullFilePath) {
-		if (fullFilePath != null && fullFilePath.length() > 0) {
-			int idx = fullFilePath.lastIndexOf('.');
-			if (idx > -1 && idx < fullFilePath.length()) {
-				fullFilePath = fullFilePath.substring(0, idx);
-			}
-		}
-		return fullFilePath;
-	}
-
-	/**
 	 * Rename the file provided as parameter.
 	 * 
 	 * @param data
 	 *            Original data information.
 	 * @param file
 	 *            The file to be renamed.
-	 * @param index
-	 *            The index used to generate a unique file name if the file is
-	 *            already exist.
 	 */
-	private String getNewFileName(FileRenameData data, File file, int index) {
+	private String getNewFileName(FileRenameData data, File file) {
 		String oldFileName = file.getName();
 		String prefix = data.getPrefixAfter();
 		String sufix;
+		String extension = getFileExtension(oldFileName);
+		String fileNameZero = oldFileName;
 		long milliseconds = 0;
 		switch (mApplication.getRenameFileDateType()) {
 		case 1:
@@ -420,11 +414,24 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		}
 		String newFileName = prefix
 				+ mApplication.getFileName(new Date(milliseconds));
-		if (index > 0) {
-			sufix = String.format(mLocale, "%05d", index);
-			newFileName += "_" + sufix;
+		if (newFileName.equals(mPreviousFileNamePrefix)) {
+			mPreviousFileNamePrefixCount++;
+		} else {
+			mPreviousFileNamePrefix = newFileName;
+			mPreviousFileNamePrefixCount = 0;
 		}
-		newFileName += getFileExtension(oldFileName);
+		if (mPreviousFileNamePrefixCount > 0) {
+			fileNameZero = newFileName + "_"
+					+ String.format(mLocale, ZERO_FILE_NAME_SUFIX, 0);
+			sufix = String.format(mLocale, ZERO_FILE_NAME_SUFIX, mPreviousFileNamePrefixCount);
+			newFileName += "_" + sufix;
+			data.setFileTitleZero(fileNameZero);
+			fileNameZero += extension;
+			data.setFileNameZero(fileNameZero);
+		}
+
+		data.setFileTitle(newFileName);
+		newFileName += extension;
 		return newFileName;
 	}
 
@@ -447,7 +454,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			dateTimeString = exifInterface
 					.getAttribute(ExifInterface.TAG_DATETIME);
 			if (dateTimeString != null) {
-				Date datetime = sFormatter.parse(dateTimeString, position);
+				Date datetime = mEXIF_Formatter.parse(dateTimeString, position);
 				if (datetime != null) {
 					milliseconds = datetime.getTime();
 				}
@@ -588,7 +595,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				}
 			}
 		} catch (Exception ex) {
-			mApplication.logE(TAG, "getImageList Exception: " + ex.getMessage(), ex);
+			mApplication.logE(TAG,
+					"getImageList Exception: " + ex.getMessage(), ex);
 		} finally {
 			if (cursor != null && !cursor.isClosed()) {
 				cursor.close();
