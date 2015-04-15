@@ -27,6 +27,7 @@ import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.adpater.FileListAdapter;
 import ro.ciubex.dscautorename.adpater.FolderListAdapter;
 import ro.ciubex.dscautorename.model.FileItem;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.task.FolderScannAsyncTask;
 import android.content.Context;
 import android.os.Bundle;
@@ -93,7 +94,11 @@ public class SelectFolderDialog extends BaseDialog implements
 		if (mFolderIndex < 0) {
 			index = 0;
 		}
-		String folderName = mApplication.getFoldersScanning()[index].toString();
+		String folderName = mApplication.getDefaultFolderScanning();
+		SelectedFolderModel[] folders = mApplication.getSelectedFolders();
+		if (folders.length > 0) {
+			folderName = folders[index].getFullPath();
+		}
 		mCurrentFolder = new File(folderName);
 		mFilesListView = (ListView) findViewById(R.id.folderList);
 		mFilesListView.setEmptyView(findViewById(R.id.emptyFolderList));
@@ -179,8 +184,9 @@ public class SelectFolderDialog extends BaseDialog implements
 	@Override
 	public void onClick(View view) {
 		if (btnOk == view) {
-			mApplication.setFolderScanning(mFolderIndex,
-					mCurrentFolder.getAbsolutePath());
+			SelectedFolderModel folder = new SelectedFolderModel();
+			folder.setPath(mCurrentFolder.getAbsolutePath());
+			mApplication.setFolderScanning(mFolderIndex, folder);
 			mParentAdapter.updateFolders();
 			mParentAdapter.notifyDataSetChanged();
 		}

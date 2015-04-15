@@ -127,7 +127,7 @@ public class FilePrefixListAdapter extends BaseAdapter {
 	 */
 	private String getBeforePrefix(FilePrefix filePrefix) {
 		String prefix = filePrefix.getBefore();
-		return prefix + "001" + mApplication.getDemoExtension(prefix);
+		return prefix + "001.EXT";
 	}
 
 	/**
@@ -139,8 +139,7 @@ public class FilePrefixListAdapter extends BaseAdapter {
 	 */
 	private String getAfterPrefix(FilePrefix filePrefix) {
 		String prefix = filePrefix.getAfter();
-		return prefix + mApplication.getFileName(mNow)
-				+ mApplication.getDemoExtension(filePrefix.getBefore());
+		return prefix + mApplication.getFileName(mNow) + ".EXT";
 	}
 
 	/**
@@ -148,7 +147,7 @@ public class FilePrefixListAdapter extends BaseAdapter {
 	 * 
 	 * @param view
 	 *            The view used to obtain the holder elements.
-	 * @param position
+	 * @param filePrefix The file prefix.
 	 * @return The item view holder.
 	 */
 	private ViewHolder initViewHolder(View view, FilePrefix filePrefix) {

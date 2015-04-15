@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- * 
- * Copyright (C) 2014 Claudiu Ciobotariu
- * 
+ *
+ * Copyright (C) 2015 Claudiu Ciobotariu
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -22,17 +22,24 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
 import ro.ciubex.dscautorename.model.FilePrefix;
-import ro.ciubex.dscautorename.model.FolderItem;
+import ro.ciubex.dscautorename.model.MountVolume;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
 import ro.ciubex.dscautorename.task.LogThread;
+import ro.ciubex.dscautorename.util.Utilities;
+
+import android.annotation.TargetApi;
 import android.app.Application;
 import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,15 +47,15 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Environment;
+import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.util.Log;
 
 /**
  * This is the application class for the DSC Auto Rename application.
- * 
+ *
  * @author Claudiu Ciobotariu
- * 
  */
 public class DSCApplication extends Application {
 	private static final String TAG = DSCApplication.class.getName();
@@ -65,14 +72,14 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_CAMERA = 1;
 	public static final int SERVICE_TYPE_CONTENT = 2;
 
-	public static final String SUCCESS = "success";
-	public static final String LOG_FILE_NAME = "DSC_logs.log";
+	public static final String LOG_FILE_NAME = "DSC_app_logs.log";
 	private static File logFile;
 	private static LogThread logFileThread;
 	private static SimpleDateFormat sFormatter;
 
 	private static final String KEY_FOLDER_SCANNING = "folderScanning";
 	private static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
+	private static final String KEY_ENABLED_SCAN_FILES = "enableScanForFiles";
 	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
 	private static final String KEY_RENAME_SERVICE_START_CONFIRMATION = "hideRenameServiceStartConfirmation";
 	private static final String KEY_FILE_NAME_FORMAT = "fileNameFormat";
@@ -82,9 +89,14 @@ public class DSCApplication extends Application {
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
-	private static final String KEY_LAST_RENAME_FINISH_MESSAGE = "lastRenameFinishMessage";
-	
+	private static final String FIRST_TIME = "firstTime";
+
 	public static final String LOGS_FOLDER_NAME = "logs";
+	private static int mSdkInt = 8;
+
+	private Object mMountService;
+	private List<MountVolume> mMountVolumes;
+	private SelectedFolderModel[] mSelectedSelectedFolderModels;
 
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
@@ -98,37 +110,104 @@ public class DSCApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mLocale = Locale.getDefault();
-		mSharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(this);
+		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		mSdkInt = android.os.Build.VERSION.SDK_INT;
 		checkRegisteredServiceType(true);
+		updateMountedVolumes();
+		updateSelectedFolders();
+	}
+
+	/**
+	 * Update mounted volumes.
+	 */
+	public void updateMountedVolumes() {
+		mMountVolumes = Utilities.MountService.getVolumeList(getMountService());
+	}
+
+	/**
+	 * Update selected folders for scanning
+	 */
+	public void updateSelectedFolders() {
+		mSelectedSelectedFolderModels = getFoldersScanning();
+		if (mSelectedSelectedFolderModels.length > 0) {
+			MountVolume volume;
+			for (SelectedFolderModel model : mSelectedSelectedFolderModels) {
+				volume = getMountVolumeByUuid(model.getUuid());
+				if (volume != null) {
+					model.setRootPath(volume.getPath());
+				}
+			}
+		}
+	}
+
+	public SelectedFolderModel[] getSelectedFolders() {
+		return mSelectedSelectedFolderModels;
+	}
+
+	/**
+	 * Obtain mount volume based on the path.
+	 *
+	 * @param path Path to check.
+	 * @return Mount volume of checked path.
+	 */
+	public MountVolume getMountVolumeByPath(String path) {
+		for (MountVolume volume : mMountVolumes) {
+			if (Utilities.contained(volume.getPath(), path)) {
+				return volume;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Obtain mount volume based on the volume UUID.
+	 *
+	 * @param uuid The volume UUID to find.
+	 * @return Mount volume with requested UUID.
+	 */
+	public MountVolume getMountVolumeByUuid(String uuid) {
+		if (uuid != null && !"null".equalsIgnoreCase(uuid)) {
+			for (MountVolume volume : mMountVolumes) {
+				if (volume.getUuid() != null && volume.getUuid().equals(uuid)) {
+					return volume;
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
 	 * Check if is enabled folder scanning.
-	 * 
+	 *
 	 * @return True if is enabled folder scanning.
 	 */
 	public boolean isEnabledFolderScanning() {
-		return mSharedPreferences
-				.getBoolean(KEY_ENABLED_FOLDER_SCANNING, false);
+		return mSharedPreferences.getBoolean(KEY_ENABLED_FOLDER_SCANNING, false);
+	}
+
+	/**
+	 * Check if is enabled file scanning on selected folders.
+	 *
+	 * @return True if is enabled file scanning on selected folders.
+	 */
+	public boolean isEnabledScanForFiles() {
+		return isEnabledFolderScanning() && mSharedPreferences.getBoolean(KEY_ENABLED_SCAN_FILES, false);
 	}
 
 	/**
 	 * Check if the rename shortcut is created on home screen.
-	 * 
+	 *
 	 * @return True if the shortcut for rename service is created on home
-	 *         screen.
+	 * screen.
 	 */
 	public boolean isRenameShortcutCreated() {
-		return mSharedPreferences
-				.getBoolean(KEY_RENAME_SHORTCUT_CREATED, false);
+		return mSharedPreferences.getBoolean(KEY_RENAME_SHORTCUT_CREATED, false);
 	}
 
 	/**
 	 * Set the boolean value of created shortcut for rename service.
-	 * 
-	 * @param flag
-	 *            True or False.
+	 *
+	 * @param flag True or False.
 	 */
 	public void setRenameShortcutCreated(boolean flag) {
 		saveBooleanValue(KEY_RENAME_SHORTCUT_CREATED, flag);
@@ -136,110 +215,115 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the confirmation flag for the rename service start.
-	 * 
+	 *
 	 * @return True if the confirmation of rename service start should be
-	 *         hidden.
+	 * hidden.
 	 */
 	public boolean hideRenameServiceStartConfirmation() {
-		return mSharedPreferences.getBoolean(
-				KEY_RENAME_SERVICE_START_CONFIRMATION, false);
+		return mSharedPreferences.getBoolean(KEY_RENAME_SERVICE_START_CONFIRMATION, false);
 	}
 
 	/**
 	 * Get the folder used for scanning files.
-	 * 
+	 *
 	 * @return The folder user for scanning files.
 	 */
 	private String getFolderScanning() {
 		String folders = mSharedPreferences.getString(KEY_FOLDER_SCANNING, "");
-		if (folders.length() < 2) {
-			folders = Environment.getExternalStorageDirectory()
-					.getAbsolutePath() + "/DCIM";
-			setFoldersScanning(folders);
-		}
 		return folders;
 	}
 
 	/**
+	 * Obtain default folder scanning, normally should be /storage/sdcard/DCIM, where
+	 * the /storage/sdcard/ is the primary volume.
+	 *
+	 * @return Default path for camera storage folder.
+	 */
+	public String getDefaultFolderScanning() {
+		return getPrimaryVolumePath() + "/DCIM";
+	}
+
+	/**
 	 * Obtain all folders where the file should be renamed.
-	 * 
+	 *
 	 * @return An array with folders restricted for renaming.
 	 */
-	public FolderItem[] getFoldersScanning() {
+	private SelectedFolderModel[] getFoldersScanning() {
 		String stored = getFolderScanning();
-		String[] folders = stored.split(",");
-		FolderItem[] items = new FolderItem[folders.length];
-		for (int i = 0; i < folders.length; i++) {
-			items[i] = new FolderItem(folders[i]);
+		SelectedFolderModel[] items;
+		if (Utilities.isEmpty(stored)) {
+			items = new SelectedFolderModel[0];
+		} else {
+			String[] folders = stored.split(",");
+			items = new SelectedFolderModel[folders.length];
+			for (int i = 0; i < folders.length; i++) {
+				items[i] = new SelectedFolderModel();
+				items[i].fromString(folders[i]);
+			}
 		}
 		return items;
 	}
 
 	/**
-	 * Set folders used for scanning files.
-	 * 
-	 * @param folders
-	 *            The folders names to save.
-	 */
-	public void setFoldersScanning(String folders) {
-		saveStringValue(KEY_FOLDER_SCANNING, folders);
-	}
-
-	/**
 	 * Set or add a folder used on renaming process.
-	 * 
-	 * @param index
-	 *            Index of the folder on the list. If is -1 the the folder is
-	 *            added.
-	 * @param folder
-	 *            Folder to be stored on the scanning folder
+	 *
+	 * @param index  Index of the folder on the list. If is -1 the the folder is
+	 *               added.
+	 * @param folder Folder to be stored on the scanning folder
 	 */
-	public void setFolderScanning(int index, String folder) {
-		FolderItem[] folders = getFoldersScanning();
+	public void setFolderScanning(int index, SelectedFolderModel folder) {
+		SelectedFolderModel[] folders = mSelectedSelectedFolderModels;
+		List<SelectedFolderModel> folderList = new ArrayList<SelectedFolderModel>();
 		int i = 0, len = folders.length;
-		StringBuilder buffer = new StringBuilder();
 		while (i < len) {
-			if (i > 0) {
-				buffer.append(',');
-			}
 			if (i == index) {
-				buffer.append(folder);
+				if (folder != null && !folderList.contains(folder)) {
+					folderList.add(folder);
+				}
 			} else {
-				buffer.append(folders[i]);
+				if (folder != null) {
+					if (Utilities.contained(folder.getFullPath(), folders[i].getFullPath())) {
+						if (!folderList.contains(folder)) {
+							folderList.add(folder);
+						}
+						index = i;
+					} else {
+						if (!folderList.contains(folders[i])) {
+							folderList.add(folders[i]);
+						}
+					}
+				}
 			}
 			i++;
 		}
 		if (index == -1) {
-			buffer.append(',').append(folder);
+			if (!folderList.contains(folder)) {
+				folderList.add(folder);
+			}
 		}
-		saveStringValue(KEY_FOLDER_SCANNING, buffer.toString());
+		persistFolderList(folderList);
 	}
 
 	/**
-	 * Remove a scanning folder.
-	 * 
-	 * @param index
-	 *            Index of removed scanning folder.
+	 * Set folders used for scanning files.
+	 *
+	 * @param folderList The folders names to save.
 	 */
-	public void removeFolderScanning(int index) {
-		FolderItem[] folders = getFoldersScanning();
-		int i = 0, len = folders.length;
+	public void persistFolderList(List<SelectedFolderModel> folderList) {
 		StringBuilder buffer = new StringBuilder();
-		while (i < len) {
+		for (SelectedFolderModel item : folderList) {
 			if (buffer.length() > 0) {
 				buffer.append(',');
 			}
-			if (i != index) {
-				buffer.append(folders[i]);
-			}
-			i++;
+			buffer.append(item);
 		}
 		saveStringValue(KEY_FOLDER_SCANNING, buffer.toString());
+		updateSelectedFolders();
 	}
 
 	/**
 	 * Obtain the application locale.
-	 * 
+	 *
 	 * @return The locale of the application.
 	 */
 	public Locale getLocale() {
@@ -248,19 +332,17 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the formatting template for the file name.
-	 * 
+	 *
 	 * @return The file name format.
 	 */
 	public String getFileNameFormat() {
-		return mSharedPreferences.getString(KEY_FILE_NAME_FORMAT,
-				getString(R.string.file_name_format));
+		return mSharedPreferences.getString(KEY_FILE_NAME_FORMAT, getString(R.string.file_name_format));
 	}
 
 	/**
 	 * Obtain the formated file name based on a date.
-	 * 
-	 * @param date
-	 *            Date used to generate file name.
+	 *
+	 * @param date Date used to generate file name.
 	 * @return The formated file name.
 	 */
 	public String getFileName(Date date) {
@@ -279,23 +361,8 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Obtain a demo extension based on provided file name prefix.
-	 * 
-	 * @param fileNamePrefix
-	 *            Provided file name prefix.
-	 * @return A demo extension.
-	 */
-	public String getDemoExtension(String fileNamePrefix) {
-		String ext = ".JPG";
-		if (fileNamePrefix != null && fileNamePrefix.indexOf("DSC") < 0) {
-			ext = ".MP4";
-		}
-		return ext;
-	}
-
-	/**
 	 * Check if the service is enabled.
-	 * 
+	 *
 	 * @return True if the service is enabled.
 	 */
 	public boolean isAutoRenameEnabled() {
@@ -304,7 +371,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if the video files should renamed too.
-	 * 
+	 *
 	 * @return True if the video files should be renamed.
 	 */
 	public boolean isRenameVideoEnabled() {
@@ -313,7 +380,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the original file name prefix.
-	 * 
+	 *
 	 * @return The original file name prefix.
 	 */
 	public FilePrefix[] getOriginalFilePrefix() {
@@ -333,11 +400,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Update a file prefix.
-	 * 
-	 * @param filePrefix
-	 *            File prefix to be updated.
-	 * @param position
-	 *            Position of updated file prefix.
+	 *
+	 * @param filePrefix File prefix to be updated.
+	 * @param position   Position of updated file prefix.
 	 */
 	public void saveFilePrefix(FilePrefix filePrefix, int position) {
 		FilePrefix[] arr = getOriginalFilePrefix();
@@ -370,9 +435,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Save the files prefixes on the shared preferences..
-	 * 
-	 * @param filePrefixes
-	 *            The file prefixes to be saved.
+	 *
+	 * @param filePrefixes The file prefixes to be saved.
 	 */
 	public void saveFilePrefix(String filePrefixes) {
 		saveStringValue(KEY_ORIGINAL_FILE_PREFIX, filePrefixes);
@@ -380,7 +444,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if rename file is requested.
-	 * 
+	 *
 	 * @return the renameFileRequested
 	 */
 	public boolean isRenameFileRequested() {
@@ -389,9 +453,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Set renameFileRequest flag.
-	 * 
-	 * @param renameFileRequested
-	 *            the renameFileRequested to set
+	 *
+	 * @param renameFileRequested the renameFileRequested to set
 	 */
 	public void setRenameFileRequested(boolean renameFileRequested) {
 		DSCApplication.mRenameFileRequested = renameFileRequested;
@@ -399,7 +462,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the rename file task cancel boolean value.
-	 * 
+	 *
 	 * @return The rename file task cancel boolean value.
 	 */
 	public boolean isRenameFileTaskCanceled() {
@@ -408,9 +471,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Set the rename file task cancel flag.
-	 * 
-	 * @param flag
-	 *            The rename file task cancel boolean value.
+	 *
+	 * @param flag The rename file task cancel boolean value.
 	 */
 	public void setRenameFileTaskCanceled(boolean flag) {
 		DSCApplication.mRenameFileTaskCanceled = flag;
@@ -418,7 +480,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if rename file task is running.
-	 * 
+	 *
 	 * @return the renameFileTaskRunning
 	 */
 	public boolean isRenameFileTaskRunning() {
@@ -427,9 +489,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Set rename file task is running flag.
-	 * 
-	 * @param renameFileTaskRunning
-	 *            the renameFileTaskRunning to set
+	 *
+	 * @param renameFileTaskRunning the renameFileTaskRunning to set
 	 */
 	public void setRenameFileTaskRunning(boolean renameFileTaskRunning) {
 		DSCApplication.mRenameFileTaskRunning = renameFileTaskRunning;
@@ -437,7 +498,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the number of renamed files.
-	 * 
+	 *
 	 * @return Number of renamed files.
 	 */
 	public int getFileRenameCount() {
@@ -446,9 +507,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Increase the rename file counter.
-	 * 
-	 * @param value
-	 *            The integer value to be increased the rename file counter.
+	 *
+	 * @param value The integer value to be increased the rename file counter.
 	 */
 	public void increaseFileRenameCount(int value) {
 		if (value == -1) {
@@ -461,7 +521,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the delay for starting the rename service.
-	 * 
+	 *
 	 * @return The delay for starting the rename service.
 	 */
 	public int getRenameServiceStartDelay() {
@@ -470,7 +530,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the selected service type.
-	 * 
+	 *
 	 * @return Disabled = 0, camera = 1 or content = 2.
 	 */
 	public int getServiceType() {
@@ -479,11 +539,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain a valid integer value from shared preference.
-	 * 
-	 * @param key
-	 *            The key.
-	 * @param defaultValue
-	 *            The default value.
+	 *
+	 * @param key          The key.
+	 * @param defaultValue The default value.
 	 * @return Value of the key.
 	 */
 	private int getIntValue(String key, int defaultValue) {
@@ -499,9 +557,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the registered service type.
-	 * 
+	 *
 	 * @return The registered service type: disabled = 0, camera = 1 or content
-	 *         = 2. -1 is returning for the first time.
+	 * = 2. -1 is returning for the first time.
 	 */
 	public int getRegisteredServiceType() {
 		return mSharedPreferences.getInt(KEY_REGISTERED_SERVICE_TYPE, -1);
@@ -509,9 +567,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Save the registered service type value.
-	 * 
-	 * @param value
-	 *            The registered service type value.
+	 *
+	 * @param value The registered service type value.
 	 */
 	public void setRegisteredServiceType(int value) {
 		saveIntegerValue(KEY_REGISTERED_SERVICE_TYPE, value);
@@ -519,7 +576,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if the registered service type was changed.
-	 * 
+	 *
 	 * @return True if the registered service type was changed.
 	 */
 	public boolean checkRegisteredServiceType(boolean force) {
@@ -534,11 +591,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Update registered service type according with specified service type.
-	 * 
-	 * @param serviceType
-	 *            The specified service type to be registered.
-	 * @param regServiceType
-	 *            The current service type registered.
+	 *
+	 * @param serviceType    The specified service type to be registered.
+	 * @param regServiceType The current service type registered.
 	 */
 	private void updateRegisteredServiceType(int serviceType, int regServiceType) {
 		if (SERVICE_TYPE_CONTENT == regServiceType) {
@@ -552,7 +607,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain which date should be used to rename
-	 * 
+	 *
 	 * @return
 	 */
 	public int getRenameFileDateType() {
@@ -587,11 +642,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Store a string value on the shared preferences.
-	 * 
-	 * @param key
-	 *            The shared preference key.
-	 * @param value
-	 *            The string value to be saved.
+	 *
+	 * @param key   The shared preference key.
+	 * @param value The string value to be saved.
 	 */
 	private void saveStringValue(String key, String value) {
 		Editor editor = mSharedPreferences.edit();
@@ -601,11 +654,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Store a boolean value on the shared preferences.
-	 * 
-	 * @param key
-	 *            The shared preference key.
-	 * @param value
-	 *            The boolean value to be saved.
+	 *
+	 * @param key   The shared preference key.
+	 * @param value The boolean value to be saved.
 	 */
 	private void saveBooleanValue(String key, boolean value) {
 		Editor editor = mSharedPreferences.edit();
@@ -615,11 +666,9 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Store an integer value on the shared preferences.
-	 * 
-	 * @param key
-	 *            The shared preference key.
-	 * @param value
-	 *            The integer value to be saved.
+	 *
+	 * @param key   The shared preference key.
+	 * @param value The integer value to be saved.
 	 */
 	private void saveIntegerValue(String key, int value) {
 		Editor editor = mSharedPreferences.edit();
@@ -629,9 +678,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Remove a shared preference.
-	 * 
-	 * @param key
-	 *            The key of the shared preference to be removed.
+	 *
+	 * @param key The key of the shared preference to be removed.
 	 */
 	private void removeSharedPreference(String key) {
 		Editor editor = mSharedPreferences.edit();
@@ -642,16 +690,13 @@ public class DSCApplication extends Application {
 	/**
 	 * This will show a progress dialog using a context and the message to be
 	 * showed on the progress dialog.
-	 * 
-	 * @param listener
-	 *            The listener class which should listen for cancel.
-	 * @param context
-	 *            The context where should be displayed the progress dialog.
-	 * @param message
-	 *            The message displayed inside of progress dialog.
+	 *
+	 * @param listener The listener class which should listen for cancel.
+	 * @param context  The context where should be displayed the progress dialog.
+	 * @param message  The message displayed inside of progress dialog.
 	 */
 	public void showProgressDialog(final ProgressCancelListener listener,
-			Context context, String message, int max) {
+								   Context context, String message, int max) {
 		hideProgressDialog();
 		mProgressDialog = new ProgressDialog(context);
 		mProgressDialog.setTitle(R.string.please_wait);
@@ -690,9 +735,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Set the message on the progress dialog.
-	 * 
-	 * @param message
-	 *            The message to be set.
+	 *
+	 * @param message The message to be set.
 	 */
 	public void setProgressDialogMessage(String message) {
 		if (mProgressDialog != null) {
@@ -702,9 +746,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Set the progress position for the progress dialog.
-	 * 
-	 * @param position
-	 *            The progress position.
+	 *
+	 * @param position The progress position.
 	 */
 	public void setProgressDialogProgress(int position) {
 		if (mProgressDialog != null) {
@@ -714,7 +757,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check for pro version.
-	 * 
+	 *
 	 * @return True if pro version exist.
 	 */
 	public boolean isProPresent() {
@@ -732,9 +775,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Set the rename shortcut update listener.
-	 * 
-	 * @param listener
-	 *            The rename shortcut update listener.
+	 *
+	 * @param listener The rename shortcut update listener.
 	 */
 	public void updateShortcutUpdateListener(
 			RenameShortcutUpdateListener listener) {
@@ -743,7 +785,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Get the rename shortcut update listener.
-	 * 
+	 *
 	 * @return The rename shortcut update listener.
 	 */
 	public RenameShortcutUpdateListener getShortcutUpdateListener() {
@@ -752,14 +794,12 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Method invoked by the shortcut broadcast.
-	 * 
-	 * @param data
-	 *            Intent data from the shortcut broadcast.
-	 * @param type
-	 *            Type of the event, uninstall or install.
+	 *
+	 * @param data Intent data from the shortcut broadcast.
+	 * @param type Type of the event, uninstall or install.
 	 */
 	public void prepareShortcutPref(Intent data,
-			RenameShortcutUpdateListener.TYPE type) {
+									RenameShortcutUpdateListener.TYPE type) {
 		Intent intent = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
 		String name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
 		if (intent != null && name != null && intent.getComponent() != null) {
@@ -772,9 +812,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Update the preferences related with the shortcut.
-	 * 
-	 * @param type
-	 *            Type of the event, uninstall or install.
+	 *
+	 * @param type Type of the event, uninstall or install.
 	 */
 	private void updateShortcutPref(RenameShortcutUpdateListener.TYPE type) {
 		RenameShortcutUpdateListener listener = getShortcutUpdateListener();
@@ -792,46 +831,11 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Save the rename process message.
-	 * 
-	 * @param message
-	 *            Message to be saved.
-	 */
-	public void setLastRenameFinishMessage(String message) {
-		saveStringValue(KEY_LAST_RENAME_FINISH_MESSAGE, message);
-	}
-
-	/**
-	 * Get the last rename process message.
-	 * 
-	 * @return Last rename process message.
-	 */
-	public String getLastRenameFinishMessage() {
-		return mSharedPreferences.getString(KEY_LAST_RENAME_FINISH_MESSAGE,
-				SUCCESS);
-	}
-
-	/**
-	 * Check if the Android version is KitKat or newer.
-	 * 
-	 * @return True if the system is KitKat or newer.
-	 */
-	public boolean isKitKatOrNewer() {
-		// 18 is Android 4.3 - Jelly Bean
-		if (android.os.Build.VERSION.SDK_INT > 18) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Send a {@link #ERROR} log message and log the exception.
-	 * 
-	 * @param tag
-	 *            Used to identify the source of a log message. It usually
+	 *
+	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
-	 * @param msg
-	 *            The message you would like logged.
+	 * @param msg The message you would like logged.
 	 */
 	public void logE(String tag, String msg) {
 		Log.e(tag, msg);
@@ -840,14 +844,11 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Send a {@link #ERROR} log message and log the exception.
-	 * 
-	 * @param tag
-	 *            Used to identify the source of a log message. It usually
+	 *
+	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
-	 * @param msg
-	 *            The message you would like logged.
-	 * @param tr
-	 *            An exception to log
+	 * @param msg The message you would like logged.
+	 * @param tr  An exception to log
 	 */
 	public void logE(String tag, String msg, Throwable tr) {
 		Log.e(tag, msg, tr);
@@ -857,12 +858,10 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Send a {@link #DEBUG} log message.
-	 * 
-	 * @param tag
-	 *            Used to identify the source of a log message. It usually
+	 *
+	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
-	 * @param msg
-	 *            The message you would like logged.
+	 * @param msg The message you would like logged.
 	 */
 	public void logD(String tag, String msg) {
 		Log.d(tag, msg);
@@ -871,9 +870,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Write the log message to the app log file.
-	 * 
-	 * @param logmessage
-	 *            The log message.
+	 *
+	 * @param logmessage The log message.
 	 */
 	private void writeLogFile(long milliseconds, String logmessage) {
 		if (checkLogFileThread()) {
@@ -903,7 +901,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the log file.
-	 * 
+	 *
 	 * @return The log file.
 	 */
 	public File getLogFile() {
@@ -931,15 +929,28 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Check if the application is launched for the first time.
+	 *
+	 * @return True if is the first time when the application is launched.
+	 */
+	public boolean isFirstTime() {
+		String key = FIRST_TIME + getVersion();
+		boolean result = mSharedPreferences.getBoolean(key, true);
+		if (result) {
+			saveBooleanValue(key, false);
+		}
+		return result;
+	}
+
+	/**
 	 * Retrieve the application version code.
-	 * 
+	 *
 	 * @return The application version code.
 	 */
 	public int getVersion() {
 		if (mVersionCode == -1) {
 			try {
-				mVersionCode = getPackageManager().getPackageInfo(
-						getPackageName(), 0).versionCode;
+				mVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
 			} catch (NameNotFoundException e) {
 			}
 		}
@@ -947,7 +958,24 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Obtain the application version.
+	 *
+	 * @return The application version.
+	 */
+	public String getApplicationVersion() {
+		String version = "1.0";
+		try {
+			version = this.getPackageManager().getPackageInfo(
+					this.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException ex) {
+
+		}
+		return version;
+	}
+
+	/**
 	 * Get logs folder. If is not defined then is initialized and created.
+	 *
 	 * @return Logs folder.
 	 */
 	public File getLogsFolder() {
@@ -958,5 +986,97 @@ public class DSCApplication extends Application {
 			}
 		}
 		return mLogsFolder;
+	}
+
+	/**
+	 * The user-visible SDK version of the framework.
+	 *
+	 * @return The user-visible SDK version of the framework
+	 */
+	public int getSdkInt() {
+		return mSdkInt;
+	}
+
+	/**
+	 * Take URI permission
+	 */
+	@TargetApi(21)
+	public boolean doGrantUriPermission(ContentResolver resolver, Uri uri, int flags) {
+		boolean result = false;
+		try {
+			this.getApplicationContext().grantUriPermission(this.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			final int takeFlags = flags & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+					| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+			resolver.takePersistableUriPermission(uri, takeFlags);
+			result = true;
+			this.logD(TAG, "Successfully doGrantUriPermission(" + String.valueOf(uri) + ")");
+		} catch (Exception e) {
+			this.logE(TAG, "doGrantUriPermission(" + String.valueOf(uri) + ")", e);
+		}
+		return result;
+	}
+
+	/**
+	 * Apply URI permission to selected folders.
+	 *
+	 * @return True if all folders received permissions.
+	 */
+	public boolean doGrantUriPermission(ContentResolver resolver) {
+		int count = 0;
+		for (SelectedFolderModel folder : mSelectedSelectedFolderModels) {
+			if (doGrantUriPermission(resolver, folder.getUri(), folder.getFlags())) {
+				count++;
+			}
+		}
+		return count == mSelectedSelectedFolderModels.length; // all folders received permissions
+	}
+
+	/**
+	 * Obtain the Mount Service object.
+	 *
+	 * @return The Mount Service.
+	 */
+	public Object getMountService() {
+		if (mMountService == null) {
+			mMountService = Utilities.MountService.getService();
+		}
+		return mMountService;
+	}
+
+	/**
+	 * Get primary mounted volume path.
+	 *
+	 * @return Empty string or primary mounted volume path.
+	 */
+	private String getPrimaryVolumePath() {
+		for (MountVolume volume : mMountVolumes) {
+			if (volume.isPrimary()) {
+				return volume.getPath();
+			}
+		}
+		return "";
+	}
+
+	/**
+	 * For API >= 21 the file path should be translated
+	 * from original full path: /storage/sdcard/DCIM/Camera/20150325_193246.jpg
+	 * to a valid API Uri: content://com.android.externalstorage.documents/tree/17EA-1C19:DCIM/Camera/20150325_193246.jpg
+	 *
+	 * @param fullFilePath Original full path.
+	 * @return New URI compatible file path string.
+	 */
+	@TargetApi(21)
+	public Uri getDocumentUri(String fullFilePath) {
+		if (mSelectedSelectedFolderModels.length > 0) {
+			String rootPath, documentId;
+			for (SelectedFolderModel selectedFolder : mSelectedSelectedFolderModels) {
+				rootPath = selectedFolder.getRootPath();
+				if (fullFilePath.startsWith(rootPath)) {
+					documentId = fullFilePath.replace(rootPath + "/", selectedFolder.getUuid() + ":");
+					return DocumentsContract.buildDocumentUriUsingTree(selectedFolder.getUri(), documentId);
+				}
+			}
+		}
+		return null;
 	}
 }

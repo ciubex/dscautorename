@@ -32,6 +32,13 @@
         android:layout_height="wrap_content"
         android:text="@string/prefix_dialog_prefix_bottom" />
 
+    <TextView
+        android:id="@+id/itemsListNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/file_extension_note"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >

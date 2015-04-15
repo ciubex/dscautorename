@@ -20,32 +20,48 @@ package ro.ciubex.dscautorename.dialog;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
+import ro.ciubex.dscautorename.activity.SettingsActivity;
 import ro.ciubex.dscautorename.adpater.FolderListAdapter;
-import ro.ciubex.dscautorename.model.FolderItem;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
+
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Claudiu
  * 
  */
 public class SelectFoldersListDialog extends BaseDialog {
+	private Activity mParentActivity;
 	private FolderListAdapter mAdapter;
 	private ListView mListView;
+	private TextView mItemsListNote;
 	private Button mBtnAdd, mBtnDelete;
+	private int mSelectedIndex;
+
+	private static final int CONFIRMATION_DELETE_FOLDER = 1;
 
 	/**
 	 * @param context
 	 * @param application
 	 */
-	public SelectFoldersListDialog(Context context, DSCApplication application) {
+	public SelectFoldersListDialog(Context context, DSCApplication application, Activity parentActivity) {
 		super(context, application);
+		this.mParentActivity = parentActivity;
 		setContentView(R.layout.items_list_dialog_layout);
 		mAdapter = new FolderListAdapter(context, application);
+		mSelectedIndex = -1;
 	}
 
 	/*
@@ -58,10 +74,12 @@ public class SelectFoldersListDialog extends BaseDialog {
 		super.onCreate(savedInstanceState);
 		setTitle(R.string.folder_list_title);
 		initDialog(BUTTON_CANCEL);
+		mItemsListNote = (TextView) findViewById(R.id.itemsListNote);
 		mBtnAdd = (Button) findViewById(R.id.btnAdd);
 		mBtnAdd.setOnClickListener(this);
 		mBtnDelete = (Button) findViewById(R.id.btnDelete);
 		mBtnDelete.setOnClickListener(this);
+		mItemsListNote.setVisibility(View.GONE);
 		initListView();
 	}
 
@@ -70,7 +88,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 	 */
 	private void initListView() {
 		mListView = (ListView) findViewById(R.id.itemsList);
-		mListView.setEmptyView(findViewById(R.id.emptyItemsList));
+		mListView.setEmptyView(findViewById(R.id.emptyFolderList));
 		mListView.setAdapter(mAdapter);
 		mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -89,8 +107,22 @@ public class SelectFoldersListDialog extends BaseDialog {
 	 *            Selected position.
 	 */
 	private void clickOnItem(int position) {
-		new SelectFolderDialog(mContext, mApplication, mAdapter, position)
-				.show();
+		if (mApplication.getSdkInt() < 21) {
+			new SelectFolderDialog(mContext, mApplication, mAdapter, position).show();
+		} else {
+			mSelectedIndex = position;
+			startIntentActionOpenDocumentTree();
+		}
+	}
+
+	/**
+	 * Initiate the folder chosen API
+	 */
+	@TargetApi(21)
+	private void startIntentActionOpenDocumentTree() {
+		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+		intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
+		mParentActivity.startActivityForResult(intent, SettingsActivity.REQUEST_OPEN_DOCUMENT_TREE);
 	}
 
 	/**
@@ -106,6 +138,9 @@ public class SelectFoldersListDialog extends BaseDialog {
 		} else if (mBtnDelete == view) {
 			onDelete();
 		} else {
+			if (mParentActivity instanceof SettingsActivity) {
+				((SettingsActivity)mParentActivity).updateSelectedFolders();
+			}
 			super.onClick(view);
 		}
 	}
@@ -115,7 +150,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 	 */
 	private void onDelete() {
 		int i = 0, k = 0, len = mAdapter.getCount();
-		FolderItem item;
+		SelectedFolderModel item;
 		for (i = 0; i < len; i++) {
 			item = mAdapter.getItem(i);
 			if (item.isSelected()) {
@@ -130,7 +165,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 					mContext.getString(R.string.folder_list_all_selected));
 		} else {
 			showConfirmationDialog(R.string.folder_list_title,
-					mContext.getString(R.string.folder_list_confirmation), 0,
+					mContext.getString(R.string.folder_list_confirmation), CONFIRMATION_DELETE_FOLDER,
 					null);
 		}
 	}
@@ -138,22 +173,35 @@ public class SelectFoldersListDialog extends BaseDialog {
 	@Override
 	protected void onConfirmation(boolean positive, int confirmationId,
 			Object anObject) {
-		if (positive) {
-			int i = 0, len = mAdapter.getCount();
-			StringBuilder sb = new StringBuilder();
-			FolderItem item;
+		if (positive && CONFIRMATION_DELETE_FOLDER == confirmationId) {
+			int i, len = mAdapter.getCount();
+			SelectedFolderModel item;
+			List<SelectedFolderModel> folderList = new ArrayList<SelectedFolderModel>();
 			for (i = 0; i < len; i++) {
 				item = mAdapter.getItem(i);
 				if (!item.isSelected()) {
-					if (sb.length() > 0) {
-						sb.append(',');
-					}
-					sb.append(item.toString());
+					folderList.add(item);
 				}
 			}
-			mApplication.setFoldersScanning(sb.toString());
+			mApplication.persistFolderList(folderList);
 			mAdapter.updateFolders();
 			mAdapter.notifyDataSetChanged();
 		}
+	}
+
+	/**
+	 * Obtain selected index from the list.
+	 * @return The selected index from the list.
+	 */
+	public int getSelectedIndex() {
+		return mSelectedIndex;
+	}
+
+	/**
+	 * Update the selected folder list.
+	 */
+	public void updateSelectedFolders() {
+		mAdapter.updateFolders();
+		mAdapter.notifyDataSetChanged();
 	}
 }

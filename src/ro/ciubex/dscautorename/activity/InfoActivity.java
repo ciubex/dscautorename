@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import ro.ciubex.dscautorename.R;
+import ro.ciubex.dscautorename.util.Utilities;
+
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -136,13 +138,7 @@ public class InfoActivity extends Activity {
 			}
 		} catch (IOException e) {
 		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			Utilities.doClose(in);
 		}
 		return sb.toString();
 	}

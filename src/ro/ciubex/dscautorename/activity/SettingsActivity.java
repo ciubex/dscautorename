@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2015 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,7 +18,29 @@
  */
 package ro.ciubex.dscautorename.activity;
 
-import java.io.Closeable;
+import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
+import android.provider.DocumentsContract;
+import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
+import android.text.util.Linkify;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,29 +53,12 @@ import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.dialog.SelectFoldersListDialog;
 import ro.ciubex.dscautorename.dialog.SelectPrefixDialog;
 import ro.ciubex.dscautorename.model.FilePrefix;
-import ro.ciubex.dscautorename.model.FolderItem;
-import ro.ciubex.dscautorename.task.CachedFileProvider;
+import ro.ciubex.dscautorename.model.MountVolume;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
+import ro.ciubex.dscautorename.provider.CachedFileProvider;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
-import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.CheckBoxPreference;
-import android.preference.EditTextPreference;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.PreferenceActivity;
-import android.text.SpannableString;
-import android.text.method.LinkMovementMethod;
-import android.text.util.Linkify;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import ro.ciubex.dscautorename.util.Devices;
+import ro.ciubex.dscautorename.util.Utilities;
 
 /**
  * This is main activity class, actually is a preference activity.
@@ -70,17 +75,23 @@ public class SettingsActivity extends PreferenceActivity implements
 	private ListPreference mRenameFileDateType;
 	private Preference mDefinePrefixes;
 	private EditTextPreference mFileNameFormat;
+	private CheckBoxPreference mEnabledFolderScanning;
 	private Preference mFolderScanningPref;
 	private Preference mToggleRenameShortcut;
 	private CheckBoxPreference mHideRenameServiceStartConfirmation;
 	private Preference mManuallyStartRename;
 	private Preference mFileRenameCount;
 	private Preference mBuildVersion;
+	private Preference mSendDebugReport;
 	private Preference mLicensePref;
 	private Preference mDonatePref;
+	private SelectFoldersListDialog selectFoldersListDialog;
+	private static final int ID_CONFIRMATION_ALERT = -1;
 	private static final int ID_CONFIRMATION_DONATION = 0;
-	private static final int ID_CONFIRMATION_REPORT = 1;
+	private static final int ID_CONFIRMATION_RESET_RENAME_COUNTER = 1;
+	private static final int ID_CONFIRMATION_DEBUG_REPORT = 2;
 	private static final int REQUEST_SEND_REPORT = 1;
+	public static final int REQUEST_OPEN_DOCUMENT_TREE = 42;
 
 	/**
 	 * Method called when the activity is created
@@ -103,6 +114,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefinePrefixes = (Preference) findPreference("definePrefixes");
+		mEnabledFolderScanning = (CheckBoxPreference) findPreference("enabledFolderScanning");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
 		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
 		mHideRenameServiceStartConfirmation = (CheckBoxPreference) findPreference("hideRenameServiceStartConfirmation");
@@ -110,6 +122,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
 		mBuildVersion = (Preference) findPreference("buildVersion");
+		mSendDebugReport = (Preference) findPreference("sendDebugReport");
 		mLicensePref = (Preference) findPreference("licensePref");
 		mDonatePref = (Preference) findPreference("donatePref");
 	}
@@ -172,6 +185,14 @@ public class SettingsActivity extends PreferenceActivity implements
 						return true;
 					}
 				});
+		mSendDebugReport.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				onSendDebugReport();
+				return true;
+			}
+		});
 		mLicensePref
 				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -210,7 +231,22 @@ public class SettingsActivity extends PreferenceActivity implements
 				.registerOnSharedPreferenceChangeListener(this);
 		mApplication.updateShortcutUpdateListener(this);
 		prepareSummaries();
-		checkLastRenameMessage();
+		checkAndroidVersion();
+	}
+
+	/**
+	 * Check if is first time when the used open this application
+	 */
+	private void checkAndroidVersion() {
+		if (mApplication.isFirstTime() && mApplication.getSdkInt() > 18) {
+			if (mApplication.getSdkInt() < 21) { // KitKat
+				showConfirmationDialog(getString(R.string.enable_filter_alert_v19), true,
+						ID_CONFIRMATION_ALERT);
+			} else { // Lollipop
+				showConfirmationDialog(getString(R.string.enable_filter_alert_v21), false,
+						ID_CONFIRMATION_ALERT);
+			}
+		}
 	}
 
 	/**
@@ -227,7 +263,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	/**
 	 * This method is invoked when a preference is changed
 	 * 
-	 * @param sp
+	 * @param sharedPreferences
 	 *            The shared preference
 	 * @param key
 	 *            Key of changed preference
@@ -246,7 +282,6 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void prepareSummaries() {
 		Date now = new Date();
-		String temp;
 		FilePrefix[] originalArr = mApplication.getOriginalFilePrefix();
 		String newFileName = mApplication.getFileName(now);
 		String summary = mApplication.getString(
@@ -267,42 +302,38 @@ public class SettingsActivity extends PreferenceActivity implements
 			mServiceTypeList.setSummary(R.string.service_choice_0);
 			break;
 		}
-		FolderItem[] folders = mApplication.getFoldersScanning();
-		summary = folders[0].toString();
-		if (folders.length > 1) {
-			summary += ", ";
-			temp = folders[1].toString();
-			summary += temp.substring(0,
-					10 < temp.length() ? 10 : temp.length());
-			summary += "...";
+		if (mApplication.getSdkInt() >= 21) {
+			mEnabledFolderScanning.setSummary(R.string.enable_filter_folder_desc_v21);
 		}
+		updateSelectedFolders();
 		// renameFileDateType
 		String arr[] = mApplication.getResources().getStringArray(
 				R.array.rename_file_using_labels);
 		mRenameFileDateType
 				.setSummary(arr[mApplication.getRenameFileDateType()]);
-		mFolderScanningPref.setSummary(summary);
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
-		mBuildVersion.setSummary(getApplicationVersion());
+		mBuildVersion.setSummary(mApplication.getApplicationVersion());
 	}
 
 	/**
-	 * Obtain the application version.
-	 * 
-	 * @return The application version.
+	 * Update selected folders.
 	 */
-	private String getApplicationVersion() {
-		String version = "1.0";
-		try {
-			version = this.getPackageManager().getPackageInfo(
-					this.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException ex) {
-			mApplication.logE(TAG,
-					"getApplicationVersion Exception: " + ex.getMessage(), ex);
+	public void updateSelectedFolders() {
+		String summary, temp;
+		SelectedFolderModel[] folders = mApplication.getSelectedFolders();
+		if (folders.length > 0) {
+			summary = folders[0].getFullPath();
+			if (folders.length > 1) {
+				summary += ", ";
+				temp = folders[1].getFullPath();
+				summary += temp.substring(0,
+						10 < temp.length() ? 10 : temp.length());
+				summary += "...";
+			}
+			mFolderScanningPref.setSummary(summary);
 		}
-		return version;
 	}
 
 	/**
@@ -316,7 +347,12 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Start to select a folder.
 	 */
 	private void onFolderScanningPref() {
-		new SelectFoldersListDialog(this, mApplication).show();
+		if (selectFoldersListDialog == null) {
+			selectFoldersListDialog = new SelectFoldersListDialog(this, mApplication, this);
+		} else {
+			selectFoldersListDialog.updateSelectedFolders();
+		}
+		selectFoldersListDialog.show();
 	}
 
 	/**
@@ -330,9 +366,22 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * Start the rename service.
+	 * Method invoked by the user to start rename service.
 	 */
 	private void onManuallyStartRename() {
+		if (mApplication.getSdkInt() >= 21 && (!mApplication.isEnabledFolderScanning()
+				|| mApplication.getSelectedFolders().length == 0)) {
+			showConfirmationDialog(getString(R.string.enable_filter_alert_v21), false,
+					ID_CONFIRMATION_ALERT);
+		} else {
+			startRenameServiceManually();
+		}
+	}
+
+	/**
+	 * Start the rename service.
+	 */
+	private void startRenameServiceManually() {
 		mApplication.setRenameFileRequested(true);
 		if (!mApplication.isRenameFileTaskRunning()) {
 			new RenameFileAsyncTask(mApplication, this).execute();
@@ -343,18 +392,15 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Method invoked when was pressed the fileRenameCount preference.
 	 */
 	private void onResetFileRenameCounter() {
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.app_name)
-				.setMessage(R.string.file_rename_count_confirmation)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setPositiveButton(R.string.yes,
-						new DialogInterface.OnClickListener() {
+		showConfirmationDialog(getString(R.string.file_rename_count_confirmation), false,
+				ID_CONFIRMATION_RESET_RENAME_COUNTER);
+	}
 
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								mApplication.increaseFileRenameCount(-1);
-							}
-						}).setNegativeButton(R.string.no, null).show();
+	/**
+	 * Confirmed reset file rename counter.
+	 */
+	private void confirmedResetFileRenameCounter() {
+		mApplication.increaseFileRenameCount(-1);
 	}
 
 	/**
@@ -368,6 +414,11 @@ public class SettingsActivity extends PreferenceActivity implements
 		b.putBoolean(InfoActivity.HTML_MESSAGE, true);
 		intent.putExtras(b);
 		startActivity(intent);
+	}
+
+	private void onSendDebugReport() {
+		showConfirmationDialog(getString(R.string.send_debug_confirmation), false,
+				ID_CONFIRMATION_DEBUG_REPORT);
 	}
 
 	/**
@@ -403,7 +454,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void showConfirmationDialog(String message,
 			boolean messageContainLink, final int confirmationId) {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		alertDialog.setIcon(android.R.drawable.ic_dialog_info);
+		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
 		alertDialog.setTitle(R.string.app_name);
 		if (messageContainLink) {
 			ScrollView scrollView = new ScrollView(this);
@@ -421,14 +472,18 @@ public class SettingsActivity extends PreferenceActivity implements
 			alertDialog.setMessage(message);
 		}
 		alertDialog.setCancelable(false);
-		alertDialog.setPositiveButton(R.string.yes,
-				new DialogInterface.OnClickListener() {
+		if (confirmationId == ID_CONFIRMATION_ALERT) {
+			alertDialog.setNeutralButton(R.string.ok, null);
+		} else {
+			alertDialog.setPositiveButton(R.string.yes,
+					new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int whichButton) {
-						onConfirmation(confirmationId);
-					}
-				});
-		alertDialog.setNegativeButton(R.string.no, null);
+						public void onClick(DialogInterface dialog, int whichButton) {
+							onConfirmation(confirmationId);
+						}
+					});
+			alertDialog.setNegativeButton(R.string.no, null);
+		}
 		AlertDialog alert = alertDialog.create();
 		alert.show();
 	}
@@ -442,8 +497,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	protected void onConfirmation(int confirmationId) {
 		if (confirmationId == ID_CONFIRMATION_DONATION) {
 			confirmedDonationPage();
-		} else if (confirmationId == ID_CONFIRMATION_REPORT) {
-			confirmedSendReport();
+		} else if (confirmationId == ID_CONFIRMATION_RESET_RENAME_COUNTER) {
+			confirmedResetFileRenameCounter();
+		} else if (confirmationId == ID_CONFIRMATION_DEBUG_REPORT) {
+			confirmedSendReport(getString(R.string.send_debug_email_title));
 		}
 	}
 
@@ -517,23 +574,6 @@ public class SettingsActivity extends PreferenceActivity implements
 			break;
 		}
 		mApplication.hideProgressDialog();
-		if (checkLastRenameMessage()) {
-			showAlertDialog(message);
-		}
-	}
-
-	/**
-	 * Display an alert dialog with a custom message.
-	 * 
-	 * @param message
-	 *            Message to be displayed on an alert dialog.
-	 */
-	private void showAlertDialog(String message) {
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.app_name).setMessage(message)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setNeutralButton(R.string.ok, null);
-		dialog.show();
 	}
 
 	@Override
@@ -609,45 +649,20 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * Check last rename message.
-	 * 
-	 * @return FALSE if an error occurred on rename process;
-	 */
-	private boolean checkLastRenameMessage() {
-		String message = mApplication.getLastRenameFinishMessage();
-		boolean result = true;
-		if (message != null && message.length() > 0
-				&& !DSCApplication.SUCCESS.equals(message)) {
-			if (mApplication.isKitKatOrNewer()) {
-				message = mApplication.getString(
-						R.string.last_error_message_android_newer, message);
-			} else {
-				message = mApplication.getString(R.string.last_error_message,
-						message);
-			}
-			mApplication.setLastRenameFinishMessage(DSCApplication.SUCCESS);
-			showConfirmationDialog(message, true, ID_CONFIRMATION_REPORT);
-			result = false;
-		}
-		return result;
-	}
-
-	/**
 	 * User just confirmed to send a report.
 	 */
-	private void confirmedSendReport() {
+	private void confirmedSendReport(String emailTitle) {
 		mApplication.showProgressDialog(this, this,
 				mApplication.getString(R.string.manually_service_running), 0);
 		String message = getString(R.string.report_body);
-		File cahceDir = mApplication.getLogsFolder();
+		File cacheFolder = mApplication.getLogsFolder();
 		File logFile = mApplication.getLogFile();
-		File logcatFile = getLogcatFile(cahceDir);
+		File logcatFile = getLogcatFile(cacheFolder);
 		String[] TO = { "ciubex@yahoo.com" };
 		Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
-		emailIntent.setType("message/rfc822");
+		emailIntent.setType("text/plain");
 		emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-		emailIntent.putExtra(Intent.EXTRA_SUBJECT,
-				getString(R.string.report_subject));
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
 		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
 
 		ArrayList<Uri> uris = new ArrayList<Uri>();
@@ -672,26 +687,14 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * This method is invoked when a child activity is finished and this
-	 * activity is showed again
-	 */
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQUEST_SEND_REPORT) {
-//			mApplication.deleteLogFile();
-		}
-	}
-
-	/**
 	 * Generate logs file on cache directory.
 	 * 
-	 * @param cahceDir
+	 * @param cacheFolder
 	 *            Cache directory where are the logs.
 	 * @return File with the logs.
 	 */
-	private File getLogcatFile(File cahceDir) {
-		File logFile = new File(cahceDir, "DSC_logcat.log");
+	private File getLogcatFile(File cacheFolder) {
+		File logFile = new File(cacheFolder, "DSC_logcat.log");
 		Process shell = null;
 		InputStreamReader reader = null;
 		FileWriter writer = null;
@@ -701,19 +704,24 @@ public class SettingsActivity extends PreferenceActivity implements
 		if (!model.startsWith(Build.MANUFACTURER)) {
 			model = Build.MANUFACTURER + " " + model;
 		}
-		String command = (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) ? "logcat -d -v threadtime ro.ciubex.dscautorename:v dalvikvm:v System.err:v *:s"
-				: "logcat -d -v threadtime";
+		String oldCmd = "logcat -d -v threadtime ro.ciubex.dscautorename:v dalvikvm:v System.err:v *:s";
+		String newCmd = "logcat -d -v threadtime";
+		String command = newCmd;
 		try {
 			if (!logFile.exists()) {
 				logFile.createNewFile();
 			}
+			if (mApplication.getSdkInt() <= 15) {
+				command = oldCmd;
+			}
 			shell = Runtime.getRuntime().exec(command);
 			reader = new InputStreamReader(shell.getInputStream());
 			writer = new FileWriter(logFile);
-			writer.write("Android version: " + Build.VERSION.SDK_INT + LS);
+			writer.write("Android version: " + Build.VERSION.SDK_INT + " (" + Build.VERSION.CODENAME + ")" + LS);
 			writer.write("Device: " + model + LS);
+			writer.write("Device name: " + Devices.getDeviceName() + LS);
 			writer.write("App version: " + mApplication.getVersion() + LS);
-			int n = 0;
+			int n;
 			do {
 				n = reader.read(buffer, 0, buffer.length);
 				if (n == -1) {
@@ -723,12 +731,14 @@ public class SettingsActivity extends PreferenceActivity implements
 			} while (true);
 			shell.waitFor();
 		} catch (IOException e) {
-			mApplication.logE(TAG, "getCurrentProcessLog failed", e);
+			mApplication.logE(TAG, "getLogcatFile failed: IOException", e);
 		} catch (InterruptedException e) {
-			mApplication.logE(TAG, "getCurrentProcessLog failed", e);
+			mApplication.logE(TAG, "getLogcatFile failed: InterruptedException", e);
+		} catch (Exception e) {
+			mApplication.logE(TAG, "getLogcatFile failed: Exception", e);
 		} finally {
-			doClose(writer);
-			doClose(reader);
+			Utilities.doClose(writer);
+			Utilities.doClose(reader);
 			if (shell != null) {
 				shell.destroy();
 			}
@@ -737,17 +747,43 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * Close a closeable object.
-	 * 
-	 * @param closeable
-	 *            Object to be close.
+	 * This method is invoked when a child activity is finished and this
+	 * activity is showed again
 	 */
-	private void doClose(Closeable closeable) {
-		if (closeable != null) {
-			try {
-				closeable.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_SEND_REPORT) {
+//			mApplication.deleteLogFile();
+		} else if (resultCode == RESULT_OK && requestCode == REQUEST_OPEN_DOCUMENT_TREE) {
+			if (mApplication.getSdkInt() >= 21) {
+				processActionOpenDocumentTree(data);
+			}
+		}
+	}
+
+	/**
+	 * Process resulted data from new API regarding selected tree.
+	 * @param resultData Resulted data from selected folder.
+	 */
+	@TargetApi(21)
+	private void processActionOpenDocumentTree(Intent resultData) {
+		Uri uri = resultData.getData();
+		int flags = resultData.getFlags();
+		int index = -1;
+		mApplication.logD(TAG, "Selected on OpenDocumentTree uri: " + uri);
+		if (selectFoldersListDialog != null) {
+			index = selectFoldersListDialog.getSelectedIndex();
+		}
+		SelectedFolderModel selectedFolder = new SelectedFolderModel();
+		selectedFolder.fromUri(uri, flags);
+		MountVolume volume = mApplication.getMountVolumeByUuid(selectedFolder.getUuid());
+		if (volume != null && !Utilities.isEmpty(volume.getPath())) {
+			selectedFolder.setRootPath(volume.getPath());
+			mApplication.logD(TAG, "Selected from OpenDocumentTree: " + selectedFolder);
+			mApplication.setFolderScanning(index, selectedFolder);
+			if (selectFoldersListDialog != null) {
+				selectFoldersListDialog.updateSelectedFolders();
 			}
 		}
 	}

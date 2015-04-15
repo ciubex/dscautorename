@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ro.ciubex.dscautorename.util.Utilities;
+
 /**
  * A thread used to write logs to a private file.
  * 
@@ -86,12 +88,7 @@ public class LogThread implements Runnable, Closeable {
 		} catch (IOException e) {
 			closing = true;
 		} finally {
-			if (bufferedWriter != null) {
-				try {
-					bufferedWriter.close();
-				} catch (IOException e) {
-				}
-			}
+			Utilities.doClose(bufferedWriter);
 		}
 		closed = true;
 	}

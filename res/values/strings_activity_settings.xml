@@ -26,12 +26,18 @@
     <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
     <string name="enable_filter_folder_title">Rename within a folder</string>
     <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
+    <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera application save files.</string>
+    <string name="enable_filter_alert_v19">Because on Android KitKat are enabled some security constraints, this application will not be able to rename files from SD Card.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis application can rename files from internal memory only.\nSet your camera application to save on internal memory.</string>
+    <string name="enable_filter_alert_v21">As an Android Lollipop user, you should enable \"Rename within a folder\" option and you should define at least one folder to be scanned on \"List of scanned folders.\".</string>
     <string name="folder_list_title">List of scanned folders.</string>
     <string name="folder_list_all_selected">At least one folder should be left unchecked!</string>
     <string name="folder_list_no_selection">Select at least one folder to delete!</string>
     <string name="folder_list_confirmation">Do you want to remove selected folders?</string>
     <string name="filter_folder_title">Select a folder.</string>
     <string name="filter_folder_desc">/</string>
+    <string name="filter_folder_no_folder">[No folder]</string>
+    <string name="enable_folder_scanning_title">Enable folder scanning for files.</string>
+    <string name="enable_folder_scanning_desc">By selecting this option the rename service will scan for media files on the above selected folders. Select this if your device have media content scanner disabled.</string>
     <string name="original_file_prefix_from">DSC_</string>
     <string name="original_file_prefix_to"></string>
     <string name="original_file_prefix">DSC_,MOV_</string>
@@ -45,6 +51,7 @@
     <string name="prefix_validation_error_old_empty">Old prefix cannot be empty.</string>
     <string name="prefix_validation_error_old_prefix">Old prefix already exist, change the text with a new one.</string>
     <string name="prefix_validation_error_new_prefix">The new prefix should not be a part of an original prefix, the above or existing defined prefix!</string>
+    <string name="file_extension_note">The file extension is preserved during rename process.</string>
     <string name="file_name_format_title">Renamed file name format.</string>
     <string name="file_name_format_desc">Define a renamed file name format:\n%1$s\n(e.g. %2$s.JPG)</string>
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
@@ -88,6 +95,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
     <string name="add">Add</string>
     <string name="delete">Delete</string>
     <string name="please_wait">Please wait&#8230;</string>
@@ -100,8 +108,6 @@
     <string name="prefix_list_confirmation">Do you want to remove selected prefixes?</string>
     <string name="error_rename_file_no_read_write">File can not be read and write</string>
     <string name="error_rename_file">The file %s cannot be renamed!</string>
-    <string name="last_error_message">Seems to have file restrictions. Please check application description on Google Play for more detalis: http://goo.gl/uKkCXh\nLast rename process error message:\n%s\nSee the link http://goo.gl/kJeED3 for a possible fix.\nDo you want to send a report?</string>
-    <string name="last_error_message_android_newer">Seems to have a newer Android version which have file restrictions. Please check application description on Google Play for more detalis: http://goo.gl/uKkCXh\nLast rename process error message:\n%s\nSee the link http://goo.gl/kJeED3 for a possible fix.\nDo you want to send a report?</string>
     <string name="obtain_logs">Generate log file for report&#8230;</string>
     <string name="report_subject">Report for DSC Auto Rename</string>
     <string name="report_body">Description: </string>
@@ -111,6 +117,10 @@
     <string name="about_section">About</string>
     <string name="build_version_title">Build version</string>
     <string name="build_version_desc">1</string>
+    <string name="send_debug_title">Send debugging logs</string>
+    <string name="send_debug_desc">Send an e-mail with debugging files</string>
+    <string name="send_debug_confirmation">Do you want to send a debugging report?\nYour default e-mail application will send an e-mail with two files attached, please fill a short description of your issues if is necessary.\nThank you!</string>
+    <string name="send_debug_email_title">Debugging logs for DSC Auto Rename</string>
     <string name="license_title">Open source licenses</string>
     <string name="license_desc">License details for open source software</string>
     <string name="donate_title">Donate</string>

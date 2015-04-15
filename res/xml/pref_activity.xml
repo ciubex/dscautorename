@@ -36,8 +36,16 @@
             android:dependency="enabledFolderScanning"
             android:key="folderScanningPref"
             android:persistent="false"
-            android:summary="@string/filter_folder_desc"
+            android:summary="@string/filter_folder_no_folder"
             android:title="@string/filter_folder_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="enabledFolderScanning"
+            android:key="enableScanForFiles"
+            android:summary="@string/enable_folder_scanning_desc"
+            android:title="@string/enable_folder_scanning_title" />
+
         <Preference
             android:key="definePrefixes"
             android:persistent="false"
@@ -88,6 +96,11 @@
             android:persistent="false"
             android:summary="@string/build_version_desc"
             android:title="@string/build_version_title" />
+        <Preference
+            android:key="sendDebugReport"
+            android:persistent="false"
+            android:summary="@string/send_debug_desc"
+            android:title="@string/send_debug_title" />
         <Preference
             android:key="licensePref"
             android:persistent="false"

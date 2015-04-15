@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2015 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,8 +41,7 @@ public class FileRenameData {
 	private String mFileName;
 	private String mFileNameZero;
 
-	public FileRenameData(int id, Uri uri, String data, String title,
-			String displayName, long dateAdded) {
+	public FileRenameData(int id, Uri uri, String data, String title, String displayName, long dateAdded) {
 		this.mId = id;
 		this.mUri = uri;
 		this.mData = data;
@@ -223,19 +222,22 @@ public class FileRenameData {
 		return true;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder("OriginalData");
-		builder.append(" [Uri=").append(mUri).append(", Id=").append(mId)
-				.append(", Data=").append(mData).append(", DisplayName=")
-				.append(mDisplayName).append(", Title=").append(mTitle)
-				.append(", DateAdded=").append(mDateAdded).append("]");
-		return builder.toString();
+		return "FileRenameData{" +
+				"mId=" + mId +
+				", mUri=" + mUri +
+				", mData='" + mData + '\'' +
+				", mTitle='" + mTitle + '\'' +
+				", mDisplayName='" + mDisplayName + '\'' +
+				", mDateAdded=" + mDateAdded +
+				", mPrefixBefore='" + mPrefixBefore + '\'' +
+				", mPrefixAfter='" + mPrefixAfter + '\'' +
+				", mFullPath='" + mFullPath + '\'' +
+				", mFileTitle='" + mFileTitle + '\'' +
+				", mFileTitleZero='" + mFileTitleZero + '\'' +
+				", mFileName='" + mFileName + '\'' +
+				", mFileNameZero='" + mFileNameZero + '\'' +
+				'}';
 	}
-
 }

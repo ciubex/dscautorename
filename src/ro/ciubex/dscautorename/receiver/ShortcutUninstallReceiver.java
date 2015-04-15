@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2015 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import android.content.Intent;
  * 
  */
 public class ShortcutUninstallReceiver extends BroadcastReceiver {
-	private static final String TAG = ShortcutUninstallReceiver.class.getName();
 
 	/*
 	 * (non-Javadoc)
@@ -47,7 +46,6 @@ public class ShortcutUninstallReceiver extends BroadcastReceiver {
 			application = (DSCApplication) appCtx;
 		}
 		if (application != null) {
-			application.logD(TAG, "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx UNINSTALL");
 			application.prepareShortcutPref(data,
 					RenameShortcutUpdateListener.TYPE.UNINSTALL);
 		}

@@ -153,7 +153,7 @@ public class PrefixesEditorDialog extends BaseDialog {
 		btnOk.setEnabled(text == null);
 		if (text == null) {
 			String newFileName = prefAfter + mApplication.getFileName(mNow);
-			String ext = mApplication.getDemoExtension(prefBefore);
+			String ext = ".EXT";
 			text = mContext.getString(R.string.prefix_dialog_prefix_bottom,
 					prefBefore, newFileName, ext);
 		}

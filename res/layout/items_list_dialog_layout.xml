@@ -17,6 +17,20 @@
         android:text="@string/no_prefix"
         android:visibility="gone" />
 
+
+    <TextView
+        android:id="@+id/emptyFolderList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_folders"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/itemsListNote"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/file_extension_note"
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -53,7 +67,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/cancel" />
+            android:text="@string/close" />
     </LinearLayout>
 
 </LinearLayout>

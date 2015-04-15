@@ -20,7 +20,8 @@ package ro.ciubex.dscautorename.adpater;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
-import ro.ciubex.dscautorename.model.FolderItem;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ import android.widget.TextView;
 public class FolderListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private DSCApplication mApplication;
-	private FolderItem[] mFolders;
+	private SelectedFolderModel[] mFolders;
 
 	/**
 	 * 
@@ -52,7 +53,7 @@ public class FolderListAdapter extends BaseAdapter {
 	 * Update folders.
 	 */
 	public void updateFolders() {
-		mFolders = mApplication.getFoldersScanning();
+		mFolders = mApplication.getSelectedFolders();
 	}
 
 	/*
@@ -71,7 +72,7 @@ public class FolderListAdapter extends BaseAdapter {
 	 * @see android.widget.Adapter#getItem(int)
 	 */
 	@Override
-	public FolderItem getItem(int position) {
+	public SelectedFolderModel getItem(int position) {
 		if (position > -1 && position < getCount()) {
 			return mFolders[position];
 		}
@@ -97,7 +98,7 @@ public class FolderListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View view, ViewGroup parent) {
 		ViewHolder viewHolder = null;
-		FolderItem item = getItem(position);
+		SelectedFolderModel item = getItem(position);
 		if (view == null) {
 			view = mInflater.inflate(R.layout.dlg_folders_list_layout, parent,
 					false);
@@ -109,7 +110,7 @@ public class FolderListAdapter extends BaseAdapter {
 		}
 		if (viewHolder != null && item != null) {
 			viewHolder.checkBoxItem.setChecked(item.isSelected());
-			viewHolder.itemText.setText(item.toString());
+			viewHolder.itemText.setText(item.getFullPath());
 		}
 		return view;
 	}
@@ -119,21 +120,20 @@ public class FolderListAdapter extends BaseAdapter {
 	 * 
 	 * @param view
 	 *            The view used to obtain the holder elements.
-	 * @param position
+	 * @param folderItem
 	 * @return The item view holder.
 	 */
-	private ViewHolder initViewHolder(View view, FolderItem folderItem) {
+	private ViewHolder initViewHolder(View view, SelectedFolderModel folderItem) {
 		ViewHolder viewHolder = new ViewHolder();
-		viewHolder.checkBoxItem = (CheckBox) view
-				.findViewById(R.id.checkBoxFolder);
+		viewHolder.checkBoxItem = (CheckBox) view.findViewById(R.id.checkBoxFolder);
 		viewHolder.checkBoxItem.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				CheckBox cb = (CheckBox) v;
 				Object item = cb.getTag();
-				if (item instanceof FolderItem) {
-					((FolderItem) item).setSelected(cb.isChecked());
+				if (item instanceof SelectedFolderModel) {
+					((SelectedFolderModel) item).setSelected(cb.isChecked());
 				}
 			}
 		});
