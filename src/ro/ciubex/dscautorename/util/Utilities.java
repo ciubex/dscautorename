@@ -18,6 +18,7 @@
  */
 package ro.ciubex.dscautorename.util;
 
+import android.database.Cursor;
 import android.os.IBinder;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
@@ -324,10 +325,18 @@ public class Utilities {
 	 *
 	 * @param closeable Object to be close.
 	 */
-	public static void doClose(Closeable closeable) {
-		if (closeable != null) {
+	public static void doClose(Object closeable) {
+		if (closeable instanceof Closeable) {
 			try {
-				closeable.close();
+				((Closeable)closeable).close();
+			} catch (RuntimeException rethrown) {
+				throw rethrown;
+			} catch (Exception e) {
+				Log.e(TAG, "doClose Exception: " + e.getMessage(), e);
+			}
+		} else if (closeable instanceof Cursor) {
+			try {
+				((Cursor)closeable).close();
 			} catch (RuntimeException rethrown) {
 				throw rethrown;
 			} catch (Exception e) {

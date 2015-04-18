@@ -130,7 +130,8 @@
     <string name="thank_you_title">Thank you for donation!</string>
     <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
     <string name="about_text"><Data>
-<![CDATA[This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/><br/>
+<![CDATA[<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>
+This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/><br/>
 The file rename format use Java date and time format parameters:<br/>
 - yyyy for years;<br/>
 - MM for month;<br/>
@@ -138,11 +139,11 @@ The file rename format use Java date and time format parameters:<br/>
 - HH for hour;<br/>
 - mm for minutes;<br/>
 - ss for seconds;<br/>
-- SSS for miliseconds.<br/>
+- SSS for milliseconds.<br/>
 See more format information on: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/><br/>
 The rename service, if is enabled, automatically is triggered when the image file is saved on the device media storage.<br/><br/>
 The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.<br/>
-In some cases, the camera do not send any message, so is possibile to select as a trigger the media content events, but this imply a permanently running service in background.<br/>
+In some cases, the camera do not send any message, so is possible to select as a trigger the media content events, but this imply a permanently running service in background.<br/>
 <br/>
 For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
 ]]>
