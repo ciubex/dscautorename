@@ -25,7 +25,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,7 +33,6 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.provider.DocumentsContract;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -85,6 +83,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private Preference mSendDebugReport;
 	private Preference mLicensePref;
 	private Preference mDonatePref;
+	private CheckBoxPreference mAppendOriginalName;
 	private SelectFoldersListDialog selectFoldersListDialog;
 	private static final int ID_CONFIRMATION_ALERT = -1;
 	private static final int ID_CONFIRMATION_DONATION = 0;
@@ -119,6 +118,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
 		mHideRenameServiceStartConfirmation = (CheckBoxPreference) findPreference("hideRenameServiceStartConfirmation");
 		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
+		mAppendOriginalName = (CheckBoxPreference) findPreference("appendOriginalName");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
 		mBuildVersion = (Preference) findPreference("buildVersion");
@@ -311,10 +311,12 @@ public class SettingsActivity extends PreferenceActivity implements
 				R.array.rename_file_using_labels);
 		mRenameFileDateType
 				.setSummary(arr[mApplication.getRenameFileDateType()]);
+		summary = getString(R.string.append_original_name_desc, newFileName);
+		mAppendOriginalName.setSummary(summary);
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
-		mBuildVersion.setSummary(mApplication.getApplicationVersion());
+		mBuildVersion.setSummary(mApplication.getVersionName());
 	}
 
 	/**
@@ -704,6 +706,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		if (!model.startsWith(Build.MANUFACTURER)) {
 			model = Build.MANUFACTURER + " " + model;
 		}
+		mApplication.logD(TAG, "Prepare Logs to be send via e-mail.");
 		String oldCmd = "logcat -d -v threadtime ro.ciubex.dscautorename:v dalvikvm:v System.err:v *:s";
 		String newCmd = "logcat -d -v threadtime";
 		String command = newCmd;
@@ -717,10 +720,12 @@ public class SettingsActivity extends PreferenceActivity implements
 			shell = Runtime.getRuntime().exec(command);
 			reader = new InputStreamReader(shell.getInputStream());
 			writer = new FileWriter(logFile);
-			writer.write("Android version: " + Build.VERSION.SDK_INT + " (" + Build.VERSION.CODENAME + ")" + LS);
+			writer.write("Android version: " + Build.VERSION.SDK_INT +
+					" (" + Build.VERSION.CODENAME + ")" + LS);
 			writer.write("Device: " + model + LS);
 			writer.write("Device name: " + Devices.getDeviceName() + LS);
-			writer.write("App version: " + mApplication.getVersion() + LS);
+			writer.write("App version: " + mApplication.getVersionName() +
+					" (" + mApplication.getVersionCode() + ")"  + LS);
 			int n;
 			do {
 				n = reader.read(buffer, 0, buffer.length);

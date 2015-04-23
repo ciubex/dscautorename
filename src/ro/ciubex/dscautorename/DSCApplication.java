@@ -65,6 +65,7 @@ public class DSCApplication extends Application {
 	private RenameShortcutUpdateListener mShortcutUpdateListener;
 	private File mLogsFolder;
 	private static int mVersionCode = -1;
+	private static String mVersionName = null;
 	private static boolean mRenameFileRequested;
 	private static boolean mRenameFileTaskCanceled;
 	private static boolean mRenameFileTaskRunning;
@@ -89,6 +90,7 @@ public class DSCApplication extends Application {
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
+	private static final String KEY_APPEND_ORIGINAL_NAME = "appendOriginalName";
 	private static final String FIRST_TIME = "firstTime";
 
 	public static final String LOGS_FOLDER_NAME = "logs";
@@ -615,6 +617,14 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Check if the original name should be appended to the new file name.
+	 * @return True, if the original name should be preserved.
+	 */
+	public boolean isAppendOriginalNameEnabled() {
+		return mSharedPreferences.getBoolean(KEY_APPEND_ORIGINAL_NAME, false);
+	}
+
+	/**
 	 * Method used to dynamically register a content observer service used to
 	 * launch automatically rename service.
 	 */
@@ -934,7 +944,7 @@ public class DSCApplication extends Application {
 	 * @return True if is the first time when the application is launched.
 	 */
 	public boolean isFirstTime() {
-		String key = FIRST_TIME + getVersion();
+		String key = FIRST_TIME + getVersionCode();
 		boolean result = mSharedPreferences.getBoolean(key, true);
 		if (result) {
 			saveBooleanValue(key, false);
@@ -947,7 +957,7 @@ public class DSCApplication extends Application {
 	 *
 	 * @return The application version code.
 	 */
-	public int getVersion() {
+	public int getVersionCode() {
 		if (mVersionCode == -1) {
 			try {
 				mVersionCode = getPackageManager().getPackageInfo(getPackageName(), 0).versionCode;
@@ -958,19 +968,18 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Obtain the application version.
+	 * Retrieve the application version name.
 	 *
-	 * @return The application version.
+	 * @return The application version name.
 	 */
-	public String getApplicationVersion() {
-		String version = "1.0";
-		try {
-			version = this.getPackageManager().getPackageInfo(
-					this.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException ex) {
-
+	public String getVersionName() {
+		if (mVersionName == null) {
+			try {
+				mVersionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+			} catch (NameNotFoundException e) {
+			}
 		}
-		return version;
+		return mVersionName;
 	}
 
 	/**

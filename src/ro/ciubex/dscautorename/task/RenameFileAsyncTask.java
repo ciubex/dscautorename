@@ -21,13 +21,10 @@ package ro.ciubex.dscautorename.task;
 import java.io.File;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.regex.Pattern;
 
 import ro.ciubex.dscautorename.DSCApplication;
@@ -63,8 +60,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private Locale mLocale;
 	private FilePrefix[] mFilesPrefixes;
 	private Pattern[] mPatterns;
-	private static SimpleDateFormat mEXIF_Formatter;
-	private static ParsePosition position = new ParsePosition(0);
 	private FileRenameData mPreviousFileRenameData;
 	private String mPreviousFileNamePrefix;
 	private int mPreviousFileNamePrefixCount;
@@ -90,8 +85,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
 		mLocale = mApplication.getLocale();
-		mEXIF_Formatter = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", mLocale);
-		mEXIF_Formatter.setTimeZone(TimeZone.getDefault());
 		mApplication.setRenameFileTaskRunning(true);
 		mFilesPrefixes = mApplication.getOriginalFilePrefix();
 	}
@@ -553,8 +546,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private String getNewFileName(FileRenameData data, File file) {
 		String oldFileName = file.getName();
 		String prefix = data.getPrefixAfter();
-		String sufix;
-		String extension = getFileExtension(oldFileName);
+		String suffix;
+		int idx = oldFileName.lastIndexOf(".");
+		String extension = oldFileName.substring(idx);
+		oldFileName = oldFileName.substring(0, idx);
 		String fileNameZero;
 		long milliseconds = 0;
 		switch (mApplication.getRenameFileDateType()) {
@@ -578,13 +573,18 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (mPreviousFileNamePrefixCount > 0) {
 			fileNameZero = newFileName + "_"
 					+ String.format(mLocale, ZERO_FILE_NAME_SUFIX, 0);
-			sufix = String.format(mLocale, ZERO_FILE_NAME_SUFIX, mPreviousFileNamePrefixCount);
-			newFileName += "_" + sufix;
+			suffix = String.format(mLocale, ZERO_FILE_NAME_SUFIX, mPreviousFileNamePrefixCount);
+			if (mApplication.isAppendOriginalNameEnabled()) {
+				fileNameZero += "_" + oldFileName;
+			}
+			newFileName += "_" + suffix;
 			data.setFileTitleZero(fileNameZero);
 			fileNameZero += extension;
 			data.setFileNameZero(fileNameZero);
 		}
-
+		if (mApplication.isAppendOriginalNameEnabled()) {
+			newFileName += "_" + oldFileName;
+		}
 		data.setFileTitle(newFileName);
 		newFileName += extension;
 		return newFileName;
@@ -604,10 +604,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		String fileName = file.getAbsolutePath();
 		try {
 			ExifInterface exifInterface = new ExifInterface(fileName);
-			dateTimeString = exifInterface
-					.getAttribute(ExifInterface.TAG_DATETIME);
+			dateTimeString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
 			if (dateTimeString != null) {
-				Date datetime = mEXIF_Formatter.parse(dateTimeString, position);
+				Date datetime = Utilities.parseExifDateTimeString(dateTimeString);
 				if (datetime != null) {
 					milliseconds = datetime.getTime();
 				}
@@ -647,21 +646,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 		}
 		return milliseconds;
-	}
-
-	/**
-	 * Obtain the file extension, based on the full file name.
-	 *
-	 * @param fileName The file name.
-	 * @return The file extension.
-	 */
-	private String getFileExtension(String fileName) {
-		String ext = ".jpg";
-		int idx = fileName.lastIndexOf(".");
-		if (idx > 0) {
-			ext = fileName.substring(idx);
-		}
-		return ext;
 	}
 
 	/**

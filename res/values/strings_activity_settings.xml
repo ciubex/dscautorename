@@ -68,6 +68,8 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+    <string name="append_original_name_title">Append original name</string>
+    <string name="append_original_name_desc">Keep and append original name, for example, from DSC_09.JPG the new name will be %s_DSC_09.JPG</string>
 
     <!-- rename shortcut -->
     <string name="rename_shortcut">DSC Rename service shortcut</string>

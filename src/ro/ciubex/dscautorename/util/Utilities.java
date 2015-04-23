@@ -28,6 +28,9 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import ro.ciubex.dscautorename.model.MountVolume;
@@ -328,7 +331,7 @@ public class Utilities {
 	public static void doClose(Object closeable) {
 		if (closeable instanceof Closeable) {
 			try {
-				((Closeable)closeable).close();
+				((Closeable) closeable).close();
 			} catch (RuntimeException rethrown) {
 				throw rethrown;
 			} catch (Exception e) {
@@ -336,7 +339,7 @@ public class Utilities {
 			}
 		} else if (closeable instanceof Cursor) {
 			try {
-				((Cursor)closeable).close();
+				((Cursor) closeable).close();
 			} catch (RuntimeException rethrown) {
 				throw rethrown;
 			} catch (Exception e) {
@@ -355,5 +358,47 @@ public class Utilities {
 		if (object instanceof CharSequence)
 			return ((CharSequence) object).length() == 0;
 		return object == null;
+	}
+
+	/**
+	 * Parse a string date time value in format yyyy:MM:dd HH:mm:ss to a date.
+	 * @param dateTime Date time to be parsed.
+	 * @return The parsed date time.
+	 */
+	public static Date parseExifDateTimeString(String dateTime) {
+		String[] arr = dateTime.split(" ");
+		Date date = null;
+		if (arr.length == 2) {
+			String[] dateString = arr[0].split(":");
+			String[] timeString = arr[1].split(":");
+			if (dateString.length == 3 && timeString.length == 3) {
+				Calendar calendar = GregorianCalendar.getInstance();
+				calendar.set(Calendar.YEAR, parseToInt(dateString[0]));
+				calendar.set(Calendar.MONTH, parseToInt(dateString[1]) - 1);
+				calendar.set(Calendar.DAY_OF_MONTH, parseToInt(dateString[2]));
+				calendar.set(Calendar.HOUR_OF_DAY, parseToInt(timeString[0]));
+				calendar.set(Calendar.MINUTE, parseToInt(timeString[1]));
+				calendar.set(Calendar.SECOND, parseToInt(timeString[2]));
+				calendar.set(Calendar.MILLISECOND, 0);
+				date = calendar.getTime();
+			}
+		}
+		return date;
+	}
+
+	/**
+	 * Parse a string to int. If string can not be parsed -1 is returned.
+	 *
+	 * @param value The string value to be parsed.
+	 * @return The parsed value or -1 if can not be parsed.
+	 */
+	public static int parseToInt(String value) {
+		int result = -1;
+		try {
+			result = Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			Log.e(TAG, "Value:" + value);
+		}
+		return result;
 	}
 }
