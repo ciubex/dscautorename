@@ -99,6 +99,7 @@ public class DSCApplication extends Application {
 	private Object mMountService;
 	private List<MountVolume> mMountVolumes;
 	private SelectedFolderModel[] mSelectedSelectedFolderModels;
+	private String mDefaultFolderScanning;
 
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
@@ -242,7 +243,26 @@ public class DSCApplication extends Application {
 	 * @return Default path for camera storage folder.
 	 */
 	public String getDefaultFolderScanning() {
-		return getPrimaryVolumePath() + "/DCIM";
+		if (mDefaultFolderScanning == null) {
+			String path = getPrimaryVolumePath();
+			File dcim = null;
+			if (path.length() > 0) {
+				dcim = new File(path, "DCIM");
+				if (dcim.exists() && dcim.isDirectory()) {
+					path = dcim.getAbsolutePath();
+				}
+			} else {
+				dcim = new File("DCIM");
+				if (dcim.exists() && dcim.isDirectory()) {
+					path = "DCIM";
+				} else {
+					path = "/";
+				}
+			}
+			dcim = null;
+			mDefaultFolderScanning = path;
+		}
+		return mDefaultFolderScanning;
 	}
 
 	/**
@@ -1061,6 +1081,13 @@ public class DSCApplication extends Application {
 		for (MountVolume volume : mMountVolumes) {
 			if (volume.isPrimary()) {
 				return volume.getPath();
+			}
+		}
+		if (mMountVolumes.size() > 0) {
+			for (MountVolume volume : mMountVolumes) {
+				if (volume.isMounted()) {
+					return volume.getPath();
+				}
 			}
 		}
 		return "";

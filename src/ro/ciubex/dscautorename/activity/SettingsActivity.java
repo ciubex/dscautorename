@@ -576,6 +576,21 @@ public class SettingsActivity extends PreferenceActivity implements
 			break;
 		}
 		mApplication.hideProgressDialog();
+		showAlertDialog(message);
+	}
+
+	/**
+	 * Display an alert dialog with a custom message.
+	 *
+	 * @param message
+	 *            Message to be displayed on an alert dialog.
+	 */
+	private void showAlertDialog(String message) {
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+				.setTitle(R.string.app_name).setMessage(message)
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setNeutralButton(R.string.ok, null);
+		dialog.show();
 	}
 
 	@Override
