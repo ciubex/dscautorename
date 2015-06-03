@@ -758,9 +758,16 @@ public class DSCApplication extends Application {
 	 */
 	public void hideProgressDialog() {
 		if (mProgressDialog != null) {
-			mProgressDialog.dismiss();
+			try {
+				if (mProgressDialog.isShowing()) {
+					mProgressDialog.dismiss();
+				}
+			} catch (Exception e) {
+				logE(TAG, "hideProgressDialog: " + e.getMessage(), e);
+			} finally {
+				mProgressDialog = null;
+			}
 		}
-		mProgressDialog = null;
 	}
 
 	/**
