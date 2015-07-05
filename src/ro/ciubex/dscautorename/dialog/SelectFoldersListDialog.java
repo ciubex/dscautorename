@@ -18,12 +18,6 @@
  */
 package ro.ciubex.dscautorename.dialog;
 
-import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.R;
-import ro.ciubex.dscautorename.activity.SettingsActivity;
-import ro.ciubex.dscautorename.adpater.FolderListAdapter;
-import ro.ciubex.dscautorename.model.SelectedFolderModel;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -38,11 +32,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.R;
+import ro.ciubex.dscautorename.activity.SettingsActivity;
+import ro.ciubex.dscautorename.adpater.FolderListAdapter;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
+
 /**
  * @author Claudiu
  * 
  */
 public class SelectFoldersListDialog extends BaseDialog {
+	private static final String TAG = SelectFoldersListDialog.class.getName();
 	private Activity mParentActivity;
 	private FolderListAdapter mAdapter;
 	private ListView mListView;
@@ -94,7 +95,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
+									int position, long id) {
 				clickOnItem(position);
 			}
 		});
@@ -122,7 +123,12 @@ public class SelectFoldersListDialog extends BaseDialog {
 	private void startIntentActionOpenDocumentTree() {
 		Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 		intent.putExtra("android.content.extra.SHOW_ADVANCED", true);
-		mParentActivity.startActivityForResult(intent, SettingsActivity.REQUEST_OPEN_DOCUMENT_TREE);
+		try {
+			mParentActivity.startActivityForResult(intent, SettingsActivity.REQUEST_OPEN_DOCUMENT_TREE);
+		} catch (Exception e) {
+			showAlertDialog(R.string.folder_list_title,
+					mContext.getString(R.string.folder_list_no_open_document_tree_support));
+		}
 	}
 
 	/**
@@ -149,7 +155,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 	 * Invoked by the Delete button.
 	 */
 	private void onDelete() {
-		int i = 0, k = 0, len = mAdapter.getCount();
+		int i, k = 0, len = mAdapter.getCount();
 		SelectedFolderModel item;
 		for (i = 0; i < len; i++) {
 			item = mAdapter.getItem(i);
