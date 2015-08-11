@@ -33,8 +33,8 @@ public class FileRenameData {
 	private String mTitle;
 	private String mDisplayName;
 	private long mDateAdded;
-	private String mPrefixBefore;
-	private String mPrefixAfter;
+	private String mFileNamePatternBefore;
+	private String mFileNamePatternAfter;
 	private String mFullPath;
 	private String mFileTitle;
 	private String mFileTitleZero;
@@ -92,20 +92,20 @@ public class FileRenameData {
 		return mDateAdded;
 	}
 
-	public String getPrefixBefore() {
-		return mPrefixBefore;
+	public String getFileNamePatternBefore() {
+		return mFileNamePatternBefore;
 	}
 
-	public void setPrefixBefore(String prefixBefore) {
-		this.mPrefixBefore = prefixBefore;
+	public void setFileNamePatternBefore(String fileNamePatternBefore) {
+		this.mFileNamePatternBefore = fileNamePatternBefore;
 	}
 
-	public String getPrefixAfter() {
-		return mPrefixAfter;
+	public String getFileNamePatternAfter() {
+		return mFileNamePatternAfter;
 	}
 
-	public void setPrefixAfter(String prefixAfter) {
-		this.mPrefixAfter = prefixAfter;
+	public void setFileNamePatternAfter(String fileNamePatternAfter) {
+		this.mFileNamePatternAfter = fileNamePatternAfter;
 	}
 
 	/**
@@ -231,8 +231,8 @@ public class FileRenameData {
 				", mTitle='" + mTitle + '\'' +
 				", mDisplayName='" + mDisplayName + '\'' +
 				", mDateAdded=" + mDateAdded +
-				", mPrefixBefore='" + mPrefixBefore + '\'' +
-				", mPrefixAfter='" + mPrefixAfter + '\'' +
+				", mFileNamePatternBefore='" + mFileNamePatternBefore + '\'' +
+				", mFileNamePatternAfter='" + mFileNamePatternAfter + '\'' +
 				", mFullPath='" + mFullPath + '\'' +
 				", mFileTitle='" + mFileTitle + '\'' +
 				", mFileTitleZero='" + mFileTitleZero + '\'' +

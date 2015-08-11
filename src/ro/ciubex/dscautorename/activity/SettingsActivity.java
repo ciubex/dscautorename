@@ -49,8 +49,8 @@ import java.util.Date;
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.dialog.SelectFoldersListDialog;
-import ro.ciubex.dscautorename.dialog.SelectPrefixDialog;
-import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.dialog.SelectFileNamePatternDialog;
+import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.provider.CachedFileProvider;
@@ -71,8 +71,8 @@ public class SettingsActivity extends PreferenceActivity implements
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
 	private ListPreference mRenameFileDateType;
-	private Preference mDefinePrefixes;
-	private EditTextPreference mFileNameFormat;
+	private Preference mDefineFileNamePatterns;
+	private EditTextPreference mFileNameSuffixFormat;
 	private CheckBoxPreference mEnabledFolderScanning;
 	private Preference mFolderScanningPref;
 	private Preference mToggleRenameShortcut;
@@ -112,12 +112,12 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
-		mDefinePrefixes = (Preference) findPreference("definePrefixes");
+		mDefineFileNamePatterns = (Preference) findPreference("definePatterns");
+		mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
 		mEnabledFolderScanning = (CheckBoxPreference) findPreference("enabledFolderScanning");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
 		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
 		mHideRenameServiceStartConfirmation = (CheckBoxPreference) findPreference("hideRenameServiceStartConfirmation");
-		mFileNameFormat = (EditTextPreference) findPreference("fileNameFormat");
 		mAppendOriginalName = (CheckBoxPreference) findPreference("appendOriginalName");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
@@ -131,12 +131,12 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Initialize the preference commands.
 	 */
 	private void initCommands() {
-		mDefinePrefixes
+		mDefineFileNamePatterns
 				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
 					@Override
 					public boolean onPreferenceClick(Preference preference) {
-						onDefinePrefixes();
+						onDefineFileNamePatterns();
 						return true;
 					}
 				});
@@ -238,14 +238,17 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Check if is first time when the used open this application
 	 */
 	private void checkAndroidVersion() {
-		if (mApplication.isFirstTime() && mApplication.getSdkInt() > 18) {
-			if (mApplication.getSdkInt() < 21) { // KitKat
-				showConfirmationDialog(getString(R.string.enable_filter_alert_v19), true,
-						ID_CONFIRMATION_ALERT);
-			} else { // Lollipop
-				showConfirmationDialog(getString(R.string.enable_filter_alert_v21), false,
-						ID_CONFIRMATION_ALERT);
+		boolean isFirstTime = mApplication.isFirstTime();
+		if (isFirstTime){
+			String message = getString(R.string.first_time_alert);
+			boolean messageContainLink = false;
+			if (mApplication.getSdkInt() > 18 && mApplication.getSdkInt() < 21) {
+				message += "\n" + getString(R.string.enable_filter_alert_v19);
+				messageContainLink = true;
+			} else if (mApplication.getSdkInt() > 20) { // Lollipop
+				message += "\n" + getString(R.string.enable_filter_alert_v21);
 			}
+			showConfirmationDialog(message, messageContainLink, ID_CONFIRMATION_ALERT);
 		}
 	}
 
@@ -282,15 +285,21 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void prepareSummaries() {
 		Date now = new Date();
-		FilePrefix[] originalArr = mApplication.getOriginalFilePrefix();
-		String newFileName = mApplication.getFileName(now);
+		FileNameModel[] originalArr = mApplication.getOriginalFileNamePattern();
+		String newFileName = mApplication.getFileNameFormatted(originalArr[0].getAfter(), now);
 		String summary = mApplication.getString(
-				R.string.define_file_prefix_desc, originalArr[0].getBefore());
-		mDefinePrefixes.setSummary(summary);
-		summary = mApplication.getString(R.string.file_name_format_desc,
-				mApplication.getFileNameFormat(), originalArr[0].getAfter()
-						+ newFileName);
-		mFileNameFormat.setSummary(summary);
+				R.string.define_file_name_pattern_desc, originalArr[0].getDemoBefore());
+		mDefineFileNamePatterns.setSummary(summary);
+
+		summary = "" + newFileName;
+		summary += "_" + mApplication.getFormattedFileNameSuffix(0);
+		summary += "." + originalArr[0].getDemoExtension();
+		summary += ", " + newFileName;
+		summary += "_" + mApplication.getFormattedFileNameSuffix(1);
+		summary += "." + originalArr[0].getDemoExtension();
+
+		summary = mApplication.getString(R.string.file_name_suffix_format_desc, summary);
+		mFileNameSuffixFormat.setSummary(summary);
 		switch (mApplication.getServiceType()) {
 		case DSCApplication.SERVICE_TYPE_CAMERA:
 			mServiceTypeList.setSummary(R.string.service_choice_1);
@@ -339,10 +348,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * When the user click on define prefixes preferences.
+	 * When the user click on define file name patterns preferences.
 	 */
-	private void onDefinePrefixes() {
-		new SelectPrefixDialog(this, mApplication).show();
+	private void onDefineFileNamePatterns() {
+		new SelectFileNamePatternDialog(this, mApplication).show();
 	}
 
 	/**

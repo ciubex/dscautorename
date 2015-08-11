@@ -47,16 +47,16 @@
             android:title="@string/enable_folder_scanning_title" />
 
         <Preference
-            android:key="definePrefixes"
+            android:key="definePatterns"
             android:persistent="false"
-            android:summary="@string/define_file_prefix_desc"
-            android:title="@string/define_file_prefix_title" />
+            android:summary="@string/define_file_name_pattern_desc"
+            android:title="@string/define_file_name_pattern_title" />
 
         <EditTextPreference
-            android:defaultValue="@string/file_name_format"
-            android:key="fileNameFormat"
-            android:summary="@string/file_name_format_desc"
-            android:title="@string/file_name_format_title" />
+            android:defaultValue="@string/file_name_suffix_format_value"
+            android:key="fileNameSuffixFormat"
+            android:summary="@string/file_name_suffix_format_desc"
+            android:title="@string/file_name_suffix_format_title" />
 
         <ListPreference
             android:defaultValue="1"

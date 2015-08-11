@@ -14,7 +14,7 @@
         android:id="@+id/emptyItemsList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/no_prefix"
+        android:text="@string/no_file_name_pattern"
         android:visibility="gone" />
 
 

@@ -24,12 +24,13 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
-import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
@@ -84,8 +85,9 @@ public class DSCApplication extends Application {
 	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
 	private static final String KEY_RENAME_SERVICE_START_CONFIRMATION = "hideRenameServiceStartConfirmation";
 	private static final String KEY_FILE_NAME_FORMAT = "fileNameFormat";
+	private static final String KEY_FILE_NAME_SUFFIX_FORMAT = "fileNameSuffixFormat";
 	private static final String KEY_RENAME_VIDEO_ENABLED = "renameVideoEnabled";
-	private static final String KEY_ORIGINAL_FILE_PREFIX = "originalFilePrefix";
+	private static final String KEY_ORIGINAL_FILE_NAME_PATTERN = "originalFileNamePattern";
 	private static final String KEY_FILE_RENAME_COUNT = "fileRenameCount";
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
@@ -353,30 +355,20 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Obtain the formatting template for the file name.
+	 * Obtain the formatted file name based on a date.
 	 *
-	 * @return The file name format.
-	 */
-	public String getFileNameFormat() {
-		return mSharedPreferences.getString(KEY_FILE_NAME_FORMAT, getString(R.string.file_name_format));
-	}
-
-	/**
-	 * Obtain the formated file name based on a date.
-	 *
+	 * @param fileNameFormat The file name pattern format.
 	 * @param date Date used to generate file name.
-	 * @return The formated file name.
+	 * @return The formatted file name.
 	 */
-	public String getFileName(Date date) {
+	public String getFileNameFormatted(String fileNameFormat, Date date) {
 		DateFormat df = null;
-		String fileNameFormat = getFileNameFormat();
 		try {
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 		} catch (Exception e) {
 			fileNameFormat = getString(R.string.file_name_format);
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 			saveStringValue(KEY_FILE_NAME_FORMAT, fileNameFormat);
-			logE(TAG, "getFileName: " + date, e);
 		}
 		String newFileName = df.format(date);
 		return newFileName;
@@ -401,40 +393,40 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Obtain the original file name prefix.
+	 * Obtain the original file name pattern.
 	 *
-	 * @return The original file name prefix.
+	 * @return The original file name pattern.
 	 */
-	public FilePrefix[] getOriginalFilePrefix() {
-		String value = mSharedPreferences.getString(KEY_ORIGINAL_FILE_PREFIX,
-				getString(R.string.original_file_prefix));
+	public FileNameModel[] getOriginalFileNamePattern() {
+		String value = mSharedPreferences.getString(KEY_ORIGINAL_FILE_NAME_PATTERN,
+				getString(R.string.original_file_name_pattern));
 		if (value.length() < 1) {
-			value = getString(R.string.original_file_prefix);
-			saveStringValue(KEY_ORIGINAL_FILE_PREFIX, value);
+			value = getString(R.string.original_file_name_pattern);
+			saveStringValue(KEY_ORIGINAL_FILE_NAME_PATTERN, value);
 		}
 		String[] arr = value.split(",");
-		FilePrefix[] fp = new FilePrefix[arr.length];
+		FileNameModel[] fp = new FileNameModel[arr.length];
 		for (int i = 0; i < arr.length; i++) {
-			fp[i] = new FilePrefix(arr[i]);
+			fp[i] = new FileNameModel(arr[i]);
 		}
 		return fp;
 	}
 
 	/**
-	 * Update a file prefix.
+	 * Update a file name pattern.
 	 *
-	 * @param filePrefix File prefix to be updated.
-	 * @param position   Position of updated file prefix.
+	 * @param fileNameModel File name model to be updated.
+	 * @param position   Position of updated file name.
 	 */
-	public void saveFilePrefix(FilePrefix filePrefix, int position) {
-		FilePrefix[] arr = getOriginalFilePrefix();
-		FilePrefix fp;
+	public void saveFileNamePattern(FileNameModel fileNameModel, int position) {
+		FileNameModel[] arr = getOriginalFileNamePattern();
+		FileNameModel fp;
 		int index;
 		int len = arr.length;
 		StringBuilder sb = new StringBuilder();
 		for (index = 0; index < len; index++) {
 			if (position == index) {
-				fp = filePrefix;
+				fp = fileNameModel;
 			} else {
 				fp = arr[index];
 			}
@@ -447,21 +439,21 @@ public class DSCApplication extends Application {
 			if (sb.length() > 0) {
 				sb.append(',');
 			}
-			sb.append(filePrefix.toString());
+			sb.append(fileNameModel.toString());
 		}
 		if (sb.length() < 1) {
-			sb.append(getString(R.string.original_file_prefix));
+			sb.append(getString(R.string.original_file_name_pattern));
 		}
-		saveFilePrefix(sb.toString());
+		saveFileNamePattern(sb.toString());
 	}
 
 	/**
-	 * Save the files prefixes on the shared preferences..
+	 * Save the files name model on the shared preferences..
 	 *
-	 * @param filePrefixes The file prefixes to be saved.
+	 * @param fileNamePattern The file name to be saved.
 	 */
-	public void saveFilePrefix(String filePrefixes) {
-		saveStringValue(KEY_ORIGINAL_FILE_PREFIX, filePrefixes);
+	public void saveFileNamePattern(String fileNamePattern) {
+		saveStringValue(KEY_ORIGINAL_FILE_NAME_PATTERN, fileNamePattern);
 	}
 
 	/**
@@ -634,6 +626,24 @@ public class DSCApplication extends Application {
 	 */
 	public int getRenameFileDateType() {
 		return getIntValue(KEY_RENAME_FILE_DATE_TYPE, 1);
+	}
+
+	/**
+	 * Obtain the formatted file name suffix.
+	 * @param value Value to be formatted.
+	 * @return Formatted value.
+	 */
+	public String getFormattedFileNameSuffix(int value) {
+		String defFormat = getString(R.string.file_name_suffix_format_value);
+		String format = mSharedPreferences.getString(KEY_FILE_NAME_SUFFIX_FORMAT, defFormat);
+		String result;
+		try {
+			result = String.format(mLocale, format, value);
+		} catch (IllegalFormatException e) {
+			result = String.format(mLocale, defFormat, value);
+			saveStringValue(KEY_FILE_NAME_SUFFIX_FORMAT, defFormat);
+		}
+		return result;
 	}
 
 	/**

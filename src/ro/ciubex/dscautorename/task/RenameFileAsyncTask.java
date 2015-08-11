@@ -28,7 +28,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.model.FilePrefix;
+import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.FileRenameData;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.util.Utilities;
@@ -58,14 +58,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private SelectedFolderModel[] mFoldersScanning;
 	private int mPosition, mCount;
 	private Locale mLocale;
-	private FilePrefix[] mFilesPrefixes;
+	private FileNameModel[] mFileNameModels;
 	private Pattern[] mPatterns;
 	private FileRenameData mPreviousFileRenameData;
-	private String mPreviousFileNamePrefix;
-	private int mPreviousFileNamePrefixCount;
+	private String mPreviousFileNameModel;
+	private int mPreviousFileNameModelCount;
 	private boolean mIsUriPermissionGranted;
-
-	private static final String ZERO_FILE_NAME_SUFIX = "%05d";
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -86,7 +84,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		this.mListener = new WeakReference<Listener>(listener);
 		mLocale = mApplication.getLocale();
 		mApplication.setRenameFileTaskRunning(true);
-		mFilesPrefixes = mApplication.getOriginalFilePrefix();
+		mFileNameModels = mApplication.getOriginalFileNamePattern();
 	}
 
 	/**
@@ -117,7 +115,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				populateAllListFiles();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
-					mPreviousFileNamePrefixCount = 0;
+					mPreviousFileNameModelCount = 0;
 					mPreviousFileRenameData = null;
 					mPosition = 0;
 					publishProgress();
@@ -192,17 +190,17 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Prepare prefix patterns.
+	 * Prepare file name patterns.
 	 */
 	private void buildPatterns() {
-		int i, len = mFilesPrefixes.length, lst;
+		int i, len = mFileNameModels.length, lst;
 		mPatterns = new Pattern[len];
 		Pattern pattern;
-		FilePrefix filePrefix;
+		FileNameModel fileNameModel;
 		String before;
 		for (i = 0; i < len; i++) {
-			filePrefix = mFilesPrefixes[i];
-			before = filePrefix.getBefore().toLowerCase(mLocale);
+			fileNameModel = mFileNameModels[i];
+			before = fileNameModel.getBefore().toLowerCase(mLocale);
 			lst = before.length();
 			if (lst == 0) {
 				before = "*";
@@ -301,7 +299,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			parentFolder = oldFile.getParentFile();
 			newFile = new File(parentFolder, newFileName);
 			exist = newFile.exists();
-		} while (exist && mPreviousFileNamePrefixCount < 1000);
+		} while (exist && mPreviousFileNameModelCount < 1000);
 		if (!exist) {
 			int id = data.getId();
 			data.setFullPath(newFile.getAbsolutePath());
@@ -347,7 +345,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private void renameZeroFile(File parentFolder, FileRenameData data) {
 		File newFile, zeroFile;
-		if (mPreviousFileRenameData != null && mPreviousFileNamePrefixCount == 1) {
+		if (mPreviousFileRenameData != null && mPreviousFileNameModelCount == 1) {
 			zeroFile = new File(parentFolder, mPreviousFileRenameData.getFileName());
 			newFile = new File(parentFolder, data.getFileNameZero());
 			if (renameFileUseApiLevel(mPreviousFileRenameData, zeroFile, newFile)) {
@@ -545,7 +543,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private String getNewFileName(FileRenameData data, File file) {
 		String oldFileName = file.getName();
-		String prefix = data.getPrefixAfter();
 		String suffix;
 		int idx = oldFileName.lastIndexOf(".");
 		String extension = oldFileName.substring(idx);
@@ -562,18 +559,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			default:
 				milliseconds = file.lastModified();
 		}
-		String newFileName = prefix
-				+ mApplication.getFileName(new Date(milliseconds));
-		if (newFileName.equals(mPreviousFileNamePrefix)) {
-			mPreviousFileNamePrefixCount++;
+		String newFileName = mApplication.getFileNameFormatted(data.getFileNamePatternAfter(), new Date(milliseconds));
+		if (newFileName.equals(mPreviousFileNameModel)) {
+			mPreviousFileNameModelCount++;
 		} else {
-			mPreviousFileNamePrefix = newFileName;
-			mPreviousFileNamePrefixCount = 0;
+			mPreviousFileNameModel = newFileName;
+			mPreviousFileNameModelCount = 0;
 		}
-		if (mPreviousFileNamePrefixCount > 0) {
-			fileNameZero = newFileName + "_"
-					+ String.format(mLocale, ZERO_FILE_NAME_SUFIX, 0);
-			suffix = String.format(mLocale, ZERO_FILE_NAME_SUFIX, mPreviousFileNamePrefixCount);
+		if (mPreviousFileNameModelCount > 0) {
+			fileNameZero = newFileName + "_" + mApplication.getFormattedFileNameSuffix(0);
+			suffix = mApplication.getFormattedFileNameSuffix(mPreviousFileNameModelCount);
 			if (mApplication.isAppendOriginalNameEnabled()) {
 				fileNameZero += "_" + oldFileName;
 			}
@@ -702,7 +697,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private void recursiveFolderScan(File[] files) {
 		int index;
 		String fileName;
-		FilePrefix filePrefix;
+		FileNameModel fileNameModel;
 		FileRenameData originalData;
 		if (files != null) {
 			for (File file : files) {
@@ -712,16 +707,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					if (file.isFile()) {
 						fileName = file.getName();
-						index = matchFileNamePrefix(fileName);
+						index = matchFileNameBefore(fileName);
 						if (index > -1) {
-							filePrefix = mFilesPrefixes[index];
+							fileNameModel = mFileNameModels[index];
 							originalData = new FileRenameData(-1, null,
 									file.getAbsolutePath(),
 									fileName,
 									fileName,
 									file.lastModified());
-							originalData.setPrefixBefore(filePrefix.getBefore());
-							originalData.setPrefixAfter(filePrefix.getAfter());
+							originalData.setFileNamePatternBefore(fileNameModel.getBefore());
+							originalData.setFileNamePatternAfter(fileNameModel.getAfter());
 							mListFiles.add(originalData);
 						}
 					}
@@ -762,21 +757,21 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				long dateAdded;
 				String data, title, displayName, fileName;
 				FileRenameData originalData;
-				FilePrefix filePrefix;
+				FileNameModel fileNameModel;
 				while (cursor.moveToNext()) {
 					data = cursor.getString(cursor
 							.getColumnIndex(MediaStore.MediaColumns.DATA));
 					fileName = getFileName(data);
-					index = matchFileNamePrefix(fileName);
+					index = matchFileNameBefore(fileName);
 					if (index > -1) {
-						filePrefix = mFilesPrefixes[index];
+						fileNameModel = mFileNameModels[index];
 						id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
 						title = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE));
 						displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
 						dateAdded = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED));
 						originalData = new FileRenameData(id, uri, data, title, displayName, dateAdded);
-						originalData.setPrefixBefore(filePrefix.getBefore());
-						originalData.setPrefixAfter(filePrefix.getAfter());
+						originalData.setFileNamePatternBefore(fileNameModel.getBefore());
+						originalData.setFileNamePatternAfter(fileNameModel.getAfter());
 						mListFiles.add(originalData);
 					}
 				}
@@ -809,10 +804,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * Look on the path and check with existing file name matches.
 	 *
 	 * @param fileName Path to be checked.
-	 * @return -1 if the path is not matching with a prefix otherwise is
-	 * returned prefix index.
+	 * @return -1 if the path is not matching with a file name pattern otherwise is
+	 * returned file name pattern index.
 	 */
-	private int matchFileNamePrefix(String fileName) {
+	private int matchFileNameBefore(String fileName) {
 		String lower = fileName.toLowerCase(mLocale);
 		int i, len = mPatterns.length;
 		Pattern pattern;
