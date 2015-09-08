@@ -60,6 +60,7 @@ import android.util.Log;
  */
 public class DSCApplication extends Application {
 	private static final String TAG = DSCApplication.class.getName();
+	private static Context mContext;
 	private Locale mLocale;
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
@@ -114,6 +115,7 @@ public class DSCApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		DSCApplication.mContext = getApplicationContext();
 		mLocale = Locale.getDefault();
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
@@ -122,11 +124,15 @@ public class DSCApplication extends Application {
 		updateSelectedFolders();
 	}
 
+	public static Context getAppContext() {
+		return DSCApplication.mContext;
+	}
+
 	/**
 	 * Update mounted volumes.
 	 */
 	public void updateMountedVolumes() {
-		mMountVolumes = Utilities.MountService.getVolumeList(getMountService());
+		mMountVolumes = Utilities.MountService.getVolumeList(getMountService(), DSCApplication.mContext);
 	}
 
 	/**

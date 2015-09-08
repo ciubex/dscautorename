@@ -18,6 +18,7 @@
  */
 package ro.ciubex.dscautorename.util;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.os.IBinder;
 import android.util.AndroidRuntimeException;
@@ -212,19 +213,43 @@ public class Utilities {
 					METHOD_IMountService_isUsbMassStorageEnabled, mountService);
 		}
 
-		public static List<MountVolume> getVolumeList(Object mountService) {
-			Object[] arr = (Object[]) invoke("IMountService.getVolumeList()",
-					METHOD_IMountService_getVolumeList, mountService);
-			return prepareMountVolumes(mountService, arr);
+		public static String getStorageVolumeDescription(Object obj, Context context) {
+			String result = null;
+			if (METHOD_StorageVolume_getDescription != null) {
+				switch (METHOD_StorageVolume_getDescription.getParameterTypes().length) {
+					case 0: result = (String) invoke("StorageVolume.getDescription()",
+							METHOD_StorageVolume_getDescription, obj);
+						break;
+					case 1: result = (String) invoke("StorageVolume.getDescription()",
+							METHOD_StorageVolume_getDescription, obj, context);
+						break;
+				}
+			}
+			return result;
 		}
 
-		private static List<MountVolume> prepareMountVolumes(Object mountService, Object[] arr) {
+		public static List<MountVolume> getVolumeList(Object mountService, Context context) {
+			Object[] arr = null;
+			if (METHOD_IMountService_getVolumeList != null) {
+				switch (METHOD_IMountService_getVolumeList.getParameterTypes().length) {
+					case 0: arr = (Object[]) invoke("IMountService.getVolumeList()",
+							METHOD_IMountService_getVolumeList, mountService);
+						break;
+					case 3: arr = (Object[]) invoke("IMountService.getVolumeList()",
+							METHOD_IMountService_getVolumeList, mountService, 0, "/", 0);
+						break;
+				}
+			}
+			return prepareMountVolumes(mountService, arr, context);
+		}
+
+		private static List<MountVolume> prepareMountVolumes(Object mountService, Object[] arr, Context context) {
 			int len = arr != null ? arr.length : 0;
 			List<MountVolume> volumes = new ArrayList<MountVolume>();
 			if (len > 0) {
 				MountVolume volume;
 				for (Object obj : arr) {
-					volume = prepareMountVolume(mountService, obj);
+					volume = prepareMountVolume(mountService, obj, context);
 					if (volume != null) {
 						volumes.add(volume);
 					}
@@ -254,7 +279,7 @@ public class Utilities {
 			}
 		}
 
-		private static MountVolume prepareMountVolume(Object mountService, Object obj) {
+		private static MountVolume prepareMountVolume(Object mountService, Object obj, Context context) {
 			MountVolume volume = null;
 			if ("android.os.storage.StorageVolume".equals(obj.getClass().getName())) {
 				try {
@@ -291,8 +316,7 @@ public class Utilities {
 						volume.setDescriptionId((Integer) invoke("StorageVolume.getDescriptionId()",
 								METHOD_StorageVolume_getDescriptionId, obj));
 					} else if (METHOD_StorageVolume_getDescription != null) {
-						volume.setDescription((String) invoke("StorageVolume.getDescription()",
-								METHOD_StorageVolume_getDescription, obj));
+						volume.setDescription(getStorageVolumeDescription(obj, context));
 					}
 					if (METHOD_IMountService_getVolumeState != null) {
 						volume.setState(getVolumeState(mountService, volume.getPath()));
