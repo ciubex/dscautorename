@@ -1,0 +1,170 @@
+﻿<resources>
+
+    <!-- Strings related to Settings -->
+    <string name="general_settings">การตั้งค่าทั่วไป</string>
+    <string name="enable_title">เปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
+    <string name="enable_desc">เปลี่ยนชื่อไฟล์หลังจากเกิดเหตุการณ์ที่กำหนดไว้</string>
+
+    <string-array name="service_type_labels">
+        <item>ไม่ใช้งาน</item>
+        <item>เมื่อถ่ายภาพหรือวีดิโอด้วยกล้อง</item>
+        <item>เมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์</item>
+    </string-array>
+    <string-array name="service_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string name="service_choice_0">ไม่ใช้งานการเปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
+    <string name="service_choice_1">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อถ่ายภาพหรือวีดิโอด้วยกล้อง</string>
+    <string name="service_choice_2">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์</string>
+    <string name="rename_service_start_delay_title">หน่วงเวลาก่อนที่จะเปลี่ยนชื่อไฟล์</string>
+    <string name="rename_service_start_delay_desc">เริ่มทำการเปลี่ยนชื่อไฟล์หลังจาก</string>
+    <string name="seconds_unit">วินาที</string>
+    <string name="rename_video_enabled_title">อนุญาตให้เปลี่ยนชื่อวีดิโอ</string>
+    <string name="rename_video_enabled_desc">เลือกเพื่ออนุญาตให้เปลี่ยนชื่อวีดิโอด้วย ค่าเริ่มต้นคือการเปลี่ยนชื่อเฉพาะรูปภาพ</string>
+    <string name="enable_filter_folder_title">เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์</string>
+    <string name="enable_filter_folder_desc">การเปลี่ยนชื่อไฟล์จะเกิดขึ้นกับไฟล์ทั้งหมดในเครื่อง คุณสามารถเลือกตัวเลือกนี้เพื่อให้เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์เท่านั้น</string>
+    <string name="enable_filter_folder_desc_v21">สำหรับแอนดรอยด์เวอร์ชัน 5 ขึ้นไป (Lollipop) จะต้องเลือกตัวเลือกนี้ และกำหนดโฟลเดอร์ที่จัดเก็บรูปที่บันทึกจากกล้อง</string>
+    <string name="first_time_alert">โปรดอ่านอย่างละเอียด:\nกำหนดรูปแบบชื่อไฟล์สำหรับรูปถ่ายหรือวีดิโอ โดยสามารถใช้เครื่องหมาย * หรือ ? เพื่อแทนอักขระใดๆ\nไม่กำหนดรูปแบบชื่อไฟล์ ที่อาจทำให้เกิดลูปที่ไม่สิ้นสุด เช่น *.JPG\nใช้เครื่องหมาย ? เพื่อแทนอักขระใดๆ เพียงหนึ่งตัวอักษรเท่านั้น\nตัวอย่างเช่น ถ้าต้องการเปลี่ยนชื่อไฟล์ต้นทางที่ชื่อว่า 20150729_212537.JPG ควรใช้รูปแบบชื่อไฟล์ต้นทางเป็น ????????_??????.JPG และเพิ่มคำนำหน้าว่า \'PIC_\' (ใช้เครื่องหมาย \' คร่อมข้อความที่ไม่ใช่รูปแบบ) ไปยังรูปแบบชื่อไฟล์ปลายทาง เช่น \"\'PIC_\'yyyyMMdd_HHmmss\" ซึ่งผลลัพธ์ชื่อไฟล์ที่ได้คือ: PIC_20150729_212537.JPG</string>
+    <string name="enable_filter_alert_v19">สำหรับแอนดรอยด์เวอชัน 4.4 (Kitkat) ได้เพิ่มระบบรักษาความปลอดภัย ทำให้แอพพลิเคชันนี้ไม่สามารถเปลี่ยนชื่อไฟล์ที่อยู่บน SD Card ได้\nโปรดศึกษาข้อมูลจากลิงค์ http://goo.gl/kJeED3 ซึ่งอาจจะช่วยแก้ไขปัญหานี้ได้\nแอพพลิเคชันนี้เปลี่ยนชื่อไฟล์ที่อยู่ในหน่วยความจำหลักของเครื่องเท่านั้น\nโปรดตั้งค่ากล้องให้บันทึกภาพลงบนหน่วยความจำหลักของเครื่อง</string>
+    <string name="enable_filter_alert_v21">สำหรับแอนดรอยด์เวอร์ชัน 5 ขึ้นไป (Lollipop) โปรดเลือกตัวเลือก \"เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์\" และจะต้องกำหนดโฟลเดอร์ที่ต้องการสแกนอย่างน้อย 1 โฟลเดอร์ภายใน \"โฟลเดอร์ที่ต้องการสแกน\"</string>
+    <string name="folder_list_title">โฟลเดอร์ที่ต้องการสแกน</string>
+    <string name="folder_list_all_selected">ต้องมีโฟลเดอร์ที่ต้องการสแกนอย่างน้อย 1 โฟลเดอร์</string>
+    <string name="folder_list_no_selection">โปรดเลือกโฟลเดอร์ที่ต้องการลบ</string>
+    <string name="folder_list_confirmation">ต้องการลบโฟลเดอร์ที่เลือกหรือไม่?</string>
+    <string name="folder_list_no_open_document_tree_support">เวอร์ชันของแอนดรอยด์ที่ใช้ไม่สนับสนุนการเลือกโฟลเดอร์ (ACTION_OPEN_DOCUMENT_TREE).</string>
+    <string name="filter_folder_title">เลือกโฟลเดอร์</string>
+    <string name="filter_folder_desc">/</string>
+    <string name="filter_folder_no_folder">[ไม่มีโฟลเดอร์]</string>
+    <string name="enable_folder_scanning_title">อนุญาตให้สแกนไฟล์ภายในโฟลเดอร์</string>
+    <string name="enable_folder_scanning_desc">เมื่อเลือกตัวเลือกนี้ จะอนุญาตให้สแกนมีเดียที่อยู่ภายในโฟลเดอร์ที่กำหนดไว้ด้านบน โปรดเลือกตัวเลือกนี้ หากเครื่องของคุณปิดการใช้งานตัวสแกนมีเดีย</string>
+    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
+    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
+    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
+    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
+    <string name="define_file_name_pattern_title">กำหนดรูปแบบชื่อไฟล์</string>
+    <string name="define_file_name_pattern_desc">รูปแบบชื่อไฟล์ต้นทางที่ต้องการเปลี่ยน (\"DSC_*.JPG\" หรือ \"MOV_*.MP4\"), เช่น %s\nคุณสามารถใช้เครื่องหมาย * และ ? แทนอักขระใดๆ ได้ด้วย</string>
+    <string name="file_name_pattern_dialog_title_add">เพิ่มรูปแบบชื่อไฟล์</string>
+    <string name="file_name_pattern_dialog_title_editor">แก้ไขรูปแบบชื่อไฟล์</string>
+    <string name="file_name_pattern_dialog_from">1. รูปแบบชื่อไฟล์ต้นทาง:</string>
+    <string name="file_name_pattern_dialog_to">2. รูปแบบชื่อไฟล์ปลายทาง:</string>
+    <string name="file_name_pattern_dialog_bottom">ตัวอย่างชื่อเดิม:\n\t %1$s\nตัวอย่างชื่อที่ถูกแก้ไข:\n\t %2$s</string>
+    <string name="file_name_pattern_validation_error_old_empty">โปรดระบุรูปแบบชื่อไฟล์ต้นทาง</string>
+    <string name="file_name_pattern_validation_error_generic">รูปแบบชื่อไฟล์ต้นทางที่ระบุไม่เฉพาะเจาะจงพอ และอาจทำให้เกิดลูปไม่สิ้นสุด โปรดระบุรูปแบบที่ชัดเจนกว่านี้โดยใช้เครื่องหมาย ? หรือ _</string>
+    <string name="file_name_pattern_validation_error_old">รูปแบบชื่อไฟล์ต้นทางมีอยู่แล้ว โปรดระบุรูปแบบชื่อไฟล์ใหม่</string>
+    <string name="file_name_pattern_validation_error_new">รูปแบบชื่อไฟล์ปลายทางไม่ควรคล้ายกับรูปแบบชื่อไฟล์ต้นทาง รวมถึงรูปแบบชื่อไฟล์ต้นทางอื่นๆ ภายใต้รายการด้านบน</string>
+    <string name="file_name_suffix_format_title">กำหนดตัวเลขพิเศษต่อท้ายชื่อไฟล์ปลายทาง</string>
+    <string name="file_name_suffix_format_desc">ตัวเลขพิเศษนี้จะถูกใช้ก็ต่อเมื่อ ไฟล์ที่ถูกเปลี่ยนชื่อเกิดการซ้ำกัน ในกรณีที่ถ่ายรูปต่อเนื่องหลายๆ ภาพในเวลาเดียวกัน ค่าเริ่มต้นคือ ตัวเลข 5 ตัว\nตัวอย่างเช่น:\n%s</string>
+    <string name="file_name_suffix_format_value">%05d</string>
+    <string name="file_extension_note">นามสกุลของไฟล์จะไม่ถูกเปลี่ยนระหว่างการดำเนินการเปลี่ยนชื่อไฟล์</string>
+    <string name="file_name_format">yyyyMMdd_HHmmss</string>
+    <string name="rename_file_using_title">เปลี่ยนชื่อไฟล์โดยใช้ข้อมูลจาก:</string>
+    <string name="rename_file_using_desc">วันและเวลาที่ไฟล์ถูกแก้ไขล่าสุด</string>
+
+    <string-array name="rename_file_using_labels">
+        <item>วันและเวลาที่ไฟล์ถูกเพิ่มไปยังตัวจัดการมีเดีย</item>
+        <item>วันและเวลาที่ไฟล์ถูกแก้ไขล่าสุด</item>
+        <item>ข้อมูล EXIF จากรูปถ่ายหรือวีดิโอ</item>
+    </string-array>
+    <string-array name="rename_file_using_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="append_original_name_title">ต่อท้ายไฟล์ด้วยชื่อไฟล์ต้นทาง</string>
+    <string name="append_original_name_desc">นำชื่อไฟล์ต้นทางมาต่อท้ายไฟล์ปลายทาง เช่น จาก DSC_09.JPG ถูกเปลี่ยนชื่อเป็น %s_DSC_09.JPG</string>
+
+    <!-- rename shortcut -->
+    <string name="rename_shortcut">ทางลัดการเปลี่ยนชื่อ</string>
+    <string name="rename_shortcut_name">DSC rename service</string>
+    <string name="create_rename_shortcut">สร้างทางลัดการเปลี่ยนชื่อ</string>
+    <string name="create_rename_shortcut_desc">สร้างไอคอนทางลัดการเปลี่ยนชื่อบนหน้าจอหลักสำหรับการสั่งให้เริ่มการเปลี่ยนชื่อไฟล์ด้วยตนเอง</string>
+    <string name="remove_rename_shortcut">ลบทางลัดการเปลี่ยนชื่อ</string>
+    <string name="remove_rename_shortcut_desc">ลบไอคอนทางลัดการเปลี่ยนชื่อบนหน้าจอหลัก</string>
+    <string name="confirmation_rename_dialog">ไม่แสดงหน้าจอยืนยัน</string>
+    <string name="confirmation_rename_dialog_desc">แสดงหรือซ่อนหน้าจอยืนยันสำหรับการทำงานผ่านทางลัดการเปลี่ยนชื่อ</string>
+    <string name="confirmation_rename_question">ต้องการเริ่มการทำงานเปลี่ยนชื่อไฟล์หรือไม่?</string>
+    <string name="other_settings">การตั้งค่าอื่นๆ</string>
+    <string name="manually_start_title">เริ่มต้นการเปลี่ยนชื่อด้วยตนเอง</string>
+    <string name="manually_start_desc">แตะเพื่อเริ่มเปลี่ยนชื่อไฟล์</string>
+    <string name="manually_service_running">อยู่ระหว่างการดำเนินการเปลี่ยนชื่อ</string>
+    <string name="manually_file_rename_count_0">ไม่มีการเปลี่ยนชื่อไฟล์</string>
+    <string name="manually_file_rename_count_1">เปลี่ยนชื่อแล้ว 1 ไฟล์</string>
+    <string name="manually_file_rename_count_more">เปลี่ยนชื่อแล้ว %d ไฟล์</string>
+    <string name="manually_file_rename_progress_1">เปลี่ยนชื่อแล้ว %1$d ไฟล์จากทั้งหมด %2$d ไฟล์</string>
+    <string name="manually_file_rename_progress_more">เปลี่ยนชื่อแล้ว %1$d ไฟล์จากทั้งหมด %2$d ไฟล์</string>
+    <string name="file_rename_count_title">จำนวนไฟล์ที่ถูกเปลี่ยนชื่อ: %d</string>
+    <string name="file_rename_count_desc">แตะเพื่อรีเซ็ตจำนวนไฟล์ที่ถูกเปลี่ยน</string>
+    <string name="file_rename_count_confirmation">ต้องการรีเซ็ตจำนวนไฟล์ที่ถูกเปลี่ยนหรือไม่?</string>
+    <string name="ok">ตกลง</string>
+    <string name="yes">ใช่</string>
+    <string name="no">ไม่</string>
+    <string name="cancel">ยกเลิก</string>
+    <string name="close">ปิด</string>
+    <string name="add">เพิ่ม</string>
+    <string name="delete">ลบ</string>
+    <string name="please_wait">โปรดรอ&#8230;</string>
+    <string name="loading_wait">กำลังโหลด&#8230;</string>
+    <string name="no_folders">ไม่มีโฟลเดอร์</string>
+    <string name="no_file_name_pattern">ไม่ได้กำหนดรูปแบบชื่อไฟล์</string>
+    <string name="list_info_press">เพิ่มหรือลบรายการ</string>
+    <string name="file_name_pattern_list_all_selected">ต้องมีรูปแบบชื่อไฟล์อย่างน้อย 1 รูปแบบ</string>
+    <string name="file_name_pattern_list_no_selection">โปรดเลือกรูปแบบที่ต้องการลบ</string>
+    <string name="file_name_pattern_list_confirmation">ต้องการลบรูปแบบที่เลือกหรือไม่?</string>
+    <string name="error_rename_file_no_read_write">ไม่สามารถอ่านหรือเขียนไฟล์ได้</string>
+    <string name="error_rename_file">พบไฟล์ที่ไม่สามารถเปลี่ยนชื่อได้ %s ไฟล์</string>
+    <string name="obtain_logs">สร้างล็อกเพื่อรายงาน&#8230;</string>
+    <string name="report_subject">Report for DSC Auto Rename</string>
+    <string name="report_body">Description: </string>
+    <string name="send_report">ส่งรายงาน&#8230;</string>
+
+    <!-- About -->
+    <string name="about_section">เกี่ยวกับ</string>
+    <string name="build_version_title">Build version</string>
+    <string name="build_version_desc">1</string>
+    <string name="send_debug_title">ส่งล็อกเมื่อพบปัญหา</string>
+    <string name="send_debug_desc">ส่งล็อกทางอีเมล์</string>
+    <string name="send_debug_confirmation">ต้องการส่งรายงานเมื่อพบปัญหาหรือไม่?\nโปรดเลือกแอพพลิเคชันสำหรับการส่งอีเมล์ โดยจะมีไฟล์แนบไปด้วยจำนวน 2 ไฟล์ โปรดกรอกข้อมูลสั้นๆ เพื่ออธิบายถึงปัญหาที่พบ\nขอบคุณ!</string>
+    <string name="send_debug_email_title">Debugging logs for DSC Auto Rename</string>
+    <string name="license_title">Open source licenses</string>
+    <string name="license_desc">License details for open source software</string>
+    <string name="donate_title">บริจาค</string>
+    <string name="donate_desc">โปรดบริจาคถ้าคุณเห็นว่าแอพพลิเคชันนี้มีประโยชน์</string>
+    <string name="donate_confirmation">ถ้าคุณชอบแอพพลิเคชันนี้ โปรดซื้อ DSC Auto Rename PRO\nกดปุ่มตกลงเพื่อไปยังหน้า DSC Auto Rename PRO บน Google Play Store.\nขอบคุณที่ใช้แอพพลิเคชันนี้!</string>
+    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
+    <string name="thank_you_title">ขอบคุณสำหรับการบริจาค!</string>
+    <string name="thank_you_desc">ขอบคุณที่ชอบงานของเรา โดยการซื้อแอพพลิเคชัน</string>
+    <string name="about_text"><Data>
+<![CDATA[<b>ขอบคุณ Simon W สำหรับการสนับสนุนในการพัฒนาเวอร์ชัน 4.0.0</b><br/>
+แอพพลิเคชันนี้พัฒนาขึ้นเพื่อเปลี่ยนชื่อของรูปถ่ายที่ถ่ายด้วยกล้องบนโทรศัพท์ โดยอาศัยวันและเวลาที่บันทึกบนไฟล์<br/><br/>
+รูปแบบของไฟล์มาจากระบบวันและเวลาของภาษา Java ดังนี้:<br/>
+- yyyy ใช้แทน ปี<br/>
+- MM ใช้แทน เดือน<br/>
+- dd ใช้แทน วันที่<br/>
+- HH ใช้แทน ชั่วโมง<br/>
+- mm ใช้แทน นาที<br/>
+- ss ใช้แทน วินาที<br/>
+- SSS ใช้แทน มิลลิวินาที<br/>
+แต่สำหรับข้อมูล EXIF บนระบบปฏิบัติการแอนดรอยด์จะไม่ถูกจัดเก็บ จึงไม่สามารถนำค่ามาใช้งานได้<br/>
+อ่านข้อมูลเกี่ยวกับรูปแบบเพิ่มเติมได้ที่: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/>
+<br/>
+ในกรณีที่รูปถ่ายถูกสร้างขึ้นในเวลาเดียวกัน เช่น การถ่ายรูปแบบต่อเนื่อง ชื่อไฟล์ใหม่จะถูกต่อท้ายด้วยตัวเลข เช่น _01 ซึ่งสามารถกำหนดจำนวนหลักของตัวเลขได้จากหน้าการตั้งค่า<br/>
+<br/>
+กำหนดรูปแบบชื่อไฟล์โดยแยกกันระหว่างรูปถ่ายและวีดิโอ และสามารถใช้เครื่องหมาย * หรือ ? แทนอักขระใดๆ ได้<br/>
+ไม่ควรใช้รูปแบบที่สั้นเกินไป เช่น *.JPG เพื่อหลีกเลี่ยงปัญหาการเกิดลูปไม่สิ้นสุด<br/>
+ควรใช้เครื่องหมาย ? เพื่อแทนอักขระ 1 ตัว ร่วมกับเครื่องหมายอื่นๆ เช่น _<br/>
+ตัวอย่าง เช่น *.JPG\nใช้เครื่องหมาย ? เพื่อแทนอักขระใดๆ เพียงหนึ่งตัวอักษรเท่านั้น\nตัวอย่างเช่น ถ้าต้องการเปลี่ยนชื่อไฟล์ต้นทางที่ชื่อว่า 20150729_212537.JPG ควรใช้รูปแบบชื่อไฟล์ต้นทางเป็น ????????_??????.JPG และเพิ่มคำนำหน้าว่า \'PIC_\' (ใช้เครื่องหมาย \' คร่อมข้อความที่ไม่ใช่รูปแบบ) ไปยังรูปแบบชื่อไฟล์ปลายทาง เช่น \'PIC_\'yyyyMMdd_HHmmss ซึ่งผลลัพธ์ชื่อไฟล์ที่ได้คือ: PIC_20150729_212537.JPG<br/>
+<br/>
+หากเปิดใช้งานการเปลี่ยนชื่อไฟล์โดยอัตโนมัติ เมื่อไฟล์ถูกบันทึกลงมายังอุปกรณ์ จะถูกเปลี่ยนชื่อตามที่กำหนดไว้ทันที<br/><br/>
+การทำงานแบบอัตโนมัตินี้ ขึ้นอยู่กับแอพกล้องที่ใช้งาน ซึ่งจะต้องส่งอีเวนท์ <b>com.android.camera.NEW_PICTURE</b> หรือ <b>android.hardware.action.NEW_PICTURE</b> ออกมา ไม่เช่นนั้น การเปลี่ยนชื่อโดยอัตโนมัติจะไม่ทำงาน<br/>
+ในบางกรณีที่กล้องไม่ส่งอีเวนท์ดังกล่าวออกมา อาจแก้ไขได้โดยการเลือกตัวเลือก เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์ แต่การเลือกตัวเลือกนี้จะทำให้แอพพลิเคชันต้องทำงานแบบเบื้องหลังตลอดเวลา<br/>
+<br/>
+อ่านรายละเอียดเพิ่มเติมได้ที่ <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
+<br/>
+<b>ขอบคุณสำหรับการแปลไทยไปที่:</b>
+<br/>
+- Chawalit - ไทย]]></Data></string>
+
+</resources>

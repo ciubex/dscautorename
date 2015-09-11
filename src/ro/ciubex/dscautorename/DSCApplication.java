@@ -631,7 +631,7 @@ public class DSCApplication extends Application {
 	 * @return
 	 */
 	public int getRenameFileDateType() {
-		return getIntValue(KEY_RENAME_FILE_DATE_TYPE, 1);
+		return getIntValue(KEY_RENAME_FILE_DATE_TYPE, 2);
 	}
 
 	/**

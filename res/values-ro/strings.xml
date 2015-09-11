@@ -1,0 +1,171 @@
+<resources>
+
+    <string name="app_name">DSC Auto Rename</string>
+
+    <!-- Strings related to Settings -->
+    <string name="general_settings">Setari generale</string>
+    <string name="enable_title">Declansator serviciu redenumire.</string>
+    <string name="enable_desc">Fisierele sunt redenumite automat in cazurile unor declansatori.</string>
+
+    <string-array name="service_type_labels">
+        <item>Dezactivat</item>
+        <item>Eveniment de camera: caputra de poze sau inregistrare de filme.</item>
+        <item>Notificare media: la salvarea de fisiere media.</item>
+    </string-array>
+    <string-array name="service_type_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
+    <string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
+    <string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
+    <string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
+    <string name="rename_service_start_delay_title">Intarzierea declansarii serviciului de redenumire</string>
+    <string name="rename_service_start_delay_desc">Porneste serviciul de redenumite dupa</string>
+    <string name="seconds_unit">secunde</string>
+    <string name="rename_video_enabled_title">Redenumeste inclusiv filmele</string>
+    <string name="rename_video_enabled_desc">Prin selectarea acestei optiuni sunt redenumite si filmele. Altfel sunt redenumite doar pozele</string>
+    <string name="enable_filter_folder_title">Restrictie redenumire</string>
+    <string name="enable_filter_folder_desc">In mod normal sunt redenumite toate fisierele din memorie. Prin selectarea acestei obtiuni sunt redenumite doar fisierele din directoarele selectate.</string>
+    <string name="enable_filter_folder_desc_v21">Ca utilizator de Android Lollipop, activeaza aceasta optiune si alege in ce directoare sunt salvate imaginile si filmele salvate de aplicatia specifica camerei.</string>
+    <string name="first_time_alert">ATENTIE:\nDefineste formate de redenumire individuale pentru poze si pentru filme. Se pot folosi de asemenea * sau ? .\nNu folositi formate asemanatoare sau generice precum *.JPG pentru a evita blocarea aplicatiei in functia de redenumire.\nMai bine folositi semnul ? in combinatie cu alte caractere fixe precum _ pentru un mai bun control al numelor de fisiere ce urmeaza a fi redenumite.\nDe exemplu pentru un fisier cu numele original in forma 20150729_212537.JPG se poate folosi un format de genul ????????_??????.JPG si se poate adauga un prefix ca \'PIC_\' (se poate folosi apostroful pentru evitarea transformarilor in data sau ora) astfel in acest caz formatul de redenumire poate fi de forma \"\'PIC_\'yyyyMMdd_HHmmss\" iar fisierul redenumit va avea numele: PIC_20150729_212537.JPG</string>
+    <string name="enable_filter_alert_v19">Din cauza unor restrictii din sistemul de operare Android KitKa, aceasta aplicatie nu poate redenumi fisierele salvate pe cardul extern (SD Card).\nVedeti http://goo.gl/kJeED3 pentru o posibila rezolvare.\nIn mod normal, in Android KitKat fara interventii aplicatia poate redenumi doar fisierele stocate intern.\nSetati aplicatia de camera sa foloseasca memoria interna ca destinatie pentru fisierele salvate.</string>
+    <string name="enable_filter_alert_v21">Android Lollipop activeaza optiunea \"Restrictie redenumire\" dupa care selecteaza directoarele in care sunt salvate pozele si filmele de aplicatia camerei in \"Lista directoarelor selectate.\".</string>
+    <string name="folder_list_title">Lista directoarelor selectate.</string>
+    <string name="folder_list_all_selected">Trebuie lasat cel putin un director neselectat!</string>
+    <string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
+    <string name="folder_list_confirmation">Doresti sa stergi directoarele selectate?</string>
+    <string name="folder_list_no_open_document_tree_support">Versiunea de Android folosita nu are suport pentru selectarea de directoare. (ACTION_OPEN_DOCUMENT_TREE).</string>
+    <string name="filter_folder_title">Selecteaza un director.</string>
+    <string name="filter_folder_desc">/</string>
+    <string name="filter_folder_no_folder">[Nici un director]</string>
+    <string name="enable_folder_scanning_title">Scaneaza fisiere doar in directoare.</string>
+    <string name="enable_folder_scanning_desc">Prin selectarea acestei obtiuni serviciul de redenumire fisiere va redenumi doar fisierele aflate in directoarele selectate mai sus. Selecteaza aceasta optiune daca sistemul nu are activata indexarea fisierelor media.</string>
+    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
+    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
+    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
+    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
+    <string name="define_file_name_pattern_title">Modele de nume de fisiere</string>
+    <string name="define_file_name_pattern_desc">Modelele de nume de fisiere folosite pentru redenumiri (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nPot fi folosite semnele * si ? de asemenea.</string>
+    <string name="file_name_pattern_dialog_title_add">Adauga model de nume de fisier</string>
+    <string name="file_name_pattern_dialog_title_editor">Editeaza modelul de nume de fisier</string>
+    <string name="file_name_pattern_dialog_from">1. Modelul original:</string>
+    <string name="file_name_pattern_dialog_to">2. Modelul de nume redenumit:</string>
+    <string name="file_name_pattern_dialog_bottom">Exemplu nume de fisier vechi:\n\t %1$s\nExemplu redenumire nume de fisier:\n\t %2$s</string>
+    <string name="file_name_pattern_validation_error_old_empty">Modelul de nume original nu poate fi lasat gol.</string>
+    <string name="file_name_pattern_validation_error_generic">Modelul de nume original este prea generic si poate cauza blocarea aplicatiei in procesul de redenumire. Incearca o definitie mai restrictiva de redenumire folosind semnul intrebarii ? in locul caracterlor ce difera de la un nume la celalat.</string>
+    <string name="file_name_pattern_validation_error_old">Modelul de nume original este deja definit, defineste o alta varianta.</string>
+    <string name="file_name_pattern_validation_error_new">Modelul de nume redenumit nu trebuie sa se regaseasca in modelul de nume original!</string>
+    <string name="file_name_suffix_format_title">Defineste un sufix numeric</string>
+    <string name="file_name_suffix_format_desc">Acest sufix numeric este folosit cand mai multe fisiere s-ar redenumit folosind acelasi nume, precum in cazul in care in aceeasi secunda sunt luate mai multe cadre. In mod normal sunt adaugate numere pe 5 pozitii.\Exemplu:\n%s</string>
+    <string name="file_name_suffix_format_value">%05d</string>
+    <string name="file_extension_note">Extensia fisierului este pastrata in urma redenumirii.</string>
+    <string name="file_name_format">yyyyMMdd_HHmmss</string>
+    <string name="rename_file_using_title">Redenumeste fisierul folosind:</string>
+    <string name="rename_file_using_desc">data si timpul cand a fost ultima oara modificat fisierul.</string>
+
+    <string-array name="rename_file_using_labels">
+        <item>data si timpul cand fisierul a fost indexat de sistem;</item>
+        <item>data si timpul cand fisierul a fost modificat ultima oara;</item>
+        <item>data si timpul prezente in EXIF, doar pentru imagini, pentru clipuri se va folosi a doua optiune.</item>
+    </string-array>
+    <string-array name="rename_file_using_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="append_original_name_title">Adauga denumirea originala</string>
+    <string name="append_original_name_desc">Pastreaza si adauga denumirea originala dupa numele redenumit. De exemplu din DSC_09.JPG noul fisier va fi redenumit in %s_DSC_09.JPG</string>
+
+    <!-- rename shortcut -->
+    <string name="rename_shortcut">Scurtatura pentru serviciul DSC Rename</string>
+    <string name="rename_shortcut_name">Serviciu de redenumire DSC rename</string>
+    <string name="create_rename_shortcut">Creaza scurtatura pentru serviciul de redenumire DSC rename</string>
+    <string name="create_rename_shortcut_desc">Creaza-ti o scurtatura pentru lansarea manuala a serviciului de redenumit fisiere.</string>
+    <string name="remove_rename_shortcut">Sterge scurtatura de lansare a serviciului de redenumire fisiere.</string>
+    <string name="remove_rename_shortcut_desc">Sterge scurtatura creata pentru lansarea manuala a serviciului de redenumit fisiere.</string>
+    <string name="confirmation_rename_dialog">Ascunde confirmarea redenumirii</string>
+    <string name="confirmation_rename_dialog_desc">Ascunde sau nu fereastra de confirmare a redenumirii manuale a fisierelor.</string>
+    <string name="confirmation_rename_question">Doresti redenumirea fisierelor pornind manual serviciul de redenumire?</string>
+    <string name="other_settings">Alte setari</string>
+    <string name="manually_start_title">Porneste manual serviciul de redenumire</string>
+    <string name="manually_start_desc">Porneste manual serviciul de redenumit fisiere.</string>
+    <string name="manually_service_running">Ruleaza serviciul de redenumit fisiere.</string>
+    <string name="manually_file_rename_count_0">Nici un fisier nu a fost redenumit.</string>
+    <string name="manually_file_rename_count_1">Un fisier a fost redenumit.</string>
+    <string name="manually_file_rename_count_more">%d fisiere au fost redenumite.</string>
+    <string name="manually_file_rename_progress_1">%1$d fisier din %2$d a fost redenumit.</string>
+    <string name="manually_file_rename_progress_more">%1$d fisiere din %2$d au fost redenumite.</string>
+    <string name="file_rename_count_title">NUmar de fisiere redenumite: %d</string>
+    <string name="file_rename_count_desc">Reseteaza numarul de fisiere redenumite.</string>
+    <string name="file_rename_count_confirmation">Vrei sa resetezi numarul de fisiere redenumite?</string>
+    <string name="ok">OK</string>
+    <string name="yes">Da</string>
+    <string name="no">Nu</string>
+    <string name="cancel">Renunta</string>
+    <string name="close">Inchide</string>
+    <string name="add">Adauga</string>
+    <string name="delete">Sterge</string>
+    <string name="please_wait">Te rog asteata&#8230;</string>
+    <string name="loading_wait">Se incarca&#8230;</string>
+    <string name="no_folders">Nici un director</string>
+    <string name="no_file_name_pattern">Nici un model definit</string>
+    <string name="list_info_press">Adauga sau sterge elemente.</string>
+    <string name="file_name_pattern_list_all_selected">Cel putin un model trebuie pastrat!</string>
+    <string name="file_name_pattern_list_no_selection">Pentru stergere selecteaza cel putin un model!</string>
+    <string name="file_name_pattern_list_confirmation">Confirmi stergerea modelelor selectate?</string>
+    <string name="error_rename_file_no_read_write">Fisierul nu poate fi citit sau scris.</string>
+    <string name="error_rename_file">Fisierul %s nu poate fi redenumit!</string>
+    <string name="obtain_logs">Genereaza fisierele de log-uri pentru raport&#8230;</string>
+    <string name="report_subject">Raporteaza DSC Auto Rename</string>
+    <string name="report_body">Descriere: </string>
+    <string name="send_report">Trimitere raport&#8230;</string>
+
+    <!-- About -->
+    <string name="about_section">Despre</string>
+    <string name="build_version_title">Build version</string>
+    <string name="build_version_desc">1</string>
+    <string name="send_debug_title">Trimite logurile pentru investigare</string>
+    <string name="send_debug_desc">Trimite un e-mail cu logurile pentru investigare</string>
+    <string name="send_debug_confirmation">Doresti sa trimiti un raport pentru investigare?\nAplicatia folosita in mod normal pentru a trimite mesaje va trimite un e-mail avand atasate niste fisiere folosite pentru investigarea posibilelor probleme. Scrie o scurta descriere a problemei intampinate in timpul folosirii aplicatiei.\nMultumesc!</string>
+    <string name="send_debug_email_title">Loguri pentru investigare DSC Auto Rename</string>
+    <string name="license_title">Open source licenses</string>
+    <string name="license_desc">License details for open source software</string>
+    <string name="donate_title">Doneaza</string>
+    <string name="donate_desc">Daca apreciezi aceasta aplicatie poti face o donatie.</string>
+    <string name="donate_confirmation">Daca consideri aceasta aplicatie utila si apreciezi efortul depus pentru realizarea ei, poti face o donatie prin instalarea aplicatiei DSC Auto Rename PRO!\nPrin apasarea butonului Da, vei fi redirectat catre aplicatia DSC Auto Rename PRO din Google Play Store.\nMultumesc pentru folosirea acestei aplicatii!</string>
+    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
+    <string name="thank_you_title">Multumesc pentru donatie!</string>
+    <string name="thank_you_desc">Multumesc pentru aprecierea realizata prin cumpararea aplicatiei PRO.</string>
+    <string name="about_text"><Data>
+<![CDATA[<b>Multumiri lui Simon W pentru suportul adus la dezvoltarea versiunii 4.0.0!</b><br/>
+Scopul acestei aplicatieii este acela de a redenumit automat fisierele multimedia, imagini si clipuri, in functie de data si timpul cand acestea au fost create.<br/><br/>
+Pentru redenumirea fisierelor sunt folosite niste marcatori specifici limbajului de programare Java:<br/>
+- yyyy pentru ani;<br/>
+- MM pentru luna;<br/>
+- dd pentru zi;<br/>
+- HH pentru ora;<br/>
+- mm pentru minute;<br/>
+- ss pentru secunde;<br/>
+- SSS pentru milisecunde.<br/>
+Deoarece din specificatiile EXIF pentru redenumirea unui fisier nu pot fi folosite milisecundele.<br/>
+Mai multe detalii poti obtine de la adresa: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/>
+<br/>
+In cazul in care mai multe imagini sunt luate in acelasi timp, precum in modul "burst", se va adauga la numele redenumit un sufix numeric _01. Depinde cate pozitii sunt definite in cazul sufixului numeric.<br/>
+<br/>
+Defineste modele separate pentru imagini si pentru clipuri. Semnele * or ? pot fi de asemenea folosite.<br/>
+Nu folosi modele generice precum *.JPG pentru a evita intrarea in bulca infinita a procesului de redenumire.<br/>
+Este indicat a se folosi semnul ? in combinatie cu caractere constante precum _ in definirea de modele pentru numele originale.<br/>
+Spre exemplu pentru un fisier ce are denumirea originala de genul 20150729_212537.JPG se poate folosi un model precum ????????_??????.JPG pentru redenumire se poate pune prefixul \'PIC_\' (utilizati apostroful pentru evitarea conversiei in data/timp) precum \"\'PIC_\'yyyyMMdd_HHmmss\" astfel fisierul va fi redenumit in: PIC_20150729_212537.JPG<br/>
+<br/>
+Daca serviciul de redenumit fisiere este activ, acesta va functiona in fundal pentru redenumirea fisierelor media.<br/><br/>
+Declansatorii depinde de aplicatia folosita pentru camera. Aplicatia de camera trebuie sa trimita un mesaj boradcast <b>com.android.camera.NEW_PICTURE</b> sau <b>android.hardware.action.NEW_PICTURE</b>, altfel, serviciul de redenumire atomanta nu poate fi declansat.<br/>
+Daca asemenea mesaje nu sunt trimise de aplicatia folosita pentru camera, se pot folosi ca declansatori notificarile media, dar acest aspect presupune rularea unui alt serviciu in fundal.<br/>
+<br/>
+Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
+<br/>
+<b>Multumesc pentru traducere:</b><br/>
+- Chawalit pentru <b>tailandeza</b><br/>]]></Data></string>
+
+</resources>
