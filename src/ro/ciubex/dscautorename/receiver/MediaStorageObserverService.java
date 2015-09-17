@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2015 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,8 @@ import android.os.IBinder;
 import android.provider.MediaStore;
 
 /**
+ * This is a service which register media observer.
+ *
  * @author Claudiu Ciobotariu
  * 
  */
@@ -85,7 +87,7 @@ public class MediaStorageObserverService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		super.onStartCommand(intent, flags, startId);
 		if (mMediaStorageContentObserver != null) {
-			boolean flag = false;
+			boolean flag = true;
 			getContentResolver().registerContentObserver(
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, flag,
 					mMediaStorageContentObserver);

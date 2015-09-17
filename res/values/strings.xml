@@ -11,16 +11,19 @@
         <item>Disabled</item>
         <item>Camera events: pictures or videos taken.</item>
         <item>Media content observer: pictures or videos saved.</item>
+        <item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
     </string-array>
     <string-array name="service_type_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string name="service_choice_0">The auto rename service is disabled.</string>
     <string name="service_choice_1">The auto rename service is triggered by camera events.</string>
     <string name="service_choice_2">The auto rename service is triggered by media content events.</string>
+    <string name="service_choice_3">The auto rename service is triggered when a file is added on selected folders. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</string>
     <string name="rename_service_start_delay_title">Rename service start delay</string>
     <string name="rename_service_start_delay_desc">Start rename service after</string>
     <string name="seconds_unit">seconds</string>

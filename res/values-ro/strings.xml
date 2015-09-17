@@ -11,16 +11,19 @@
         <item>Dezactivat</item>
         <item>Eveniment de camera: caputra de poze sau inregistrare de filme.</item>
         <item>Notificare media: la salvarea de fisiere media.</item>
+        <item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
     </string-array>
     <string-array name="service_type_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
     <string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
     <string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
+    <string name="service_choice_3">Serviciul de redenumire automata este declansat cand sunt adaugate fisiere in directoarele selectate.</string>
     <string name="rename_service_start_delay_title">Intarzierea declansarii serviciului de redenumire</string>
     <string name="rename_service_start_delay_desc">Porneste serviciul de redenumite dupa</string>
     <string name="seconds_unit">secunde</string>

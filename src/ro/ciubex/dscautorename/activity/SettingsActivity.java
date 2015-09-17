@@ -274,8 +274,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if ("serviceType".equals(key)) {
+		if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
 			mApplication.checkRegisteredServiceType(false);
+		} else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
+			mApplication.updateFolderObserverList();
 		}
 		prepareSummaries();
 	}
@@ -306,6 +308,9 @@ public class SettingsActivity extends PreferenceActivity implements
 			break;
 		case DSCApplication.SERVICE_TYPE_CONTENT:
 			mServiceTypeList.setSummary(R.string.service_choice_2);
+			break;
+		case DSCApplication.SERVICE_TYPE_FILE_OBSERVER:
+			mServiceTypeList.setSummary(R.string.service_choice_3);
 			break;
 		default:
 			mServiceTypeList.setSummary(R.string.service_choice_0);
@@ -813,6 +818,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			mApplication.setFolderScanning(index, selectedFolder);
 			if (selectFoldersListDialog != null) {
 				selectFoldersListDialog.updateSelectedFolders();
+				mApplication.updateFolderObserverList();
 			}
 		}
 	}

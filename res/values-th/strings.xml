@@ -9,16 +9,19 @@
         <item>ไม่ใช้งาน</item>
         <item>เมื่อถ่ายภาพหรือวีดิโอด้วยกล้อง</item>
         <item>เมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์</item>
+        <item>ตรวจจับไฟล์: คอยเฝ้าดูโฟลเดอร์ที่เลือกเมื่อมีการเพิ่มไฟล์  โดยต้องเลือกตัวเลือก \"เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์\" และเพิ่มโฟลเดอร์ไว้ใน \"เลือกโฟลเดอร์\" อย่างน้อย 1 โฟลเดอร์</item>
     </string-array>
     <string-array name="service_type_values">
         <item>0</item>
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string name="service_choice_0">ไม่ใช้งานการเปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
     <string name="service_choice_1">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อถ่ายภาพหรือวีดิโอด้วยกล้อง</string>
     <string name="service_choice_2">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์</string>
+    <string name="service_choice_3">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์ที่กำหนดไว้</string>
     <string name="rename_service_start_delay_title">หน่วงเวลาก่อนที่จะเปลี่ยนชื่อไฟล์</string>
     <string name="rename_service_start_delay_desc">เริ่มทำการเปลี่ยนชื่อไฟล์หลังจาก</string>
     <string name="seconds_unit">วินาที</string>

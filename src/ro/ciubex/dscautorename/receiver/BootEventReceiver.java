@@ -48,8 +48,10 @@ public class BootEventReceiver extends BroadcastReceiver {
 			application = (DSCApplication) appCtx;
 		}
 		if (application != null
-				&& DSCApplication.SERVICE_TYPE_CONTENT == application
-						.getServiceType()) {
+				&& (DSCApplication.SERVICE_TYPE_CONTENT == application
+						.getServiceType() ||
+				DSCApplication.SERVICE_TYPE_FILE_OBSERVER == application
+						.getServiceType())) {
 			application.checkRegisteredServiceType(true);
 		}
 	}

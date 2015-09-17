@@ -19,8 +19,8 @@
 package ro.ciubex.dscautorename.receiver;
 
 import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.database.ContentObserver;
+import android.net.Uri;
 import android.os.Handler;
 
 /**
@@ -41,12 +41,23 @@ public class MediaStorageContentObserver extends ContentObserver {
 
 	/**
 	 * This method is called when a content change occurs.
-	 * 
+	 *
 	 * @param selfChange
 	 *            True if this is a self-change notification.
 	 */
 	@Override
 	public void onChange(boolean selfChange) {
+		onChange(selfChange, null);
+	}
+
+	/**
+	 * This method is called when a content change occurs.
+	 * 
+	 * @param selfChange
+	 *            True if this is a self-change notification.
+	 */
+	@Override
+	public void onChange(boolean selfChange, Uri uri) {
 		// super.onChange(selfChange);
 		checkAutoRenameTask();
 	}
@@ -55,11 +66,8 @@ public class MediaStorageContentObserver extends ContentObserver {
 	 * Check auto rename task and launch it if necessary.
 	 */
 	private void checkAutoRenameTask() {
-		if (mApplication != null && mApplication.isAutoRenameEnabled()) {
-			mApplication.setRenameFileRequested(true);
-			if (!mApplication.isRenameFileTaskRunning()) {
-				new RenameFileAsyncTask(mApplication).execute();
-			}
+		if (mApplication != null) {
+			mApplication.launchAutoRenameTask();
 		}
 	}
 

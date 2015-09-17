@@ -19,7 +19,6 @@
 package ro.ciubex.dscautorename.receiver;
 
 import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -61,10 +60,7 @@ public class CameraEventReceiver extends BroadcastReceiver {
 			boolean process = isPicture
 					|| (isVideo && mApplication.isRenameVideoEnabled());
 			if (process) {
-				mApplication.setRenameFileRequested(true);
-				if (!mApplication.isRenameFileTaskRunning()) {
-					new RenameFileAsyncTask(mApplication).execute();
-				}
+				mApplication.launchAutoRenameTask();
 			}
 		}
 	}

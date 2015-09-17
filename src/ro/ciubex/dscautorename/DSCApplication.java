@@ -24,17 +24,22 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
+import ro.ciubex.dscautorename.receiver.FolderObserver;
+import ro.ciubex.dscautorename.receiver.FolderObserverService;
 import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
 import ro.ciubex.dscautorename.task.LogThread;
+import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import ro.ciubex.dscautorename.util.Utilities;
 
 import android.annotation.TargetApi;
@@ -74,14 +79,16 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_DISABLED = 0;
 	public static final int SERVICE_TYPE_CAMERA = 1;
 	public static final int SERVICE_TYPE_CONTENT = 2;
+	public static final int SERVICE_TYPE_FILE_OBSERVER = 3;
 
 	public static final String LOG_FILE_NAME = "DSC_app_logs.log";
 	private static File logFile;
 	private static LogThread logFileThread;
 	private static SimpleDateFormat sFormatter;
 
+	public static final String KEY_SERVICE_TYPE = "serviceType";
 	private static final String KEY_FOLDER_SCANNING = "folderScanning";
-	private static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
+	public static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
 	private static final String KEY_ENABLED_SCAN_FILES = "enableScanForFiles";
 	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
 	private static final String KEY_RENAME_SERVICE_START_CONFIRMATION = "hideRenameServiceStartConfirmation";
@@ -103,6 +110,7 @@ public class DSCApplication extends Application {
 	private List<MountVolume> mMountVolumes;
 	private SelectedFolderModel[] mSelectedSelectedFolderModels;
 	private String mDefaultFolderScanning;
+	private Map<String, FolderObserver> mFolderObserverMap;
 
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
@@ -122,6 +130,10 @@ public class DSCApplication extends Application {
 		checkRegisteredServiceType(true);
 		updateMountedVolumes();
 		updateSelectedFolders();
+		mFolderObserverMap = new HashMap<String, FolderObserver>();
+		if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
+			initFolderObserverList(false);
+		}
 	}
 
 	public static Context getAppContext() {
@@ -390,6 +402,18 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Launch the auto rename task.
+	 */
+	public void launchAutoRenameTask() {
+		if (isAutoRenameEnabled()) {
+			setRenameFileRequested(true);
+			if (!isRenameFileTaskRunning()) {
+				new RenameFileAsyncTask(this).execute();
+			}
+		}
+	}
+
+	/**
 	 * Check if the video files should renamed too.
 	 *
 	 * @return True if the video files should be renamed.
@@ -616,11 +640,24 @@ public class DSCApplication extends Application {
 	 * @param regServiceType The current service type registered.
 	 */
 	private void updateRegisteredServiceType(int serviceType, int regServiceType) {
-		if (SERVICE_TYPE_CONTENT == regServiceType) {
-			unregisterMediaStorageContentObserver();
+		switch (regServiceType) {
+			case SERVICE_TYPE_CONTENT: unregisterMediaStorageContentObserver(); break;
+			case SERVICE_TYPE_FILE_OBSERVER: unregisterFolderObserver(); break;
 		}
-		if (SERVICE_TYPE_CONTENT == serviceType) {
-			registerMediaStorageContentObserver();
+		switch (serviceType) {
+			case SERVICE_TYPE_CONTENT:
+				registerMediaStorageContentObserver();
+				break;
+			case SERVICE_TYPE_FILE_OBSERVER:
+				if (isEnabledFolderScanning()) {
+					registerFolderObserver();
+				} else {
+					serviceType = regServiceType;
+					if (serviceType == SERVICE_TYPE_CONTENT) {
+						registerMediaStorageContentObserver();
+					}
+				}
+				break;
 		}
 		saveIntegerValue(KEY_REGISTERED_SERVICE_TYPE, serviceType);
 	}
@@ -674,6 +711,19 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Method used to dynamically register a folder observer service used to
+	 * launch automatically rename service.
+	 */
+	private void registerFolderObserver() {
+		try {
+			startService(new Intent(this, FolderObserverService.class));
+		} catch (Exception e) {
+			logE(TAG, "registerFolderObserver: " + e.getMessage(),
+					e);
+		}
+	}
+
+	/**
 	 * Method used to unregister the content observer service.
 	 */
 	private void unregisterMediaStorageContentObserver() {
@@ -682,6 +732,19 @@ public class DSCApplication extends Application {
 		} catch (Exception e) {
 			logE(TAG,
 					"unregisterMediaStorageContentObserver: " + e.getMessage(),
+					e);
+		}
+	}
+
+	/**
+	 * Method used to unregister the folder observer service.
+	 */
+	private void unregisterFolderObserver() {
+		try {
+			stopService(new Intent(this, FolderObserverService.class));
+		} catch (Exception e) {
+			logE(TAG,
+					"unregisterFolderObserver: " + e.getMessage(),
 					e);
 		}
 	}
@@ -1137,5 +1200,105 @@ public class DSCApplication extends Application {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Initialise list of observers.
+	 */
+	public void initFolderObserverList(boolean startWatching) {
+		if (isEnabledFolderScanning()) {
+			SelectedFolderModel[] folders = getSelectedFolders();
+			if (folders.length > 0) {
+				File file;
+				for (SelectedFolderModel folder : folders) {
+					file = new File(folder.getFullPath());
+					registerRecursivelyPath(file, false, startWatching);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Method used to recursive register file observers on selected path and its subfolders.
+	 *
+	 * @param file          Path to be registered and subfolders.
+	 * @param skipCheck     Boolean flag used to check the validity of provided file.
+	 * @param startWatching If true the created observer will start watching.
+	 */
+	private void registerRecursivelyPath(File file, boolean skipCheck, boolean startWatching) {
+		if (skipCheck || isValidFolder(file)) {
+			String path = file.getAbsolutePath();
+			FolderObserver observer = mFolderObserverMap.get(path);
+			if (observer == null) {
+				logD(TAG, "registerRecursivelyPath: " + path);
+				observer = new FolderObserver(this, path);
+				if (startWatching) {
+					observer.startWatching();
+				}
+				mFolderObserverMap.put(path, observer);
+			}
+			// check for subfolders
+			for (File subfolder : file.listFiles()) {
+				if (isValidFolder(subfolder)) {
+					registerRecursivelyPath(subfolder, true, startWatching);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Check if the folder is ok to be watched.
+	 *
+	 * @param folder Folder to validate.
+	 * @return True if the folder can be watched.
+	 */
+	private boolean isValidFolder(File folder) {
+		return folder != null && folder.exists() && folder.isDirectory() && !isHidden(folder);
+	}
+
+	/**
+	 * Check if a file is hidden.
+	 *
+	 * @param file File to check.
+	 * @return True if the file is hidden
+	 */
+	private boolean isHidden(File file) {
+		return file != null ? file.isHidden() || file.getName().charAt(0) == '.' : true;
+	}
+
+	/**
+	 * Clean up observers list.
+	 */
+	public void cleanupObservers() {
+		if (mFolderObserverMap != null && !mFolderObserverMap.isEmpty()) {
+			logD(TAG, "cleanupObservers");
+			for (FolderObserver observer : mFolderObserverMap.values()) {
+				observer.stopWatching();
+			}
+			mFolderObserverMap.clear();
+		}
+	}
+
+	/**
+	 * Start registered observers.
+	 */
+	public void startWatchingObservers() {
+		if (mFolderObserverMap != null && !mFolderObserverMap.isEmpty()) {
+			for (FolderObserver observer : mFolderObserverMap.values()) {
+				observer.startWatching();
+			}
+		}
+	}
+
+	/**
+	 * Method used to update the observer list.
+	 */
+	public void updateFolderObserverList() {
+		if (mFolderObserverMap != null) {
+			cleanupObservers();
+			if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
+				initFolderObserverList(true);
+			}
+		}
 	}
 }
