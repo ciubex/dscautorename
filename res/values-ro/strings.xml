@@ -143,7 +143,8 @@
     <string name="thank_you_desc">Multumesc pentru aprecierea realizata prin cumpararea aplicatiei PRO.</string>
     <string name="about_text"><Data>
 <![CDATA[<b>Multumiri lui Simon W pentru suportul adus la dezvoltarea versiunii 4.0.0!</b><br/>
-Scopul acestei aplicatieii este acela de a redenumit automat fisierele multimedia, imagini si clipuri, in functie de data si timpul cand acestea au fost create.<br/><br/>
+Scopul acestei aplicatieii este acela de a redenumit automat fisierele multimedia, imagini si clipuri, in functie de data si timpul cand acestea au fost create.<br/>
+<br/>
 Pentru redenumirea fisierelor sunt folosite niste marcatori specifici limbajului de programare Java:<br/>
 - yyyy pentru ani;<br/>
 - MM pentru luna;<br/>
@@ -162,13 +163,14 @@ Nu folosi modele generice precum *.JPG pentru a evita intrarea in bulca infinita
 Este indicat a se folosi semnul ? in combinatie cu caractere constante precum _ in definirea de modele pentru numele originale.<br/>
 Spre exemplu pentru un fisier ce are denumirea originala de genul 20150729_212537.JPG se poate folosi un model precum ????????_??????.JPG pentru redenumire se poate pune prefixul \'PIC_\' (utilizati apostroful pentru evitarea conversiei in data/timp) precum \"\'PIC_\'yyyyMMdd_HHmmss\" astfel fisierul va fi redenumit in: PIC_20150729_212537.JPG<br/>
 <br/>
-Daca serviciul de redenumit fisiere este activ, acesta va functiona in fundal pentru redenumirea fisierelor media.<br/><br/>
+Daca serviciul de redenumit fisiere este activ, acesta va functiona in fundal pentru redenumirea fisierelor media.<br/>
+<br/>
 Declansatorii depinde de aplicatia folosita pentru camera. Aplicatia de camera trebuie sa trimita un mesaj boradcast <b>com.android.camera.NEW_PICTURE</b> sau <b>android.hardware.action.NEW_PICTURE</b>, altfel, serviciul de redenumire atomanta nu poate fi declansat.<br/>
 Daca asemenea mesaje nu sunt trimise de aplicatia folosita pentru camera, se pot folosi ca declansatori notificarile media, dar acest aspect presupune rularea unui alt serviciu in fundal.<br/>
 <br/>
-Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
-<br/>
+Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
 <b>Multumesc pentru traducere:</b><br/>
-- Chawalit pentru <b>tailandeza</b><br/>]]></Data></string>
+- Chawalit pentru <b>tailandeza</b><br/>
+- Runels for 4PDA pentru <b>ruseste</b><br/>]]></Data></string>
 
 </resources>
