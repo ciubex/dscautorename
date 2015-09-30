@@ -98,10 +98,10 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/about_section" >
         <ListPreference
-            android:defaultValue="0"
+            android:defaultValue="en"
             android:entries="@array/language_labels"
             android:entryValues="@array/language_values"
-            android:key="languageId"
+            android:key="languageCode"
             android:summary="@string/change_language_desc"
             android:title="@string/change_language_title" />
         <Preference

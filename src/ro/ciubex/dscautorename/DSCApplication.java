@@ -101,11 +101,7 @@ public class DSCApplication extends Application {
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
 	private static final String KEY_APPEND_ORIGINAL_NAME = "appendOriginalName";
-	public static final String KEY_LANGUAGE_ID = "languageId";
-
-	private static final String[] mLanguages = new String[]{
-			"en", "ro", "ru", "th"
-	};
+	public static final String KEY_LANGUAGE_CODE = "languageCode";
 
 	private static final String FIRST_TIME = "firstTime";
 
@@ -146,11 +142,11 @@ public class DSCApplication extends Application {
 	 * Init application locale.
 	 */
 	public void initLocale() {
-		int id = getIntValue(KEY_LANGUAGE_ID, 0);
+		String language = mSharedPreferences.getString(KEY_LANGUAGE_CODE, "en");
 		try {
-			mLocale = id == 0 ? Locale.ENGLISH : new Locale(mLanguages[id]);
+			mLocale = "en".equals(language) ? Locale.ENGLISH : new Locale(language);
 		} catch (Exception e) {
-			logE(TAG, "init locale with id: " + id + "): ", e);
+			Log.e(TAG, "init locale with id: " + language + "): ", e);
 		}
 		Locale.setDefault(mLocale);
 		android.content.res.Configuration config = new android.content.res.Configuration();

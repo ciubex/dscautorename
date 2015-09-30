@@ -279,7 +279,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			mApplication.checkRegisteredServiceType(false);
 		} else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
 			mApplication.updateFolderObserverList();
-		} else if (DSCApplication.KEY_LANGUAGE_ID.equals(key)) {
+		} else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key)) {
 			doPrepareSummaries = false;
 			restartActivity();
 		}
