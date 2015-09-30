@@ -101,6 +101,12 @@ public class DSCApplication extends Application {
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
 	private static final String KEY_APPEND_ORIGINAL_NAME = "appendOriginalName";
+	public static final String KEY_LANGUAGE_ID = "languageId";
+
+	private static final String[] mLanguages = new String[]{
+			"en", "ro", "ru", "th"
+	};
+
 	private static final String FIRST_TIME = "firstTime";
 
 	public static final String LOGS_FOLDER_NAME = "logs";
@@ -124,8 +130,8 @@ public class DSCApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		DSCApplication.mContext = getApplicationContext();
-		mLocale = Locale.getDefault();
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		initLocale();
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
 		checkRegisteredServiceType(true);
 		updateMountedVolumes();
@@ -134,6 +140,22 @@ public class DSCApplication extends Application {
 		if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
 			initFolderObserverList(false);
 		}
+	}
+
+	/**
+	 * Init application locale.
+	 */
+	public void initLocale() {
+		int id = getIntValue(KEY_LANGUAGE_ID, 0);
+		try {
+			mLocale = id == 0 ? Locale.ENGLISH : new Locale(mLanguages[id]);
+		} catch (Exception e) {
+			logE(TAG, "init locale with id: " + id + "): ", e);
+		}
+		Locale.setDefault(mLocale);
+		android.content.res.Configuration config = new android.content.res.Configuration();
+		config.locale = mLocale;
+		DSCApplication.mContext.getResources().updateConfiguration(config, DSCApplication.mContext.getResources().getDisplayMetrics());
 	}
 
 	public static Context getAppContext() {
@@ -384,7 +406,7 @@ public class DSCApplication extends Application {
 		try {
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 		} catch (Exception e) {
-			fileNameFormat = getString(R.string.file_name_format);
+			fileNameFormat = DSCApplication.getAppContext().getString(R.string.file_name_format);
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 			saveStringValue(KEY_FILE_NAME_FORMAT, fileNameFormat);
 		}
@@ -429,9 +451,9 @@ public class DSCApplication extends Application {
 	 */
 	public FileNameModel[] getOriginalFileNamePattern() {
 		String value = mSharedPreferences.getString(KEY_ORIGINAL_FILE_NAME_PATTERN,
-				getString(R.string.original_file_name_pattern));
+				DSCApplication.getAppContext().getString(R.string.original_file_name_pattern));
 		if (value.length() < 1) {
-			value = getString(R.string.original_file_name_pattern);
+			value = DSCApplication.getAppContext().getString(R.string.original_file_name_pattern);
 			saveStringValue(KEY_ORIGINAL_FILE_NAME_PATTERN, value);
 		}
 		String[] arr = value.split(",");
@@ -472,7 +494,7 @@ public class DSCApplication extends Application {
 			sb.append(fileNameModel.toString());
 		}
 		if (sb.length() < 1) {
-			sb.append(getString(R.string.original_file_name_pattern));
+			sb.append(DSCApplication.getAppContext().getString(R.string.original_file_name_pattern));
 		}
 		saveFileNamePattern(sb.toString());
 	}
@@ -677,7 +699,7 @@ public class DSCApplication extends Application {
 	 * @return Formatted value.
 	 */
 	public String getFormattedFileNameSuffix(int value) {
-		String defFormat = getString(R.string.file_name_suffix_format_value);
+		String defFormat = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_value);
 		String format = mSharedPreferences.getString(KEY_FILE_NAME_SUFFIX_FORMAT, defFormat);
 		String result;
 		try {
@@ -812,7 +834,7 @@ public class DSCApplication extends Application {
 		mProgressDialog.setMessage(message);
 		mProgressDialog.setCancelable(false);
 		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-				getString(R.string.cancel),
+				DSCApplication.getAppContext().getString(R.string.cancel),
 				new DialogInterface.OnClickListener() {
 
 					@Override

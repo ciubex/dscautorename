@@ -240,13 +240,13 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void checkAndroidVersion() {
 		boolean isFirstTime = mApplication.isFirstTime();
 		if (isFirstTime){
-			String message = getString(R.string.first_time_alert);
+			String message = DSCApplication.getAppContext().getString(R.string.first_time_alert);
 			boolean messageContainLink = false;
 			if (mApplication.getSdkInt() > 18 && mApplication.getSdkInt() < 21) {
-				message += "\n" + getString(R.string.enable_filter_alert_v19);
+				message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v19);
 				messageContainLink = true;
 			} else if (mApplication.getSdkInt() > 20) { // Lollipop
-				message += "\n" + getString(R.string.enable_filter_alert_v21);
+				message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v21);
 			}
 			showConfirmationDialog(message, messageContainLink, ID_CONFIRMATION_ALERT);
 		}
@@ -274,12 +274,29 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
+		boolean doPrepareSummaries = true;
 		if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
 			mApplication.checkRegisteredServiceType(false);
 		} else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
 			mApplication.updateFolderObserverList();
+		} else if (DSCApplication.KEY_LANGUAGE_ID.equals(key)) {
+			doPrepareSummaries = false;
+			restartActivity();
 		}
-		prepareSummaries();
+		if (doPrepareSummaries) {
+			prepareSummaries();
+		}
+	}
+
+	/**
+	 * Restart this activity.
+	 */
+	private void restartActivity() {
+		mApplication.initLocale();
+		Intent i = DSCApplication.getAppContext().getPackageManager()
+				.getLaunchIntentForPackage( DSCApplication.getAppContext().getPackageName() );
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(i);
 	}
 
 	/**
@@ -289,7 +306,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		Date now = new Date();
 		FileNameModel[] originalArr = mApplication.getOriginalFileNamePattern();
 		String newFileName = mApplication.getFileNameFormatted(originalArr[0].getAfter(), now);
-		String summary = mApplication.getString(
+		String summary = DSCApplication.getAppContext().getString(
 				R.string.define_file_name_pattern_desc, originalArr[0].getDemoBefore());
 		mDefineFileNamePatterns.setSummary(summary);
 
@@ -300,7 +317,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		summary += "_" + mApplication.getFormattedFileNameSuffix(1);
 		summary += "." + originalArr[0].getDemoExtension();
 
-		summary = mApplication.getString(R.string.file_name_suffix_format_desc, summary);
+		summary = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_desc, summary);
 		mFileNameSuffixFormat.setSummary(summary);
 		switch (mApplication.getServiceType()) {
 		case DSCApplication.SERVICE_TYPE_CAMERA:
@@ -387,7 +404,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void onManuallyStartRename() {
 		if (mApplication.getSdkInt() >= 21 && (!mApplication.isEnabledFolderScanning()
 				|| mApplication.getSelectedFolders().length == 0)) {
-			showConfirmationDialog(getString(R.string.enable_filter_alert_v21), false,
+			showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v21), false,
 					ID_CONFIRMATION_ALERT);
 		} else {
 			startRenameServiceManually();
@@ -408,7 +425,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Method invoked when was pressed the fileRenameCount preference.
 	 */
 	private void onResetFileRenameCounter() {
-		showConfirmationDialog(getString(R.string.file_rename_count_confirmation), false,
+		showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.file_rename_count_confirmation), false,
 				ID_CONFIRMATION_RESET_RENAME_COUNTER);
 	}
 
@@ -433,7 +450,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	private void onSendDebugReport() {
-		showConfirmationDialog(getString(R.string.send_debug_confirmation), false,
+		showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.send_debug_confirmation), false,
 				ID_CONFIRMATION_DEBUG_REPORT);
 	}
 
@@ -453,7 +470,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Method invoked when was pressed the donatePref preference.
 	 */
 	private void onDonatePref() {
-		showConfirmationDialog(getString(R.string.donate_confirmation), false,
+		showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.donate_confirmation), false,
 				ID_CONFIRMATION_DONATION);
 	}
 
@@ -516,7 +533,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		} else if (confirmationId == ID_CONFIRMATION_RESET_RENAME_COUNTER) {
 			confirmedResetFileRenameCounter();
 		} else if (confirmationId == ID_CONFIRMATION_DEBUG_REPORT) {
-			confirmedSendReport(getString(R.string.send_debug_email_title));
+			confirmedSendReport(DSCApplication.getAppContext().getString(R.string.send_debug_email_title));
 		}
 	}
 
@@ -524,7 +541,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Access the browser to open the donation page.
 	 */
 	private void confirmedDonationPage() {
-		String url = mApplication.getString(R.string.donate_url);
+		String url = DSCApplication.getAppContext().getString(R.string.donate_url);
 		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
 		try {
 			startActivity(i);
@@ -540,7 +557,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onTaskStarted() {
 		mApplication.showProgressDialog(this, this,
-				mApplication.getString(R.string.manually_service_running), 0);
+				DSCApplication.getAppContext().getString(R.string.manually_service_running), 0);
 	}
 
 	/**
@@ -553,7 +570,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	@Override
 	public void onTaskUpdate(int position, int count) {
-		String message = mApplication.getString(
+		String message = DSCApplication.getAppContext().getString(
 				position == 1 ? R.string.manually_file_rename_progress_1
 						: R.string.manually_file_rename_progress_more,
 				position, count);
@@ -577,16 +594,13 @@ public class SettingsActivity extends PreferenceActivity implements
 		String message;
 		switch (count) {
 		case 0:
-			message = mApplication
-					.getString(R.string.manually_file_rename_count_0);
+			message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_0);
 			break;
 		case 1:
-			message = mApplication
-					.getString(R.string.manually_file_rename_count_1);
+			message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_1);
 			break;
 		default:
-			message = mApplication.getString(
-					R.string.manually_file_rename_count_more, count);
+			message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_more, count);
 			break;
 		}
 		mApplication.hideProgressDialog();
@@ -627,7 +641,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT,
 				getActivityIntent());
 		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
-				getString(R.string.rename_shortcut_name));
+				DSCApplication.getAppContext().getString(R.string.rename_shortcut_name));
 		shortcutIntent.putExtra("duplicate", false);
 		if (create) {
 			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
@@ -684,8 +698,8 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void confirmedSendReport(String emailTitle) {
 		mApplication.showProgressDialog(this, this,
-				mApplication.getString(R.string.manually_service_running), 0);
-		String message = getString(R.string.report_body);
+				DSCApplication.getAppContext().getString(R.string.manually_service_running), 0);
+		String message = DSCApplication.getAppContext().getString(R.string.report_body);
 		File cacheFolder = mApplication.getLogsFolder();
 		File logFile = mApplication.getLogFile();
 		File logcatFile = getLogcatFile(cacheFolder);
@@ -710,7 +724,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication.hideProgressDialog();
 		try {
 			startActivityForResult(Intent.createChooser(emailIntent,
-					getString(R.string.send_report)), REQUEST_SEND_REPORT);
+					DSCApplication.getAppContext().getString(R.string.send_report)), REQUEST_SEND_REPORT);
 		} catch (ActivityNotFoundException ex) {
 			mApplication.logE(TAG,
 					"confirmedSendReport Exception: " + ex.getMessage(), ex);

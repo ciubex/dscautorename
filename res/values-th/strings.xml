@@ -123,6 +123,22 @@
     <string name="report_body">Description: </string>
     <string name="send_report">ส่งรายงาน&#8230;</string>
 
+    <!-- Change locale -->
+    <string name="change_language_title">Language: ภาษาแอพลิเคชัน</string>
+    <string name="change_language_desc">แอพลิเคชันที่ควรจะเริ่มต้นใหม่ที่จะใช้ภาษาที่เลือก</string>
+    <string-array name="language_labels">
+        <item>English - อังกฤษ</item>
+        <item>Romanian - โรมาเนีย</item>
+        <item>Russian - รัสเซีย</item>
+        <item>Thai - ภาษาไทย</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <!-- About -->
     <string name="about_section">เกี่ยวกับ</string>
     <string name="build_version_title">Build version</string>

@@ -123,13 +123,13 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 		}
 		if (k == 0) {
 			showAlertDialog(R.string.define_file_name_pattern_title,
-					mContext.getString(R.string.file_name_pattern_list_no_selection));
+					DSCApplication.getAppContext().getString(R.string.file_name_pattern_list_no_selection));
 		} else if (k == len) {
 			showAlertDialog(R.string.define_file_name_pattern_title,
-					mContext.getString(R.string.file_name_pattern_list_all_selected));
+					DSCApplication.getAppContext().getString(R.string.file_name_pattern_list_all_selected));
 		} else {
 			showConfirmationDialog(R.string.define_file_name_pattern_title,
-					mContext.getString(R.string.file_name_pattern_list_confirmation), 0,
+					DSCApplication.getAppContext().getString(R.string.file_name_pattern_list_confirmation), 0,
 					null);
 		}
 	}

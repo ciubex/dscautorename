@@ -78,7 +78,7 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 	@Override
 	protected void onStart() {
 		mNow = new Date();
-		mFileNameModel = new FileNameModel(mContext.getString(R.string.default_file_name_pattern));
+		mFileNameModel = new FileNameModel(DSCApplication.getAppContext().getString(R.string.default_file_name_pattern));
 		updateDialogTitle();
 		initValues();
 		updateFileNamePatternInfo();
@@ -147,7 +147,7 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 	private void updateFileNamePatternInfo() {
 		String prefBefore = mEditFileNamePatternFrom.getEditableText().toString();
 		if (prefBefore.length() < 1) {
-			prefBefore = mContext.getString(R.string.original_file_name_pattern_from);
+			prefBefore = DSCApplication.getAppContext().getString(R.string.original_file_name_pattern_from);
 		}
 		prefBefore = prefBefore.trim();
 		String prefAfter = mEditFileNamePatternTo.getEditableText().toString().trim();
@@ -162,7 +162,7 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 			}
 			String newFileName = mApplication.getFileNameFormatted(prefAfter, mNow);
 			newFileName += "." + mFileNameModel.getDemoExtension();
-			text = mContext.getString(R.string.file_name_pattern_dialog_bottom,
+			text = DSCApplication.getAppContext().getString(R.string.file_name_pattern_dialog_bottom,
 					mFileNameModel.getDemoBefore(), newFileName);
 		}
 		mFileNamePatternInfo.setText(text);
@@ -185,22 +185,22 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 		int index, length = mFileNameModels.length;
 		FileNameModel fileNameModel;
 		if (str11.length() < 1) {
-			return mContext
+			return DSCApplication.getAppContext()
 					.getString(R.string.file_name_pattern_validation_error_old_empty);
 		} else {
 			index = str11.indexOf('.');
 			if (index == 1 && str11.charAt(0) == '*') {
-				return mContext.getString(R.string.file_name_pattern_validation_error_generic);
+				return DSCApplication.getAppContext().getString(R.string.file_name_pattern_validation_error_generic);
 			} else {
 				for (index = 0; index < length; index++) {
 					fileNameModel = mFileNameModels[index];
 					str1 = fileNameModel.getBefore().toLowerCase(locale);
 					if (str11.indexOf(str1) == 0 && index != mPosition) {
-						return mContext
+						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_old);
 					}
 					if (str2.length() > 1 && str2.indexOf(str1) == 0) {
-						return mContext
+						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_new);
 					}
 				}

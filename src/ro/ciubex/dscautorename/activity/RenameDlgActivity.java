@@ -161,7 +161,7 @@ public class RenameDlgActivity extends Activity implements
 	 */
 	@Override
 	public void onTaskUpdate(int position, int count) {
-		String message = mApplication.getString(
+		String message = DSCApplication.getAppContext().getString(
 				position == 1 ? R.string.manually_file_rename_progress_1
 						: R.string.manually_file_rename_progress_more,
 				position, count);
@@ -184,16 +184,16 @@ public class RenameDlgActivity extends Activity implements
 		String message;
 		switch (count) {
 		case 0:
-			message = mApplication
+			message = DSCApplication.getAppContext()
 					.getString(R.string.manually_file_rename_count_0);
 			break;
 		case 1:
-			message = mApplication
+			message = DSCApplication.getAppContext()
 					.getString(R.string.manually_file_rename_count_1);
 			break;
 		default:
-			message = mApplication.getString(
-					R.string.manually_file_rename_count_more, count);
+			message = DSCApplication.getAppContext()
+					.getString(R.string.manually_file_rename_count_more, count);
 			break;
 		}
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this)

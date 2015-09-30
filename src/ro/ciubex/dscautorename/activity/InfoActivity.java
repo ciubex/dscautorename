@@ -21,6 +21,7 @@ package ro.ciubex.dscautorename.activity;
 import java.io.IOException;
 import java.io.InputStream;
 
+import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.util.Utilities;
 
@@ -74,7 +75,7 @@ public class InfoActivity extends Activity {
 			}
 			if (b.containsKey(MESSAGE)) {
 				resId = b.getInt(MESSAGE);
-				mBufferedText = getResources().getString(resId);
+				mBufferedText = DSCApplication.getAppContext().getString(resId);
 			} else if (b.containsKey(FILE_NAME)) {
 				bundleValue = b.getString(FILE_NAME);
 				mBufferedText = getStreamText(bundleValue);

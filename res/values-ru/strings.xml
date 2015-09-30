@@ -125,6 +125,22 @@
     <string name="report_body">Описание:</string>
     <string name="send_report">Отправить отчет&#8230;</string>
 
+    <!-- Change locale -->
+    <string name="change_language_title">Language: язык приложения</string>
+    <string name="change_language_desc">Заявление должно быть перезапущен, чтобы применить выбранный язык.</string>
+    <string-array name="language_labels">
+        <item>English - английский</item>
+        <item>Romanian - румынский</item>
+        <item>Russian - Русский</item>
+        <item>Thai - тайский</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <!-- About -->
     <string name="about_section">Около</string>
     <string name="build_version_title">версия сборки</string>

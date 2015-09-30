@@ -100,7 +100,7 @@
     <string name="manually_file_rename_count_more">%d fisiere au fost redenumite.</string>
     <string name="manually_file_rename_progress_1">%1$d fisier din %2$d a fost redenumit.</string>
     <string name="manually_file_rename_progress_more">%1$d fisiere din %2$d au fost redenumite.</string>
-    <string name="file_rename_count_title">NUmar de fisiere redenumite: %d</string>
+    <string name="file_rename_count_title">Numar de fisiere redenumite: %d</string>
     <string name="file_rename_count_desc">Reseteaza numarul de fisiere redenumite.</string>
     <string name="file_rename_count_confirmation">Vrei sa resetezi numarul de fisiere redenumite?</string>
     <string name="ok">OK</string>
@@ -124,6 +124,22 @@
     <string name="report_subject">Raporteaza DSC Auto Rename</string>
     <string name="report_body">Descriere: </string>
     <string name="send_report">Trimitere raport&#8230;</string>
+
+    <!-- Change locale -->
+    <string name="change_language_title">Language: Limba in aplicatie</string>
+    <string name="change_language_desc">Pentru a se folosi limba selectata trebuie ca aplicatia sa fie restartata.</string>
+    <string-array name="language_labels">
+        <item>English - Engeza</item>
+        <item>Romanian - Romana</item>
+        <item>Russian - Ruseste</item>
+        <item>Thai - Tailandeza</item>
+    </string-array>
+    <string-array name="language_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <!-- About -->
     <string name="about_section">Despre</string>

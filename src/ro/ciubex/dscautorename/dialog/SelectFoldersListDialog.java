@@ -127,7 +127,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 			mParentActivity.startActivityForResult(intent, SettingsActivity.REQUEST_OPEN_DOCUMENT_TREE);
 		} catch (Exception e) {
 			showAlertDialog(R.string.folder_list_title,
-					mContext.getString(R.string.folder_list_no_open_document_tree_support));
+					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support));
 		}
 	}
 
@@ -165,13 +165,13 @@ public class SelectFoldersListDialog extends BaseDialog {
 		}
 		if (k == 0) {
 			showAlertDialog(R.string.folder_list_title,
-					mContext.getString(R.string.folder_list_no_selection));
+					DSCApplication.getAppContext().getString(R.string.folder_list_no_selection));
 		} else if (k == len) {
 			showAlertDialog(R.string.folder_list_title,
-					mContext.getString(R.string.folder_list_all_selected));
+					DSCApplication.getAppContext().getString(R.string.folder_list_all_selected));
 		} else {
 			showConfirmationDialog(R.string.folder_list_title,
-					mContext.getString(R.string.folder_list_confirmation), CONFIRMATION_DELETE_FOLDER,
+					DSCApplication.getAppContext().getString(R.string.folder_list_confirmation), CONFIRMATION_DELETE_FOLDER,
 					null);
 		}
 	}
