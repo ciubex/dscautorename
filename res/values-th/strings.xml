@@ -55,6 +55,7 @@
     <string name="file_name_pattern_dialog_to">2. รูปแบบชื่อไฟล์ปลายทาง:</string>
     <string name="file_name_pattern_dialog_bottom">ตัวอย่างชื่อเดิม:\n\t %1$s\nตัวอย่างชื่อที่ถูกแก้ไข:\n\t %2$s</string>
     <string name="file_name_pattern_validation_error_old_empty">โปรดระบุรูปแบบชื่อไฟล์ต้นทาง</string>
+    <string name="file_name_pattern_validation_error_new_empty">รูปแบบการเปลี่ยนชื่อชื่อไฟล์ต้องไม่ว่างเปล่า</string>
     <string name="file_name_pattern_validation_error_generic">รูปแบบชื่อไฟล์ต้นทางที่ระบุไม่เฉพาะเจาะจงพอ และอาจทำให้เกิดลูปไม่สิ้นสุด โปรดระบุรูปแบบที่ชัดเจนกว่านี้โดยใช้เครื่องหมาย ? หรือ _</string>
     <string name="file_name_pattern_validation_error_old">รูปแบบชื่อไฟล์ต้นทางมีอยู่แล้ว โปรดระบุรูปแบบชื่อไฟล์ใหม่</string>
     <string name="file_name_pattern_validation_error_new">รูปแบบชื่อไฟล์ปลายทางไม่ควรคล้ายกับรูปแบบชื่อไฟล์ต้นทาง รวมถึงรูปแบบชื่อไฟล์ต้นทางอื่นๆ ภายใต้รายการด้านบน</string>

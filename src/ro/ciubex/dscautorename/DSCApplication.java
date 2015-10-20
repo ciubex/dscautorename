@@ -318,7 +318,7 @@ public class DSCApplication extends Application {
 			items = new SelectedFolderModel[folders.length];
 			for (int i = 0; i < folders.length; i++) {
 				items[i] = new SelectedFolderModel();
-				items[i].fromString(folders[i]);
+				items[i].fromString(this, folders[i]);
 			}
 		}
 		return items;

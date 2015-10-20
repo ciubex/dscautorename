@@ -22,10 +22,13 @@ import android.net.Uri;
 
 import java.io.File;
 
+import ro.ciubex.dscautorename.DSCApplication;
+
 /**
  * Created by claudiu on 08.04.2015.
  */
 public class SelectedFolderModel {
+	private static final String TAG = SelectedFolderModel.class.getName();
 	private String mSchema;
 	private String mAuthority;
 	private String mUuid;
@@ -34,7 +37,7 @@ public class SelectedFolderModel {
 	private int mFlags;
 	private boolean selected;
 
-	public void fromString(String value) {
+	public void fromString(DSCApplication application, String value) {
 		int idx = value.length();
 		if (idx > 0 && value.charAt(0) == '[' && value.charAt(idx-1) == ']') {
 			String[] values = value.substring(1, idx-1).split(":");
@@ -42,11 +45,21 @@ public class SelectedFolderModel {
 			mAuthority = values[1];
 			mUuid = values[2];
 			mPath = values[3];
-			mFlags = Integer.parseInt(values[4]);
+			mFlags = getIntValue(application, values[4], value);
 		} else {
 			mPath = value;
 			mFlags = 195;
 		}
+	}
+
+	private int getIntValue(DSCApplication application, String value, String fullValue) {
+		int result = 195;
+		try {
+			result = Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			application.logE(TAG, "Exception on parsing for: " + value + " fullValue: " + fullValue, e);
+		}
+		return result;
 	}
 
 	public void fromUri(Uri uri, int flags) {

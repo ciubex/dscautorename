@@ -57,6 +57,7 @@
     <string name="file_name_pattern_dialog_to">2. Modelul de nume redenumit:</string>
     <string name="file_name_pattern_dialog_bottom">Exemplu nume de fisier vechi:\n\t %1$s\nExemplu redenumire nume de fisier:\n\t %2$s</string>
     <string name="file_name_pattern_validation_error_old_empty">Modelul de nume original nu poate fi lasat gol.</string>
+    <string name="file_name_pattern_validation_error_new_empty">Modelul de nume redenumit nu poate fi lasat gol.</string>
     <string name="file_name_pattern_validation_error_generic">Modelul de nume original este prea generic si poate cauza blocarea aplicatiei in procesul de redenumire. Incearca o definitie mai restrictiva de redenumire folosind semnul intrebarii ? in locul caracterlor ce difera de la un nume la celalat.</string>
     <string name="file_name_pattern_validation_error_old">Modelul de nume original este deja definit, defineste o alta varianta.</string>
     <string name="file_name_pattern_validation_error_new">Modelul de nume redenumit nu trebuie sa se regaseasca in modelul de nume original!</string>

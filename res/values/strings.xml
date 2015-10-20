@@ -57,6 +57,7 @@
     <string name="file_name_pattern_dialog_to">2. Renamed file name pattern:</string>
     <string name="file_name_pattern_dialog_bottom">Old file name example:\n\t %1$s\nRenamed file name example:\n\t %2$s</string>
     <string name="file_name_pattern_validation_error_old_empty">Original pattern cannot be empty.</string>
+    <string name="file_name_pattern_validation_error_new_empty">Rename filename pattern cannot be empty.</string>
     <string name="file_name_pattern_validation_error_generic">Original pattern is too generic causing to rename files over and over again. Try to define a more restrictive pattern using ? and other used characters.</string>
     <string name="file_name_pattern_validation_error_old">Original file name pattern already exist, change the text with a new one.</string>
     <string name="file_name_pattern_validation_error_new">The new pattern should not be a part of an original pattern, the above or other original defined pattern!</string>

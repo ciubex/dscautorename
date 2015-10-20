@@ -31,6 +31,7 @@ import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.FileRenameData;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
+import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
 import ro.ciubex.dscautorename.util.Utilities;
 
 import android.annotation.TargetApi;
@@ -59,12 +60,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private int mPosition, mCount;
 	private Locale mLocale;
 	private FileNameModel[] mFileNameModels;
-	private Pattern[] mPatterns;
 	private List<String> mUpdateMediaStorageFiles;
 	private FileRenameData mPreviousFileRenameData;
 	private String mPreviousFileNameModel;
 	private int mPreviousFileNameModelCount;
 	private boolean mIsUriPermissionGranted;
+	private RenamePatternsUtilities renamePatternsUtilities;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -87,6 +88,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		mLocale = mApplication.getLocale();
 		mApplication.setRenameFileTaskRunning(true);
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
+		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
 	}
 
 	/**
@@ -114,7 +116,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				mUpdateMediaStorageFiles.clear();
 				mApplication.setRenameFileRequested(false);
 				executeDelay();
-				buildPatterns();
+				renamePatternsUtilities.buildPatterns();
 				populateAllListFiles();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
@@ -211,31 +213,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 		}
 		return false;
-	}
-
-	/**
-	 * Prepare file name patterns.
-	 */
-	private void buildPatterns() {
-		int i, len = mFileNameModels.length, lst;
-		mPatterns = new Pattern[len];
-		Pattern pattern;
-		FileNameModel fileNameModel;
-		String before;
-		for (i = 0; i < len; i++) {
-			fileNameModel = mFileNameModels[i];
-			before = fileNameModel.getBefore().toLowerCase(mLocale);
-			lst = before.length();
-			if (lst == 0) {
-				before = "*";
-			} else if (lst > 0) {
-				if (before.charAt(lst - 1) != '*') {
-					before += "*";
-				}
-			}
-			pattern = Pattern.compile(wildcardToRegex(before));
-			mPatterns[i] = pattern;
-		}
 	}
 
 	/**
@@ -684,7 +661,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					if (file.isFile()) {
 						fileName = file.getName();
-						index = matchFileNameBefore(fileName);
+						index = renamePatternsUtilities.matchFileNameBefore(fileName);
 						if (index > -1) {
 							fileNameModel = mFileNameModels[index];
 							originalData = new FileRenameData(-1, null,
@@ -743,7 +720,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					data = cursor.getString(cursor
 							.getColumnIndex(MediaStore.MediaColumns.DATA));
 					fileName = getFileName(data);
-					index = matchFileNameBefore(fileName);
+					index = renamePatternsUtilities.matchFileNameBefore(fileName);
 					if (index > -1) {
 						fileNameModel = mFileNameModels[index];
 						id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
@@ -780,68 +757,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			fileName = fullPath.substring(idx + 1);
 		}
 		return fileName;
-	}
-
-	/**
-	 * Look on the path and check with existing file name matches.
-	 *
-	 * @param fileName Path to be checked.
-	 * @return -1 if the path is not matching with a file name pattern otherwise is
-	 * returned file name pattern index.
-	 */
-	private int matchFileNameBefore(String fileName) {
-		String lower = fileName.toLowerCase(mLocale);
-		int i, len = mPatterns.length;
-		Pattern pattern;
-		for (i = 0; i < len; i++) {
-			pattern = mPatterns[i];
-			if (pattern.matcher(lower).matches()) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * Convert wildcard to a regex expression.
-	 *
-	 * @param wildcard Wildcard expression to convert.
-	 * @return Converted expression.
-	 */
-	private String wildcardToRegex(String wildcard) {
-		StringBuffer s = new StringBuffer(wildcard.length());
-		s.append('^');
-		for (int i = 0, is = wildcard.length(); i < is; i++) {
-			char c = wildcard.charAt(i);
-			switch (c) {
-				case '*':
-					s.append(".*");
-					break;
-				case '?':
-					s.append(".");
-					break;
-				// escape special regexp-characters
-				case '(':
-				case ')':
-				case '[':
-				case ']':
-				case '$':
-				case '^':
-				case '.':
-				case '{':
-				case '}':
-				case '|':
-				case '\\':
-					s.append("\\");
-					s.append(c);
-					break;
-				default:
-					s.append(c);
-					break;
-			}
-		}
-		s.append('$');
-		return (s.toString());
 	}
 
 	/**

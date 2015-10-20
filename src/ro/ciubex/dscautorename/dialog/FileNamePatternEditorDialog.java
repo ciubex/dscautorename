@@ -25,6 +25,7 @@ import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.adpater.FileNamePatternListAdapter;
 import ro.ciubex.dscautorename.model.FileNameModel;
+import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 	private Date mNow;
 	private FileNameModel[] mFileNameModels;
 	private FileNameModel mFileNameModel;
+	private RenamePatternsUtilities renamePatternsUtilities;
 
 	public FileNamePatternEditorDialog(Context context, DSCApplication application,
 									   FileNamePatternListAdapter adapter, int position) {
@@ -56,6 +58,7 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 		mAdapter = adapter;
 		mPosition = position;
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
+		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
 	}
 
 	/*
@@ -160,12 +163,32 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 			} else {
 				mFileNameModel.setAfter(prefAfter);
 			}
-			String newFileName = mApplication.getFileNameFormatted(prefAfter, mNow);
-			newFileName += "." + mFileNameModel.getDemoExtension();
+
 			text = DSCApplication.getAppContext().getString(R.string.file_name_pattern_dialog_bottom,
-					mFileNameModel.getDemoBefore(), newFileName);
+					mFileNameModel.getDemoBefore(), getDemoFileName(prefAfter, mFileNameModel.getDemoExtension()));
 		}
 		mFileNamePatternInfo.setText(text);
+	}
+
+	/**
+	 * Obtain a demo file name based on a file name format.
+	 * @param fileNameFormat The file name format.
+	 * @return A demo file name.
+	 */
+	private String getDemoFileName(String fileNameFormat, String fileExtension) {
+		String newFileName = mApplication.getFileNameFormatted(fileNameFormat, mNow);
+		newFileName += "." + fileExtension;
+		return newFileName;
+	}
+
+	/**
+	 * Extract the file name extension from the provided file name string.
+	 * @param fileName The file name string.
+	 * @return The extension of the file name or default file name.
+	 */
+	private String getFileNameExtension(String fileName) {
+		int index = fileName.lastIndexOf('.') + 1;
+		return index > 0 ? fileName.substring(index) : mFileNameModel.getDemoExtension();
 	}
 
 	/**
@@ -181,17 +204,27 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 	private String validateFileNamePatterns(String before, String after) {
 		Locale locale = mApplication.getLocale();
 		String str1, str11 = before.toLowerCase(locale);
-		String str2 = after.toLowerCase(locale);
+		String newFileName;
 		int index, length = mFileNameModels.length;
 		FileNameModel fileNameModel;
 		if (str11.length() < 1) {
 			return DSCApplication.getAppContext()
 					.getString(R.string.file_name_pattern_validation_error_old_empty);
+		} else if (after.length() < 1) {
+			return DSCApplication.getAppContext()
+					.getString(R.string.file_name_pattern_validation_error_new_empty);
 		} else {
 			index = str11.indexOf('.');
 			if (index == 1 && str11.charAt(0) == '*') {
 				return DSCApplication.getAppContext().getString(R.string.file_name_pattern_validation_error_generic);
 			} else {
+				renamePatternsUtilities.buildPatterns();
+				newFileName = getDemoFileName(after, getFileNameExtension(before));
+				if (renamePatternsUtilities.matchFileNameBefore(newFileName) != -1 ||
+						renamePatternsUtilities.matchFileNameBefore(before, newFileName) != -1) {
+					return DSCApplication.getAppContext()
+							.getString(R.string.file_name_pattern_validation_error_new);
+				}
 				for (index = 0; index < length; index++) {
 					fileNameModel = mFileNameModels[index];
 					str1 = fileNameModel.getBefore().toLowerCase(locale);
@@ -199,7 +232,15 @@ public class FileNamePatternEditorDialog extends BaseDialog {
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_old);
 					}
-					if (str2.length() > 1 && str2.indexOf(str1) == 0) {
+					newFileName = getDemoFileName(fileNameModel.getAfter(), getFileNameExtension(str1));
+					if (renamePatternsUtilities.matchFileNameBefore(newFileName) != -1 ||
+							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != -1) {
+						return DSCApplication.getAppContext()
+								.getString(R.string.file_name_pattern_validation_error_new);
+					}
+					newFileName = getDemoFileName(after, getFileNameExtension(str1));
+					if (renamePatternsUtilities.matchFileNameBefore(newFileName) != -1 ||
+							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != -1) {
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_new);
 					}

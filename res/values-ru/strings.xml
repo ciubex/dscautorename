@@ -57,6 +57,7 @@
     <string name="file_name_pattern_dialog_to">2. Переименовать шаблон имени файла:</string>
     <string name="file_name_pattern_dialog_bottom">Пример старого имени файла:\n\t %1$s\nПример переименованного файла:\n\t %2$s</string>
     <string name="file_name_pattern_validation_error_old_empty">Оригинальный шаблон не может быть пустым.</string>
+    <string name="file_name_pattern_validation_error_new_empty">Переименовать имя файла шаблона не может быть пустым.</string>
     <string name="file_name_pattern_validation_error_generic">Оригинальный шаблон слишком общий, поэтому переименование повторяется и повторяется. Пробуйте установить более ограниченный шаблон и/или другие символы.</string>
     <string name="file_name_pattern_validation_error_old">Оригинальный шаблон имени файла уже существует, замените текст.</string>
     <string name="file_name_pattern_validation_error_new">Новый шаблон должен быть частью оригинального шаблона!</string>
