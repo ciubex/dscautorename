@@ -1077,6 +1077,23 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Check if is the first time when the application was installed.
+	 * @return True if is the first time when the application was installed.
+	 */
+	public boolean isFirstInstallation() {
+		Map<String, ?> allEntries = mSharedPreferences.getAll();
+		String key = FIRST_TIME + getVersionCode();
+		String keyEntry;
+		for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+			keyEntry = entry.getKey();
+			if (keyEntry.startsWith(FIRST_TIME) && !keyEntry.equals(key)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Retrieve the application version code.
 	 *
 	 * @return The application version code.

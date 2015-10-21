@@ -238,18 +238,38 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Check if is first time when the used open this application
 	 */
 	private void checkAndroidVersion() {
-		boolean isFirstTime = mApplication.isFirstTime();
-		if (isFirstTime){
-			String message = DSCApplication.getAppContext().getString(R.string.first_time_alert);
+		if (mApplication.isFirstTime()) {
+			String message;
 			boolean messageContainLink = false;
-			if (mApplication.getSdkInt() > 18 && mApplication.getSdkInt() < 21) {
-				message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v19);
-				messageContainLink = true;
-			} else if (mApplication.getSdkInt() > 20) { // Lollipop
-				message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v21);
+			if (mApplication.isFirstInstallation()) {
+				message = DSCApplication.getAppContext().getString(R.string.first_time_alert);
+				if (mApplication.getSdkInt() > 18 && mApplication.getSdkInt() < 21) { // KitKat
+					message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v19);
+					messageContainLink = true;
+				} else if (mApplication.getSdkInt() > 20) { // Lollipop
+					message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v21);
+				}
+			} else { // check update message
+				message = getUpdateMessage();
 			}
-			showConfirmationDialog(message, messageContainLink, ID_CONFIRMATION_ALERT);
+			if (message != null) { // show the message only if is necessary
+				showConfirmationDialog(message, messageContainLink, ID_CONFIRMATION_ALERT);
+			}
 		}
+	}
+
+	/**
+	 * Get the update message from the resources.
+	 * @return The update message if is present on the resources.
+	 */
+	private String getUpdateMessage() {
+		String message = null;
+		int id = DSCApplication.getAppContext().getResources().getIdentifier("update_message",
+				"string", mApplication.getPackageName());
+		if (id > 0) {
+			message = DSCApplication.getAppContext().getString(id);
+		}
+		return message;
 	}
 
 	/**
