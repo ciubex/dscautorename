@@ -39,12 +39,20 @@ import android.text.util.Linkify;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
@@ -91,6 +99,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private static final int ID_CONFIRMATION_DEBUG_REPORT = 2;
 	private static final int REQUEST_SEND_REPORT = 1;
 	public static final int REQUEST_OPEN_DOCUMENT_TREE = 42;
+	private static final int BUFFER = 1024;
 
 	/**
 	 * Method called when the activity is created
@@ -315,7 +324,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication.initLocale();
 		Intent i = DSCApplication.getAppContext().getPackageManager()
 				.getLaunchIntentForPackage( DSCApplication.getAppContext().getPackageName() );
-		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(i);
 	}
 
@@ -718,11 +727,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void confirmedSendReport(String emailTitle) {
 		mApplication.showProgressDialog(this, this,
-				DSCApplication.getAppContext().getString(R.string.manually_service_running), 0);
+				DSCApplication.getAppContext().getString(R.string.send_debug_title), 0);
 		String message = DSCApplication.getAppContext().getString(R.string.report_body);
-		File cacheFolder = mApplication.getLogsFolder();
-		File logFile = mApplication.getLogFile();
-		File logcatFile = getLogcatFile(cacheFolder);
+		File logsFolder = mApplication.getLogsFolder();
+		File archive = getLogArchive(logsFolder);
 		String[] TO = { "ciubex@yahoo.com" };
 		Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		emailIntent.setType("text/plain");
@@ -731,16 +739,14 @@ public class SettingsActivity extends PreferenceActivity implements
 		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
 
 		ArrayList<Uri> uris = new ArrayList<Uri>();
-		if (logFile != null && logFile.exists() && logFile.length() > 0) {
+		if (archive != null && archive.exists() && archive.length() > 0) {
 			uris.add(Uri.parse("content://" + CachedFileProvider.AUTHORITY
-					+ "/" + logFile.getName()));
+					+ "/" + archive.getName()));
 		}
-		uris.add(Uri.parse("content://" + CachedFileProvider.AUTHORITY + "/"
-				+ logcatFile.getName()));
-
-		emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
-		emailIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-		emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		if (!uris.isEmpty()) {
+			emailIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+			emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		}
 		mApplication.hideProgressDialog();
 		try {
 			startActivityForResult(Intent.createChooser(emailIntent,
@@ -749,6 +755,59 @@ public class SettingsActivity extends PreferenceActivity implements
 			mApplication.logE(TAG,
 					"confirmedSendReport Exception: " + ex.getMessage(), ex);
 		}
+	}
+
+	/**
+	 * Build the logs and call the archive creator.
+	 * @param logsFolder The logs folder.
+	 * @return The archive file which should contain the logs.
+	 */
+	private File getLogArchive(File logsFolder) {
+		File logFile = mApplication.getLogFile();
+		File logcatFile = getLogcatFile(logsFolder);
+		return getArchives(new File[]{logFile, logcatFile}, logsFolder, "DSC_logs.zip");
+	}
+
+	/**
+	 * Method used to build a ZIP archive with log files.
+	 * @param files The log files to be added.
+	 * @param logsFolder The logs folder where should be added the archive name.
+	 * @param archiveName The archive file name.
+	 * @return The archive file.
+	 */
+	private File getArchives(File[] files, File logsFolder, String archiveName) {
+		File archive = new File(logsFolder, archiveName);
+		try {
+			BufferedInputStream origin;
+			FileOutputStream dest = new FileOutputStream(archive);
+			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
+			byte data[] = new byte[BUFFER];
+			File file;
+			FileInputStream fi;
+			ZipEntry entry;
+			int count;
+			for (int i = 0; i < files.length; i++) {
+				file = files[i];
+				if (file.exists() && file.length() > 0) {
+					mApplication.logD(TAG, "Adding to archive: " + file.getName());
+					fi = new FileInputStream(file);
+					origin = new BufferedInputStream(fi, BUFFER);
+					entry = new ZipEntry(file.getName());
+					out.putNextEntry(entry);
+					while ((count = origin.read(data, 0, BUFFER)) != -1) {
+						out.write(data, 0, count);
+					}
+					Utilities.doClose(entry);
+					Utilities.doClose(origin);
+				}
+			}
+			Utilities.doClose(out);
+		} catch (FileNotFoundException e) {
+			mApplication.logE(TAG, "getArchives failed: FileNotFoundException", e);
+		} catch (IOException e) {
+			mApplication.logE(TAG, "getArchives failed: IOException", e);
+		}
+		return archive;
 	}
 
 	/**
@@ -764,7 +823,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		InputStreamReader reader = null;
 		FileWriter writer = null;
 		char LS = '\n';
-		char[] buffer = new char[10000];
+		char[] buffer = new char[BUFFER];
 		String model = Build.MODEL;
 		if (!model.startsWith(Build.MANUFACTURER)) {
 			model = Build.MANUFACTURER + " " + model;
@@ -789,9 +848,10 @@ public class SettingsActivity extends PreferenceActivity implements
 			writer.write("Device name: " + Devices.getDeviceName() + LS);
 			writer.write("App version: " + mApplication.getVersionName() +
 					" (" + mApplication.getVersionCode() + ")"  + LS);
+			mApplication.writeSharedPreferences(writer);
 			int n;
 			do {
-				n = reader.read(buffer, 0, buffer.length);
+				n = reader.read(buffer, 0, BUFFER);
 				if (n == -1) {
 					break;
 				}
@@ -812,6 +872,10 @@ public class SettingsActivity extends PreferenceActivity implements
 			}
 		}
 		return logFile;
+	}
+
+	private void writePre(Writer writer) {
+
 	}
 
 	/**

@@ -20,6 +20,7 @@ package ro.ciubex.dscautorename;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -1334,6 +1335,25 @@ public class DSCApplication extends Application {
 			if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
 				initFolderObserverList(true);
 			}
+		}
+	}
+
+	/**
+	 * Write the shared preferences to provided writer.
+	 * @param writer The writer used to write the shared preferences.
+	 */
+	public void writeSharedPreferences(Writer writer) {
+		Map<String, ?> allEntries = mSharedPreferences.getAll();
+		try {
+			for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
+				writer.write(entry.getKey());
+				writer.write(": \"");
+				writer.write(String.valueOf(entry.getValue()));
+				writer.write("\"");
+				writer.write('\n');
+			}
+		} catch (IOException e) {
+			logE(TAG, "writeSharedPreferences: " + e.getMessage(), e);
 		}
 	}
 }

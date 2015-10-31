@@ -1,27 +1,22 @@
 /**
  * This file is part of DSCAutoRename application.
- * 
+ *
  * Copyright (C) 2014 Claudiu Ciobotariu
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package ro.ciubex.dscautorename.provider;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-
-import ro.ciubex.dscautorename.DSCApplication;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -32,9 +27,15 @@ import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
+import ro.ciubex.dscautorename.DSCApplication;
+
 /**
+ * This is the cache file provider used to access the log files.
+ *
  * @author Claudiu Ciobotariu
- * 
  */
 public class CachedFileProvider extends ContentProvider {
 
@@ -91,17 +92,17 @@ public class CachedFileProvider extends ContentProvider {
 	 */
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+						String[] selectionArgs, String sortOrder) {
 		if (1 == uriMatcher.match(uri)) {
 			MatrixCursor cursor = null;
 			File file = new File(getContext().getCacheDir() + File.separator
 					+ DSCApplication.LOGS_FOLDER_NAME + File.separator
 					+ uri.getLastPathSegment());
 			if (file.exists()) {
-				cursor = new MatrixCursor(new String[] {
-						OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE });
-				cursor.addRow(new Object[] { uri.getLastPathSegment(),
-						file.length() });
+				cursor = new MatrixCursor(new String[]{
+						OpenableColumns.DISPLAY_NAME, OpenableColumns.SIZE});
+				cursor.addRow(new Object[]{uri.getLastPathSegment(),
+						file.length()});
 			}
 			return cursor;
 		}
@@ -154,7 +155,7 @@ public class CachedFileProvider extends ContentProvider {
 	 */
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+					  String[] selectionArgs) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
