@@ -24,10 +24,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.regex.Pattern;
 
 import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.FileRenameData;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
@@ -57,8 +56,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private final WeakReference<Listener> mListener;
 	private List<FileRenameData> mListFiles;
 	private SelectedFolderModel[] mFoldersScanning;
-	private int mPosition, mCount;
-	private Locale mLocale;
+	private static int mProgressPosition, mProgressLastPosition, mProgressMax;
+	private static String mProgressMessage;
 	private FileNameModel[] mFileNameModels;
 	private List<String> mUpdateMediaStorageFiles;
 	private FileRenameData mPreviousFileRenameData;
@@ -70,7 +69,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public interface Listener {
 		public void onTaskStarted();
 
-		public void onTaskUpdate(int position, int count);
+		public void onTaskUpdate(int position, int max, String message);
 
 		public void onTaskFinished(int count);
 
@@ -85,7 +84,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
 		mUpdateMediaStorageFiles = new ArrayList<String>();
-		mLocale = mApplication.getLocale();
 		mApplication.setRenameFileTaskRunning(true);
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
@@ -100,7 +98,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
-		mPosition = 0;
+		mProgressPosition = 0;
+		mProgressLastPosition = -1;
 		boolean enableFilter;
 		if (mContentResolver != null) {
 			enableFilter = mApplication.isEnabledFolderScanning();
@@ -122,13 +121,13 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 						&& !mApplication.isRenameFileTaskCanceled()) {
 					mPreviousFileNameModelCount = 0;
 					mPreviousFileRenameData = null;
-					mPosition = 0;
+					mProgressPosition = 0;
 					publishProgress();
 					for (FileRenameData data : mListFiles) {
 						renameCurrentFile(data);
 					}
-					if (mPosition > 0) {
-						mApplication.increaseFileRenameCount(mPosition);
+					if (mProgressPosition > 0) {
+						mApplication.increaseFileRenameCount(mProgressPosition);
 					}
 					populateAllListFiles();
 				}
@@ -136,7 +135,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 		}
 		mApplication.setRenameFileTaskRunning(false);
-		return mPosition;
+		return mProgressPosition;
 	}
 
 	/**
@@ -178,7 +177,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					if (oldFile.canRead() && oldFile.canWrite()) {
 						if (mainRenameFile(currentFile, oldFile, oldFileName)) {
 							mPreviousFileRenameData = currentFile;
-							mPosition++;
+							mProgressPosition++;
 						}
 					} else {
 						mApplication.logE(TAG,
@@ -251,10 +250,18 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected void onProgressUpdate(Void... values) {
 		super.onProgressUpdate(values);
-		if (mListener.get() != null) {
+		if (mProgressLastPosition != mProgressPosition) {
+			mProgressLastPosition = mProgressPosition;
 			Listener listener = mListener.get();
-			if (listener != null && !listener.isFinishing()) {
-				listener.onTaskUpdate(mPosition, mCount);
+			if (listener != null) {
+				if (listener != null && !listener.isFinishing()) {
+					mProgressMessage = DSCApplication.getAppContext().getString(
+							mProgressPosition == 1 ? R.string.manually_file_rename_progress_1
+									: R.string.manually_file_rename_progress_more,
+							mProgressPosition, mProgressMax);
+					mApplication.logD(TAG, "progress position: " + mProgressPosition);
+					listener.onTaskUpdate(mProgressPosition, mProgressMax, mProgressMessage);
+				}
 			}
 		}
 	}
@@ -624,7 +631,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		} else {
 			scanMediaStore();
 		}
-		mCount = mListFiles.size();
+		mProgressMax = mListFiles.size();
 	}
 
 	/**

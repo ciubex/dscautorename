@@ -2822,6 +2822,8 @@ public class Devices {
 			"Sony|Xperia Z3 Dual|D6633|D6633", "Sony|Xperia Z3 Tablet Compact|SGP611|SGP611",
 			"Sony|Xperia Z3 Tablet Compact|SGP612|SGP612", "Sony|Xperia Z3 Tablet Compact|SGP621|SGP621",
 			"Sony|Xperia Z3 Tablet Compact|SGP641|SGP641", "Sony|Xperia Z3v|D6708|D6708",
+			"Sony|Xperia Z5|E6603|E6603", "Sony|Xperia Z5|E6653|E6653",
+			"Sony|Xperia Z5 Compact|E5803|E5803", "Sony|Xperia Z5 Compact|E5823|E5823",
 			"Sony|Xperia ZL|C6502|C6502", "Sony|Xperia ZL|C6503|C6503",
 			"Sony|Xperia ZL|C6506|C6506", "Sony|Xperia ZL|L35h|L35h",
 			"Sony|Xperia ZL2|SOL25|SOL25", "Sony|Xperia ZR|C5306|C5306",

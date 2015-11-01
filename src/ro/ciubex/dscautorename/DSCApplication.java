@@ -823,8 +823,20 @@ public class DSCApplication extends Application {
 	 * @param context  The context where should be displayed the progress dialog.
 	 * @param message  The message displayed inside of progress dialog.
 	 */
-	public void showProgressDialog(final ProgressCancelListener listener,
-								   Context context, String message, int max) {
+	public void createProgressDialog(final ProgressCancelListener listener, Context context, String message) {
+		createProgressDialog(listener, context, message, 0);
+	}
+
+	/**
+	 * This will show a progress dialog using a context and the message to be
+	 * showed on the progress dialog.
+	 *
+	 * @param listener The listener class which should listen for cancel.
+	 * @param context  The context where should be displayed the progress dialog.
+	 * @param message  The message displayed inside of progress dialog.
+	 * @param progressMax The progress dialog bar max steps.
+	 */
+	public void createProgressDialog(final ProgressCancelListener listener, Context context, String message, int progressMax) {
 		hideProgressDialog();
 		mProgressDialog = new ProgressDialog(context);
 		mProgressDialog.setTitle(R.string.please_wait);
@@ -841,13 +853,21 @@ public class DSCApplication extends Application {
 						}
 					}
 				});
-		if (max > 0) {
+		if (progressMax > 0) {
 			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			mProgressDialog.setIndeterminate(false);
-			mProgressDialog.setMax(max);
+			mProgressDialog.setMax(progressMax);
 		}
-		if (!mProgressDialog.isShowing()) {
-			mProgressDialog.show();
+	}
+
+	/**
+	 * Show the progress dialog.
+	 */
+	public void showProgressDialog() {
+		if (mProgressDialog != null) {
+			if (!mProgressDialog.isShowing()) {
+				mProgressDialog.show();
+			}
 		}
 	}
 

@@ -158,13 +158,11 @@ public class RenameDlgActivity extends Activity implements
 	 *            Current number of renamed files.
 	 * @param count
 	 *            The number of total files to be renamed.
+	 * @param message
+	 *            The message to be displayed on progress dialog.
 	 */
 	@Override
-	public void onTaskUpdate(int position, int count) {
-		String message = DSCApplication.getAppContext().getString(
-				position == 1 ? R.string.manually_file_rename_progress_1
-						: R.string.manually_file_rename_progress_more,
-				position, count);
+	public void onTaskUpdate(int position, int count, String message) {
 		mRenameProgressMessage.setText(message);
 		if (position == 0) {
 			mRenameProgressBar.setIndeterminate(false);

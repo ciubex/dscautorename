@@ -585,8 +585,9 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	@Override
 	public void onTaskStarted() {
-		mApplication.showProgressDialog(this, this,
-				DSCApplication.getAppContext().getString(R.string.manually_service_running), 0);
+		mApplication.createProgressDialog(this, this,
+				DSCApplication.getAppContext().getString(R.string.manually_service_running));
+		mApplication.showProgressDialog();
 	}
 
 	/**
@@ -594,18 +595,14 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * 
 	 * @param position
 	 *            Current number of renamed files.
-	 * @param count
-	 *            The number of total files to be renamed.
+	 * @param message
+	 *            The message to be displayed on progress dialog.
 	 */
 	@Override
-	public void onTaskUpdate(int position, int count) {
-		String message = DSCApplication.getAppContext().getString(
-				position == 1 ? R.string.manually_file_rename_progress_1
-						: R.string.manually_file_rename_progress_more,
-				position, count);
-		if (position == 0) {
-			mApplication.hideProgressDialog();
-			mApplication.showProgressDialog(this, this, message, count);
+	public void onTaskUpdate(int position, int max, String message) {
+		if (position == 0 && max > 0) {
+			mApplication.createProgressDialog(this, this, message, max);
+			mApplication.showProgressDialog();
 		} else {
 			mApplication.setProgressDialogMessage(message);
 			mApplication.setProgressDialogProgress(position);
@@ -726,8 +723,9 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * User just confirmed to send a report.
 	 */
 	private void confirmedSendReport(String emailTitle) {
-		mApplication.showProgressDialog(this, this,
-				DSCApplication.getAppContext().getString(R.string.send_debug_title), 0);
+		mApplication.createProgressDialog(this, this,
+				DSCApplication.getAppContext().getString(R.string.send_debug_title));
+		mApplication.showProgressDialog();
 		String message = DSCApplication.getAppContext().getString(R.string.report_body);
 		File logsFolder = mApplication.getLogsFolder();
 		File archive = getLogArchive(logsFolder);
