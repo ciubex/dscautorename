@@ -49,6 +49,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.zip.ZipEntry;
@@ -93,12 +94,14 @@ public class SettingsActivity extends PreferenceActivity implements
 	private Preference mDonatePref;
 	private CheckBoxPreference mAppendOriginalName;
 	private SelectFoldersListDialog selectFoldersListDialog;
+	private SelectFileNamePatternDialog selectFileNamePatternDialog;
 	private static final int ID_CONFIRMATION_ALERT = -1;
 	private static final int ID_CONFIRMATION_DONATION = 0;
 	private static final int ID_CONFIRMATION_RESET_RENAME_COUNTER = 1;
 	private static final int ID_CONFIRMATION_DEBUG_REPORT = 2;
 	private static final int REQUEST_SEND_REPORT = 1;
 	public static final int REQUEST_OPEN_DOCUMENT_TREE = 42;
+	public static final int REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER = 43;
 	private static final int BUFFER = 1024;
 
 	/**
@@ -402,7 +405,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * When the user click on define file name patterns preferences.
 	 */
 	private void onDefineFileNamePatterns() {
-		new SelectFileNamePatternDialog(this, mApplication).show();
+		if (selectFileNamePatternDialog == null) {
+			selectFileNamePatternDialog = new SelectFileNamePatternDialog(this, mApplication, this);
+		}
+		selectFileNamePatternDialog.show();
 	}
 
 	/**
@@ -730,6 +736,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		File logsFolder = mApplication.getLogsFolder();
 		File archive = getLogArchive(logsFolder);
 		String[] TO = { "ciubex@yahoo.com" };
+
 		Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		emailIntent.setType("text/plain");
 		emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
@@ -763,7 +770,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	private File getLogArchive(File logsFolder) {
 		File logFile = mApplication.getLogFile();
 		File logcatFile = getLogcatFile(logsFolder);
-		return getArchives(new File[]{logFile, logcatFile}, logsFolder, "DSC_logs.zip");
+		Date now = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
+		String fileName = "DSC_logs_" + format.format(now) + ".zip";
+		return getArchives(new File[]{logFile, logcatFile}, logsFolder, fileName);
 	}
 
 	/**
@@ -872,10 +882,6 @@ public class SettingsActivity extends PreferenceActivity implements
 		return logFile;
 	}
 
-	private void writePre(Writer writer) {
-
-	}
-
 	/**
 	 * This method is invoked when a child activity is finished and this
 	 * activity is showed again
@@ -885,9 +891,12 @@ public class SettingsActivity extends PreferenceActivity implements
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_SEND_REPORT) {
 //			mApplication.deleteLogFile();
-		} else if (resultCode == RESULT_OK && requestCode == REQUEST_OPEN_DOCUMENT_TREE) {
+		} else if (resultCode == RESULT_OK && (
+				requestCode == REQUEST_OPEN_DOCUMENT_TREE ||
+				requestCode == REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER)
+		) {
 			if (mApplication.getSdkInt() >= 21) {
-				processActionOpenDocumentTree(data);
+				processActionOpenDocumentTree(requestCode, data);
 			}
 		}
 	}
@@ -897,25 +906,47 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * @param resultData Resulted data from selected folder.
 	 */
 	@TargetApi(21)
-	private void processActionOpenDocumentTree(Intent resultData) {
+	private void processActionOpenDocumentTree(int requestCode, Intent resultData) {
 		Uri uri = resultData.getData();
 		int flags = resultData.getFlags();
-		int index = -1;
 		mApplication.logD(TAG, "Selected on OpenDocumentTree uri: " + uri);
-		if (selectFoldersListDialog != null) {
-			index = selectFoldersListDialog.getSelectedIndex();
-		}
 		SelectedFolderModel selectedFolder = new SelectedFolderModel();
 		selectedFolder.fromUri(uri, flags);
 		MountVolume volume = mApplication.getMountVolumeByUuid(selectedFolder.getUuid());
 		if (volume != null && !Utilities.isEmpty(volume.getPath())) {
 			selectedFolder.setRootPath(volume.getPath());
 			mApplication.logD(TAG, "Selected from OpenDocumentTree: " + selectedFolder);
-			mApplication.setFolderScanning(index, selectedFolder);
-			if (selectFoldersListDialog != null) {
-				selectFoldersListDialog.updateSelectedFolders();
-				mApplication.updateFolderObserverList();
+			if (requestCode == REQUEST_OPEN_DOCUMENT_TREE) {
+				updateSelectFoldersListDialog(selectedFolder);
+			} else if (requestCode == REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER) {
+				updateSelectedFolder(selectedFolder);
 			}
+		}
+	}
+
+	/**
+	 * Update select folder list dialog.
+	 * @param selectedFolder Selected folder model.
+	 */
+	private void updateSelectFoldersListDialog(SelectedFolderModel selectedFolder) {
+		int index = -1;
+		if (selectFoldersListDialog != null) {
+			index = selectFoldersListDialog.getSelectedIndex();
+		}
+		mApplication.setFolderScanning(index, selectedFolder);
+		if (selectFoldersListDialog != null) {
+			selectFoldersListDialog.updateSelectedFolders();
+			mApplication.updateFolderObserverList();
+		}
+	}
+
+	/**
+	 * Update the pattern dialog with selected folder.
+	 * @param selectedFolder The selected folder.
+	 */
+	private void updateSelectedFolder(SelectedFolderModel selectedFolder) {
+		if (selectFileNamePatternDialog != null) {
+			selectFileNamePatternDialog.updateSelectedFolder(selectedFolder);
 		}
 	}
 }

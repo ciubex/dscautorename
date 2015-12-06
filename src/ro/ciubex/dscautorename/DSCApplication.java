@@ -172,18 +172,25 @@ public class DSCApplication extends Application {
 	public void updateSelectedFolders() {
 		mSelectedSelectedFolderModels = getFoldersScanning();
 		if (mSelectedSelectedFolderModels.length > 0) {
-			MountVolume volume;
 			for (SelectedFolderModel model : mSelectedSelectedFolderModels) {
-				volume = getMountVolumeByUuid(model.getUuid());
-				if (volume != null) {
-					model.setRootPath(volume.getPath());
-				}
+				updateSelectedFolderModel(model);
 			}
 		}
 	}
 
 	public SelectedFolderModel[] getSelectedFolders() {
 		return mSelectedSelectedFolderModels;
+	}
+
+	/**
+	 * Update the selected folder model with the volume ID and root path.
+	 * @param model The model to be updated.
+	 */
+	public void updateSelectedFolderModel(SelectedFolderModel model) {
+		MountVolume volume = getMountVolumeByUuid(model.getUuid());
+		if (volume != null) {
+			model.setRootPath(volume.getPath());
+		}
 	}
 
 	/**
@@ -456,7 +463,8 @@ public class DSCApplication extends Application {
 		String[] arr = value.split(",");
 		FileNameModel[] fp = new FileNameModel[arr.length];
 		for (int i = 0; i < arr.length; i++) {
-			fp[i] = new FileNameModel(arr[i]);
+			fp[i] = new FileNameModel(this, arr[i]);
+			updateSelectedFolderModel(fp[i].getSelectedFolder());
 		}
 		return fp;
 	}
@@ -1160,46 +1168,18 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * The user-visible SDK version of the framework.
-	 *
-	 * @return The user-visible SDK version of the framework
-	 */
-	public int getSdkInt() {
-		return mSdkInt;
-	}
-
-	/**
-	 * Take URI permission
-	 */
-	@TargetApi(21)
-	public boolean doGrantUriPermission(ContentResolver resolver, Uri uri, int flags) {
-		boolean result = false;
-		try {
-			this.getApplicationContext().grantUriPermission(this.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-			final int takeFlags = flags & (Intent.FLAG_GRANT_READ_URI_PERMISSION
-					| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-			resolver.takePersistableUriPermission(uri, takeFlags);
-			result = true;
-			this.logD(TAG, "Successfully doGrantUriPermission(" + String.valueOf(uri) + ")");
-		} catch (Exception e) {
-			this.logE(TAG, "doGrantUriPermission(" + String.valueOf(uri) + ")", e);
-		}
-		return result;
-	}
-
-	/**
 	 * Apply URI permission to selected folders.
 	 *
 	 * @return True if all folders received permissions.
 	 */
-	public boolean doGrantUriPermission(ContentResolver resolver) {
+	public boolean doGrantUriPermission(ContentResolver resolver, List<SelectedFolderModel> folders) {
 		int count = 0;
-		for (SelectedFolderModel folder : mSelectedSelectedFolderModels) {
+		for (SelectedFolderModel folder : folders) {
 			if (doGrantUriPermission(resolver, folder.getUri(), folder.getFlags())) {
 				count++;
 			}
 		}
-		return count == mSelectedSelectedFolderModels.length; // all folders received permissions
+		return count == folders.size(); // all folders received permissions
 	}
 
 	/**
@@ -1236,6 +1216,34 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * The user-visible SDK version of the framework.
+	 *
+	 * @return The user-visible SDK version of the framework
+	 */
+	public int getSdkInt() {
+		return mSdkInt;
+	}
+
+	/**
+	 * Take URI permission
+	 */
+	@TargetApi(21)
+	public boolean doGrantUriPermission(ContentResolver resolver, Uri uri, int flags) {
+		boolean result = false;
+		try {
+			this.getApplicationContext().grantUriPermission(this.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			final int takeFlags = flags & (Intent.FLAG_GRANT_READ_URI_PERMISSION
+					| Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+			resolver.takePersistableUriPermission(uri, takeFlags);
+			result = true;
+			this.logD(TAG, "Successfully doGrantUriPermission(" + String.valueOf(uri) + ")");
+		} catch (Exception e) {
+			this.logE(TAG, "doGrantUriPermission(" + String.valueOf(uri) + ")", e);
+		}
+		return result;
+	}
+
+	/**
 	 * For API >= 21 the file path should be translated
 	 * from original full path: /storage/sdcard/DCIM/Camera/20150325_193246.jpg
 	 * to a valid API Uri: content://com.android.externalstorage.documents/tree/17EA-1C19:DCIM/Camera/20150325_193246.jpg
@@ -1244,18 +1252,30 @@ public class DSCApplication extends Application {
 	 * @return New URI compatible file path string.
 	 */
 	@TargetApi(21)
-	public Uri getDocumentUri(String fullFilePath) {
-		if (mSelectedSelectedFolderModels.length > 0) {
-			String rootPath, documentId;
-			for (SelectedFolderModel selectedFolder : mSelectedSelectedFolderModels) {
-				rootPath = selectedFolder.getRootPath();
-				if (fullFilePath.startsWith(rootPath)) {
-					documentId = fullFilePath.replace(rootPath + "/", selectedFolder.getUuid() + ":");
-					return DocumentsContract.buildDocumentUriUsingTree(selectedFolder.getUri(), documentId);
+	public Uri getDocumentUri(List<SelectedFolderModel> selectedFolders, String fullFilePath) {
+		if (!Utilities.isEmpty(selectedFolders)) {
+			String currentFullPath, documentId = null, previousFullPath = "";
+			Uri selectedUri = null;
+			for (SelectedFolderModel selectedFolder : selectedFolders) {
+				currentFullPath = selectedFolder.getFullPath();
+				if (folderMatching(previousFullPath, currentFullPath, fullFilePath)) {
+					previousFullPath = currentFullPath;
+					documentId = fullFilePath.replace(selectedFolder.getRootPath() + "/", selectedFolder.getUuid() + ":");
+					selectedUri = selectedFolder.getUri();
 				}
+			}
+			if (selectedUri != null && documentId != null) {
+				return DocumentsContract.buildDocumentUriUsingTree(selectedUri, documentId);
 			}
 		}
 		return null;
+	}
+
+	private boolean folderMatching(String previousMatch, String actualMatch, String testMatch) {
+		if (testMatch.startsWith(actualMatch)) {
+			return previousMatch.length() < actualMatch.length();
+		}
+		return false;
 	}
 
 	/**

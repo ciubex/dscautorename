@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- * 
+ *
  * Copyright (C) 2014 Claudiu Ciobotariu
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -40,9 +40,9 @@ import ro.ciubex.dscautorename.model.SelectedFolderModel;
 
 /**
  * @author Claudiu
- * 
  */
-public class SelectFoldersListDialog extends BaseDialog {
+public class SelectFoldersListDialog extends BaseDialog implements
+		SelectFolderDialog.SelectFolderListener {
 	private static final String TAG = SelectFoldersListDialog.class.getName();
 	private Activity mParentActivity;
 	private FolderListAdapter mAdapter;
@@ -103,13 +103,12 @@ public class SelectFoldersListDialog extends BaseDialog {
 
 	/**
 	 * Method invoked when a position in list is selected.
-	 * 
-	 * @param position
-	 *            Selected position.
+	 *
+	 * @param position Selected position.
 	 */
 	private void clickOnItem(int position) {
 		if (mApplication.getSdkInt() < 21) {
-			new SelectFolderDialog(mContext, mApplication, mAdapter, position).show();
+			new SelectFolderDialog(mContext, mApplication, this, position).show();
 		} else {
 			mSelectedIndex = position;
 			startIntentActionOpenDocumentTree();
@@ -133,9 +132,8 @@ public class SelectFoldersListDialog extends BaseDialog {
 
 	/**
 	 * Called when a view has been clicked.
-	 * 
-	 * @param view
-	 *            The view that was clicked.
+	 *
+	 * @param view The view that was clicked.
 	 */
 	@Override
 	public void onClick(View view) {
@@ -145,7 +143,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 			onDelete();
 		} else {
 			if (mParentActivity instanceof SettingsActivity) {
-				((SettingsActivity)mParentActivity).updateSelectedFolders();
+				((SettingsActivity) mParentActivity).updateSelectedFolders();
 			}
 			super.onClick(view);
 		}
@@ -178,7 +176,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 
 	@Override
 	protected void onConfirmation(boolean positive, int confirmationId,
-			Object anObject) {
+								  Object anObject) {
 		if (positive && CONFIRMATION_DELETE_FOLDER == confirmationId) {
 			int i, len = mAdapter.getCount();
 			SelectedFolderModel item;
@@ -197,6 +195,7 @@ public class SelectFoldersListDialog extends BaseDialog {
 
 	/**
 	 * Obtain selected index from the list.
+	 *
 	 * @return The selected index from the list.
 	 */
 	public int getSelectedIndex() {
@@ -209,5 +208,16 @@ public class SelectFoldersListDialog extends BaseDialog {
 	public void updateSelectedFolders() {
 		mAdapter.updateFolders();
 		mAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public String getSelectedFolder() {
+		return null;
+	}
+
+	@Override
+	public void onFolderSelected(int folderIndex, SelectedFolderModel selectedFolder) {
+		mApplication.setFolderScanning(folderIndex, selectedFolder);
+		updateSelectedFolders();
 	}
 }

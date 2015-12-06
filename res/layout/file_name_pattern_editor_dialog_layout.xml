@@ -32,6 +32,18 @@
         android:layout_height="wrap_content"
         android:text="@string/file_name_pattern_dialog_bottom" />
 
+    <CheckBox
+        android:id="@+id/enableMoveFiles"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/move_file_enable"/>
+
+    <TextView
+        android:id="@+id/selectedFolderField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/move_file_text_no_folder"/>
+
     <TextView
         android:id="@+id/itemsListNote"
         android:layout_width="match_parent"

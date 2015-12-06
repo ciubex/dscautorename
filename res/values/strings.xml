@@ -32,7 +32,7 @@
     <string name="enable_filter_folder_title">Rename within a folder</string>
     <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
     <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera application save files.</string>
-    <string name="first_time_alert">READ CAREFULLY:\nDefine file name patterns individually for pictures or clips. Wildcards * or ? can be used too.\nDo not use too generics pattern like *.JPG to avoid infinite renaming looping.\nBetter use ? to define a single possible character in combination with other constant existing character like _.\nFor example if original file name are like 20150729_212537.JPG use a pattern like ????????_??????.JPG and put a prefix \'PIC_\' (use the apostrophes to define constant texts) into the rename pattern like \"\'PIC_\'yyyyMMdd_HHmmss\" to rename the file to: PIC_20150729_212537.JPG</string>
+    <string name="first_time_alert">READ CAREFULLY:\nRenamed and moved files process cannot be rolled back!\nUse this software with caution!\nDefine file name patterns individually for pictures or clips, renamed files can be moved to another folder also. Wildcards * or ? can be used too.\nDo not use too generics pattern like *.JPG to avoid infinite renaming looping.\nBetter use ? to define a single possible character in combination with other constant existing character like _.\nFor example if original file name are like 20150729_212537.JPG use a pattern like ????????_??????.JPG and put a prefix \'PIC_\' (use the apostrophes to define constant texts) into the rename pattern like \"\'PIC_\'yyyyMMdd_HHmmss\" to rename the file to: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Because on Android KitKat are enabled some security constraints, this application will not be able to rename files from SD Card.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis application can rename files from internal memory only.\nSet your camera application to save on internal memory.</string>
     <string name="enable_filter_alert_v21">As an Android Lollipop user, you should enable \"Rename within a folder\" option and you should define at least one folder to be scanned on \"List of scanned folders.\".</string>
     <string name="folder_list_title">List of scanned folders.</string>
@@ -68,6 +68,10 @@
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Rename file using:</string>
     <string name="rename_file_using_desc">date and time when file was last time modified.</string>
+    <string name="move_file_enable">Move the renamed file to below selected folder.</string>
+    <string name="move_file_text_no_folder">No folder selected, touch this text to select a folder.</string>
+    <string name="move_file_text_selected_folder">Selected folder: %s</string>
+    <string name="new_folder">New Folder</string>
 
     <string-array name="rename_file_using_labels">
         <item>date and time when file was added to media provider;</item>

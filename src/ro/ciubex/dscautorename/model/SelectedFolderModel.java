@@ -157,7 +157,7 @@ public class SelectedFolderModel {
 
 		SelectedFolderModel folderModel = (SelectedFolderModel) o;
 
-		if (!mPath.equals(folderModel.getFullPath())) return false;
+		if (!getFullPath().equals(folderModel.getFullPath())) return false;
 
 		return true;
 	}

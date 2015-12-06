@@ -35,6 +35,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import ro.ciubex.dscautorename.model.MountVolume;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
 
 /**
  * This is an utilities class with some useful methods.
@@ -56,6 +57,7 @@ public class Utilities {
 	private static Method METHOD_IMountService_isUsbMassStorageEnabled;
 
 	private static Method METHOD_StorageVolume_getUuid;
+	private static Method METHOD_StorageVolume_getState;
 	private static Method METHOD_StorageVolume_getStorageId;
 	private static Method METHOD_StorageVolume_getDescriptionId;
 	private static Method METHOD_StorageVolume_getDescription;
@@ -106,6 +108,8 @@ public class Utilities {
 					methodName = method.getName();
 					if ("getUuid".equals(methodName)) {
 						METHOD_StorageVolume_getUuid = method;
+					} else if ("getFsUuid".equals(methodName)) { // API 23
+						METHOD_StorageVolume_getUuid = method;
 					} else if ("getStorageId".equals(methodName)) {
 						METHOD_StorageVolume_getStorageId = method;
 					} else if ("getDescription".equals(methodName)) {
@@ -122,6 +126,8 @@ public class Utilities {
 						METHOD_StorageVolume_isPrimary = method;
 					} else if ("isEmulated".equals(methodName)) {
 						METHOD_StorageVolume_isEmulated = method;
+					} else if ("getState".equals(methodName)) {
+						METHOD_StorageVolume_getState = method;
 					}
 				}
 			}
@@ -165,8 +171,9 @@ public class Utilities {
 			return null;
 		}
 
-		public static String getVolumeState(Object mountService, String mountPoint) {
+		public static String getVolumeState(Object mountService, MountVolume volume) {
 			String state = INVALID_STATE;
+			String mountPoint = volume.getPath();
 			try {
 				state = (String) invoke("IMountService.getVolumeState()",
 						METHOD_IMountService_getVolumeState, mountService, mountPoint);
@@ -318,8 +325,11 @@ public class Utilities {
 					} else if (METHOD_StorageVolume_getDescription != null) {
 						volume.setDescription(getStorageVolumeDescription(obj, context));
 					}
-					if (METHOD_IMountService_getVolumeState != null) {
-						volume.setState(getVolumeState(mountService, volume.getPath()));
+					if (METHOD_StorageVolume_getState != null) {
+						volume.setState((String) invoke("StorageVolume.getState()",
+								METHOD_StorageVolume_getState, obj));
+					} else if (METHOD_IMountService_getVolumeState != null) {
+						volume.setState(getVolumeState(mountService, volume));
 					}
 					if (volume.getUuid() == null && volume.isPrimary() && volume.isEmulated()) {
 						volume.setUuid(ROOT_ID_PRIMARY_EMULATED);
@@ -424,5 +434,14 @@ public class Utilities {
 			Log.e(TAG, "Value:" + value);
 		}
 		return result;
+	}
+
+	/**
+	 * Check if the move files is enabled.
+	 * @return The move files enabled state.
+	 */
+	public static boolean isMoveFiles(SelectedFolderModel selectedFolder) {
+		return selectedFolder != null &&
+				!Utilities.isEmpty(selectedFolder.getFullPath());
 	}
 }

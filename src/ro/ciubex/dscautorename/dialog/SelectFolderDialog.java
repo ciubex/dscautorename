@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- * 
+ *
  * Copyright (C) 2014 Claudiu Ciobotariu
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,34 +29,46 @@ import ro.ciubex.dscautorename.adpater.FolderListAdapter;
 import ro.ciubex.dscautorename.model.FileItem;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.task.FolderScannAsyncTask;
+import ro.ciubex.dscautorename.util.Utilities;
+
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 /**
  * A dialog used to show a list of folders and files.
- * 
+ *
  * @author Claudiu Ciobotariu
- * 
  */
 public class SelectFolderDialog extends BaseDialog implements
 		FolderScannAsyncTask.Responder {
 
-	private FolderListAdapter mParentAdapter;
+	private SelectFolderListener mSelectFolderListener;
 	private int mFolderIndex;
 	private File mCurrentFolder;
 	private ListView mFilesListView;
 	private FileListAdapter mFileListAdapter;
 	private List<FileItem> mFiles;
 	private boolean mIsFolderScanning;
+	private Button mBtnNewFolder;
 
-	public SelectFolderDialog(Context context, DSCApplication application, FolderListAdapter parentAdapter,
-			int folderIndex) {
+	public interface SelectFolderListener {
+		public String getSelectedFolder();
+
+		public void onFolderSelected(int folderIndex, SelectedFolderModel selectedFolder);
+	}
+
+	public SelectFolderDialog(Context context, DSCApplication application, SelectFolderListener selectFolderListener,
+							  int folderIndex) {
 		super(context, application);
 		setContentView(R.layout.select_folder_dialog_layout);
-		mParentAdapter = parentAdapter;
+		mSelectFolderListener = selectFolderListener;
 		mFolderIndex = folderIndex;
 		this.mFiles = new ArrayList<FileItem>();
 		mFileListAdapter = new FileListAdapter(context);
@@ -72,6 +84,8 @@ public class SelectFolderDialog extends BaseDialog implements
 		super.onCreate(savedInstanceState);
 		initDialog(BUTTON_OK | BUTTON_CANCEL);
 		initFilesList();
+		mBtnNewFolder = (Button) findViewById(R.id.btnNewFolder);
+		mBtnNewFolder.setOnClickListener(this);
 	}
 
 	/*
@@ -90,14 +104,20 @@ public class SelectFolderDialog extends BaseDialog implements
 	 * Initialize the list o files and files list view.
 	 */
 	private void initFilesList() {
-		int index = mFolderIndex;
-		if (mFolderIndex < 0) {
-			index = 0;
+		String folderName = null;
+		if (mSelectFolderListener != null) {
+			folderName = mSelectFolderListener.getSelectedFolder();
 		}
-		String folderName = mApplication.getDefaultFolderScanning();
-		SelectedFolderModel[] folders = mApplication.getSelectedFolders();
-		if (folders.length > 0) {
-			folderName = folders[index].getFullPath();
+		if (folderName == null) {
+			folderName = mApplication.getDefaultFolderScanning();
+			SelectedFolderModel[] folders = mApplication.getSelectedFolders();
+			if (folders.length > 0) {
+				int index = mFolderIndex;
+				if (mFolderIndex < 0) {
+					index = 0;
+				}
+				folderName = folders[index].getFullPath();
+			}
 		}
 		mCurrentFolder = new File(folderName);
 		mFilesListView = (ListView) findViewById(R.id.folderList);
@@ -108,7 +128,7 @@ public class SelectFolderDialog extends BaseDialog implements
 
 					@Override
 					public void onItemClick(AdapterView<?> parent, View view,
-							int position, long id) {
+											int position, long id) {
 						setSelectedFolder(position);
 					}
 				});
@@ -116,9 +136,8 @@ public class SelectFolderDialog extends BaseDialog implements
 
 	/**
 	 * Set selected folder from the list.
-	 * 
-	 * @param position
-	 *            Position on the list of selected folder.
+	 *
+	 * @param position Position on the list of selected folder.
 	 */
 	private void setSelectedFolder(int position) {
 		if (mIsFolderScanning) {
@@ -177,20 +196,62 @@ public class SelectFolderDialog extends BaseDialog implements
 
 	/**
 	 * Called when a view has been clicked.
-	 * 
-	 * @param view
-	 *            The view that was clicked.
+	 *
+	 * @param view The view that was clicked.
 	 */
 	@Override
 	public void onClick(View view) {
 		if (btnOk == view) {
-			SelectedFolderModel folder = new SelectedFolderModel();
-			folder.setPath(mCurrentFolder.getAbsolutePath());
-			mApplication.setFolderScanning(mFolderIndex, folder);
-			mParentAdapter.updateFolders();
-			mParentAdapter.notifyDataSetChanged();
+			if (mSelectFolderListener != null) {
+				SelectedFolderModel selectedFolder = new SelectedFolderModel();
+				selectedFolder.setPath(mCurrentFolder.getAbsolutePath());
+				mSelectFolderListener.onFolderSelected(mFolderIndex, selectedFolder);
+			}
+		} else if (mBtnNewFolder == view) {
+			onNewFolderHandler();
 		}
 		super.onClick(view);
 	}
 
+	/**
+	 * Handle actions related with the new folder button.
+	 */
+	private void onNewFolderHandler() {
+		final EditText input = new EditText(mContext);
+		input.setHint(R.string.new_folder);
+		final BaseDialog parentDialog = this;
+		new AlertDialog.Builder(mContext)
+				.setIcon(android.R.drawable.ic_dialog_info)
+				.setTitle(R.string.new_folder)
+				.setView(input)
+				.setNegativeButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+												int which) {
+								String value = input.getText().toString().trim();
+								makeNewFolder(value);
+								parentDialog.show();
+							}
+						})
+				.setPositiveButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+												int which) {
+								parentDialog.show();
+							}
+						}).show();
+	}
+
+	/**
+	 * Create a new folder on the current folder.
+	 * @param folderName New folder to be created.
+	 */
+	private void makeNewFolder(String folderName) {
+		if (!Utilities.isEmpty(folderName)) {
+			File newFolder = new File(mCurrentFolder, folderName);
+			newFolder.mkdir();
+		}
+	}
 }

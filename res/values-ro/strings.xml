@@ -32,7 +32,7 @@
     <string name="enable_filter_folder_title">Restrictie redenumire</string>
     <string name="enable_filter_folder_desc">In mod normal sunt redenumite toate fisierele din memorie. Prin selectarea acestei obtiuni sunt redenumite doar fisierele din directoarele selectate.</string>
     <string name="enable_filter_folder_desc_v21">Ca utilizator de Android Lollipop, activeaza aceasta optiune si alege in ce directoare sunt salvate imaginile si filmele salvate de aplicatia specifica camerei.</string>
-    <string name="first_time_alert">ATENTIE:\nDefineste formate de redenumire individuale pentru poze si pentru filme. Se pot folosi de asemenea * sau ? .\nNu folositi formate asemanatoare sau generice precum *.JPG pentru a evita blocarea aplicatiei in functia de redenumire.\nMai bine folositi semnul ? in combinatie cu alte caractere fixe precum _ pentru un mai bun control al numelor de fisiere ce urmeaza a fi redenumite.\nDe exemplu pentru un fisier cu numele original in forma 20150729_212537.JPG se poate folosi un format de genul ????????_??????.JPG si se poate adauga un prefix ca \'PIC_\' (se poate folosi apostroful pentru evitarea transformarilor in data sau ora) astfel in acest caz formatul de redenumire poate fi de forma \"\'PIC_\'yyyyMMdd_HHmmss\" iar fisierul redenumit va avea numele: PIC_20150729_212537.JPG</string>
+    <string name="first_time_alert">ATENTIE:\nRedenumirea si mutarea fisierelor nu este reversibila!\nUtilizati aceasta aplicatie cu precautie!\nDefineste formate de redenumire individuale pentru poze si pentru filme, de asemenea fisierele pot fi mutate intr-un director ales. Se pot folosi de asemenea * sau ? .\nNu folositi formate asemanatoare sau generice precum *.JPG pentru a evita blocarea aplicatiei in functia de redenumire.\nMai bine folositi semnul ? in combinatie cu alte caractere fixe precum _ pentru un mai bun control al numelor de fisiere ce urmeaza a fi redenumite.\nDe exemplu pentru un fisier cu numele original in forma 20150729_212537.JPG se poate folosi un format de genul ????????_??????.JPG si se poate adauga un prefix ca \'PIC_\' (se poate folosi apostroful pentru evitarea transformarilor in data sau ora) astfel in acest caz formatul de redenumire poate fi de forma \"\'PIC_\'yyyyMMdd_HHmmss\" iar fisierul redenumit va avea numele: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Din cauza unor restrictii din sistemul de operare Android KitKa, aceasta aplicatie nu poate redenumi fisierele salvate pe cardul extern (SD Card).\nVedeti http://goo.gl/kJeED3 pentru o posibila rezolvare.\nIn mod normal, in Android KitKat fara interventii aplicatia poate redenumi doar fisierele stocate intern.\nSetati aplicatia de camera sa foloseasca memoria interna ca destinatie pentru fisierele salvate.</string>
     <string name="enable_filter_alert_v21">Android Lollipop activeaza optiunea \"Restrictie redenumire\" dupa care selecteaza directoarele in care sunt salvate pozele si filmele de aplicatia camerei in \"Lista directoarelor selectate.\".</string>
     <string name="folder_list_title">Lista directoarelor selectate.</string>
@@ -68,6 +68,10 @@
     <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Redenumeste fisierul folosind:</string>
     <string name="rename_file_using_desc">data si timpul cand a fost ultima oara modificat fisierul.</string>
+    <string name="move_file_enable">Muta fisierul redenumit in directorul selectat mai jos.</string>
+    <string name="move_file_text_no_folder">Nici un director selectat, atinge acest text pentru a selecta un director</string>
+    <string name="move_file_text_selected_folder">Director selectat: %s</string>
+    <string name="new_folder">Director nou</string>
 
     <string-array name="rename_file_using_labels">
         <item>data si timpul cand fisierul a fost indexat de sistem;</item>

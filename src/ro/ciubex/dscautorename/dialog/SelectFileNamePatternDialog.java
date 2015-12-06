@@ -22,6 +22,9 @@ import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.adpater.FileNamePatternListAdapter;
 import ro.ciubex.dscautorename.model.FileNameModel;
+import ro.ciubex.dscautorename.model.SelectedFolderModel;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -36,13 +39,16 @@ import android.widget.ListView;
  * 
  */
 public class SelectFileNamePatternDialog extends BaseDialog {
+	private Activity mParentActivity;
 	private FileNamePatternListAdapter mAdapter;
 	private ListView mListView;
 	private Button mBtnAdd, mBtnDelete;
+	private FileNamePatternEditorDialog mFileNamePatternEditorDialog;
 
-	public SelectFileNamePatternDialog(Context context, DSCApplication application) {
+	public SelectFileNamePatternDialog(Context context, DSCApplication application, Activity parentActivity) {
 		super(context, application);
 		setContentView(R.layout.items_list_dialog_layout);
+		mParentActivity = parentActivity;
 		mAdapter = new FileNamePatternListAdapter(context, application);
 	}
 
@@ -88,8 +94,21 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 	 *            Selected position.
 	 */
 	private void clickOnItem(int position) {
-		new FileNamePatternEditorDialog(mContext, mApplication, mAdapter, position)
-				.show();
+		if (mFileNamePatternEditorDialog == null) {
+			mFileNamePatternEditorDialog = new FileNamePatternEditorDialog(mContext, mApplication, mParentActivity, mAdapter);
+		}
+		mFileNamePatternEditorDialog.setPosition(position);
+		mFileNamePatternEditorDialog.show();
+	}
+
+	/**
+	 * Update the selected folder.
+	 * @param selectedFolder The selected folder.
+	 */
+	public void updateSelectedFolder(SelectedFolderModel selectedFolder) {
+		if (mFileNamePatternEditorDialog != null) {
+			mFileNamePatternEditorDialog.onFolderSelected(0, selectedFolder);
+		}
 	}
 
 	/**
@@ -138,7 +157,7 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 	protected void onConfirmation(boolean positive, int confirmationId,
 			Object anObject) {
 		if (positive) {
-			int i = 0, len = mAdapter.getCount();
+			int i, len = mAdapter.getCount();
 			StringBuilder sb = new StringBuilder();
 			FileNameModel item;
 			for (i = 0; i < len; i++) {

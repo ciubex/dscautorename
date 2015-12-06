@@ -20,6 +20,8 @@ package ro.ciubex.dscautorename.model;
 
 import android.net.Uri;
 
+import java.io.File;
+
 /**
  * The model used to store image or video DB informations.
  * 
@@ -40,14 +42,24 @@ public class FileRenameData {
 	private String mFileTitleZero;
 	private String mFileName;
 	private String mFileNameZero;
+	private String mMoveToFolderPath;
+	private String mMimeType;
+	private long mSize;
+	private File mParentFolder;
 
-	public FileRenameData(int id, Uri uri, String data, String title, String displayName, long dateAdded) {
+	public FileRenameData(int id, Uri uri, String data) {
+		this(id, uri, data, null, null, null, -1, 0);
+	}
+
+	public FileRenameData(int id, Uri uri, String data, String title, String displayName, String mimeType, long dateAdded, long size) {
 		this.mId = id;
 		this.mUri = uri;
 		this.mData = data;
 		this.mTitle = title;
 		this.mDisplayName = displayName;
+		this.mMimeType = mimeType;
 		this.mDateAdded = dateAdded;
+		this.mSize = size;
 	}
 
 	/**
@@ -83,6 +95,13 @@ public class FileRenameData {
 	 */
 	public String getDisplayName() {
 		return mDisplayName;
+	}
+
+	/**
+	 * @return the mMimeType
+	 */
+	public String getMimeType() {
+		return mMimeType;
 	}
 
 	/**
@@ -178,11 +197,35 @@ public class FileRenameData {
 		this.mFileNameZero = fileNameZero;
 	}
 
+	public String getMoveToFolderPath() {
+		return mMoveToFolderPath;
+	}
+
+	public void setMoveToFolderPath(String moveToFolderPath) {
+		this.mMoveToFolderPath = moveToFolderPath;
+	}
+
+	public long getSize() {
+		return mSize;
+	}
+
+	public void setSize(long size) {
+		this.mSize = size;
+	}
+
+	public File getParentFolder() {
+		return mParentFolder;
+	}
+
+	public void setParentFolder(File mParentFolder) {
+		this.mParentFolder = mParentFolder;
+	}
+
 	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
+					 * (non-Javadoc)
+					 *
+					 * @see java.lang.Object#hashCode()
+					 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -227,9 +270,11 @@ public class FileRenameData {
 		return "FileRenameData{" +
 				"mId=" + mId +
 				", mUri=" + mUri +
+				", mSize=" + mSize +
 				", mData='" + mData + '\'' +
 				", mTitle='" + mTitle + '\'' +
 				", mDisplayName='" + mDisplayName + '\'' +
+				", mMimeType='" + mMimeType + '\'' +
 				", mDateAdded=" + mDateAdded +
 				", mFileNamePatternBefore='" + mFileNamePatternBefore + '\'' +
 				", mFileNamePatternAfter='" + mFileNamePatternAfter + '\'' +

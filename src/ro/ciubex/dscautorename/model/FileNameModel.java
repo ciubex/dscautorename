@@ -18,6 +18,9 @@
  */
 package ro.ciubex.dscautorename.model;
 
+import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.util.Utilities;
+
 /**
  * @author Claudiu Ciobotariu
  * 
@@ -26,25 +29,37 @@ public class FileNameModel {
 	private String mBefore;
 	private String mAfter;
 	private boolean mSelected;
+	private SelectedFolderModel mSelectedFolder;
 
-	public FileNameModel(String string) {
-		fromString(string);
+	public FileNameModel(DSCApplication application, String string) {
+		mSelectedFolder = new SelectedFolderModel();
+		fromString(application, string);
 	}
 
-	private void fromString(String string) {
+	private void fromString(DSCApplication application, String string) {
+		String[] arr = string.split("\\|");
+		if (arr.length > 0) {
+			preparePatterns(arr[0]);
+			if (arr.length > 1) {
+				mSelectedFolder.fromString(application, arr[1]);
+			}
+		}
+	}
+
+	private void preparePatterns(String string) {
 		String[] arr = string.split(":");
 		switch (arr.length) {
-		case 1:
-			mBefore = arr[0];
-			mAfter = "'PIC_'yyyyMMdd_HHmmss";
-			break;
-		case 2:
-			mBefore = arr[0];
-			mAfter = arr[1];
-			break;
-		default:
-			mBefore = "DSC_*.JPG";
-			mAfter = "\'PIC_\'yyyyMMdd_HHmmss";
+			case 1:
+				mBefore = arr[0];
+				mAfter = "'PIC_'yyyyMMdd_HHmmss";
+				break;
+			case 2:
+				mBefore = arr[0];
+				mAfter = arr[1];
+				break;
+			default:
+				mBefore = "DSC_*.JPG";
+				mAfter = "\'PIC_\'yyyyMMdd_HHmmss";
 		}
 	}
 
@@ -70,9 +85,18 @@ public class FileNameModel {
 		return mAfter;
 	}
 
+	public SelectedFolderModel getSelectedFolder() {
+		return mSelectedFolder;
+	}
+
+	public void setSelectedFolder(SelectedFolderModel selectedFolder) {
+		mSelectedFolder = selectedFolder;
+	}
+
 	@Override
 	public String toString() {
-		return mBefore + ":" + mAfter;
+		return mBefore + ":" + mAfter +
+				(mSelectedFolder != null ? ("|" + mSelectedFolder.toString()) : "");
 	}
 
 	public boolean isSelected() {
