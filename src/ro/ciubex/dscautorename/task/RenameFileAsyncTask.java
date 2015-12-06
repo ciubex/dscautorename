@@ -877,7 +877,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				MediaStore.MediaColumns.SIZE
 		};
 		try {
-			doQuery(mContentResolver, uri);
+//			doQuery(mContentResolver, uri);
 			cursor = mContentResolver.query(uri, columns, null, null, null);
 			if (cursor != null) {
 				int index, id;

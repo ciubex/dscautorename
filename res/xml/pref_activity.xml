@@ -31,7 +31,7 @@
             android:summary="@string/rename_service_start_delay_desc"
             android:title="@string/rename_service_start_delay_title"
             ciubex:maxValue="30"
-            ciubex:minValue="2"
+            ciubex:minValue="0"
             ciubex:units="@string/seconds_unit" />
 
         <CheckBoxPreference
