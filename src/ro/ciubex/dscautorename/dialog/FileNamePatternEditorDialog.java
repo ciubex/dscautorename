@@ -70,7 +70,6 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 		setContentView(R.layout.file_name_pattern_editor_dialog_layout);
 		mAdapter = adapter;
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
-		mDefaultSelectedFolder = new SelectedFolderModel();
 		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
 	}
 
@@ -103,7 +102,6 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 	@Override
 	protected void onStart() {
 		mNow = new Date();
-		mDefaultSelectedFolder.setPath(mApplication.getDefaultFolderScanning());
 		mDefaultFileName = new FileNameModel(mApplication, DSCApplication.getAppContext().getString(R.string.default_file_name_pattern));
 		updateDialogTitle();
 		initValues();
@@ -168,6 +166,9 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 			if (isMoveFiles) {
 				mDefaultSelectedFolder = fileNameModel.getSelectedFolder();
 				mDefaultFileName.setSelectedFolder(mDefaultSelectedFolder);
+			} else {
+				mDefaultSelectedFolder = new SelectedFolderModel();
+				mDefaultSelectedFolder.setPath(mApplication.getDefaultFolderScanning());
 			}
 		}
 		mEnableMoveFiles.setChecked(isMoveFiles);
@@ -180,7 +181,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 		boolean isMoveFiles = Utilities.isMoveFiles(mDefaultFileName.getSelectedFolder());
 		if (isMoveFiles) {
 			mSelectedFolderField.setVisibility(View.VISIBLE);
-			String path = mDefaultSelectedFolder.getFullPath();
+			String path = mDefaultFileName.getSelectedFolder().getFullPath();
 			String text;
 			if (Utilities.isEmpty(path)) {
 				text = DSCApplication.getAppContext().getString(R.string.move_file_text_no_folder);

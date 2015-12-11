@@ -225,6 +225,9 @@ public class SettingsActivity extends PreferenceActivity implements
 				});
 	}
 
+	/**
+	 * Check if the pro version is present to update the donation preference item.
+	 */
 	private void checkProVersion() {
 		if (mApplication.isProPresent()) {
 			mDonatePref.setEnabled(false);
