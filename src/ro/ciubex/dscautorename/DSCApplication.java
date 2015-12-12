@@ -24,6 +24,7 @@ import java.io.Writer;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
@@ -115,6 +116,27 @@ public class DSCApplication extends Application {
 	private String mDefaultFolderScanning;
 	private Map<String, FolderObserver> mFolderObserverMap;
 
+	private static final String KEY_HAVE_PERMISSIONS_ASKED = "havePermissionsAsked";
+	public static final String PERMISSION_FOR_CAMERA = "android.permission.CAMERA";
+	public static final String PERMISSION_FOR_READ_EXTERNAL_STORAGE = "android.permission.READ_EXTERNAL_STORAGE";
+	public static final String PERMISSION_FOR_WRITE_EXTERNAL_STORAGE = "android.permission.WRITE_EXTERNAL_STORAGE";
+	public static final String PERMISSION_FOR_INSTALL_SHORTCUT = "com.android.launcher.permission.INSTALL_SHORTCUT";
+	public static final String PERMISSION_FOR_UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";
+	public static final String PERMISSION_FOR_LOGS = "android.permission.READ_LOGS";
+
+	public static final List<String> FUNCTIONAL_PERMISSIONS = Arrays.asList(
+			PERMISSION_FOR_CAMERA,
+			PERMISSION_FOR_READ_EXTERNAL_STORAGE,
+			PERMISSION_FOR_WRITE_EXTERNAL_STORAGE
+	);
+
+	public static final List<String> SHORTCUT_PERMISSIONS = Arrays.asList(
+			PERMISSION_FOR_INSTALL_SHORTCUT,
+			PERMISSION_FOR_UNINSTALL_SHORTCUT
+	);
+
+	public static final List<String> LOGS_PERMISSIONS = Arrays.asList(PERMISSION_FOR_LOGS);
+
 	public interface ProgressCancelListener {
 		public void onProgressCancel();
 	}
@@ -184,6 +206,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Update the selected folder model with the volume ID and root path.
+	 *
 	 * @param model The model to be updated.
 	 */
 	public void updateSelectedFolderModel(SelectedFolderModel model) {
@@ -402,7 +425,7 @@ public class DSCApplication extends Application {
 	 * Obtain the formatted file name based on a date.
 	 *
 	 * @param fileNameFormat The file name pattern format.
-	 * @param date Date used to generate file name.
+	 * @param date           Date used to generate file name.
 	 * @return The formatted file name.
 	 */
 	public String getFileNameFormatted(String fileNameFormat, Date date) {
@@ -473,7 +496,7 @@ public class DSCApplication extends Application {
 	 * Update a file name pattern.
 	 *
 	 * @param fileNameModel File name model to be updated.
-	 * @param position   Position of updated file name.
+	 * @param position      Position of updated file name.
 	 */
 	public void saveFileNamePattern(FileNameModel fileNameModel, int position) {
 		FileNameModel[] arr = getOriginalFileNamePattern();
@@ -668,8 +691,12 @@ public class DSCApplication extends Application {
 	 */
 	private void updateRegisteredServiceType(int serviceType, int regServiceType) {
 		switch (regServiceType) {
-			case SERVICE_TYPE_CONTENT: unregisterMediaStorageContentObserver(); break;
-			case SERVICE_TYPE_FILE_OBSERVER: unregisterFolderObserver(); break;
+			case SERVICE_TYPE_CONTENT:
+				unregisterMediaStorageContentObserver();
+				break;
+			case SERVICE_TYPE_FILE_OBSERVER:
+				unregisterFolderObserver();
+				break;
 		}
 		switch (serviceType) {
 			case SERVICE_TYPE_CONTENT:
@@ -700,6 +727,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Obtain the formatted file name suffix.
+	 *
 	 * @param value Value to be formatted.
 	 * @return Formatted value.
 	 */
@@ -718,6 +746,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if the original name should be appended to the new file name.
+	 *
 	 * @return True, if the original name should be preserved.
 	 */
 	public boolean isAppendOriginalNameEnabled() {
@@ -839,9 +868,9 @@ public class DSCApplication extends Application {
 	 * This will show a progress dialog using a context and the message to be
 	 * showed on the progress dialog.
 	 *
-	 * @param listener The listener class which should listen for cancel.
-	 * @param context  The context where should be displayed the progress dialog.
-	 * @param message  The message displayed inside of progress dialog.
+	 * @param listener    The listener class which should listen for cancel.
+	 * @param context     The context where should be displayed the progress dialog.
+	 * @param message     The message displayed inside of progress dialog.
 	 * @param progressMax The progress dialog bar max steps.
 	 */
 	public void createProgressDialog(final ProgressCancelListener listener, Context context, String message, int progressMax) {
@@ -1107,6 +1136,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if is the first time when the application was installed.
+	 *
 	 * @return True if is the first time when the application was installed.
 	 */
 	public boolean isFirstInstallation() {
@@ -1380,6 +1410,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Write the shared preferences to provided writer.
+	 *
 	 * @param writer The writer used to write the shared preferences.
 	 */
 	public void writeSharedPreferences(Writer writer) {
@@ -1394,6 +1425,172 @@ public class DSCApplication extends Application {
 			}
 		} catch (IOException e) {
 			logE(TAG, "writeSharedPreferences: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Check if should be asked for permissions.
+	 *
+	 * @return True if should be asked for permissions.
+	 */
+	public boolean shouldAskPermissions() {
+		boolean result = mSdkInt > 22;
+		return result;
+	}
+
+	/**
+	 * Check if the permissions were asked.
+	 * @return True if the permissions were asked.
+	 */
+	public boolean havePermissionsAsked() {
+		return mSharedPreferences.getBoolean(KEY_HAVE_PERMISSIONS_ASKED, false);
+	}
+
+	/**
+	 * Set the permission asked flag to true.
+	 */
+	public void markPermissionsAsked() {
+		saveBooleanValue(KEY_HAVE_PERMISSIONS_ASKED, true);
+	}
+
+	/**
+	 * Check if a permission was asked.
+	 *
+	 * @param permission The permission to be asked.
+	 * @return True if the permission was asked before.
+	 */
+	public boolean isPermissionAsked(String permission) {
+		return mSharedPreferences.getBoolean(permission, false);
+	}
+
+	/**
+	 * Mark a permission as asked.
+	 *
+	 * @param permission Permission to be marked as asked.
+	 */
+	public void markPermissionAsked(String permission) {
+		saveBooleanValue(permission, true);
+	}
+
+	/**
+	 * Remove the permission asked flag.
+	 *
+	 * @param permission The permission for which will be removed the asked flag.
+	 */
+	public void removePermissionAskedMark(String permission) {
+		removeSharedPreference(permission);
+	}
+
+	/**
+	 * Check if a permission is allowed.
+	 *
+	 * @param permission The permission to be checked.
+	 * @return True if the permission is allowed.
+	 */
+	public boolean hasPermission(String permission) {
+		if (shouldAskPermissions()) {
+			return hasPermission23(permission);
+		}
+		return true;
+	}
+
+	/**
+	 * Check if a permission is allowed. (API 23)
+	 *
+	 * @param permission The permission to be checked.
+	 * @return True if the permission is allowed.
+	 */
+	@TargetApi(23)
+	private boolean hasPermission23(String permission) {
+		return (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+	}
+
+	/**
+	 * Check if the application have functional permissions.
+	 *
+	 * @return True if all functional permissions are allowed.
+	 */
+	public boolean haveFunctionalPermissions() {
+		for (String permission : DSCApplication.FUNCTIONAL_PERMISSIONS) {
+			if (!hasPermission(permission)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Check if the application have shortcut permissions.
+	 *
+	 * @return True if all shortcut permissions are allowed.
+	 */
+	public boolean haveShortcutPermissions() {
+		for (String permission : DSCApplication.SHORTCUT_PERMISSIONS) {
+			if (!hasPermission(permission)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Check if the application have logs permissions.
+	 *
+	 * @return True if all logs permissions are allowed.
+	 */
+	public boolean haveLogsPermissions() {
+		for (String permission : DSCApplication.LOGS_PERMISSIONS) {
+			if (!hasPermission(permission)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Get all not granted permissions.
+	 */
+	public String[] getNotGrantedPermissions() {
+		List<String> permissions = new ArrayList<String>();
+		buildRequiredPermissions(permissions, DSCApplication.FUNCTIONAL_PERMISSIONS, true);
+		buildRequiredPermissions(permissions, DSCApplication.SHORTCUT_PERMISSIONS, true);
+//		buildRequiredPermissions(permissions, DSCApplication.LOGS_PERMISSIONS, true);
+		String[] array = null;
+		if (!permissions.isEmpty()) {
+			array = new String[permissions.size()];
+			array = permissions.toArray(array);
+		}
+		return array;
+	}
+
+	/**
+	 * Get an array with all required permissions.
+	 * @return Array with permissions to be requested.
+	 */
+	public String[] getAllRequiredPermissions() {
+		List<String> permissions = new ArrayList<String>();
+		buildRequiredPermissions(permissions, DSCApplication.FUNCTIONAL_PERMISSIONS, false);
+		buildRequiredPermissions(permissions, DSCApplication.SHORTCUT_PERMISSIONS, false);
+//		buildRequiredPermissions(permissions, DSCApplication.LOGS_PERMISSIONS, false);
+		String[] array = null;
+		if (!permissions.isEmpty()) {
+			array = new String[permissions.size()];
+			array = permissions.toArray(array);
+		}
+		return array;
+	}
+
+	/**
+	 * Put on the permissions all required permissions which is missing and was not asked.
+	 * @param permissions List of permissions to be requested.
+	 * @param requiredPermissions List with all required permissions to be checked.
+	 */
+	private void buildRequiredPermissions(List<String> permissions, List<String> requiredPermissions, boolean force) {
+		for (String permission : requiredPermissions) {
+			if ((force && !hasPermission(permission)) ||
+					(!isPermissionAsked(permission) && !hasPermission(permission))) {
+				permissions.add(permission);
+			}
 		}
 	}
 }

@@ -146,6 +146,12 @@
         <item>th</item>
     </string-array>
 
+    <!-- Permission sections -->
+    <string name="request_permissions_title">Solicita permisiunile aplicatiei.</string>
+    <string name="request_permissions_desc">Atinge aceasta optiune pentru a solicita acordarea permisiunilor necesare aplicatiei: Camera (folosit pentru capturarea noilor fisiere media), Storage (folosit pentru redenumirea fisierelor).</string>
+    <string name="request_permissions_confirmation">Solicitati acordarea permisiunilor necesare aplicatiei?</string>
+    <string name="request_permissions_ok">Sunt acordate toate permisiunile necesare!</string>
+
     <!-- About -->
     <string name="about_section">Despre</string>
     <string name="build_version_title">Build version</string>

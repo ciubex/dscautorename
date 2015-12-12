@@ -146,6 +146,12 @@
         <item>th</item>
     </string-array>
 
+    <!-- Permission sections -->
+    <string name="request_permissions_title">Request required application permission.</string>
+    <string name="request_permissions_desc">Touch this option to request for required application permissions: Camera (used to receive the capture moment), Storage (used to rename and move files).</string>
+    <string name="request_permissions_confirmation">Do you want to request for required application permissions?</string>
+    <string name="request_permissions_ok">All required permissions are granted!</string>
+
     <!-- About -->
     <string name="about_section">About</string>
     <string name="build_version_title">Build version</string>

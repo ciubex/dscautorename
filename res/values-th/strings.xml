@@ -144,16 +144,22 @@
         <item>th</item>
     </string-array>
 
+    <!-- Permission sections -->
+    <string name="request_permissions_title">ขออนุญาตการประยุกต์ใช้ที่จำเป็น</string>
+    <string name="request_permissions_desc">สัมผัสตัวเลือกนี้เพื่อขอสิทธิ์ในแอพลิเคชันที่ต้องการ: กล้อง (ใช้ในการรับช่วงเวลาการจับภาพ), การจัดเก็บข้อมูล (ที่ใช้ในการเปลี่ยนชื่อและย้ายไฟล์).</string>
+    <string name="request_permissions_confirmation">คุณต้องการที่จะขอสิทธิ์ในการประยุกต์ใช้ต้อง?</string>
+    <string name="request_permissions_ok">สิทธิ์ที่จำเป็นทั้งหมดจะได้รับ!</string>
+
     <!-- About -->
     <string name="about_section">เกี่ยวกับ</string>
-    <string name="build_version_title">Build version</string>
+    <string name="build_version_title">สร้างรุ่น</string>
     <string name="build_version_desc">1</string>
     <string name="send_debug_title">ส่งล็อกเมื่อพบปัญหา</string>
     <string name="send_debug_desc">ส่งล็อกทางอีเมล์</string>
     <string name="send_debug_confirmation">ต้องการส่งรายงานเมื่อพบปัญหาหรือไม่?\nโปรดเลือกแอพพลิเคชันสำหรับการส่งอีเมล์ โดยจะมีไฟล์แนบไปด้วยจำนวน 2 ไฟล์ โปรดกรอกข้อมูลสั้นๆ เพื่ออธิบายถึงปัญหาที่พบ\nขอบคุณ!</string>
-    <string name="send_debug_email_title">Debugging logs for DSC Auto Rename</string>
-    <string name="license_title">Open source licenses</string>
-    <string name="license_desc">License details for open source software</string>
+    <string name="send_debug_email_title">บันทึกการแก้จุดบกพร่องสำหรับ DSC Auto Rename</string>
+    <string name="license_title">ใบอนุญาตเปิดแหล่งที่มา</string>
+    <string name="license_desc">รายละเอียดใบอนุญาตซอฟต์แวร์โอเพ่นซอร์ส</string>
     <string name="donate_title">บริจาค</string>
     <string name="donate_desc">โปรดบริจาคถ้าคุณเห็นว่าแอพพลิเคชันนี้มีประโยชน์</string>
     <string name="donate_confirmation">ถ้าคุณชอบแอพพลิเคชันนี้ โปรดซื้อ DSC Auto Rename PRO\nกดปุ่มตกลงเพื่อไปยังหน้า DSC Auto Rename PRO บน Google Play Store.\nขอบคุณที่ใช้แอพพลิเคชันนี้!</string>

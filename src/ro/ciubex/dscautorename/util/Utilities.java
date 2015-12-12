@@ -30,6 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -224,11 +225,13 @@ public class Utilities {
 			String result = null;
 			if (METHOD_StorageVolume_getDescription != null) {
 				switch (METHOD_StorageVolume_getDescription.getParameterTypes().length) {
-					case 0: result = (String) invoke("StorageVolume.getDescription()",
-							METHOD_StorageVolume_getDescription, obj);
+					case 0:
+						result = (String) invoke("StorageVolume.getDescription()",
+								METHOD_StorageVolume_getDescription, obj);
 						break;
-					case 1: result = (String) invoke("StorageVolume.getDescription()",
-							METHOD_StorageVolume_getDescription, obj, context);
+					case 1:
+						result = (String) invoke("StorageVolume.getDescription()",
+								METHOD_StorageVolume_getDescription, obj, context);
 						break;
 				}
 			}
@@ -239,11 +242,13 @@ public class Utilities {
 			Object[] arr = null;
 			if (METHOD_IMountService_getVolumeList != null) {
 				switch (METHOD_IMountService_getVolumeList.getParameterTypes().length) {
-					case 0: arr = (Object[]) invoke("IMountService.getVolumeList()",
-							METHOD_IMountService_getVolumeList, mountService);
+					case 0:
+						arr = (Object[]) invoke("IMountService.getVolumeList()",
+								METHOD_IMountService_getVolumeList, mountService);
 						break;
-					case 3: arr = (Object[]) invoke("IMountService.getVolumeList()",
-							METHOD_IMountService_getVolumeList, mountService, 0, "/", 0);
+					case 3:
+						arr = (Object[]) invoke("IMountService.getVolumeList()",
+								METHOD_IMountService_getVolumeList, mountService, 0, "/", 0);
 						break;
 				}
 			}
@@ -389,13 +394,26 @@ public class Utilities {
 	 * @return True if object is null or zero length.
 	 */
 	public static boolean isEmpty(Object object) {
-		if (object instanceof CharSequence)
-			return ((CharSequence) object).length() == 0;
-		return object == null;
+		if (object != null) {
+			if (object instanceof CharSequence) {
+				String string = String.valueOf(object);
+				return string.trim().length() == 0;
+			} else if (object instanceof StringBuilder) {
+				String string = String.valueOf(object);
+				return string.trim().length() == 0;
+			} else if (object instanceof Collection) {
+				return ((Collection) object).isEmpty();
+			} else if (object instanceof Object[]) {
+				return ((Object[]) object).length == 0;
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/**
 	 * Parse a string date time value in format yyyy:MM:dd HH:mm:ss to a date.
+	 *
 	 * @param dateTime Date time to be parsed.
 	 * @return The parsed date time.
 	 */
@@ -438,6 +456,7 @@ public class Utilities {
 
 	/**
 	 * Check if the move files is enabled.
+	 *
 	 * @return The move files enabled state.
 	 */
 	public static boolean isMoveFiles(SelectedFolderModel selectedFolder) {

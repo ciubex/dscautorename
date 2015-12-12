@@ -92,7 +92,7 @@
             android:summary="@string/confirmation_rename_dialog_desc"
             android:title="@string/confirmation_rename_dialog" />
     </PreferenceCategory>
-    <PreferenceCategory android:title="@string/other_settings" >
+    <PreferenceCategory android:title="@string/other_settings" android:key="otherSettings">
         <Preference
             android:key="manuallyStartRename"
             android:persistent="false"
@@ -103,6 +103,11 @@
             android:persistent="false"
             android:summary="@string/file_rename_count_desc"
             android:title="@string/file_rename_count_title" />
+        <Preference
+            android:key="requestPermissions"
+            android:persistent="false"
+            android:summary="@string/request_permissions_desc"
+            android:title="@string/request_permissions_title" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/about_section" >
         <Preference

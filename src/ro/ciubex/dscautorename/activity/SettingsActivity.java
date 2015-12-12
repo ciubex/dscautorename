@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- * 
+ *
  * Copyright (C) 2015 Claudiu Ciobotariu
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -33,6 +33,7 @@ import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceCategory;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
@@ -48,7 +49,6 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Writer;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -69,9 +69,8 @@ import ro.ciubex.dscautorename.util.Utilities;
 
 /**
  * This is main activity class, actually is a preference activity.
- * 
+ *
  * @author Claudiu Ciobotariu
- * 
  */
 public class SettingsActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener, RenameFileAsyncTask.Listener,
@@ -79,15 +78,19 @@ public class SettingsActivity extends PreferenceActivity implements
 	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
+	private CheckBoxPreference mRenameVideoEnabled;
+	private Preference mRenameServiceStartDelay;
 	private ListPreference mRenameFileDateType;
 	private Preference mDefineFileNamePatterns;
 	private EditTextPreference mFileNameSuffixFormat;
 	private CheckBoxPreference mEnabledFolderScanning;
 	private Preference mFolderScanningPref;
+	private Preference mEnableScanForFiles;
 	private Preference mToggleRenameShortcut;
 	private CheckBoxPreference mHideRenameServiceStartConfirmation;
 	private Preference mManuallyStartRename;
 	private Preference mFileRenameCount;
+	private Preference mRequestPermissions;
 	private Preference mBuildVersion;
 	private Preference mSendDebugReport;
 	private Preference mLicensePref;
@@ -95,13 +98,18 @@ public class SettingsActivity extends PreferenceActivity implements
 	private CheckBoxPreference mAppendOriginalName;
 	private SelectFoldersListDialog selectFoldersListDialog;
 	private SelectFileNamePatternDialog selectFileNamePatternDialog;
+	private PreferenceCategory mOtherSettings;
+	private static final int ID_CONFIRMATION_INFO = -2;
 	private static final int ID_CONFIRMATION_ALERT = -1;
 	private static final int ID_CONFIRMATION_DONATION = 0;
 	private static final int ID_CONFIRMATION_RESET_RENAME_COUNTER = 1;
 	private static final int ID_CONFIRMATION_DEBUG_REPORT = 2;
+	private static final int ID_CONFIRMATION_REQUEST_PERMISSIONS = 3;
+	private static final int ID_CONFIRMATION_MANUAL_RENAME = 4;
 	private static final int REQUEST_SEND_REPORT = 1;
 	public static final int REQUEST_OPEN_DOCUMENT_TREE = 42;
 	public static final int REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER = 43;
+	private static final int PERMISSIONS_REQUEST_CODE = 44;
 	private static final int BUFFER = 1024;
 
 	/**
@@ -114,8 +122,18 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication = (DSCApplication) getApplication();
 		initPreferences();
 		initCommands();
+		initPreferencesByPermissions();
 		checkProVersion();
 		updateShortcutFields();
+	}
+
+	/**
+	 * Remove the permission request preference if should not be asked for permissions.
+	 */
+	private void initPreferencesByPermissions() {
+		if (!mApplication.shouldAskPermissions()) {
+			mOtherSettings.removePreference(mRequestPermissions);
+		}
 	}
 
 	/**
@@ -123,20 +141,25 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
+		mRenameVideoEnabled = (CheckBoxPreference) findPreference("renameVideoEnabled");
+		mRenameServiceStartDelay = (Preference) findPreference("renameServiceStartDelay");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefineFileNamePatterns = (Preference) findPreference("definePatterns");
 		mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
 		mEnabledFolderScanning = (CheckBoxPreference) findPreference("enabledFolderScanning");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
+		mEnableScanForFiles = (Preference) findPreference("enableScanForFiles");
 		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
 		mHideRenameServiceStartConfirmation = (CheckBoxPreference) findPreference("hideRenameServiceStartConfirmation");
 		mAppendOriginalName = (CheckBoxPreference) findPreference("appendOriginalName");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
+		mRequestPermissions = (Preference) findPreference("requestPermissions");
 		mBuildVersion = (Preference) findPreference("buildVersion");
 		mSendDebugReport = (Preference) findPreference("sendDebugReport");
 		mLicensePref = (Preference) findPreference("licensePref");
 		mDonatePref = (Preference) findPreference("donatePref");
+		mOtherSettings = (PreferenceCategory) findPreference("otherSettings");
 	}
 
 	/**
@@ -188,6 +211,14 @@ public class SettingsActivity extends PreferenceActivity implements
 						return true;
 					}
 				});
+		mRequestPermissions.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				onRequestPermissions();
+				return true;
+			}
+		});
 		mBuildVersion
 				.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 
@@ -225,6 +256,18 @@ public class SettingsActivity extends PreferenceActivity implements
 				});
 	}
 
+
+
+	/**
+	 * Method used to request for application required permissions.
+	 */
+	@TargetApi(23)
+	private void requestForPermissions(String[] permissions) {
+		if (!Utilities.isEmpty(permissions)) {
+			requestPermissions(permissions, PERMISSIONS_REQUEST_CODE);
+		}
+	}
+
 	/**
 	 * Check if the pro version is present to update the donation preference item.
 	 */
@@ -247,6 +290,20 @@ public class SettingsActivity extends PreferenceActivity implements
 		mApplication.updateShortcutUpdateListener(this);
 		prepareSummaries();
 		checkAndroidVersion();
+		checkForPermissions();
+	}
+
+	/**
+	 * Method used to check for application permissions.
+	 */
+	@TargetApi(23)
+	private void checkForPermissions() {
+		if (mApplication.shouldAskPermissions()) {
+			updateSettingsOptionsByPermissions();
+			if (!mApplication.havePermissionsAsked()) {
+				requestForPermissions(mApplication.getAllRequiredPermissions());
+			}
+		}
 	}
 
 	/**
@@ -275,6 +332,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Get the update message from the resources.
+	 *
 	 * @return The update message if is present on the resources.
 	 */
 	private String getUpdateMessage() {
@@ -300,15 +358,13 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * This method is invoked when a preference is changed
-	 * 
-	 * @param sharedPreferences
-	 *            The shared preference
-	 * @param key
-	 *            Key of changed preference
+	 *
+	 * @param sharedPreferences The shared preference
+	 * @param key               Key of changed preference
 	 */
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
+										  String key) {
 		boolean doPrepareSummaries = true;
 		if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
 			mApplication.checkRegisteredServiceType(false);
@@ -329,7 +385,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void restartActivity() {
 		mApplication.initLocale();
 		Intent i = DSCApplication.getAppContext().getPackageManager()
-				.getLaunchIntentForPackage( DSCApplication.getAppContext().getPackageName() );
+				.getLaunchIntentForPackage(DSCApplication.getAppContext().getPackageName());
 		i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(i);
 	}
@@ -355,18 +411,18 @@ public class SettingsActivity extends PreferenceActivity implements
 		summary = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_desc, summary);
 		mFileNameSuffixFormat.setSummary(summary);
 		switch (mApplication.getServiceType()) {
-		case DSCApplication.SERVICE_TYPE_CAMERA:
-			mServiceTypeList.setSummary(R.string.service_choice_1);
-			break;
-		case DSCApplication.SERVICE_TYPE_CONTENT:
-			mServiceTypeList.setSummary(R.string.service_choice_2);
-			break;
-		case DSCApplication.SERVICE_TYPE_FILE_OBSERVER:
-			mServiceTypeList.setSummary(R.string.service_choice_3);
-			break;
-		default:
-			mServiceTypeList.setSummary(R.string.service_choice_0);
-			break;
+			case DSCApplication.SERVICE_TYPE_CAMERA:
+				mServiceTypeList.setSummary(R.string.service_choice_1);
+				break;
+			case DSCApplication.SERVICE_TYPE_CONTENT:
+				mServiceTypeList.setSummary(R.string.service_choice_2);
+				break;
+			case DSCApplication.SERVICE_TYPE_FILE_OBSERVER:
+				mServiceTypeList.setSummary(R.string.service_choice_3);
+				break;
+			default:
+				mServiceTypeList.setSummary(R.string.service_choice_0);
+				break;
 		}
 		if (mApplication.getSdkInt() >= 21) {
 			mEnabledFolderScanning.setSummary(R.string.enable_filter_folder_desc_v21);
@@ -445,7 +501,8 @@ public class SettingsActivity extends PreferenceActivity implements
 			showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v21), false,
 					ID_CONFIRMATION_ALERT);
 		} else {
-			startRenameServiceManually();
+			showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.confirmation_rename_question), false,
+					ID_CONFIRMATION_MANUAL_RENAME);
 		}
 	}
 
@@ -468,6 +525,14 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
+	 * Method invoked when was pressed the request permission preference.
+	 */
+	private void onRequestPermissions() {
+		showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.request_permissions_confirmation), false,
+				ID_CONFIRMATION_REQUEST_PERMISSIONS);
+	}
+
+	/**
 	 * Confirmed reset file rename counter.
 	 */
 	private void confirmedResetFileRenameCounter() {
@@ -487,6 +552,9 @@ public class SettingsActivity extends PreferenceActivity implements
 		startActivity(intent);
 	}
 
+	/**
+	 * Method invoked when the user chose to send a debug.
+	 */
 	private void onSendDebugReport() {
 		showConfirmationDialog(DSCApplication.getAppContext().getString(R.string.send_debug_confirmation), false,
 				ID_CONFIRMATION_DEBUG_REPORT);
@@ -514,18 +582,14 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Show a confirmation popup dialog.
-	 * 
-	 * @param message
-	 *            Message of the confirmation dialog.
-	 * @param messageContainLink
-	 *            A boolean flag which mark if the text contain links.
-	 * @param confirmationId
-	 *            ID of the process to be executed if confirmed.
+	 *
+	 * @param message            Message of the confirmation dialog.
+	 * @param messageContainLink A boolean flag which mark if the text contain links.
+	 * @param confirmationId     ID of the process to be executed if confirmed.
 	 */
 	private void showConfirmationDialog(String message,
-			boolean messageContainLink, final int confirmationId) {
+										boolean messageContainLink, final int confirmationId) {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-		alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
 		alertDialog.setTitle(R.string.app_name);
 		if (messageContainLink) {
 			ScrollView scrollView = new ScrollView(this);
@@ -544,8 +608,13 @@ public class SettingsActivity extends PreferenceActivity implements
 		}
 		alertDialog.setCancelable(false);
 		if (confirmationId == ID_CONFIRMATION_ALERT) {
+			alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
+			alertDialog.setNeutralButton(R.string.ok, null);
+		} else if (confirmationId == ID_CONFIRMATION_INFO) {
+			alertDialog.setIcon(android.R.drawable.ic_dialog_info);
 			alertDialog.setNeutralButton(R.string.ok, null);
 		} else {
+			alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
 			alertDialog.setPositiveButton(R.string.yes,
 					new DialogInterface.OnClickListener() {
 
@@ -561,9 +630,8 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Execute proper confirmation process based on received confirmation ID.
-	 * 
-	 * @param confirmationId
-	 *            Received confirmation ID.
+	 *
+	 * @param confirmationId Received confirmation ID.
 	 */
 	protected void onConfirmation(int confirmationId) {
 		if (confirmationId == ID_CONFIRMATION_DONATION) {
@@ -572,6 +640,18 @@ public class SettingsActivity extends PreferenceActivity implements
 			confirmedResetFileRenameCounter();
 		} else if (confirmationId == ID_CONFIRMATION_DEBUG_REPORT) {
 			confirmedSendReport(DSCApplication.getAppContext().getString(R.string.send_debug_email_title));
+		} else if (confirmationId == ID_CONFIRMATION_REQUEST_PERMISSIONS) {
+			String[] permissions = mApplication.getNotGrantedPermissions();
+			if (Utilities.isEmpty(permissions)) {
+				showConfirmationDialog(
+						DSCApplication.getAppContext().getString(R.string.request_permissions_ok),
+						false,
+						ID_CONFIRMATION_ALERT);
+			} else {
+				requestForPermissions(mApplication.getNotGrantedPermissions());
+			}
+		} else if (confirmationId == ID_CONFIRMATION_MANUAL_RENAME) {
+			startRenameServiceManually();
 		}
 	}
 
@@ -601,11 +681,9 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Method invoked from the rename task when an update is required.
-	 * 
-	 * @param position
-	 *            Current number of renamed files.
-	 * @param message
-	 *            The message to be displayed on progress dialog.
+	 *
+	 * @param position Current number of renamed files.
+	 * @param message  The message to be displayed on progress dialog.
 	 */
 	@Override
 	public void onTaskUpdate(int position, int max, String message) {
@@ -620,23 +698,22 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Method invoked at the end of rename file async task.
-	 * 
-	 * @param count
-	 *            Number of renamed files.
+	 *
+	 * @param count Number of renamed files.
 	 */
 	@Override
 	public void onTaskFinished(int count) {
 		String message;
 		switch (count) {
-		case 0:
-			message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_0);
-			break;
-		case 1:
-			message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_1);
-			break;
-		default:
-			message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_more, count);
-			break;
+			case 0:
+				message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_0);
+				break;
+			case 1:
+				message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_1);
+				break;
+			default:
+				message = DSCApplication.getAppContext().getString(R.string.manually_file_rename_count_more, count);
+				break;
 		}
 		mApplication.hideProgressDialog();
 		showAlertDialog(message);
@@ -645,8 +722,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	/**
 	 * Display an alert dialog with a custom message.
 	 *
-	 * @param message
-	 *            Message to be displayed on an alert dialog.
+	 * @param message Message to be displayed on an alert dialog.
 	 */
 	private void showAlertDialog(String message) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
@@ -663,9 +739,8 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Create or remove rename shortcut from the home screen.
-	 * 
-	 * @param create
-	 *            True if the shortcut should be created.
+	 *
+	 * @param create True if the shortcut should be created.
 	 */
 	private void createOrRemoveRenameShortcut(boolean create) {
 		String action = create ? RenameShortcutUpdateListener.INSTALL_SHORTCUT
@@ -689,7 +764,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Create the manually rename service shortcut intent.
-	 * 
+	 *
 	 * @return The manually rename service shortcut intent.
 	 */
 	private Intent getActivityIntent() {
@@ -738,7 +813,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		String message = DSCApplication.getAppContext().getString(R.string.report_body);
 		File logsFolder = mApplication.getLogsFolder();
 		File archive = getLogArchive(logsFolder);
-		String[] TO = { "ciubex@yahoo.com" };
+		String[] TO = {"ciubex@yahoo.com"};
 
 		Intent emailIntent = new Intent(Intent.ACTION_SEND_MULTIPLE);
 		emailIntent.setType("text/plain");
@@ -767,6 +842,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Build the logs and call the archive creator.
+	 *
 	 * @param logsFolder The logs folder.
 	 * @return The archive file which should contain the logs.
 	 */
@@ -781,8 +857,9 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Method used to build a ZIP archive with log files.
-	 * @param files The log files to be added.
-	 * @param logsFolder The logs folder where should be added the archive name.
+	 *
+	 * @param files       The log files to be added.
+	 * @param logsFolder  The logs folder where should be added the archive name.
 	 * @param archiveName The archive file name.
 	 * @return The archive file.
 	 */
@@ -823,9 +900,8 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Generate logs file on cache directory.
-	 * 
-	 * @param cacheFolder
-	 *            Cache directory where are the logs.
+	 *
+	 * @param cacheFolder Cache directory where are the logs.
 	 * @return File with the logs.
 	 */
 	private File getLogcatFile(File cacheFolder) {
@@ -858,7 +934,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			writer.write("Device: " + model + LS);
 			writer.write("Device name: " + Devices.getDeviceName() + LS);
 			writer.write("App version: " + mApplication.getVersionName() +
-					" (" + mApplication.getVersionCode() + ")"  + LS);
+					" (" + mApplication.getVersionCode() + ")" + LS);
 			mApplication.writeSharedPreferences(writer);
 			int n;
 			do {
@@ -896,8 +972,8 @@ public class SettingsActivity extends PreferenceActivity implements
 //			mApplication.deleteLogFile();
 		} else if (resultCode == RESULT_OK && (
 				requestCode == REQUEST_OPEN_DOCUMENT_TREE ||
-				requestCode == REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER)
-		) {
+						requestCode == REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER)
+				) {
 			if (mApplication.getSdkInt() >= 21) {
 				processActionOpenDocumentTree(requestCode, data);
 			}
@@ -906,6 +982,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Process resulted data from new API regarding selected tree.
+	 *
 	 * @param resultData Resulted data from selected folder.
 	 */
 	@TargetApi(21)
@@ -929,6 +1006,7 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Update select folder list dialog.
+	 *
 	 * @param selectedFolder Selected folder model.
 	 */
 	private void updateSelectFoldersListDialog(SelectedFolderModel selectedFolder) {
@@ -945,11 +1023,59 @@ public class SettingsActivity extends PreferenceActivity implements
 
 	/**
 	 * Update the pattern dialog with selected folder.
+	 *
 	 * @param selectedFolder The selected folder.
 	 */
 	private void updateSelectedFolder(SelectedFolderModel selectedFolder) {
 		if (selectFileNamePatternDialog != null) {
 			selectFileNamePatternDialog.updateSelectedFolder(selectedFolder);
+		}
+	}
+
+	/**
+	 * Callback for the result from requesting permissions.
+	 *
+	 * @param requestCode  The request code passed in {@link #requestPermissions(String[], int)}.
+	 * @param permissions  The requested permissions. Never null.
+	 * @param grantResults The grant results for the corresponding permissions.
+	 */
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		if (PERMISSIONS_REQUEST_CODE == requestCode) {
+			mApplication.markPermissionsAsked();
+			for (String permission : permissions) {
+				mApplication.markPermissionAsked(permission);
+			}
+			updateSettingsOptionsByPermissions();
+		}
+	}
+
+	/**
+	 * Update settings options based on the allowed permissions.
+	 */
+	private void updateSettingsOptionsByPermissions() {
+		boolean allowed;
+		if (mApplication.shouldAskPermissions()) {
+			// functionality
+			allowed = mApplication.haveFunctionalPermissions();
+			mServiceTypeList.setEnabled(allowed);
+			mRenameVideoEnabled.setEnabled(allowed);
+			mRenameServiceStartDelay.setEnabled(allowed);
+			mEnabledFolderScanning.setEnabled(allowed);
+			mFolderScanningPref.setEnabled(allowed);
+			mEnableScanForFiles.setEnabled(allowed);
+			mDefineFileNamePatterns.setEnabled(allowed);
+			mFileNameSuffixFormat.setEnabled(allowed);
+			mRenameFileDateType.setEnabled(allowed);
+			mAppendOriginalName.setEnabled(allowed);
+			mManuallyStartRename.setEnabled(allowed);
+			// shortcut
+			allowed = allowed && mApplication.haveShortcutPermissions();
+			mToggleRenameShortcut.setEnabled(allowed);
+			mHideRenameServiceStartConfirmation.setEnabled(allowed);
+			// logs
+			allowed = true;// mApplication.haveLogsPermissions();
+			mSendDebugReport.setEnabled(allowed);
 		}
 	}
 }

@@ -146,6 +146,12 @@
         <item>3</item>
     </string-array>
 
+    <!-- Permission sections -->
+    <string name="request_permissions_title">Запрос Требуется разрешение приложения.</string>
+    <string name="request_permissions_desc">Выберите этот вариант, чтобы требовать для необходимых разрешений приложений: камера (используется для получения момента захвата), Место хранения (используется для переименования и перемещения файлов).</string>
+    <string name="request_permissions_confirmation">Вы хотите, чтобы запросить необходимые разрешения приложения?</string>
+    <string name="request_permissions_ok">Все необходимые разрешения выдаются!</string>
+
     <!-- About -->
     <string name="about_section">Около</string>
     <string name="build_version_title">версия сборки</string>
