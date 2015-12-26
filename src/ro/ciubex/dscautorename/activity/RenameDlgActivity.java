@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2015 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -44,7 +44,7 @@ public class RenameDlgActivity extends Activity implements
 	private Button mCancelButton;
 
 	/**
-	 * Method called when the activity is created
+	 * Method called when the activity is created.
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

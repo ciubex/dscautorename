@@ -189,6 +189,15 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Get the list of mounted volumes.
+	 *
+	 * @return List of mounted volumes.
+	 */
+	public List<MountVolume> getMountedVolumes() {
+		return mMountVolumes;
+	}
+
+	/**
 	 * Update selected folders for scanning
 	 */
 	public void updateSelectedFolders() {
@@ -902,8 +911,13 @@ public class DSCApplication extends Application {
 	 */
 	public void showProgressDialog() {
 		if (mProgressDialog != null) {
-			if (!mProgressDialog.isShowing()) {
-				mProgressDialog.show();
+			try {
+				if (!mProgressDialog.isShowing()) {
+					mProgressDialog.show();
+				}
+			} catch (Exception e) {
+				logE(TAG, "showProgressDialog: " + e.getMessage(), e);
+				hideProgressDialog();
 			}
 		}
 	}
@@ -1440,6 +1454,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Check if the permissions were asked.
+	 *
 	 * @return True if the permissions were asked.
 	 */
 	public boolean havePermissionsAsked() {
@@ -1565,6 +1580,7 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Get an array with all required permissions.
+	 *
 	 * @return Array with permissions to be requested.
 	 */
 	public String[] getAllRequiredPermissions() {
@@ -1582,7 +1598,8 @@ public class DSCApplication extends Application {
 
 	/**
 	 * Put on the permissions all required permissions which is missing and was not asked.
-	 * @param permissions List of permissions to be requested.
+	 *
+	 * @param permissions         List of permissions to be requested.
 	 * @param requiredPermissions List with all required permissions to be checked.
 	 */
 	private void buildRequiredPermissions(List<String> permissions, List<String> requiredPermissions, boolean force) {

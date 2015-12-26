@@ -32,6 +32,7 @@ import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.FileRenameData;
+import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
 import ro.ciubex.dscautorename.util.Utilities;
@@ -44,7 +45,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.webkit.MimeTypeMap;
 
 /**
  * An AsyncTask used to rename a file.
@@ -889,23 +889,26 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				while (cursor.moveToNext()) {
 					data = cursor.getString(cursor
 							.getColumnIndex(MediaStore.MediaColumns.DATA));
-					fileName = getFileName(data);
-					index = renamePatternsUtilities.matchFileNameBefore(fileName);
-					if (index > -1) {
-						fileNameModel = mFileNameModels[index];
-						id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
-						title = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE));
-						displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
-						mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE));
-						dateAdded = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED));
-						size = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE));
-						originalData = new FileRenameData(id, uri, data, title, displayName, mimeType, dateAdded, size);
-						originalData.setFileNamePatternBefore(fileNameModel.getBefore());
-						originalData.setFileNamePatternAfter(fileNameModel.getAfter());
-						if (Utilities.isMoveFiles(fileNameModel.getSelectedFolder())) {
-							originalData.setMoveToFolderPath(fileNameModel.getSelectedFolder().getFullPath());
+					data = getValidFullFileName(data);
+					if (data != null) {
+						fileName = getFileName(data);
+						index = renamePatternsUtilities.matchFileNameBefore(fileName);
+						if (index > -1) {
+							fileNameModel = mFileNameModels[index];
+							id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+							title = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE));
+							displayName = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DISPLAY_NAME));
+							mimeType = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.MIME_TYPE));
+							dateAdded = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.DATE_ADDED));
+							size = cursor.getLong(cursor.getColumnIndex(MediaStore.MediaColumns.SIZE));
+							originalData = new FileRenameData(id, uri, data, title, displayName, mimeType, dateAdded, size);
+							originalData.setFileNamePatternBefore(fileNameModel.getBefore());
+							originalData.setFileNamePatternAfter(fileNameModel.getAfter());
+							if (Utilities.isMoveFiles(fileNameModel.getSelectedFolder())) {
+								originalData.setMoveToFolderPath(fileNameModel.getSelectedFolder().getFullPath());
+							}
+							mListFiles.add(originalData);
 						}
-						mListFiles.add(originalData);
 					}
 				}
 			} else {
@@ -932,6 +935,35 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			fileName = fullPath.substring(idx + 1);
 		}
 		return fileName;
+	}
+
+	/**
+	 * Validate an return full path for the provided file name.
+	 *
+	 * @param fullFileName Original full file name.
+	 * @return Return validated file name or null.
+	 */
+	private String getValidFullFileName(String fullFileName) {
+		File file;
+		String path, wrongPath;
+		if (fullFileName.contains("public:")) {
+			for (MountVolume volume : mApplication.getMountedVolumes()) {
+				wrongPath = volume.getWrongPath();
+				if (wrongPath != null && fullFileName.contains(wrongPath)) {
+					path = fullFileName.replaceAll(wrongPath, volume.getPath());
+					file = new File(path);
+					if (file.exists()) {
+						return path;
+					}
+				}
+			}
+		} else {
+			file = new File(fullFileName);
+			if (file.exists()) {
+				return file.getAbsolutePath();
+			}
+		}
+		return null;
 	}
 
 	/**

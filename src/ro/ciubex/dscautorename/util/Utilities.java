@@ -26,6 +26,10 @@ import android.util.Log;
 
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.LineNumberReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -57,6 +61,7 @@ public class Utilities {
 	private static Method METHOD_IMountService_getStorageUsers;
 	private static Method METHOD_IMountService_isUsbMassStorageEnabled;
 
+	private static Method METHOD_StorageVolume_getId;
 	private static Method METHOD_StorageVolume_getUuid;
 	private static Method METHOD_StorageVolume_getState;
 	private static Method METHOD_StorageVolume_getStorageId;
@@ -107,7 +112,9 @@ public class Utilities {
 			if (clazz != null) {
 				for (Method method : clazz.getDeclaredMethods()) {
 					methodName = method.getName();
-					if ("getUuid".equals(methodName)) {
+					if ("getId".equals(methodName)) {
+						METHOD_StorageVolume_getId = method;
+					} else if ("getUuid".equals(methodName)) {
 						METHOD_StorageVolume_getUuid = method;
 					} else if ("getFsUuid".equals(methodName)) { // API 23
 						METHOD_StorageVolume_getUuid = method;
@@ -240,6 +247,7 @@ public class Utilities {
 
 		public static List<MountVolume> getVolumeList(Object mountService, Context context) {
 			Object[] arr = null;
+			// debuggingLogMounts();
 			if (METHOD_IMountService_getVolumeList != null) {
 				switch (METHOD_IMountService_getVolumeList.getParameterTypes().length) {
 					case 0:
@@ -253,6 +261,27 @@ public class Utilities {
 				}
 			}
 			return prepareMountVolumes(mountService, arr, context);
+		}
+
+		/**
+		 * Method used for debugging only: read /proc/mounts
+		 */
+		private static void debuggingLogMounts() {
+			LineNumberReader lnr = null;
+			String line;
+			try {
+				Log.d(TAG, "debuggingLogMounts: /proc/mounts");
+				lnr = new LineNumberReader(new FileReader("/proc/mounts"));
+				while ((line = lnr.readLine()) != null) {
+					Log.d(TAG, line);
+				}
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				doClose(lnr);
+			}
 		}
 
 		private static List<MountVolume> prepareMountVolumes(Object mountService, Object[] arr, Context context) {
@@ -293,9 +322,14 @@ public class Utilities {
 
 		private static MountVolume prepareMountVolume(Object mountService, Object obj, Context context) {
 			MountVolume volume = null;
+			Log.d(TAG, "prepareMountVolume: " + obj);
 			if ("android.os.storage.StorageVolume".equals(obj.getClass().getName())) {
 				try {
 					volume = new MountVolume();
+					if (METHOD_StorageVolume_getId != null) {
+						volume.setId((String) invoke("StorageVolume.getId()",
+								METHOD_StorageVolume_getId, obj));
+					}
 					if (METHOD_StorageVolume_getUuid != null) {
 						volume.setUuid((String) invoke("StorageVolume.getUuid()",
 								METHOD_StorageVolume_getUuid, obj));
@@ -339,12 +373,38 @@ public class Utilities {
 					if (volume.getUuid() == null && volume.isPrimary() && volume.isEmulated()) {
 						volume.setUuid(ROOT_ID_PRIMARY_EMULATED);
 					}
+					handleWrongStorageVolume(volume);
+					Log.d(TAG, "MountVolume: " + volume);
 				} catch (Exception e) {
 					Log.e(TAG, "Exception: " + e.getMessage() + " volume: " + volume, e);
 					throw new AndroidRuntimeException(e);
 				}
 			}
 			return volume;
+		}
+	}
+
+	/**
+	 * In some cases the phone API provide wrong path file which seems to contain a string like
+	 * /storage/public:179,65 the path should be something like /storage/16F1-1001
+	 * where the 16F1-1001 is mount volume FsUuid or Uuid.
+	 * @param volume The mount volume to be checked for wrong path.
+	 */
+	private static void handleWrongStorageVolume(MountVolume volume) {
+		if (volume != null) {
+			String id = volume.getId();
+			if (!isEmpty(id) && id.startsWith("public:")) {
+				Log.d(TAG, "handleWrongStorageVolume: " + volume);
+				String path = volume.getPath();
+				String uuid = volume.getUuid();
+				if (!isEmpty(path) && !isEmpty(uuid)) {
+					if (path.contains(id)) {
+						volume.setWrongPath(path);
+						path = path.replaceAll(id, uuid);
+						volume.setPathFile(new File(path));
+					}
+				}
+			}
 		}
 	}
 

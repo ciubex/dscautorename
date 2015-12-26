@@ -30,15 +30,25 @@ import android.os.Environment;
  *
  */
 public class MountVolume {
+	private String mId;
 	private String mUuid;
 	private int mStorageId;
 	private int mDescriptionId;
 	private String mDescription;
 	private File mPath;
+	private String mWrongPath;
 	private boolean mRemovable;
 	private boolean mPrimary;
 	private boolean mEmulated;
 	private String mState;
+
+	public String getId() {
+		return mId;
+	}
+
+	public void setId(String id) {
+		this.mId = id;
+	}
 
 	public void setUuid(String uuid) {
 		mUuid = uuid;
@@ -118,6 +128,14 @@ public class MountVolume {
 
 	public void setPathFile(File path) {
 		this.mPath = path;
+	}
+
+	public String getWrongPath() {
+		return mWrongPath;
+	}
+
+	public void setWrongPath(String wrongPath) {
+		this.mWrongPath = wrongPath;
 	}
 
 	/**

@@ -128,15 +128,6 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * Remove the permission request preference if should not be asked for permissions.
-	 */
-	private void initPreferencesByPermissions() {
-		if (!mApplication.shouldAskPermissions()) {
-			mOtherSettings.removePreference(mRequestPermissions);
-		}
-	}
-
-	/**
 	 * Initialize preferences controls.
 	 */
 	private void initPreferences() {
@@ -256,7 +247,14 @@ public class SettingsActivity extends PreferenceActivity implements
 				});
 	}
 
-
+	/**
+	 * Remove the permission request preference if should not be asked for permissions.
+	 */
+	private void initPreferencesByPermissions() {
+		if (!mApplication.shouldAskPermissions()) {
+			mOtherSettings.removePreference(mRequestPermissions);
+		}
+	}
 
 	/**
 	 * Method used to request for application required permissions.
@@ -567,7 +565,8 @@ public class SettingsActivity extends PreferenceActivity implements
 		Intent intent = new Intent(getBaseContext(), InfoActivity.class);
 		Bundle b = new Bundle();
 		b.putInt(InfoActivity.TITLE, R.string.license_title);
-		b.putString(InfoActivity.FILE_NAME, "LICENSE.TXT");
+		b.putString(InfoActivity.FILE_NAME, "gpl-3.0-standalone.html");
+		b.putBoolean(InfoActivity.HTML_MESSAGE, true);
 		intent.putExtras(b);
 		startActivity(intent);
 	}
@@ -756,10 +755,10 @@ public class SettingsActivity extends PreferenceActivity implements
 		if (create) {
 			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
 					Intent.ShortcutIconResource.fromContext(
-							getApplicationContext(),
+							DSCApplication.getAppContext(),
 							R.drawable.ic_manual_rename));
 		}
-		getApplicationContext().sendBroadcast(shortcutIntent);
+		DSCApplication.getAppContext().sendBroadcast(shortcutIntent);
 	}
 
 	/**
@@ -768,7 +767,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * @return The manually rename service shortcut intent.
 	 */
 	private Intent getActivityIntent() {
-		Intent activityIntent = new Intent(getApplicationContext(),
+		Intent activityIntent = new Intent(DSCApplication.getAppContext(),
 				RenameDlgActivity.class);
 		activityIntent.setAction(Intent.ACTION_MAIN);
 		activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
