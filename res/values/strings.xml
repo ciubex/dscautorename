@@ -135,12 +135,14 @@
     <string name="change_language_desc">The application should be restarted to be applied selected language.</string>
     <string-array name="language_labels">
         <item>English</item>
+        <item>Portuguese</item>
         <item>Romanian</item>
         <item>Russian</item>
         <item>Thai</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
+        <item>pt</item>
         <item>ro</item>
         <item>ru</item>
         <item>th</item>
@@ -198,6 +200,7 @@ In some cases, the camera do not send any message, so is possible to select as a
 For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
 <b>Thank you for translations to:</b><br/>
 - Chawalit for <b>Thai</b><br/>
-- Runels for 4PDA for <b>Russian</b><br/>]]></Data></string>
+- Runels for 4PDA for <b>Russian</b><br/>
+- Leo Manias for <b>Portuguese</b><br/>]]></Data></string>
 
 </resources>

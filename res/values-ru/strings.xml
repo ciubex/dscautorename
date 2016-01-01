@@ -135,15 +135,17 @@
     <string name="change_language_desc">Заявление должно быть перезапущен, чтобы применить выбранный язык.</string>
     <string-array name="language_labels">
         <item>English - английский</item>
+        <item>Portuguese - португальский</item>
         <item>Romanian - румынский</item>
         <item>Russian - Русский</item>
         <item>Thai - тайский</item>
     </string-array>
     <string-array name="language_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
+        <item>en</item>
+        <item>pt</item>
+        <item>ro</item>
+        <item>ru</item>
+        <item>th</item>
     </string-array>
 
     <!-- Permission sections -->
@@ -198,6 +200,7 @@
 Подробнее здесь: <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
 <b>Спасибо за переводы:</b><br/>
 - Chawalit на <b>Тайский</b><br/>
-- Runels для 4PDA на<b>Pусский</b><br/>]]></Data></string>
+- Runels для 4PDA на<b>Pусский</b><br/>
+- Leo Manias для <b>португальский</b><br/>]]></Data></string>
 
 </resources>
