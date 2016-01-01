@@ -135,14 +135,14 @@
     <string name="change_language_desc">The application should be restarted to be applied selected language.</string>
     <string-array name="language_labels">
         <item>English</item>
-        <item>Portuguese</item>
+        <item>Portuguese (Brasil)</item>
         <item>Romanian</item>
         <item>Russian</item>
         <item>Thai</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
-        <item>pt</item>
+        <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>
         <item>th</item>
@@ -201,6 +201,6 @@ For more details, please see application description page on <a href="https://pl
 <b>Thank you for translations to:</b><br/>
 - Chawalit for <b>Thai</b><br/>
 - Runels for 4PDA for <b>Russian</b><br/>
-- Leo Manias for <b>Portuguese</b><br/>]]></Data></string>
+- Leo Manias for <b>Portuguese</b> (Brazilia)<br/>]]></Data></string>
 
 </resources>

@@ -135,14 +135,14 @@
     <string name="change_language_desc">Заявление должно быть перезапущен, чтобы применить выбранный язык.</string>
     <string-array name="language_labels">
         <item>English - английский</item>
-        <item>Portuguese - португальский</item>
+        <item>Portuguese (Brasil) - португальский</item>
         <item>Romanian - румынский</item>
         <item>Russian - Русский</item>
         <item>Thai - тайский</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
-        <item>pt</item>
+        <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>
         <item>th</item>
@@ -201,6 +201,6 @@
 <b>Спасибо за переводы:</b><br/>
 - Chawalit на <b>Тайский</b><br/>
 - Runels для 4PDA на<b>Pусский</b><br/>
-- Leo Manias для <b>португальский</b><br/>]]></Data></string>
+- Leo Manias для <b>португальский</b> (Бразилия)<br/>]]></Data></string>
 
 </resources>

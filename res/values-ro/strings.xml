@@ -135,14 +135,14 @@
     <string name="change_language_desc">Pentru a se folosi limba selectata trebuie ca aplicatia sa fie restartata.</string>
     <string-array name="language_labels">
         <item>English - Engeza</item>
-        <item>Portuguese - Portugheza</item>
+        <item>Portuguese (Brasil) - Portugheza</item>
         <item>Romanian - Romana</item>
         <item>Russian - Ruseste</item>
         <item>Thai - Tailandeza</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
-        <item>pt</item>
+        <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>
         <item>th</item>
@@ -201,6 +201,6 @@ Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.googl
 <b>Multumesc pentru traducere:</b><br/>
 - Chawalit pentru <b>tailandeza</b><br/>
 - Runels for 4PDA pentru <b>ruseste</b><br/>
-- Leo Manias pentru <b>Portugeza</b><br/>]]></Data></string>
+- Leo Manias pentru <b>Portugeza</b> (Brazilia)<br/>]]></Data></string>
 
 </resources>

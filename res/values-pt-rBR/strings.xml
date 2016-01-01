@@ -26,7 +26,7 @@
     <string name="service_choice_3">O serviço de auto-renomeamento está habilitado para observador de arquivos na pasta selecionada. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</string>
     <string name="rename_service_start_delay_title">Atraso para inicio do serviço de renomeamento</string>
     <string name="rename_service_start_delay_desc">Iniciar o serviço de renomeamento após</string>
-    <string name="seconds_unit">segundos</string>
+    <string name="seconds_unit">seg.</string>
     <string name="rename_video_enabled_title">Habilitar renomeamento em arquivos de vídeo</string>
     <string name="rename_video_enabled_desc">Marcando essa opção, os vídeos também são renomeados automaticamente. Padrão é renomear apenas fotos.</string>
     <string name="enable_filter_folder_title">Renomear arquivos na pasta</string>
@@ -135,14 +135,14 @@
     <string name="change_language_desc">O aplicativo deve ser reiniciado para aplicar o novo idioma.</string>
     <string-array name="language_labels">
         <item>English</item>
-        <item>Portuguese</item>
+        <item>Portuguese (Brasil)</item>
         <item>Romanian</item>
         <item>Russian</item>
         <item>Thai</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
-        <item>pt</item>
+        <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>
         <item>th</item>
@@ -201,6 +201,6 @@ Para mais detalhes, por favor verificar a página de descrição do aplicativo e
 <b>Agradecimentos pelas traduções para:</b><br/>
 - Chawalit para <b>Thai</b><br/>
 - Runels for 4PDA para <b>Russo</b><br/>
-- Leo Manias para <b>Português</b><br/>]]></Data></string>
+- Leo Manias para <b>Português</b> (Brasil)<br/>]]></Data></string>
 
 </resources>

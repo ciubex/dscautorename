@@ -165,16 +165,40 @@ public class DSCApplication extends Application {
 	 * Init application locale.
 	 */
 	public void initLocale() {
-		String language = mSharedPreferences.getString(KEY_LANGUAGE_CODE, "en");
-		try {
-			mLocale = "en".equals(language) ? Locale.ENGLISH : new Locale(language);
-		} catch (Exception e) {
-			Log.e(TAG, "init locale with id: " + language + "): ", e);
-		}
+		mLocale = getLocaleSharedPreferences();
 		Locale.setDefault(mLocale);
 		android.content.res.Configuration config = new android.content.res.Configuration();
 		config.locale = mLocale;
 		DSCApplication.mContext.getResources().updateConfiguration(config, DSCApplication.mContext.getResources().getDisplayMetrics());
+	}
+
+	/**
+	 * Get the locale from the shared preference or device default locale.
+	 *
+	 * @return The locale which should be used on the application.
+	 */
+	private Locale getLocaleSharedPreferences() {
+		Locale locale = Locale.getDefault();
+		String language = mSharedPreferences.getString(KEY_LANGUAGE_CODE, "en");
+		if (!Utilities.isEmpty(language)) {
+			String[] arr = language.split("_");
+			try {
+				switch (arr.length) {
+					case 1:
+						locale = new Locale(arr[0]);
+						break;
+					case 2:
+						locale = new Locale(arr[0], arr[1]);
+						break;
+					case 3:
+						locale = new Locale(arr[0], arr[1], arr[2]);
+						break;
+				}
+			} catch (Exception e) {
+				Log.e(TAG, "getLocaleSharedPreferences: " + language, e);
+			}
+		}
+		return locale;
 	}
 
 	public static Context getAppContext() {

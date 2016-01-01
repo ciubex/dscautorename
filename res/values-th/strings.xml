@@ -133,14 +133,14 @@
     <string name="change_language_desc">แอพลิเคชันที่ควรจะเริ่มต้นใหม่ที่จะใช้ภาษาที่เลือก</string>
     <string-array name="language_labels">
         <item>English - อังกฤษ</item>
-        <item>Portuguese - โปรตุเกส</item>
+        <item>Portuguese (Brasil) - โปรตุเกส</item>
         <item>Romanian - โรมาเนีย</item>
         <item>Russian - รัสเซีย</item>
         <item>Thai - ภาษาไทย</item>
     </string-array>
     <string-array name="language_values">
         <item>en</item>
-        <item>pt</item>
+        <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>
         <item>th</item>
@@ -199,6 +199,6 @@
 <b>ขอบคุณสำหรับการแปลไทยไปที่:</b><br/>
 - Chawalit - ไทย<br/>
 - Runels สำหรับ 4PDA - รัสเซีย<br/>
-- Leo Manias สำหรับโปรตุเกส<br/>]]></Data></string>
+- Leo Manias สำหรับโปรตุเกส (บราซิล)<br/>]]></Data></string>
 
 </resources>
