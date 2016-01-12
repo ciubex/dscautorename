@@ -13,12 +13,6 @@
         <item>Notificare media: la salvarea de fisiere media.</item>
         <item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
     </string-array>
-    <string-array name="service_type_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 
     <string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
     <string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
@@ -41,14 +35,9 @@
     <string name="folder_list_confirmation">Doresti sa stergi directoarele selectate?</string>
     <string name="folder_list_no_open_document_tree_support">Versiunea de Android folosita nu are suport pentru selectarea de directoare. (ACTION_OPEN_DOCUMENT_TREE).</string>
     <string name="filter_folder_title">Selecteaza un director.</string>
-    <string name="filter_folder_desc">/</string>
     <string name="filter_folder_no_folder">[Nici un director]</string>
     <string name="enable_folder_scanning_title">Scaneaza fisiere doar in directoare.</string>
     <string name="enable_folder_scanning_desc">Prin selectarea acestei obtiuni serviciul de redenumire fisiere va redenumi doar fisierele aflate in directoarele selectate mai sus. Selecteaza aceasta optiune daca sistemul nu are activata indexarea fisierelor media.</string>
-    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
-    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
-    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
     <string name="define_file_name_pattern_title">Modele de nume de fisiere</string>
     <string name="define_file_name_pattern_desc">Modelele de nume de fisiere folosite pentru redenumiri (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nPot fi folosite semnele * si ? de asemenea.</string>
     <string name="file_name_pattern_dialog_title_add">Adauga model de nume de fisier</string>
@@ -63,9 +52,7 @@
     <string name="file_name_pattern_validation_error_new">Modelul de nume redenumit nu trebuie sa se regaseasca in modelul de nume original!</string>
     <string name="file_name_suffix_format_title">Defineste un sufix numeric</string>
     <string name="file_name_suffix_format_desc">Acest sufix numeric este folosit cand mai multe fisiere s-ar redenumit folosind acelasi nume, precum in cazul in care in aceeasi secunda sunt luate mai multe cadre. In mod normal sunt adaugate numere pe 5 pozitii.\Exemplu:\n%s</string>
-    <string name="file_name_suffix_format_value">%05d</string>
     <string name="file_extension_note">Extensia fisierului este pastrata in urma redenumirii.</string>
-    <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Redenumeste fisierul folosind:</string>
     <string name="rename_file_using_desc">data si timpul cand a fost ultima oara modificat fisierul.</string>
     <string name="move_file_enable">Muta fisierul redenumit in directorul selectat mai jos.</string>
@@ -77,11 +64,6 @@
         <item>data si timpul cand fisierul a fost indexat de sistem;</item>
         <item>data si timpul cand fisierul a fost modificat ultima oara;</item>
         <item>data si timpul prezente in EXIF, doar pentru imagini, pentru clipuri se va folosi a doua optiune.</item>
-    </string-array>
-    <string-array name="rename_file_using_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="append_original_name_title">Adauga denumirea originala</string>
     <string name="append_original_name_desc">Pastreaza si adauga denumirea originala dupa numele redenumit. De exemplu din DSC_09.JPG noul fisier va fi redenumit in %s_DSC_09.JPG</string>
@@ -138,14 +120,8 @@
         <item>Portuguese (Brasil) - Portugheza</item>
         <item>Romanian - Romana</item>
         <item>Russian - Ruseste</item>
+        <item>Spanish - Spaniola</item>
         <item>Thai - Tailandeza</item>
-    </string-array>
-    <string-array name="language_values">
-        <item>en</item>
-        <item>pt_BR</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>th</item>
     </string-array>
 
     <!-- Permission sections -->
@@ -157,7 +133,6 @@
     <!-- About -->
     <string name="about_section">Despre</string>
     <string name="build_version_title">Build version</string>
-    <string name="build_version_desc">1</string>
     <string name="send_debug_title">Trimite logurile pentru investigare</string>
     <string name="send_debug_desc">Trimite un e-mail cu logurile pentru investigare</string>
     <string name="send_debug_confirmation">Doresti sa trimiti un raport pentru investigare?\nAplicatia folosita in mod normal pentru a trimite mesaje va trimite un e-mail avand atasate niste fisiere folosite pentru investigarea posibilelor probleme. Scrie o scurta descriere a problemei intampinate in timpul folosirii aplicatiei.\nMultumesc!</string>
@@ -167,7 +142,6 @@
     <string name="donate_title">Doneaza</string>
     <string name="donate_desc">Daca apreciezi aceasta aplicatie poti face o donatie.</string>
     <string name="donate_confirmation">Daca consideri aceasta aplicatie utila si apreciezi efortul depus pentru realizarea ei, poti face o donatie prin instalarea aplicatiei DSC Auto Rename PRO!\nPrin apasarea butonului Da, vei fi redirectat catre aplicatia DSC Auto Rename PRO din Google Play Store.\nMultumesc pentru folosirea acestei aplicatii!</string>
-    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">Multumesc pentru donatie!</string>
     <string name="thank_you_desc">Multumesc pentru aprecierea realizata prin cumpararea aplicatiei PRO.</string>
     <string name="about_text"><Data>
@@ -201,6 +175,7 @@ Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.googl
 <b>Multumesc pentru traducere:</b><br/>
 - Chawalit pentru <b>tailandeza</b><br/>
 - Runels for 4PDA pentru <b>ruseste</b><br/>
-- Leo Manias pentru <b>Portugeza</b> (Brazilia)<br/>]]></Data></string>
+- Leo Manias pentru <b>Portugeza</b> (Brazilia)<br/>
+- Dave pentru <b>Spaniola</b><br/>]]></Data></string>
 
 </resources>

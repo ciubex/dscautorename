@@ -13,7 +13,7 @@
         <item>Media content observer: pictures or videos saved.</item>
         <item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
     </string-array>
-    <string-array name="service_type_values">
+    <string-array name="service_type_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -41,14 +41,14 @@
     <string name="folder_list_confirmation">Do you want to remove selected folders?</string>
     <string name="folder_list_no_open_document_tree_support">Your Android version do not have support to chose folders (ACTION_OPEN_DOCUMENT_TREE).</string>
     <string name="filter_folder_title">Select a folder.</string>
-    <string name="filter_folder_desc">/</string>
+    <string name="filter_folder_desc" translatable="false">/</string>
     <string name="filter_folder_no_folder">[No folder]</string>
     <string name="enable_folder_scanning_title">Enable folder scanning for files.</string>
     <string name="enable_folder_scanning_desc">By selecting this option the rename service will scan for media files on the above selected folders. Select this if your device have media content scanner disabled.</string>
-    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
-    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
-    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
+    <string name="original_file_name_pattern_from" translatable="false">DSC_*.JPG</string>
+    <string name="original_file_name_pattern_to" translatable="false">\'PIC_\'yyyyMMdd_HHmmss</string>
+    <string name="original_file_name_pattern" translatable="false">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
+    <string name="default_file_name_pattern" translatable="false">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
     <string name="define_file_name_pattern_title">Define files name patterns</string>
     <string name="define_file_name_pattern_desc">The file name patterns used to search files for rename (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nWildcards * and ? can be used too.</string>
     <string name="file_name_pattern_dialog_title_add">Add file name patterns</string>
@@ -63,9 +63,9 @@
     <string name="file_name_pattern_validation_error_new">The new pattern should not be a part of an original pattern, the above or other original defined pattern!</string>
     <string name="file_name_suffix_format_title">Define file name extra suffix</string>
     <string name="file_name_suffix_format_desc">This suffix is used when more than one file have same name, like in burst case. By default the counter have 5 digits.\nExample:\n%s</string>
-    <string name="file_name_suffix_format_value">%05d</string>
+    <string name="file_name_suffix_format_value" translatable="false">%05d</string>
     <string name="file_extension_note">The file extension is preserved during rename process.</string>
-    <string name="file_name_format">yyyyMMdd_HHmmss</string>
+    <string name="file_name_format" translatable="false">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Rename file using:</string>
     <string name="rename_file_using_desc">date and time when file was last time modified.</string>
     <string name="move_file_enable">Move the renamed file to below selected folder.</string>
@@ -78,7 +78,7 @@
         <item>date and time when file was last time modified;</item>
         <item>EXIF for images and for clips use second choice.</item>
     </string-array>
-    <string-array name="rename_file_using_values">
+    <string-array name="rename_file_using_values" translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
@@ -138,13 +138,15 @@
         <item>Portuguese (Brasil)</item>
         <item>Romanian</item>
         <item>Russian</item>
+        <item>Spanish</item>
         <item>Thai</item>
     </string-array>
-    <string-array name="language_values">
+    <string-array name="language_values" translatable="false">
         <item>en</item>
         <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>
+        <item>es</item>
         <item>th</item>
     </string-array>
 
@@ -157,7 +159,7 @@
     <!-- About -->
     <string name="about_section">About</string>
     <string name="build_version_title">Build version</string>
-    <string name="build_version_desc">1</string>
+    <string name="build_version_desc" translatable="false">1</string>
     <string name="send_debug_title">Send debugging logs</string>
     <string name="send_debug_desc">Send an e-mail with debugging files</string>
     <string name="send_debug_confirmation">Do you want to send a debugging report?\nYour default e-mail application will send an e-mail with two files attached, please fill a short description of your issues if is necessary.\nThank you!</string>
@@ -167,7 +169,7 @@
     <string name="donate_title">Donate</string>
     <string name="donate_desc">Please make a donation if you appreciate this application.</string>
     <string name="donate_confirmation">If you appreciate this application, please do a donation buying DSC Auto Rename PRO!\nPressing YES button, you will be sent to DSC Auto Rename PRO from Google Play Store.\nThank you for using this application!</string>
-    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
+    <string name="donate_url" translatable="false"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">Thank you for donation!</string>
     <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
     <string name="about_text"><Data>
@@ -201,6 +203,7 @@ For more details, please see application description page on <a href="https://pl
 <b>Thank you for translations to:</b><br/>
 - Chawalit for <b>Thai</b><br/>
 - Runels for 4PDA for <b>Russian</b><br/>
-- Leo Manias for <b>Portuguese</b> (Brazilia)<br/>]]></Data></string>
+- Leo Manias for <b>Portuguese</b> (Brazil)<br/>
+- Dave for <b>Spanish</b><br/>]]></Data></string>
 
 </resources>

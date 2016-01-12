@@ -13,12 +13,6 @@
         <item>Observador de mídia: fotos ou vídeos salvos.</item>
         <item>Observador de arquivos: monitora as pastas selecionadas quando arquivos são adicionados. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</item>
     </string-array>
-    <string-array name="service_type_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 
     <string name="service_choice_0">O serviço de auto-renomeamento está desabilitado.</string>
     <string name="service_choice_1">O serviço de auto-renomeamento está habilitado para eventos da câmera.</string>
@@ -41,14 +35,9 @@
     <string name="folder_list_confirmation">Você realmente deseja excluir as pastas selecionadas?</string>
     <string name="folder_list_no_open_document_tree_support">Sua versão do Android não tem suporte para escolha de pastas (ACTION_OPEN_DOCUMENT_TREE).</string>
     <string name="filter_folder_title">Selecione uma pasta.</string>
-    <string name="filter_folder_desc">/</string>
     <string name="filter_folder_no_folder">[Nenhuma pasta]</string>
     <string name="enable_folder_scanning_title">Habilitar busca de arquivos na pasta.</string>
     <string name="enable_folder_scanning_desc">Selecionando esta opção o serviço de renomeamento irá buscar por arquivos de mídia nas pastas selecionadas acima. Selecione esta opção se seu dispositivo possuir a busca de mídia desabilitada.</string>
-    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
-    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
-    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
     <string name="define_file_name_pattern_title">Definir padrão de nome de arquivos</string>
     <string name="define_file_name_pattern_desc">Os padrões de nome de arquivo usados para buscar arquivos para o renomeamento (\"DSC_*.JPG\" ou \"MOV_*.MP4\"), Info. %s\nCoringas * e ? também podem ser usados.</string>
     <string name="file_name_pattern_dialog_title_add">Adicionar padrão de nome de arquivo</string>
@@ -63,9 +52,7 @@
     <string name="file_name_pattern_validation_error_new">O novo padrão não deve ser igual a: parte do padrão original, padrão acima ou outro padrão original definido!</string>
     <string name="file_name_suffix_format_title">Definir sufixo extra para o nome do arquivo</string>
     <string name="file_name_suffix_format_desc">Sufixo extra usado quando mais de uma arquivo possuir o mesmo nome. Por padrão o contador possui 5 digitos.\nExemplo:\n%s</string>
-    <string name="file_name_suffix_format_value">%05d</string>
     <string name="file_extension_note">A extensão do arquivo é preservada durante o processo de renomemento.</string>
-    <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Renomear arquivo usando:</string>
     <string name="rename_file_using_desc">data e hora quando o arquivo foi modificado.</string>
     <string name="move_file_enable">Mover o arquivo renomeado para a pasta selecionada abaixo.</string>
@@ -77,11 +64,6 @@
         <item>data e hora quando o arquivo foi adicionada ao provedor de mídia;</item>
         <item>data e hora quando o arquivo foi modificado;</item>
         <item>EXIF para fotos e para vídeos usar a segunda opção.</item>
-    </string-array>
-    <string-array name="rename_file_using_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="append_original_name_title">Adicionar ao nome original</string>
     <string name="append_original_name_desc">Manter e adicionar ao nome original. Por exemplo: de DSC_09.JPG o novo nome sera %s_DSC_09.JPG</string>
@@ -138,14 +120,8 @@
         <item>Portuguese (Brasil)</item>
         <item>Romanian</item>
         <item>Russian</item>
+        <item>Spanish</item>
         <item>Thai</item>
-    </string-array>
-    <string-array name="language_values">
-        <item>en</item>
-        <item>pt_BR</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>th</item>
     </string-array>
 
     <!-- Permission sections -->
@@ -157,7 +133,6 @@
     <!-- About -->
     <string name="about_section">Sobre</string>
     <string name="build_version_title">Versão Build</string>
-    <string name="build_version_desc">1</string>
     <string name="send_debug_title">Enviar Logs de Depuração</string>
     <string name="send_debug_desc">Enviar um e-mail com os arquivos de depuração</string>
     <string name="send_debug_confirmation">Você deseja enviar um relatório de depuração?\nSeu aplicativo de email padrão irá enviar um e-mail com dois arquivos anexados. Por favor, informar uma breve descrição do seu problema se necessário.\nObrigado!</string>
@@ -167,7 +142,6 @@
     <string name="donate_title">Doar</string>
     <string name="donate_desc">Por favor fazer uma doação se você aprecia esse aplicativo.</string>
     <string name="donate_confirmation">Se você aprecia esse aplicativo, por favor fazer uma doação comprando o DSC Auto Rename PRO!\nPressionando o botão SIM, você será direcionado para o DSC Auto Rename PRO na Google Play Store.\nObrigado por usar este aplicativo!</string>
-    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">Obrigado por sua doação!</string>
     <string name="thank_you_desc">Obrigado por apreciar meu trabalho comprando a versão PRO.</string>
     <string name="about_text"><Data>
@@ -201,6 +175,7 @@ Para mais detalhes, por favor verificar a página de descrição do aplicativo e
 <b>Agradecimentos pelas traduções para:</b><br/>
 - Chawalit para <b>Thai</b><br/>
 - Runels for 4PDA para <b>Russo</b><br/>
-- Leo Manias para <b>Português</b> (Brasil)<br/>]]></Data></string>
+- Leo Manias para <b>Português</b> (Brasil)<br/>
+- Dave para <b>Espanhol</b><br/>]]></Data></string>
 
 </resources>

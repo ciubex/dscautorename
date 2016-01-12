@@ -1,5 +1,7 @@
 ﻿<resources>
 
+    <string name="app_name">DSC Auto Rename</string>
+
     <!-- Strings related to Settings -->
     <string name="general_settings">การตั้งค่าทั่วไป</string>
     <string name="enable_title">เปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
@@ -10,12 +12,6 @@
         <item>เมื่อถ่ายภาพหรือวีดิโอด้วยกล้อง</item>
         <item>เมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์</item>
         <item>ตรวจจับไฟล์: คอยเฝ้าดูโฟลเดอร์ที่เลือกเมื่อมีการเพิ่มไฟล์  โดยต้องเลือกตัวเลือก \"เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์\" และเพิ่มโฟลเดอร์ไว้ใน \"เลือกโฟลเดอร์\" อย่างน้อย 1 โฟลเดอร์</item>
-    </string-array>
-    <string-array name="service_type_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
     </string-array>
 
     <string name="service_choice_0">ไม่ใช้งานการเปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
@@ -39,14 +35,9 @@
     <string name="folder_list_confirmation">ต้องการลบโฟลเดอร์ที่เลือกหรือไม่?</string>
     <string name="folder_list_no_open_document_tree_support">เวอร์ชันของแอนดรอยด์ที่ใช้ไม่สนับสนุนการเลือกโฟลเดอร์ (ACTION_OPEN_DOCUMENT_TREE).</string>
     <string name="filter_folder_title">เลือกโฟลเดอร์</string>
-    <string name="filter_folder_desc">/</string>
     <string name="filter_folder_no_folder">[ไม่มีโฟลเดอร์]</string>
     <string name="enable_folder_scanning_title">อนุญาตให้สแกนไฟล์ภายในโฟลเดอร์</string>
     <string name="enable_folder_scanning_desc">เมื่อเลือกตัวเลือกนี้ จะอนุญาตให้สแกนมีเดียที่อยู่ภายในโฟลเดอร์ที่กำหนดไว้ด้านบน โปรดเลือกตัวเลือกนี้ หากเครื่องของคุณปิดการใช้งานตัวสแกนมีเดีย</string>
-    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
-    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
-    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
     <string name="define_file_name_pattern_title">กำหนดรูปแบบชื่อไฟล์</string>
     <string name="define_file_name_pattern_desc">รูปแบบชื่อไฟล์ต้นทางที่ต้องการเปลี่ยน (\"DSC_*.JPG\" หรือ \"MOV_*.MP4\"), เช่น %s\nคุณสามารถใช้เครื่องหมาย * และ ? แทนอักขระใดๆ ได้ด้วย</string>
     <string name="file_name_pattern_dialog_title_add">เพิ่มรูปแบบชื่อไฟล์</string>
@@ -61,9 +52,7 @@
     <string name="file_name_pattern_validation_error_new">รูปแบบชื่อไฟล์ปลายทางไม่ควรคล้ายกับรูปแบบชื่อไฟล์ต้นทาง รวมถึงรูปแบบชื่อไฟล์ต้นทางอื่นๆ ภายใต้รายการด้านบน</string>
     <string name="file_name_suffix_format_title">กำหนดตัวเลขพิเศษต่อท้ายชื่อไฟล์ปลายทาง</string>
     <string name="file_name_suffix_format_desc">ตัวเลขพิเศษนี้จะถูกใช้ก็ต่อเมื่อ ไฟล์ที่ถูกเปลี่ยนชื่อเกิดการซ้ำกัน ในกรณีที่ถ่ายรูปต่อเนื่องหลายๆ ภาพในเวลาเดียวกัน ค่าเริ่มต้นคือ ตัวเลข 5 ตัว\nตัวอย่างเช่น:\n%s</string>
-    <string name="file_name_suffix_format_value">%05d</string>
     <string name="file_extension_note">นามสกุลของไฟล์จะไม่ถูกเปลี่ยนระหว่างการดำเนินการเปลี่ยนชื่อไฟล์</string>
-    <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">เปลี่ยนชื่อไฟล์โดยใช้ข้อมูลจาก:</string>
     <string name="rename_file_using_desc">วันและเวลาที่ไฟล์ถูกแก้ไขล่าสุด</string>
     <string name="move_file_enable">ย้ายไฟล์เปลี่ยนชื่อยังโฟลเดอร์ที่เลือกดังต่อไปนี้</string>
@@ -75,11 +64,6 @@
         <item>วันและเวลาที่ไฟล์ถูกเพิ่มไปยังตัวจัดการมีเดีย</item>
         <item>วันและเวลาที่ไฟล์ถูกแก้ไขล่าสุด</item>
         <item>ข้อมูล EXIF จากรูปถ่ายหรือวีดิโอ</item>
-    </string-array>
-    <string-array name="rename_file_using_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="append_original_name_title">ต่อท้ายไฟล์ด้วยชื่อไฟล์ต้นทาง</string>
     <string name="append_original_name_desc">นำชื่อไฟล์ต้นทางมาต่อท้ายไฟล์ปลายทาง เช่น จาก DSC_09.JPG ถูกเปลี่ยนชื่อเป็น %s_DSC_09.JPG</string>
@@ -136,14 +120,8 @@
         <item>Portuguese (Brasil) - โปรตุเกส</item>
         <item>Romanian - โรมาเนีย</item>
         <item>Russian - รัสเซีย</item>
+        <item>Spanish - สเปน</item>
         <item>Thai - ภาษาไทย</item>
-    </string-array>
-    <string-array name="language_values">
-        <item>en</item>
-        <item>pt_BR</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>th</item>
     </string-array>
 
     <!-- Permission sections -->
@@ -155,7 +133,6 @@
     <!-- About -->
     <string name="about_section">เกี่ยวกับ</string>
     <string name="build_version_title">สร้างรุ่น</string>
-    <string name="build_version_desc">1</string>
     <string name="send_debug_title">ส่งล็อกเมื่อพบปัญหา</string>
     <string name="send_debug_desc">ส่งล็อกทางอีเมล์</string>
     <string name="send_debug_confirmation">ต้องการส่งรายงานเมื่อพบปัญหาหรือไม่?\nโปรดเลือกแอพพลิเคชันสำหรับการส่งอีเมล์ โดยจะมีไฟล์แนบไปด้วยจำนวน 2 ไฟล์ โปรดกรอกข้อมูลสั้นๆ เพื่ออธิบายถึงปัญหาที่พบ\nขอบคุณ!</string>
@@ -165,7 +142,6 @@
     <string name="donate_title">บริจาค</string>
     <string name="donate_desc">โปรดบริจาคถ้าคุณเห็นว่าแอพพลิเคชันนี้มีประโยชน์</string>
     <string name="donate_confirmation">ถ้าคุณชอบแอพพลิเคชันนี้ โปรดซื้อ DSC Auto Rename PRO\nกดปุ่มตกลงเพื่อไปยังหน้า DSC Auto Rename PRO บน Google Play Store.\nขอบคุณที่ใช้แอพพลิเคชันนี้!</string>
-    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">ขอบคุณสำหรับการบริจาค!</string>
     <string name="thank_you_desc">ขอบคุณที่ชอบงานของเรา โดยการซื้อแอพพลิเคชัน</string>
     <string name="about_text"><Data>
@@ -197,8 +173,9 @@
 <br/>
 อ่านรายละเอียดเพิ่มเติมได้ที่ <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
 <b>ขอบคุณสำหรับการแปลไทยไปที่:</b><br/>
-- Chawalit - ไทย<br/>
-- Runels สำหรับ 4PDA - รัสเซีย<br/>
-- Leo Manias สำหรับโปรตุเกส (บราซิล)<br/>]]></Data></string>
+- Chawalit สำหรับ <b>ไทย</b><br/>
+- Runels for 4PDA สำหรับ <b>รัสเซีย</b><br/>
+- Leo Manias สำหรับ <b>รตุเกส</b> (บราซิล)<br/>
+- Dave สำหรับ <b>สเปน</b><br/>]]></Data></string>
 
 </resources>

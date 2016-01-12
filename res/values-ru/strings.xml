@@ -41,14 +41,9 @@
     <string name="folder_list_confirmation">Вы хотите удалить выбранные папки?</string>
     <string name="folder_list_no_open_document_tree_support">Ваша версия Андроид не поддерживает выбор папок (ACTION_OPEN_DOCUMENT_TREE).</string>
     <string name="filter_folder_title">Выбор папки.</string>
-    <string name="filter_folder_desc">/</string>
     <string name="filter_folder_no_folder">[Нет папки]</string>
     <string name="enable_folder_scanning_title">Включение сканирования в папке.</string>
     <string name="enable_folder_scanning_desc">Выбрав эту опцию сервис переименования будет сканировать наличие медиафайлов в выбранных выше папках. Выберите это, если в вашем аппарате выключен сканер медиа контента.</string>
-    <string name="original_file_name_pattern_from">DSC_*.JPG</string>
-    <string name="original_file_name_pattern_to">\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="original_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>
-    <string name="default_file_name_pattern">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
     <string name="define_file_name_pattern_title">Определенные шаблоны имен файлов</string>
     <string name="define_file_name_pattern_desc">Эти шаблоны используются для поиска файлов для переименования (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nГрупповые символы * и ? также могут быть использованы.</string>
     <string name="file_name_pattern_dialog_title_add">Добавить шаблоны имен файлов</string>
@@ -63,9 +58,7 @@
     <string name="file_name_pattern_validation_error_new">Новый шаблон должен быть частью оригинального шаблона!</string>
     <string name="file_name_suffix_format_title">Установить дополнительный суффикс имени файла</string>
     <string name="file_name_suffix_format_desc">Этот суффикс используется, когда более чем один файл имеют одинаковое имя. По умолчанию счетчик имеет 5 цифр.\nПример:\n%s</string>
-    <string name="file_name_suffix_format_value">%05d</string>
     <string name="file_extension_note">При переименовании расширение файла сохраняется.</string>
-    <string name="file_name_format">yyyyMMdd_HHmmss</string>
     <string name="rename_file_using_title">Переименованный файл использует:</string>
     <string name="rename_file_using_desc">Дата и время, когда файл был последний раз модифицирован.</string>
     <string name="move_file_enable">Перемещение переименованный файл в папку ниже выбранной.</string>
@@ -77,11 +70,6 @@
         <item>Дата и время, когда файлы были добавлены в медиа;</item>
         <item>Дата и время, когда файлы были последний раз модифицированы;</item>
         <item>EXIF для изображений и клипов используется второй вариант.</item>
-    </string-array>
-    <string-array name="rename_file_using_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
     <string name="append_original_name_title">Добавить оригинальное имя</string>
     <string name="append_original_name_desc">Сохранить и добавить оригинальное имя, на пример, с DSC_09.JPG на %s_DSC_09.JPG</string>
@@ -138,14 +126,8 @@
         <item>Portuguese (Brasil) - португальский</item>
         <item>Romanian - румынский</item>
         <item>Russian - Русский</item>
+        <item>Spanish - испанский</item>
         <item>Thai - тайский</item>
-    </string-array>
-    <string-array name="language_values">
-        <item>en</item>
-        <item>pt_BR</item>
-        <item>ro</item>
-        <item>ru</item>
-        <item>th</item>
     </string-array>
 
     <!-- Permission sections -->
@@ -157,7 +139,6 @@
     <!-- About -->
     <string name="about_section">Около</string>
     <string name="build_version_title">версия сборки</string>
-    <string name="build_version_desc">1</string>
     <string name="send_debug_title">Послать отладочные логи</string>
     <string name="send_debug_desc">Послать по e-mail отладочные логи</string>
     <string name="send_debug_confirmation">Вы хотите послать отчет?\nВаше почтовое приложение отправит по e-mail 2 приложенных файла и, если необходимо,  добавьте пожалуйста свое короткое описание.\nСпасибо!</string>
@@ -167,7 +148,6 @@
     <string name="donate_title">Пожертвовать</string>
     <string name="donate_desc">Пожалуйста пожертвуйте, если Вам понравилось приложение .</string>
     <string name="donate_confirmation">Если Вам приложение понравилось, купите версию PRO!\nНажмите ДА для перехода к DSC Auto Rename PRO на Google Play Store.\nСпасибо за использование приложения!</string>
-    <string name="donate_url"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">Спасибо за пожертвование!</string>
     <string name="thank_you_desc">Спасибо за покупку.</string>
     <string name="about_text"><Data>
@@ -201,6 +181,7 @@
 <b>Спасибо за переводы:</b><br/>
 - Chawalit на <b>Тайский</b><br/>
 - Runels для 4PDA на<b>Pусский</b><br/>
-- Leo Manias для <b>португальский</b> (Бразилия)<br/>]]></Data></string>
+- Leo Manias для <b>португальский</b> (Бразилия)<br/>
+- Dave для <b>испанский</b><br/>]]></Data></string>
 
 </resources>
