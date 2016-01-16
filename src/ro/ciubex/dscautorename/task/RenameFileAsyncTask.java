@@ -176,40 +176,65 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	/**
 	 * Rename current file.
 	 *
-	 * @param currentFile Current file data used by the rename process.
+	 * @param currentFileData Current file data used by the rename process.
 	 */
-	private void renameCurrentFile(FileRenameData currentFile) {
-		String oldFileName = currentFile.getData();
+	private void renameCurrentFile(FileRenameData currentFileData) {
+		String currentFileName = currentFileData.getData();
 		boolean skipFile;
-		if (oldFileName != null) {
-			File oldFile = getFile(oldFileName);
-			if (oldFile != null) {
+		if (currentFileName != null) {
+			File currentFile = getFile(currentFileName);
+			if (currentFile != null) {
 				skipFile = false;
 				if (mFoldersScanning != null && mFoldersScanning.length > 0) {
-					skipFile = !checkScanningFolders(oldFile);
+					skipFile = !checkScanningFolders(currentFile);
 				}
 				if (!skipFile) {
-					if (oldFile.canRead() && oldFile.canWrite()) {
-						if (mainRenameFile(currentFile, oldFile, oldFileName)) {
-							mPreviousFileRenameData = currentFile;
-							mProgressPosition++;
-						}
+					if (canRenameFile(currentFile)) {
+						invokeRenameFile(currentFileData, currentFile, currentFileName);
 					} else {
-						mApplication.logE(TAG,
-								"File can not be read and write: "
-										+ oldFileName);
+						mApplication.logE(TAG, "File can not be renamed: " + currentFileName);
 					}
 				} else {
-					mApplication.logD(TAG, "Skip rename file: " + oldFileName);
+					mApplication.logD(TAG, "Skip rename file: " + currentFileName);
 				}
 			} else {
-				mApplication.logE(TAG, "The file:" + oldFileName
-						+ " does not exist.");
+				mApplication.logE(TAG, "The file:" + currentFileName + " does not exist.");
 			}
 		} else {
 			mApplication.logE(TAG, "oldFileName is null.");
 		}
 		publishProgress();
+	}
+
+	/**
+	 * Check if the file can be renamed.
+	 * @param file The file to be checked.
+	 * @return
+	 */
+	private boolean canRenameFile(File file) {
+		if (file.exists()) {
+			if (mApplication.getSdkInt() > 20) { // will be used new API
+				return true;
+			}
+			return file.renameTo(file); // rename to itself
+		}
+		return false;
+	}
+
+	/**
+	 * Try to rename the old file with provided new name.
+	 *
+	 * @param data        Original data information.
+	 * @param file        The old file to be renamed.
+	 * @param oldFileName The old file name.
+	 */
+	private boolean invokeRenameFile(FileRenameData data, final File file, String oldFileName) {
+		boolean result = mainRenameFile(data, file, oldFileName);
+		if (result) {
+			mPreviousFileRenameData = data;
+			mProgressPosition++;
+		}
+		return result;
 	}
 
 	/**
