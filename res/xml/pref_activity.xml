@@ -34,6 +34,14 @@
             ciubex:minValue="0"
             ciubex:units="@string/seconds_unit"/>
 
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/delay_units_labels"
+            android:entryValues="@array/delay_units_values"
+            android:key="delayUnit"
+            android:summary="@string/choose_units_desc"
+            android:title="@string/choose_units_title"/>
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="enabledFolderScanning"

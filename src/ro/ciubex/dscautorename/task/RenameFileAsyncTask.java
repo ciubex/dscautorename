@@ -58,6 +58,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private final WeakReference<Listener> mListener;
 	private List<FileRenameData> mListFiles;
 	private SelectedFolderModel[] mFoldersScanning;
+	private boolean isGrantUriPermissionRequested;
 	private static int mProgressPosition, mProgressLastPosition, mProgressMax;
 	private static String mProgressMessage;
 	private FileNameModel[] mFileNameModels;
@@ -114,15 +115,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 			mApplication.updateMountedVolumes();
 			mApplication.updateSelectedFolders();
-			if (mApplication.getSdkInt() >= 21) {
-				prepareSelectedFolders();
-				mIsUriPermissionGranted = mApplication.doGrantUriPermission(mContentResolver, mSelectedFolders);
-			}
 			while (mApplication.isRenameFileRequested()) {
 				mUpdateMediaStorageFiles.clear();
 				mDeleteMediaStorageFiles.clear();
 				mApplication.setRenameFileRequested(false);
 				executeDelay();
+				doGrantUriPermission();
 				renamePatternsUtilities.buildPatterns();
 				populateAllListFiles();
 				if (!mListFiles.isEmpty()
@@ -149,7 +147,20 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Preapare the list of selected folders used to garant URI permissions.
+	 * Request grant URI permissions.
+	 */
+	private void doGrantUriPermission() {
+		if (!isGrantUriPermissionRequested) {
+			isGrantUriPermissionRequested = true;
+			if (mApplication.getSdkInt() >= 21) {
+				prepareSelectedFolders();
+				mIsUriPermissionGranted = mApplication.doGrantUriPermission(mContentResolver, mSelectedFolders);
+			}
+		}
+	}
+
+	/**
+	 * Prepare the list of selected folders used to grant URI permissions.
 	 */
 	private void prepareSelectedFolders() {
 		SelectedFolderModel folderMove;
@@ -259,7 +270,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private void executeDelay() {
 		long sec = mApplication.getRenameServiceStartDelay();
-		long delayMillis = sec * 1000;
+		int unit = mApplication.getDelayUnit();
+		long delayMillis = sec * unit * 1000;
 		try {
 			Thread.sleep(delayMillis);
 		} catch (InterruptedException e) {

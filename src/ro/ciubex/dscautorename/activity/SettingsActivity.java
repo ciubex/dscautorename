@@ -62,6 +62,7 @@ import ro.ciubex.dscautorename.dialog.SelectFileNamePatternDialog;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
+import ro.ciubex.dscautorename.preference.SeekBarPreference;
 import ro.ciubex.dscautorename.provider.CachedFileProvider;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import ro.ciubex.dscautorename.util.Devices;
@@ -79,7 +80,8 @@ public class SettingsActivity extends PreferenceActivity implements
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
 	private CheckBoxPreference mRenameVideoEnabled;
-	private Preference mRenameServiceStartDelay;
+	private SeekBarPreference mRenameServiceStartDelay;
+	private ListPreference mDelayUnit;
 	private ListPreference mRenameFileDateType;
 	private Preference mDefineFileNamePatterns;
 	private EditTextPreference mFileNameSuffixFormat;
@@ -133,7 +135,8 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
 		mRenameVideoEnabled = (CheckBoxPreference) findPreference("renameVideoEnabled");
-		mRenameServiceStartDelay = (Preference) findPreference("renameServiceStartDelay");
+		mRenameServiceStartDelay = (SeekBarPreference) findPreference("renameServiceStartDelay");
+		mDelayUnit = (ListPreference) findPreference("delayUnit");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefineFileNamePatterns = (Preference) findPreference("definePatterns");
 		mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
@@ -378,6 +381,18 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
+	 * Get selected units string: seconds or minutes.
+	 *
+	 * @return Selected units string.
+	 */
+	private String getSelectedUnits() {
+		if (mApplication.getDelayUnit() == 60) {
+			return DSCApplication.getAppContext().getString(R.string.minutes_unit);
+		}
+		return DSCApplication.getAppContext().getString(R.string.seconds_unit);
+ 	}
+
+	/**
 	 * Restart this activity.
 	 */
 	private void restartActivity() {
@@ -422,6 +437,11 @@ public class SettingsActivity extends PreferenceActivity implements
 				mServiceTypeList.setSummary(R.string.service_choice_0);
 				break;
 		}
+		summary = getSelectedUnits();
+		mRenameServiceStartDelay.setUnits(summary);
+		mDelayUnit.setTitle(
+				DSCApplication.getAppContext().getString(R.string.choose_units_title_param,
+						summary));
 		if (mApplication.getSdkInt() >= 21) {
 			mEnabledFolderScanning.setSummary(R.string.enable_filter_folder_desc_v21);
 		}
@@ -1060,6 +1080,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			mServiceTypeList.setEnabled(allowed);
 			mRenameVideoEnabled.setEnabled(allowed);
 			mRenameServiceStartDelay.setEnabled(allowed);
+			mDelayUnit.setEnabled(allowed);
 			mEnabledFolderScanning.setEnabled(allowed);
 			mFolderScanningPref.setEnabled(allowed);
 			mEnableScanForFiles.setEnabled(allowed);

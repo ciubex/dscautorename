@@ -21,6 +21,20 @@
     <string name="rename_service_start_delay_title">หน่วงเวลาก่อนที่จะเปลี่ยนชื่อไฟล์</string>
     <string name="rename_service_start_delay_desc">เริ่มทำการเปลี่ยนชื่อไฟล์หลังจาก</string>
     <string name="seconds_unit">วินาที</string>
+    <string name="minutes_unit">นาที</string>
+
+    <string name="choose_units_title">เลือกหน่วยความล่าช้า:</string>
+    <string name="choose_units_title_param">หน่วยล่าช้าเลือก: %s</string>
+    <string name="choose_units_desc">ตัวเลือกนี้จะช่วยให้คุณสามารถที่จะเลือกข้างต้นล่าช้าระหว่างหน่วยวินาทีและนาที</string>
+    <string-array name="delay_units_labels">
+        <item>วินาที</item>
+        <item>นาที</item>
+    </string-array>
+    <string-array name="delay_units_values" translatable="false">
+        <item>1</item>
+        <item>60</item>
+    </string-array>
+
     <string name="rename_video_enabled_title">อนุญาตให้เปลี่ยนชื่อวีดิโอ</string>
     <string name="rename_video_enabled_desc">เลือกเพื่ออนุญาตให้เปลี่ยนชื่อวีดิโอด้วย ค่าเริ่มต้นคือการเปลี่ยนชื่อเฉพาะรูปภาพ</string>
     <string name="enable_filter_folder_title">เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์</string>

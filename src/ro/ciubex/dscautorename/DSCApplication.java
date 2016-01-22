@@ -100,6 +100,7 @@ public class DSCApplication extends Application {
 	private static final String KEY_ORIGINAL_FILE_NAME_PATTERN = "originalFileNamePattern";
 	private static final String KEY_FILE_RENAME_COUNT = "fileRenameCount";
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
+	public static final String KEY_DELAY_UNIT = "delayUnit";
 	private static final String KEY_REGISTERED_SERVICE_TYPE = "registeredServiceType";
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
 	private static final String KEY_APPEND_ORIGINAL_NAME = "appendOriginalName";
@@ -653,6 +654,15 @@ public class DSCApplication extends Application {
 	 */
 	public int getRenameServiceStartDelay() {
 		return mSharedPreferences.getInt(KEY_RENAME_SERVICE_START_DELAY, 3);
+	}
+
+	/**
+	 * Obtain the delay unit used to starting the rename service.
+	 *
+	 * @return The delay unit used to starting the rename service.
+	 */
+	public int getDelayUnit() {
+		return getIntValue(KEY_DELAY_UNIT, 1);
 	}
 
 	/**

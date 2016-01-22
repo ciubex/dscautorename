@@ -21,6 +21,20 @@
     <string name="rename_service_start_delay_title">Retardo de inicio del servicio de renombrado.</string>
     <string name="rename_service_start_delay_desc">Iniciar el servicio de renombrado después de</string>
     <string name="seconds_unit">segundos</string>
+    <string name="minutes_unit">minutos</string>
+
+    <string name="choose_units_title">Elija las unidades de retardo:</string>
+    <string name="choose_units_title_param">Unidades de retardo Elegidos: %s</string>
+    <string name="choose_units_desc">Esta opción le permite elegir por encima de las unidades de retardo entre segundos y minutos.</string>
+    <string-array name="delay_units_labels">
+        <item>segundos</item>
+        <item>minutos</item>
+    </string-array>
+    <string-array name="delay_units_values" translatable="false">
+        <item>1</item>
+        <item>60</item>
+    </string-array>
+
     <string name="rename_video_enabled_title">Habilitar renombrado de videos</string>
     <string name="rename_video_enabled_desc">Al activar esta opción, los videos son renombrados automáticamente también, por defecto sólo se renombran las fotos.</string>
     <string name="enable_filter_folder_title">Renombrar dentro de carpeta</string>

@@ -21,6 +21,20 @@
     <string name="rename_service_start_delay_title">Atraso para inicio do serviço de renomeamento</string>
     <string name="rename_service_start_delay_desc">Iniciar o serviço de renomeamento após</string>
     <string name="seconds_unit">seg.</string>
+    <string name="minutes_unit">min.</string>
+
+    <string name="choose_units_title">Escolha unidades de atraso:</string>
+    <string name="choose_units_title_param">Unidades de atraso escolhidos: %s</string>
+    <string name="choose_units_desc">Esta opção permitirá que você escolha acima unidades de atraso entre segundos e minutos.</string>
+    <string-array name="delay_units_labels">
+        <item>segundos</item>
+        <item>minutos</item>
+    </string-array>
+    <string-array name="delay_units_values" translatable="false">
+        <item>1</item>
+        <item>60</item>
+    </string-array>
+
     <string name="rename_video_enabled_title">Habilitar renomeamento em arquivos de vídeo</string>
     <string name="rename_video_enabled_desc">Marcando essa opção, os vídeos também são renomeados automaticamente. Padrão é renomear apenas fotos.</string>
     <string name="enable_filter_folder_title">Renomear arquivos na pasta</string>

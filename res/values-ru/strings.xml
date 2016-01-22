@@ -27,6 +27,20 @@
     <string name="rename_service_start_delay_title">Задержка сервиса</string>
     <string name="rename_service_start_delay_desc">Старт сервиса после</string>
     <string name="seconds_unit">секунд</string>
+    <string name="minutes_unit">минут</string>
+
+    <string name="choose_units_title">Выберите блоки задержки:</string>
+    <string name="choose_units_title_param">Выбранные блоки задержки: %s</string>
+    <string name="choose_units_desc">Эта опция позволит вам выбрать выше задержки единиц между секунды и минуты.</string>
+    <string-array name="delay_units_labels">
+        <item>секунд</item>
+        <item>минут</item>
+    </string-array>
+    <string-array name="delay_units_values" translatable="false">
+        <item>1</item>
+        <item>60</item>
+    </string-array>
+
     <string name="rename_video_enabled_title">Переименование видео</string>
     <string name="rename_video_enabled_desc">Включив эту функцию, видеофайлы будут также переименовываться. По умолчанию - только фото.</string>
     <string name="enable_filter_folder_title">Переименовать в папках</string>

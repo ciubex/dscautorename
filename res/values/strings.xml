@@ -27,6 +27,20 @@
     <string name="rename_service_start_delay_title">Rename service start delay</string>
     <string name="rename_service_start_delay_desc">Start rename service after</string>
     <string name="seconds_unit">seconds</string>
+    <string name="minutes_unit">minutes</string>
+
+    <string name="choose_units_title">Choose delay units:</string>
+    <string name="choose_units_title_param">Chosen delay units: %s</string>
+    <string name="choose_units_desc">This option allow you to choose above delay units between seconds and minutes.</string>
+    <string-array name="delay_units_labels">
+        <item>seconds</item>
+        <item>minutes</item>
+    </string-array>
+    <string-array name="delay_units_values" translatable="false">
+        <item>1</item>
+        <item>60</item>
+    </string-array>
+
     <string name="rename_video_enabled_title">Enable video file rename</string>
     <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
     <string name="enable_filter_folder_title">Rename within a folder</string>

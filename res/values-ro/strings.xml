@@ -21,6 +21,20 @@
     <string name="rename_service_start_delay_title">Intarzierea declansarii serviciului de redenumire</string>
     <string name="rename_service_start_delay_desc">Porneste serviciul de redenumite dupa</string>
     <string name="seconds_unit">secunde</string>
+    <string name="minutes_unit">minute</string>
+
+    <string name="choose_units_title">Alege unitatea de timp:</string>
+    <string name="choose_units_title_param">Unitatea de timp aleasa: %s</string>
+    <string name="choose_units_desc">Aceasta optiune permite alegearea unitatii de tip pentru intarzirea serviciului de redenumire.</string>
+    <string-array name="delay_units_labels">
+        <item>secunde</item>
+        <item>minute</item>
+    </string-array>
+    <string-array name="delay_units_values" translatable="false">
+        <item>1</item>
+        <item>60</item>
+    </string-array>
+
     <string name="rename_video_enabled_title">Redenumeste inclusiv filmele</string>
     <string name="rename_video_enabled_desc">Prin selectarea acestei optiuni sunt redenumite si filmele. Altfel sunt redenumite doar pozele</string>
     <string name="enable_filter_folder_title">Restrictie redenumire</string>

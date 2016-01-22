@@ -235,10 +235,17 @@ public class SeekBarPreference extends Preference implements
 
 		// change accepted, store it
 		mCurrentValue = newValue;
+		updateStatusText();
+		persistInt(newValue);
+	}
+
+	/**
+	 * Update status text.
+	 */
+	private void updateStatusText() {
 		if (mStatusText != null) {
 			mStatusText.setText(getStatusText());
 		}
-		persistInt(newValue);
 	}
 
 	/**
@@ -346,6 +353,18 @@ public class SeekBarPreference extends Preference implements
 		// Disable movement of seek bar when dependency is false
 		if (mSeekBar != null) {
 			mSeekBar.setEnabled(!disableDependent);
+		}
+	}
+
+	/**
+	 * Set the control units string.
+	 *
+	 * @param units The new units string to set.
+	 */
+	public void setUnits(String units) {
+		if (units != null && !units.equals(mUnits)) {
+			mUnits = units;
+			updateStatusText();
 		}
 	}
 }
