@@ -530,7 +530,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void startRenameServiceManually() {
 		mApplication.setRenameFileRequested(true);
 		if (!mApplication.isRenameFileTaskRunning()) {
-			new RenameFileAsyncTask(mApplication, this).execute();
+			new RenameFileAsyncTask(mApplication, this, true).execute();
 		}
 	}
 

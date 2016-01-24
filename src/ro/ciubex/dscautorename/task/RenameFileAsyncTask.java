@@ -71,6 +71,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private boolean mIsUriPermissionGranted;
 	private RenamePatternsUtilities renamePatternsUtilities;
 	private static final int BUFFER = 1024;
+	private boolean mNoDelay;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -83,10 +84,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	public RenameFileAsyncTask(DSCApplication application) {
-		this(application, null);
+		this(application, null, false);
 	}
 
-	public RenameFileAsyncTask(DSCApplication application, Listener listener) {
+	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay) {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
 		mUpdateMediaStorageFiles = new ArrayList<String>();
@@ -94,6 +95,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		mApplication.setRenameFileTaskRunning(true);
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
+		mNoDelay = noDelay;
 	}
 
 	/**
@@ -119,7 +121,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				mUpdateMediaStorageFiles.clear();
 				mDeleteMediaStorageFiles.clear();
 				mApplication.setRenameFileRequested(false);
-				executeDelay();
+				if (!mNoDelay) {
+					executeDelay();
+				}
 				doGrantUriPermission();
 				renamePatternsUtilities.buildPatterns();
 				populateAllListFiles();
