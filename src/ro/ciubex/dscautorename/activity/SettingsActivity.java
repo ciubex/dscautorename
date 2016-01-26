@@ -20,6 +20,7 @@ package ro.ciubex.dscautorename.activity;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -371,9 +372,12 @@ public class SettingsActivity extends PreferenceActivity implements
 			mApplication.checkRegisteredServiceType(false);
 		} else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
 			mApplication.updateFolderObserverList();
+			mApplication.sharedPreferencesDataChanged();
 		} else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key)) {
 			doPrepareSummaries = false;
 			restartActivity();
+		} else {
+			mApplication.sharedPreferencesDataChanged();
 		}
 		if (doPrepareSummaries) {
 			prepareSummaries();

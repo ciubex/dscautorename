@@ -283,7 +283,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 		Locale locale = mApplication.getLocale();
 		String str1, str11 = before.toLowerCase(locale);
 		String newFileName;
-		int index, length = mFileNameModels.length;
+		int index, length = mFileNameModels.length, position;
 		FileNameModel fileNameModel;
 		if (str11.length() < 1) {
 			return DSCApplication.getAppContext()
@@ -298,7 +298,8 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 			} else {
 				renamePatternsUtilities.buildPatterns();
 				newFileName = getDemoFileName(after, getFileNameExtension(before));
-				if (renamePatternsUtilities.matchFileNameBefore(newFileName) != -1 ||
+				position = renamePatternsUtilities.matchFileNameBefore(newFileName);
+				if ((position != -1 && position != mPosition) ||
 						renamePatternsUtilities.matchFileNameBefore(before, newFileName) != -1) {
 					return DSCApplication.getAppContext()
 							.getString(R.string.file_name_pattern_validation_error_new);
@@ -311,14 +312,16 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 								.getString(R.string.file_name_pattern_validation_error_old);
 					}
 					newFileName = getDemoFileName(fileNameModel.getAfter(), getFileNameExtension(str1));
-					if (renamePatternsUtilities.matchFileNameBefore(newFileName) != -1 ||
+					position = renamePatternsUtilities.matchFileNameBefore(newFileName);
+					if ((position != -1 && position != mPosition) ||
 							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != -1) {
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_new);
 					}
 					newFileName = getDemoFileName(after, getFileNameExtension(str1));
-					if (renamePatternsUtilities.matchFileNameBefore(newFileName) != -1 ||
-							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != -1) {
+					position = renamePatternsUtilities.matchFileNameBefore(newFileName);
+					if ((position != -1 && position != mPosition) ||
+							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != position) {
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_new);
 					}

@@ -47,6 +47,7 @@ import ro.ciubex.dscautorename.util.Utilities;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.app.ProgressDialog;
+import android.app.backup.BackupManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -71,6 +72,7 @@ public class DSCApplication extends Application {
 	private Locale mLocale;
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
+	private BackupManager mBackupManager;
 	private RenameShortcutUpdateListener mShortcutUpdateListener;
 	private File mLogsFolder;
 	private static int mVersionCode = -1;
@@ -151,6 +153,7 @@ public class DSCApplication extends Application {
 		super.onCreate();
 		DSCApplication.mContext = getApplicationContext();
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+		mBackupManager = new BackupManager(DSCApplication.mContext);
 		initLocale();
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
 		checkRegisteredServiceType(true);
@@ -280,6 +283,13 @@ public class DSCApplication extends Application {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Notify the backup manager when SharedPreferences is changed.
+	 */
+	public void sharedPreferencesDataChanged() {
+		mBackupManager.dataChanged();
 	}
 
 	/**
@@ -858,6 +868,7 @@ public class DSCApplication extends Application {
 		Editor editor = mSharedPreferences.edit();
 		editor.putString(key, value);
 		editor.commit();
+		sharedPreferencesDataChanged();
 	}
 
 	/**
@@ -870,6 +881,7 @@ public class DSCApplication extends Application {
 		Editor editor = mSharedPreferences.edit();
 		editor.putBoolean(key, value);
 		editor.commit();
+		sharedPreferencesDataChanged();
 	}
 
 	/**
@@ -882,6 +894,7 @@ public class DSCApplication extends Application {
 		Editor editor = mSharedPreferences.edit();
 		editor.putInt(key, value);
 		editor.commit();
+		sharedPreferencesDataChanged();
 	}
 
 	/**
@@ -893,6 +906,7 @@ public class DSCApplication extends Application {
 		Editor editor = mSharedPreferences.edit();
 		editor.remove(key);
 		editor.commit();
+		sharedPreferencesDataChanged();
 	}
 
 	/**
