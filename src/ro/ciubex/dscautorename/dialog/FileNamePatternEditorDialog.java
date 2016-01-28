@@ -320,11 +320,13 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_original);
 					}
-					newFileName = getDemoFileName(after, fileNameExt);
-					if (renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(),
-							newFileName) == 0) {
-						return DSCApplication.getAppContext()
-								.getString(R.string.file_name_pattern_validation_error_rename);
+					if (index != mPosition) {
+						newFileName = getDemoFileName(after, fileNameExt);
+						if (renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(),
+								newFileName) == 0) {
+							return DSCApplication.getAppContext()
+									.getString(R.string.file_name_pattern_validation_error_rename);
+						}
 					}
 				}
 			}
