@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -139,7 +139,7 @@ public class RenamePatternsUtilities {
 	public int matchFileNameBefore(String patternString, String fileName) {
 		String before = patternString.toLowerCase(mLocale);
 		String lower = fileName.toLowerCase(mLocale);
-		Pattern pattern = Pattern.compile(wildcardToRegex(before));;
+		Pattern pattern = Pattern.compile(wildcardToRegex(before));
 		if (pattern.matcher(lower).matches()) {
 			return 0;
 		}

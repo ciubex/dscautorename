@@ -74,7 +74,9 @@
     <string name="file_name_pattern_validation_error_new_empty">Rename filename pattern cannot be empty.</string>
     <string name="file_name_pattern_validation_error_generic">Original pattern is too generic causing to rename files over and over again. Try to define a more restrictive pattern using ? and other used characters.</string>
     <string name="file_name_pattern_validation_error_old">Original file name pattern already exist, change the text with a new one.</string>
-    <string name="file_name_pattern_validation_error_new">The new pattern should not be a part of an original pattern, the above or other original defined pattern!</string>
+    <string name="file_name_pattern_validation_error_new">The original and rename pattern are matching!</string>
+    <string name="file_name_pattern_validation_error_original">The original pattern is matching with a rename pattern defined on other case!</string>
+    <string name="file_name_pattern_validation_error_rename">The rename pattern is matching with an original pattern defined on other case!</string>
     <string name="file_name_suffix_format_title">Define file name extra suffix</string>
     <string name="file_name_suffix_format_desc">This suffix is used when more than one file have same name, like in burst case. By default the counter have 5 digits.\nExample:\n%s</string>
     <string name="file_name_suffix_format_value" translatable="false">%05d</string>

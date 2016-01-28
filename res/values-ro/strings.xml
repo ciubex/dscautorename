@@ -63,7 +63,9 @@
     <string name="file_name_pattern_validation_error_new_empty">Modelul de nume redenumit nu poate fi lasat gol.</string>
     <string name="file_name_pattern_validation_error_generic">Modelul de nume original este prea generic si poate cauza blocarea aplicatiei in procesul de redenumire. Incearca o definitie mai restrictiva de redenumire folosind semnul intrebarii ? in locul caracterlor ce difera de la un nume la celalat.</string>
     <string name="file_name_pattern_validation_error_old">Modelul de nume original este deja definit, defineste o alta varianta.</string>
-    <string name="file_name_pattern_validation_error_new">Modelul de nume redenumit nu trebuie sa se regaseasca in modelul de nume original!</string>
+    <string name="file_name_pattern_validation_error_new">Modelele de nume original si cel folosit pentru redenumire sunt asemanatoare!</string>
+    <string name="file_name_pattern_validation_error_original">Modelul de nume original se potriveste cu modelul de redenumire dintr-o alta definitie!</string>
+    <string name="file_name_pattern_validation_error_rename">Modelul de redenumire se potriveste cu modelul original dintr-o alta definitie!</string>
     <string name="file_name_suffix_format_title">Defineste un sufix numeric</string>
     <string name="file_name_suffix_format_desc">Acest sufix numeric este folosit cand mai multe fisiere s-ar redenumit folosind acelasi nume, precum in cazul in care in aceeasi secunda sunt luate mai multe cadre. In mod normal sunt adaugate numere pe 5 pozitii.\Exemplu:\n%s</string>
     <string name="file_extension_note">Extensia fisierului este pastrata in urma redenumirii.</string>

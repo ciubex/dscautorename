@@ -63,7 +63,9 @@
     <string name="file_name_pattern_validation_error_new_empty">El patrón de renombrado no puede ser vacío.</string>
     <string name="file_name_pattern_validation_error_generic">El patrón original es muy genérico, causando que se renombren los archivos una y otra vez. Trate de definir un patrón más restrictivo usando ? y otros caracteres.</string>
     <string name="file_name_pattern_validation_error_old">El patrón de archivo original ya existe, cambie el texto por uno nuevo.</string>
-    <string name="file_name_pattern_validation_error_new">El nuevo patrón no debe ser parte del patrón original o parte de otro patrón ya definido!</string>
+    <string name="file_name_pattern_validation_error_new">El patrón original y cambiar el nombre se pongan en venta!</string>
+    <string name="file_name_pattern_validation_error_original">El modelo original es coincidente con un patrón de cambio de nombre definido en otro caso!</string>
+    <string name="file_name_pattern_validation_error_rename">El patrón de cambio de nombre está emparejando con un patrón original definido en otro caso!</string>
     <string name="file_name_suffix_format_title">Definir sufijo extra para el nombre de archivo</string>
     <string name="file_name_suffix_format_desc">Este sufijo es usado cuando más de un archivo tienen el mismo nombre, como en el caso de fotos tomadas en ráfaga. Por defecto el contador tiene 5 dígitos.\nEjemplo:\n%s</string>
     <string name="file_extension_note">La extensión del archivo se conserva durante el proceso de renombrado.</string>

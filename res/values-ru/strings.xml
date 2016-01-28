@@ -69,7 +69,9 @@
     <string name="file_name_pattern_validation_error_new_empty">Переименовать имя файла шаблона не может быть пустым.</string>
     <string name="file_name_pattern_validation_error_generic">Оригинальный шаблон слишком общий, поэтому переименование повторяется и повторяется. Пробуйте установить более ограниченный шаблон и/или другие символы.</string>
     <string name="file_name_pattern_validation_error_old">Оригинальный шаблон имени файла уже существует, замените текст.</string>
-    <string name="file_name_pattern_validation_error_new">Новый шаблон должен быть частью оригинального шаблона!</string>
+    <string name="file_name_pattern_validation_error_new">Оригинальный и переименовать шаблон являются соответствие!</string>
+    <string name="file_name_pattern_validation_error_original">Оригинальный рисунок соответствие с рисунком переименования, определенной на другой случай!</string>
+    <string name="file_name_pattern_validation_error_rename">Шаблон переименования соответствие с оригинальным узором, определенной на другой случай!</string>
     <string name="file_name_suffix_format_title">Установить дополнительный суффикс имени файла</string>
     <string name="file_name_suffix_format_desc">Этот суффикс используется, когда более чем один файл имеют одинаковое имя. По умолчанию счетчик имеет 5 цифр.\nПример:\n%s</string>
     <string name="file_extension_note">При переименовании расширение файла сохраняется.</string>

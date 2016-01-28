@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="60"
-    android:versionName="4.6.0" >
+    android:versionCode="61"
+    android:versionName="4.6.1" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -16,9 +16,6 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <!-- backup data for API < 23 -->
-    <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIZnobN2u7WEcf6gpr3_TB-UkcIWfYx0PMLMAnmw" />
-
     <application
         android:name="ro.ciubex.dscautorename.DSCApplication"
         android:allowBackup="true"
@@ -28,6 +25,10 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backupscheme">
+
+        <!-- backup data for API < 23 -->
+        <meta-data android:name="com.google.android.backup.api_key" android:value="AEdPqrEAAAAIZnobN2u7WEcf6gpr3_TB-UkcIWfYx0PMLMAnmw" />
+
         <activity
             android:name="ro.ciubex.dscautorename.activity.SettingsActivity"
             android:label="@string/app_name" >

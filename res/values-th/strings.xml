@@ -63,7 +63,9 @@
     <string name="file_name_pattern_validation_error_new_empty">รูปแบบการเปลี่ยนชื่อชื่อไฟล์ต้องไม่ว่างเปล่า</string>
     <string name="file_name_pattern_validation_error_generic">รูปแบบชื่อไฟล์ต้นทางที่ระบุไม่เฉพาะเจาะจงพอ และอาจทำให้เกิดลูปไม่สิ้นสุด โปรดระบุรูปแบบที่ชัดเจนกว่านี้โดยใช้เครื่องหมาย ? หรือ _</string>
     <string name="file_name_pattern_validation_error_old">รูปแบบชื่อไฟล์ต้นทางมีอยู่แล้ว โปรดระบุรูปแบบชื่อไฟล์ใหม่</string>
-    <string name="file_name_pattern_validation_error_new">รูปแบบชื่อไฟล์ปลายทางไม่ควรคล้ายกับรูปแบบชื่อไฟล์ต้นทาง รวมถึงรูปแบบชื่อไฟล์ต้นทางอื่นๆ ภายใต้รายการด้านบน</string>
+    <string name="file_name_pattern_validation_error_new">รูปแบบเดิมและเปลี่ยนชื่อจะจับคู่!</string>
+    <string name="file_name_pattern_validation_error_original">รูปแบบเดิมคือการจับคู่ที่มีรูปแบบการเปลี่ยนชื่อที่กำหนดไว้ในกรณีอื่น ๆ !</string>
+    <string name="file_name_pattern_validation_error_rename">รูปแบบการเปลี่ยนชื่อจะเข้ากับรูปแบบเดิมที่กำหนดไว้ในกรณีอื่น ๆ !</string>
     <string name="file_name_suffix_format_title">กำหนดตัวเลขพิเศษต่อท้ายชื่อไฟล์ปลายทาง</string>
     <string name="file_name_suffix_format_desc">ตัวเลขพิเศษนี้จะถูกใช้ก็ต่อเมื่อ ไฟล์ที่ถูกเปลี่ยนชื่อเกิดการซ้ำกัน ในกรณีที่ถ่ายรูปต่อเนื่องหลายๆ ภาพในเวลาเดียวกัน ค่าเริ่มต้นคือ ตัวเลข 5 ตัว\nตัวอย่างเช่น:\n%s</string>
     <string name="file_extension_note">นามสกุลของไฟล์จะไม่ถูกเปลี่ยนระหว่างการดำเนินการเปลี่ยนชื่อไฟล์</string>

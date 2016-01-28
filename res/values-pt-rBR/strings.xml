@@ -63,7 +63,9 @@
     <string name="file_name_pattern_validation_error_new_empty">O padrão para renomeamento não pode estar vazio.</string>
     <string name="file_name_pattern_validation_error_generic">Padrão original muito genérico, causando renomeamentos em looping. Tente definir um padrão mais restritivo usando ? e outros caracteres.</string>
     <string name="file_name_pattern_validation_error_old">Padrão do arquivo original já existe. Escolher outro texto.</string>
-    <string name="file_name_pattern_validation_error_new">O novo padrão não deve ser igual a: parte do padrão original, padrão acima ou outro padrão original definido!</string>
+    <string name="file_name_pattern_validation_error_new">O padrão original e renomear estão combinando!</string>
+    <string name="file_name_pattern_validation_error_original">O padrão original está combinando com um padrão de mudança de nome definido em outro caso!</string>
+    <string name="file_name_pattern_validation_error_rename">O padrão de renomeação está combinando com um teste padrão original definido em outro caso!</string>
     <string name="file_name_suffix_format_title">Definir sufixo extra para o nome do arquivo</string>
     <string name="file_name_suffix_format_desc">Sufixo extra usado quando mais de uma arquivo possuir o mesmo nome. Por padrão o contador possui 5 digitos.\nExemplo:\n%s</string>
     <string name="file_extension_note">A extensão do arquivo é preservada durante o processo de renomemento.</string>

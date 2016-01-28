@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,7 +49,9 @@ import android.widget.TextView;
  * @author Claudiu Ciobotariu
  * 
  */
-public class FileNamePatternEditorDialog extends BaseDialog implements SelectFolderDialog.SelectFolderListener {
+public class FileNamePatternEditorDialog extends BaseDialog implements
+		SelectFolderDialog.SelectFolderListener {
+	private static final String TAG = FileNamePatternEditorDialog.class.getName();
 	private FileNamePatternListAdapter mAdapter;
 	private Activity mParentActivity;
 	private EditText mEditFileNamePatternFrom, mEditFileNamePatternTo;
@@ -69,7 +71,6 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 		mParentActivity = parentActivity;
 		setContentView(R.layout.file_name_pattern_editor_dialog_layout);
 		mAdapter = adapter;
-		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
 	}
 
@@ -103,6 +104,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 	protected void onStart() {
 		mNow = new Date();
 		mDefaultFileName = new FileNameModel(mApplication, DSCApplication.getAppContext().getString(R.string.default_file_name_pattern));
+		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		updateDialogTitle();
 		initValues();
 		updateMoveFilesFields();
@@ -170,6 +172,11 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 				mDefaultSelectedFolder = new SelectedFolderModel();
 				mDefaultSelectedFolder.setPath(mApplication.getDefaultFolderScanning());
 			}
+		} else {
+			mEditFileNamePatternFrom.setText("");
+			mEditFileNamePatternTo.setText("");
+			mDefaultSelectedFolder = new SelectedFolderModel();
+			mDefaultSelectedFolder.setPath(mApplication.getDefaultFolderScanning());
 		}
 		mEnableMoveFiles.setChecked(isMoveFiles);
 	}
@@ -227,9 +234,6 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 	 */
 	private void updateFileNamePatternInfo() {
 		String prefBefore = mEditFileNamePatternFrom.getEditableText().toString();
-		if (prefBefore.length() < 1) {
-			prefBefore = DSCApplication.getAppContext().getString(R.string.original_file_name_pattern_from);
-		}
 		prefBefore = prefBefore.trim();
 		String prefAfter = mEditFileNamePatternTo.getEditableText().toString().trim();
 		String text = validateFileNamePatterns(prefBefore, prefAfter);
@@ -282,8 +286,9 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 	private String validateFileNamePatterns(String before, String after) {
 		Locale locale = mApplication.getLocale();
 		String str1, str11 = before.toLowerCase(locale);
+		String fileNameExt;
 		String newFileName;
-		int index, length = mFileNameModels.length, position;
+		int index, length = mFileNameModels.length;
 		FileNameModel fileNameModel;
 		if (str11.length() < 1) {
 			return DSCApplication.getAppContext()
@@ -292,38 +297,34 @@ public class FileNamePatternEditorDialog extends BaseDialog implements SelectFol
 			return DSCApplication.getAppContext()
 					.getString(R.string.file_name_pattern_validation_error_new_empty);
 		} else {
-			index = str11.indexOf('.');
-			if (index == 1 && str11.charAt(0) == '*') {
+			if (before.startsWith("*.")) {
 				return DSCApplication.getAppContext().getString(R.string.file_name_pattern_validation_error_generic);
 			} else {
-				renamePatternsUtilities.buildPatterns();
 				newFileName = getDemoFileName(after, getFileNameExtension(before));
-				position = renamePatternsUtilities.matchFileNameBefore(newFileName);
-				if ((position != -1 && position != mPosition) ||
-						renamePatternsUtilities.matchFileNameBefore(before, newFileName) != -1) {
+				if (renamePatternsUtilities.matchFileNameBefore(before, newFileName) != -1) {
 					return DSCApplication.getAppContext()
 							.getString(R.string.file_name_pattern_validation_error_new);
 				}
 				for (index = 0; index < length; index++) {
 					fileNameModel = mFileNameModels[index];
 					str1 = fileNameModel.getBefore().toLowerCase(locale);
-					if (str11.indexOf(str1) == 0 && index != mPosition) {
+					// check for original name pattern
+					if (index != mPosition && str11.indexOf(str1) == 0) {
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_old);
 					}
-					newFileName = getDemoFileName(fileNameModel.getAfter(), getFileNameExtension(str1));
-					position = renamePatternsUtilities.matchFileNameBefore(newFileName);
-					if ((position != -1 && position != mPosition) ||
-							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != -1) {
+					fileNameExt = getFileNameExtension(str1);
+					newFileName = getDemoFileName(fileNameModel.getAfter(), fileNameExt);
+					if (renamePatternsUtilities.matchFileNameBefore(before,
+							newFileName) == 0) {
 						return DSCApplication.getAppContext()
-								.getString(R.string.file_name_pattern_validation_error_new);
+								.getString(R.string.file_name_pattern_validation_error_original);
 					}
-					newFileName = getDemoFileName(after, getFileNameExtension(str1));
-					position = renamePatternsUtilities.matchFileNameBefore(newFileName);
-					if ((position != -1 && position != mPosition) ||
-							renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(), newFileName) != position) {
+					newFileName = getDemoFileName(after, fileNameExt);
+					if (renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(),
+							newFileName) == 0) {
 						return DSCApplication.getAppContext()
-								.getString(R.string.file_name_pattern_validation_error_new);
+								.getString(R.string.file_name_pattern_validation_error_rename);
 					}
 				}
 			}
