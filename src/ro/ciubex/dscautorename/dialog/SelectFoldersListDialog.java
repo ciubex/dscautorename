@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,7 +39,9 @@ import ro.ciubex.dscautorename.adpater.FolderListAdapter;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 
 /**
- * @author Claudiu
+ * A dialog used as a folder picker.
+ *
+ * @author Claudiu Ciobotariu
  */
 public class SelectFoldersListDialog extends BaseDialog implements
 		SelectFolderDialog.SelectFolderListener {
@@ -52,6 +54,7 @@ public class SelectFoldersListDialog extends BaseDialog implements
 	private int mSelectedIndex;
 
 	private static final int CONFIRMATION_DELETE_FOLDER = 1;
+	private static final int CONFIRMATION_USE_INTERNAL_SELECT_FOLDER = 2;
 
 	/**
 	 * @param context
@@ -108,11 +111,20 @@ public class SelectFoldersListDialog extends BaseDialog implements
 	 */
 	private void clickOnItem(int position) {
 		if (mApplication.getSdkInt() < 21) {
-			new SelectFolderDialog(mContext, mApplication, this, position).show();
+			useInternalSelectFolderDialog(position);
 		} else {
 			mSelectedIndex = position;
 			startIntentActionOpenDocumentTree();
 		}
+	}
+
+	/**
+	 * Launch the internal select folder dialog.
+	 *
+	 * @param position The position from list of folders.
+	 */
+	private void useInternalSelectFolderDialog(int position) {
+		new SelectFolderDialog(mContext, mApplication, this, position).show();
 	}
 
 	/**
@@ -125,8 +137,11 @@ public class SelectFoldersListDialog extends BaseDialog implements
 		try {
 			mParentActivity.startActivityForResult(intent, SettingsActivity.REQUEST_OPEN_DOCUMENT_TREE);
 		} catch (Exception e) {
-			showAlertDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support));
+			mApplication.logE(TAG, "startIntentActionOpenDocumentTree: " + e.getMessage(), e);
+			showConfirmationDialog(R.string.folder_list_title,
+					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support),
+					CONFIRMATION_USE_INTERNAL_SELECT_FOLDER,
+					null);
 		}
 	}
 
@@ -190,6 +205,8 @@ public class SelectFoldersListDialog extends BaseDialog implements
 			mApplication.persistFolderList(folderList);
 			mAdapter.updateFolders();
 			mAdapter.notifyDataSetChanged();
+		} else if (positive && CONFIRMATION_USE_INTERNAL_SELECT_FOLDER == confirmationId) {
+			useInternalSelectFolderDialog(mSelectedIndex);
 		}
 	}
 

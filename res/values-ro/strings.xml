@@ -47,7 +47,7 @@
     <string name="folder_list_all_selected">Trebuie lasat cel putin un director neselectat!</string>
     <string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
     <string name="folder_list_confirmation">Doresti sa stergi directoarele selectate?</string>
-    <string name="folder_list_no_open_document_tree_support">Versiunea de Android folosita nu are suport pentru selectarea de directoare. (ACTION_OPEN_DOCUMENT_TREE).</string>
+    <string name="folder_list_no_open_document_tree_support">Versiunea de Android folosita nu are suport pentru selectarea de directoare. (ACTION_OPEN_DOCUMENT_TREE).\nDoriti folosirea selectorului intern de directoare? Folosirea acestuia nu garanteaza drepturile aplicatiei pentru directorul selectat, fara aceste drepturi este posibil ca aplicatia sa nu poata redenumi sau muta fisiere!</string>
     <string name="filter_folder_title">Selecteaza un director.</string>
     <string name="filter_folder_no_folder">[Nici un director]</string>
     <string name="enable_folder_scanning_title">Scaneaza fisiere doar in directoare.</string>

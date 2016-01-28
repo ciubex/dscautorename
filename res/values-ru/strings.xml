@@ -53,7 +53,7 @@
     <string name="folder_list_all_selected">Как минимум одна папка должна остаться не отмеченной!</string>
     <string name="folder_list_no_selection">Выберите как минимум одну папку для удаления!</string>
     <string name="folder_list_confirmation">Вы хотите удалить выбранные папки?</string>
-    <string name="folder_list_no_open_document_tree_support">Ваша версия Андроид не поддерживает выбор папок (ACTION_OPEN_DOCUMENT_TREE).</string>
+    <string name="folder_list_no_open_document_tree_support">Ваша версия Андроид не поддерживает выбор папок (ACTION_OPEN_DOCUMENT_TREE).\nВы хотите использовать внутреннюю палитру папки, чтобы выбрать папку? Использование внутреннего палитру папок приложение не будет предоставлено право на переименовывать и перемещать файлы!</string>
     <string name="filter_folder_title">Выбор папки.</string>
     <string name="filter_folder_no_folder">[Нет папки]</string>
     <string name="enable_folder_scanning_title">Включение сканирования в папке.</string>

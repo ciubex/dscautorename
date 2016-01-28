@@ -64,6 +64,8 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	private RenamePatternsUtilities renamePatternsUtilities;
 	private CheckBox mEnableMoveFiles;
 
+	private static final int CONFIRMATION_USE_INTERNAL_SELECT_FOLDER = 2;
+
 	public FileNamePatternEditorDialog(Context context, DSCApplication application,
 									   Activity parentActivity,
 									   FileNamePatternListAdapter adapter) {
@@ -355,10 +357,19 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	 */
 	private void onSelectFolder() {
 		if (mApplication.getSdkInt() < 21) {
-			new SelectFolderDialog(mContext, mApplication, this, 0).show();
+			useInternalSelectFolderDialog(0);
 		} else {
 			startIntentActionOpenDocumentTree();
 		}
+	}
+
+	/**
+	 * Launch the internal select folder dialog.
+	 *
+	 * @param position The position from list of folders.
+	 */
+	private void useInternalSelectFolderDialog(int position) {
+		new SelectFolderDialog(mContext, mApplication, this, position).show();
 	}
 
 	/**
@@ -371,8 +382,11 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 		try {
 			mParentActivity.startActivityForResult(intent, SettingsActivity.REQUEST_OPEN_DOCUMENT_TREE_MOVE_FOLDER);
 		} catch (Exception e) {
-			showAlertDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support));
+			mApplication.logE(TAG, "startIntentActionOpenDocumentTree: " + e.getMessage(), e);
+			showConfirmationDialog(R.string.folder_list_title,
+					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support),
+					CONFIRMATION_USE_INTERNAL_SELECT_FOLDER,
+					null);
 		}
 	}
 
@@ -390,5 +404,13 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 			mDefaultFileName.setSelectedFolder(null);
 		}
 		updateMoveFilesFields();
+	}
+
+	@Override
+	protected void onConfirmation(boolean positive, int confirmationId,
+								  Object anObject) {
+		if (positive && CONFIRMATION_USE_INTERNAL_SELECT_FOLDER == confirmationId) {
+			useInternalSelectFolderDialog(0);
+		}
 	}
 }

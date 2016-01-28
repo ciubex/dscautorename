@@ -47,7 +47,7 @@
     <string name="folder_list_all_selected">ต้องมีโฟลเดอร์ที่ต้องการสแกนอย่างน้อย 1 โฟลเดอร์</string>
     <string name="folder_list_no_selection">โปรดเลือกโฟลเดอร์ที่ต้องการลบ</string>
     <string name="folder_list_confirmation">ต้องการลบโฟลเดอร์ที่เลือกหรือไม่?</string>
-    <string name="folder_list_no_open_document_tree_support">เวอร์ชันของแอนดรอยด์ที่ใช้ไม่สนับสนุนการเลือกโฟลเดอร์ (ACTION_OPEN_DOCUMENT_TREE).</string>
+    <string name="folder_list_no_open_document_tree_support">เวอร์ชันของแอนดรอยด์ที่ใช้ไม่สนับสนุนการเลือกโฟลเดอร์ (ACTION_OPEN_DOCUMENT_TREE).\nคุณต้องการที่จะใช้ตัวเลือกโฟลเดอร์ภายในเพื่อเลือกโฟลเดอร์หรือไม่? การใช้ตัวเลือกโฟลเดอร์ภายในโปรแกรมจะไม่ได้รับสิทธิในการเปลี่ยนชื่อและย้ายไฟล์!</string>
     <string name="filter_folder_title">เลือกโฟลเดอร์</string>
     <string name="filter_folder_no_folder">[ไม่มีโฟลเดอร์]</string>
     <string name="enable_folder_scanning_title">อนุญาตให้สแกนไฟล์ภายในโฟลเดอร์</string>

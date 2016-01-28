@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,9 @@ import java.io.File;
 import ro.ciubex.dscautorename.DSCApplication;
 
 /**
- * Created by claudiu on 08.04.2015.
+ * A model class used to handle selected folder info
+ *
+ * @author Claudiu Ciobotariu
  */
 public class SelectedFolderModel {
 	private static final String TAG = SelectedFolderModel.class.getName();
@@ -85,12 +87,23 @@ public class SelectedFolderModel {
 		return mSchema;
 	}
 
+	public void setSchema(String schema) {
+		this.mSchema = schema;
+	}
+
 	public String getAuthority() {
 		return mAuthority;
+	}
+	public void setAuthority(String authority) {
+		this.mAuthority = authority;
 	}
 
 	public String getUuid() {
 		return mUuid;
+	}
+
+	public void setUuid(String uuid) {
+		this.mUuid = uuid;
 	}
 
 	public void setPath(String path) {
@@ -111,6 +124,10 @@ public class SelectedFolderModel {
 
 	public int getFlags() {
 		return mFlags;
+	}
+
+	public void setFlags(int flags) {
+		this.mFlags = flags;
 	}
 
 	public boolean isNewModel() {

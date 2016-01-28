@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,8 +25,8 @@ import java.util.List;
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.adpater.FileListAdapter;
-import ro.ciubex.dscautorename.adpater.FolderListAdapter;
 import ro.ciubex.dscautorename.model.FileItem;
+import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.task.FolderScannAsyncTask;
 import ro.ciubex.dscautorename.util.Utilities;
@@ -203,8 +203,14 @@ public class SelectFolderDialog extends BaseDialog implements
 	public void onClick(View view) {
 		if (btnOk == view) {
 			if (mSelectFolderListener != null) {
+				String selectedPath = mCurrentFolder.getAbsolutePath();
+				MountVolume volume = mApplication.getMountVolumeByPath(selectedPath);
 				SelectedFolderModel selectedFolder = new SelectedFolderModel();
-				selectedFolder.setPath(mCurrentFolder.getAbsolutePath());
+				selectedFolder.setSchema("content");
+				selectedFolder.setAuthority("com.android.externalstorage.documents");
+				selectedFolder.setUuid(volume.getUuid());
+				selectedFolder.setPath(selectedPath.substring(volume.getPath().length() + 1));
+				selectedFolder.setFlags(195);
 				mSelectFolderListener.onFolderSelected(mFolderIndex, selectedFolder);
 			}
 		} else if (mBtnNewFolder == view) {
