@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- *
+ * <p/>
  * Copyright (C) 2015 Claudiu Ciobotariu
- *
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,12 +26,15 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.FileRenameData;
+import ro.ciubex.dscautorename.model.MediaStoreEntity;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
@@ -39,6 +42,7 @@ import ro.ciubex.dscautorename.util.Utilities;
 
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.media.ExifInterface;
 import android.net.Uri;
@@ -63,15 +67,14 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private static String mProgressMessage;
 	private FileNameModel[] mFileNameModels;
 	private List<SelectedFolderModel> mSelectedFolders;
-	private List<String> mUpdateMediaStorageFiles;
-	private List<FileRenameData> mDeleteMediaStorageFiles;
-	private FileRenameData mPreviousFileRenameData;
+	private int mPreviousFileModelId;
 	private String mPreviousFileNameModel;
 	private int mPreviousFileNameModelCount;
 	private boolean mIsUriPermissionGranted;
 	private RenamePatternsUtilities renamePatternsUtilities;
 	private static final int BUFFER = 1024;
 	private boolean mNoDelay;
+	private List<MediaStoreEntity> mUpdateMediaStoreEntities;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -90,8 +93,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay) {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
-		mUpdateMediaStorageFiles = new ArrayList<String>();
-		mDeleteMediaStorageFiles = new ArrayList<FileRenameData>();
+		mUpdateMediaStoreEntities = new ArrayList<MediaStoreEntity>();
 		mApplication.setRenameFileTaskRunning(true);
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
@@ -118,8 +120,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			mApplication.updateMountedVolumes();
 			mApplication.updateSelectedFolders();
 			while (mApplication.isRenameFileRequested()) {
-				mUpdateMediaStorageFiles.clear();
-				mDeleteMediaStorageFiles.clear();
+				mUpdateMediaStoreEntities.clear();
 				mApplication.setRenameFileRequested(false);
 				if (!mNoDelay) {
 					executeDelay();
@@ -130,7 +131,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
 					mPreviousFileNameModelCount = 0;
-					mPreviousFileRenameData = null;
+					mPreviousFileModelId = -1;
 					mProgressPosition = 0;
 					publishProgress();
 					for (FileRenameData data : mListFiles) {
@@ -141,9 +142,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					populateAllListFiles();
 				}
-				new Thread(new MediaStorageCleanupThread(mApplication,
-						mUpdateMediaStorageFiles,
-						mDeleteMediaStorageFiles)).start();
+				updateMediaStore();
 			}
 		}
 		mApplication.setRenameFileTaskRunning(false);
@@ -246,7 +245,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private boolean invokeRenameFile(FileRenameData data, final File file, String oldFileName) {
 		boolean result = mainRenameFile(data, file, oldFileName);
 		if (result) {
-			mPreviousFileRenameData = data;
 			mProgressPosition++;
 		}
 		return result;
@@ -374,20 +372,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			data.setFileName(newFile.getName());
 			success = renameFileUseApiLevel(data, oldFile, newFile);
 			if (success) {
-				if (data.getUri() == null && id == -1) {
-					addToMediaStorageFilesList(oldFile.getAbsolutePath());
-					addToMediaStorageFilesList(data.getFullPath());
-					mApplication.logD(TAG, "File renamed:"
-							+ oldFile.getAbsolutePath() + ", " + newFile.getAbsolutePath()
-							+ ", media forced to update.");
-				} else {
-					success = updateMediaStoreData(id, data.getUri(),
-							data.getFullPath(), data.getFileTitle(),
-							data.getFileName(), data.getSize());
-					mApplication.logD(TAG, "File renamed: " + id + ", "
-							+ oldFile.getAbsolutePath() + ", " + newFile.getAbsolutePath()
-							+ ", media updated: " + success);
-				}
+				storeToUpdateMediaStoreEntities(id, data.getUri(),
+						data.getFullPath(), oldFileName, data.getFileTitle(),
+						data.getFileName(), data.getSize());
 				data.setParentFolder(newFile.getParentFile());
 				renameZeroFile(data);
 			} else {
@@ -401,45 +388,25 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Add file to be scanned by the media storage.
-	 *
-	 * @param fileFullPath Full file path to be scanned.
-	 */
-	private void addToMediaStorageFilesList(String fileFullPath) {
-		if (!mUpdateMediaStorageFiles.contains(fileFullPath)) {
-			mUpdateMediaStorageFiles.add(fileFullPath);
-		}
-	}
-
-	/**
 	 * Rename the zero file if the counter is needed.
 	 *
 	 * @param data All rename data.
 	 */
 	private void renameZeroFile(FileRenameData data) {
 		File newFile, zeroFile;
-		if (mPreviousFileRenameData != null && mPreviousFileNameModelCount == 1) {
-			zeroFile = new File(data.getParentFolder(), mPreviousFileRenameData.getFileName());
+		if (mPreviousFileNameModelCount == 1) {
+			zeroFile = new File(data.getParentFolder(), data.getPreviousFileName());
 			newFile = new File(data.getParentFolder(), data.getFileNameZero());
-			if (renameFileUseApiLevel(mPreviousFileRenameData, zeroFile, newFile)) {
-				mApplication.logD(TAG, "ZERO File renamed: "
-						+ mPreviousFileRenameData.getId() + ", "
-						+ zeroFile.getName() + ", " + newFile.getName()
-						+ ", media updated: true");
-				if (mPreviousFileRenameData.getUri() == null &&
-						mPreviousFileRenameData.getId() == -1) {
-					addToMediaStorageFilesList(mPreviousFileRenameData.getFullPath());
-					addToMediaStorageFilesList(newFile.getAbsolutePath());
-				} else {
-					updateMediaStoreData(mPreviousFileRenameData.getId(),
-							mPreviousFileRenameData.getUri(),
-							newFile.getAbsolutePath(),
-							data.getFileTitleZero(),
-							data.getFileNameZero(),
-							data.getSize());
-					mUpdateMediaStorageFiles.remove(zeroFile.getAbsolutePath());
-					mDeleteMediaStorageFiles.add(new FileRenameData(data.getId(), data.getUri(), zeroFile.getAbsolutePath()));
-				}
+			if (renameFileUseApiLevel(data, zeroFile, newFile)) {
+				mApplication.logD(TAG, "ZERO File renamed from "
+						+ zeroFile.getName() + " to " + newFile.getName());
+				storeToUpdateMediaStoreEntities(mPreviousFileModelId,
+						data.getUri(),
+						newFile.getAbsolutePath(),
+						zeroFile.getAbsolutePath(),
+						data.getFileTitleZero(),
+						data.getFileNameZero(),
+						data.getSize());
 			}
 		}
 	}
@@ -594,13 +561,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		try {
 			if (oldUri != null && newUri != null) {
 				size = copyFileUseStream(mContentResolver.openInputStream(oldUri),
-						mContentResolver.openOutputStream(newUri),
-						data);
+						mContentResolver.openOutputStream(newUri));
 
 			}
 			result = (size > 0);
 		} catch (FileNotFoundException e) {
-			mApplication.logE(TAG, "doMoveFilesNewAPI data: " + data, e);
+			mApplication.logE(TAG, "doMoveFilesNewAPI " + oldFile + " to " + newFile, e);
 		}
 		if (result) {
 			result = DocumentsContract.deleteDocument(mContentResolver, oldUri);
@@ -613,10 +579,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *
 	 * @param inStream  The input stream.
 	 * @param outStream The output stream.
-	 * @param data      File rename data info.
 	 * @return The copy size.
 	 */
-	private int copyFileUseStream(InputStream inStream, OutputStream outStream, FileRenameData data) {
+	private int copyFileUseStream(InputStream inStream, OutputStream outStream) {
 		int size = 0;
 		byte[] buffer = new byte[BUFFER];
 		int length;
@@ -630,9 +595,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 		} catch (IOException e) {
 			size = 0;
-			mApplication.logE(TAG, "copyFileUseStream data: " + data, e);
 		} finally {
-			mApplication.logD(TAG, "copyFileUseStream size: " + size + " data:" + data);
 			Utilities.doClose(outStream);
 			Utilities.doClose(inStream);
 		}
@@ -640,7 +603,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Update media store files with following data details.
+	 * Save the media store data details.
 	 *
 	 * @param id          The file ID.
 	 * @param uri         The file URI.
@@ -650,19 +613,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * @param displayName The file display name, usually is the file name without the
 	 *                    path.
 	 * @param size        The file size.
-	 * @return True if the file information was stored on DB.
 	 */
-	private boolean updateMediaStoreData(int id, Uri uri, String data,
-										 String title, String displayName,
-										 long size) {
-		try {
-			mContentResolver.delete(uri, MediaStore.MediaColumns._ID + "=?", new String[]{"" + id});
-		} catch (Exception ex) {
-			mApplication.logE(TAG, "Cannot be updated the content resolver: "
-					+ uri.toString() + " Exception: " + ex.getMessage(), ex);
-		}
-		addToMediaStorageFilesList(data);
-		return true;
+	private void storeToUpdateMediaStoreEntities(int id, Uri uri, String data, String oldData,
+												 String title, String displayName,
+												 long size) {
+		MediaStoreEntity entity = new MediaStoreEntity(id, uri, data, oldData, title, displayName, size);
+		mUpdateMediaStoreEntities.add(entity);
 	}
 
 	/**
@@ -691,10 +647,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		}
 		String newFileName = mApplication.getFileNameFormatted(data.getFileNamePatternAfter(), new Date(milliseconds));
 		if (newFileName.equals(mPreviousFileNameModel)) {
+			data.setPreviousFileName(newFileName + extension);
 			mPreviousFileNameModelCount++;
 		} else {
 			mPreviousFileNameModel = newFileName;
 			mPreviousFileNameModelCount = 0;
+			mPreviousFileModelId = data.getId();
 		}
 		if (mPreviousFileNameModelCount > 0) {
 			fileNameZero = newFileName + "_" + mApplication.getFormattedFileNameSuffix(0);
@@ -1044,6 +1002,20 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			}
 		} else {
 			mApplication.logD(TAG, "No cursor found for the URI: " + uri);
+		}
+	}
+
+	/**
+	 * Update media store DB with modified data.
+	 */
+	private void updateMediaStore() {
+		if (!mUpdateMediaStoreEntities.isEmpty()) {
+			try {
+				Thread t = new Thread(new MediaStorageCleanupThread(mApplication, mUpdateMediaStoreEntities));
+				t.start();
+				t.join();
+			} catch (InterruptedException e) {
+			}
 		}
 	}
 }

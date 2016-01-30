@@ -51,7 +51,7 @@
     <string name="filter_folder_title">Selecccionar carpeta.</string>
     <string name="filter_folder_no_folder">[No hay carpeta]</string>
     <string name="enable_folder_scanning_title">Habilitar escaneo de carpeta para archivos.</string>
-    <string name="enable_folder_scanning_desc">Al activar esta opción el servicio de renombrado buscará archivos de medios en las carpetas seleccionadas arriba. Selecciona esto si tu dispositivo tiene desabiblitado en escaneo de contenido de medios.</string>
+    <string name="enable_folder_scanning_desc">Normalmente esto no se debe elegir! Al activar esta opción el servicio de renombrado buscará archivos de medios en las carpetas seleccionadas arriba. Selecciona esto si tu dispositivo tiene desabiblitado en escaneo de contenido de medios.</string>
     <string name="define_file_name_pattern_title">Definir patrones de nombre para archivos</string>
     <string name="define_file_name_pattern_desc">Los patrones de nombre usados para buscar archivos a renombrar (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nLos comodines * and ? pueden ser usados también.</string>
     <string name="file_name_pattern_dialog_title_add">Añadir patrón de nombre de archivos</string>

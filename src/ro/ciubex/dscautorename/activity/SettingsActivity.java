@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- *
+ * <p/>
  * Copyright (C) 2015 Claudiu Ciobotariu
- *
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -26,6 +26,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -35,8 +36,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.text.util.Linkify;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -293,6 +296,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		prepareSummaries();
 		checkAndroidVersion();
 		checkForPermissions();
+		setColorPreferencesSummary(mEnableScanForFiles, Color.RED);
 	}
 
 	/**
@@ -394,7 +398,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			return DSCApplication.getAppContext().getString(R.string.minutes_unit);
 		}
 		return DSCApplication.getAppContext().getString(R.string.seconds_unit);
- 	}
+	}
 
 	/**
 	 * Restart this activity.
@@ -1101,5 +1105,19 @@ public class SettingsActivity extends PreferenceActivity implements
 			allowed = true;// mApplication.haveLogsPermissions();
 			mSendDebugReport.setEnabled(allowed);
 		}
+	}
+
+	/**
+	 * Set the text color for the preference summary.
+	 *
+	 * @param preference The preference item.
+	 * @param color      The color to set.
+	 */
+	private void setColorPreferencesSummary(Preference preference, int color) {
+		CharSequence cs = preference.getSummary();
+		String plainTitle = cs.subSequence(0, cs.length()).toString();
+		Spannable coloredTitle = new SpannableString(plainTitle);
+		coloredTitle.setSpan(new ForegroundColorSpan(color), 0, coloredTitle.length(), 0);
+		preference.setSummary(coloredTitle);
 	}
 }

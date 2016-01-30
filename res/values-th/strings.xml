@@ -51,7 +51,7 @@
     <string name="filter_folder_title">เลือกโฟลเดอร์</string>
     <string name="filter_folder_no_folder">[ไม่มีโฟลเดอร์]</string>
     <string name="enable_folder_scanning_title">อนุญาตให้สแกนไฟล์ภายในโฟลเดอร์</string>
-    <string name="enable_folder_scanning_desc">เมื่อเลือกตัวเลือกนี้ จะอนุญาตให้สแกนมีเดียที่อยู่ภายในโฟลเดอร์ที่กำหนดไว้ด้านบน โปรดเลือกตัวเลือกนี้ หากเครื่องของคุณปิดการใช้งานตัวสแกนมีเดีย</string>
+    <string name="enable_folder_scanning_desc">ปกตินี้ไม่ควรจะเลือก! เมื่อเลือกตัวเลือกนี้ จะอนุญาตให้สแกนมีเดียที่อยู่ภายในโฟลเดอร์ที่กำหนดไว้ด้านบน โปรดเลือกตัวเลือกนี้ หากเครื่องของคุณปิดการใช้งานตัวสแกนมีเดีย</string>
     <string name="define_file_name_pattern_title">กำหนดรูปแบบชื่อไฟล์</string>
     <string name="define_file_name_pattern_desc">รูปแบบชื่อไฟล์ต้นทางที่ต้องการเปลี่ยน (\"DSC_*.JPG\" หรือ \"MOV_*.MP4\"), เช่น %s\nคุณสามารถใช้เครื่องหมาย * และ ? แทนอักขระใดๆ ได้ด้วย</string>
     <string name="file_name_pattern_dialog_title_add">เพิ่มรูปแบบชื่อไฟล์</string>

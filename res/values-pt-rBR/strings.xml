@@ -51,7 +51,7 @@
     <string name="filter_folder_title">Selecione uma pasta.</string>
     <string name="filter_folder_no_folder">[Nenhuma pasta]</string>
     <string name="enable_folder_scanning_title">Habilitar busca de arquivos na pasta.</string>
-    <string name="enable_folder_scanning_desc">Selecionando esta opção o serviço de renomeamento irá buscar por arquivos de mídia nas pastas selecionadas acima. Selecione esta opção se seu dispositivo possuir a busca de mídia desabilitada.</string>
+    <string name="enable_folder_scanning_desc">Normalmente, este não deve ser especificado! Selecionando esta opção o serviço de renomeamento irá buscar por arquivos de mídia nas pastas selecionadas acima. Selecione esta opção se seu dispositivo possuir a busca de mídia desabilitada.</string>
     <string name="define_file_name_pattern_title">Definir padrão de nome de arquivos</string>
     <string name="define_file_name_pattern_desc">Os padrões de nome de arquivo usados para buscar arquivos para o renomeamento (\"DSC_*.JPG\" ou \"MOV_*.MP4\"), Info. %s\nCoringas * e ? também podem ser usados.</string>
     <string name="file_name_pattern_dialog_title_add">Adicionar padrão de nome de arquivo</string>

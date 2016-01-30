@@ -58,7 +58,7 @@
     <string name="filter_folder_desc" translatable="false">/</string>
     <string name="filter_folder_no_folder">[No folder]</string>
     <string name="enable_folder_scanning_title">Enable folder scanning for files.</string>
-    <string name="enable_folder_scanning_desc">By selecting this option the rename service will scan for media files on the above selected folders. Select this if your device have media content scanner disabled.</string>
+    <string name="enable_folder_scanning_desc">Normally this should NOT BE SELECTED! By selecting this option the rename service will scan for media files on the above selected folders. Select this if your device have media content scanner disabled.</string>
     <string name="original_file_name_pattern_from" translatable="false">DSC_*.JPG</string>
     <string name="original_file_name_pattern_to" translatable="false">\'PIC_\'yyyyMMdd_HHmmss</string>
     <string name="original_file_name_pattern" translatable="false">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss,MOV_*.MP4:\'VID_\'yyyyMMdd_HHmmss</string>

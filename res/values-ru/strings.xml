@@ -57,7 +57,7 @@
     <string name="filter_folder_title">Выбор папки.</string>
     <string name="filter_folder_no_folder">[Нет папки]</string>
     <string name="enable_folder_scanning_title">Включение сканирования в папке.</string>
-    <string name="enable_folder_scanning_desc">Выбрав эту опцию сервис переименования будет сканировать наличие медиафайлов в выбранных выше папках. Выберите это, если в вашем аппарате выключен сканер медиа контента.</string>
+    <string name="enable_folder_scanning_desc">Как правило, это не должна быть выбрана!Выбрав эту опцию сервис переименования будет сканировать наличие медиафайлов в выбранных выше папках. Выберите это, если в вашем аппарате выключен сканер медиа контента.</string>
     <string name="define_file_name_pattern_title">Определенные шаблоны имен файлов</string>
     <string name="define_file_name_pattern_desc">Эти шаблоны используются для поиска файлов для переименования (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nГрупповые символы * и ? также могут быть использованы.</string>
     <string name="file_name_pattern_dialog_title_add">Добавить шаблоны имен файлов</string>

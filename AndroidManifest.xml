@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="63"
-    android:versionName="4.6.3" >
+    android:versionCode="64"
+    android:versionName="4.6.4" >
 
     <uses-sdk
         android:minSdkVersion="8"

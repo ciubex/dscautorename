@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -41,6 +41,7 @@ public class FileRenameData {
 	private String mFileTitle;
 	private String mFileTitleZero;
 	private String mFileName;
+	private String mPreviousFileName;
 	private String mFileNameZero;
 	private String mMoveToFolderPath;
 	private String mMimeType;
@@ -197,6 +198,14 @@ public class FileRenameData {
 		this.mFileNameZero = fileNameZero;
 	}
 
+	public String getPreviousFileName() {
+		return mPreviousFileName;
+	}
+
+	public void setPreviousFileName(String previousFileName) {
+		this.mPreviousFileName = previousFileName;
+	}
+
 	public String getMoveToFolderPath() {
 		return mMoveToFolderPath;
 	}
@@ -283,6 +292,7 @@ public class FileRenameData {
 				", mFileTitleZero='" + mFileTitleZero + '\'' +
 				", mFileName='" + mFileName + '\'' +
 				", mFileNameZero='" + mFileNameZero + '\'' +
+				", mPreviousFileName='" + mPreviousFileName + '\'' +
 				'}';
 	}
 }

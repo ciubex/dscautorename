@@ -51,7 +51,7 @@
     <string name="filter_folder_title">Selecteaza un director.</string>
     <string name="filter_folder_no_folder">[Nici un director]</string>
     <string name="enable_folder_scanning_title">Scaneaza fisiere doar in directoare.</string>
-    <string name="enable_folder_scanning_desc">Prin selectarea acestei obtiuni serviciul de redenumire fisiere va redenumi doar fisierele aflate in directoarele selectate mai sus. Selecteaza aceasta optiune daca sistemul nu are activata indexarea fisierelor media.</string>
+    <string name="enable_folder_scanning_desc">In mod normal, aceasta optiune NU TREBUIE să fie SELECTATA! Prin selectarea acestei obtiuni serviciul de redenumire fisiere va redenumi doar fisierele aflate in directoarele selectate mai sus. Selecteaza aceasta optiune daca sistemul nu are activata indexarea fisierelor media.</string>
     <string name="define_file_name_pattern_title">Modele de nume de fisiere</string>
     <string name="define_file_name_pattern_desc">Modelele de nume de fisiere folosite pentru redenumiri (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nPot fi folosite semnele * si ? de asemenea.</string>
     <string name="file_name_pattern_dialog_title_add">Adauga model de nume de fisier</string>
