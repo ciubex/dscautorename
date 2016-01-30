@@ -13,12 +13,6 @@
         <item>Обозреватель медиа контента: фото или видео сохранены.</item>
         <item>Обозреватель файлов: наблюдать за выбранными папками, когда файлы добавлены. Вы должны выбрать \"Переименовать внутри папки\" не менее одной папки \"Выбор папки\".</item>
     </string-array>
-    <string-array name="service_type_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
 
     <string name="service_choice_0">Сервис отключен.</string>
     <string name="service_choice_1">Запуск сервиса по событиям камеры.</string>
@@ -35,10 +29,6 @@
     <string-array name="delay_units_labels">
         <item>секунд</item>
         <item>минут</item>
-    </string-array>
-    <string-array name="delay_units_values" translatable="false">
-        <item>1</item>
-        <item>60</item>
     </string-array>
 
     <string name="rename_video_enabled_title">Переименование видео</string>

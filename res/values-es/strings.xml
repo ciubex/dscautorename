@@ -30,10 +30,6 @@
         <item>segundos</item>
         <item>minutos</item>
     </string-array>
-    <string-array name="delay_units_values" translatable="false">
-        <item>1</item>
-        <item>60</item>
-    </string-array>
 
     <string name="rename_video_enabled_title">Habilitar renombrado de videos</string>
     <string name="rename_video_enabled_desc">Al activar esta opción, los videos son renombrados automáticamente también, por defecto sólo se renombran las fotos.</string>
