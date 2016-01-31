@@ -1010,7 +1010,32 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			whereClause = MediaStore.MediaColumns.DATA + "=?";
 			whereParam[0] = oldData;
 		}
+		if (uri == null) {
+			return updateMediaStoreData(data, title, displayName, whereClause, whereParam);
+		}
 		return updateMediaStoreData(uri, data, title, displayName, whereClause, whereParam);
+	}
+
+	/**
+	 * Update the media store database with data file details.
+	 *
+	 * @param data        The file data, normally this is the file path.
+	 * @param title       The file title, usually is the file name without path and
+	 *                    extension.
+	 * @param displayName The file display name, usually is the file name without the
+	 *                    path.
+	 * @param whereClause An SQL WHERE clause.
+	 * @param whereParam  The SQL WHERE parameter.
+	 * @return True if the media store was updated.
+	 */
+	private boolean updateMediaStoreData(String data, String title, String displayName,
+										 String whereClause, String[] whereParam) {
+		for (Uri uri : mMediaStoreURIs) {
+			if (updateMediaStoreData(uri, data, title, displayName, whereClause, whereParam)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
