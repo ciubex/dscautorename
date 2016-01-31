@@ -158,7 +158,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			isGrantUriPermissionRequested = true;
 			if (mApplication.getSdkInt() >= 21) {
 				prepareSelectedFolders();
-				mIsUriPermissionGranted = mApplication.doGrantUriPermission(mContentResolver, mSelectedFolders);
+				List<String> list = mApplication.doGrantUriPermission(mContentResolver, mSelectedFolders);
+				mIsUriPermissionGranted = list.isEmpty(); // no rejected folder.
 			}
 		}
 	}
@@ -169,7 +170,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private void prepareSelectedFolders() {
 		SelectedFolderModel folderMove;
 		if (mSelectedFolders == null) {
-			mSelectedFolders = new ArrayList<SelectedFolderModel>();
+			mSelectedFolders = new ArrayList<>();
 		} else {
 			mSelectedFolders.clear();
 		}

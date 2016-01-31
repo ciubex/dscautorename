@@ -161,7 +161,16 @@ public class SelectFolderDialog extends BaseDialog implements
 	 * Update the title text for this dialog's window.
 	 */
 	private void updateDialogTitle() {
-		setTitle(mCurrentFolder.getAbsolutePath());
+		String fullPath = mCurrentFolder.getAbsolutePath();
+		String title;
+		int length = fullPath.length();
+		int maxChars = 20;
+		if (length < maxChars) {
+			title = fullPath;
+		} else {
+			title = "..." + fullPath.substring(length - maxChars);
+		}
+		setTitle(title);
 	}
 
 	/**
@@ -203,14 +212,19 @@ public class SelectFolderDialog extends BaseDialog implements
 	public void onClick(View view) {
 		if (btnOk == view) {
 			if (mSelectFolderListener != null) {
+				SelectedFolderModel selectedFolder = new SelectedFolderModel();
 				String selectedPath = mCurrentFolder.getAbsolutePath();
 				MountVolume volume = mApplication.getMountVolumeByPath(selectedPath);
-				SelectedFolderModel selectedFolder = new SelectedFolderModel();
-				selectedFolder.setSchema("content");
-				selectedFolder.setAuthority("com.android.externalstorage.documents");
-				selectedFolder.setUuid(volume.getUuid());
-				selectedFolder.setPath(selectedPath.substring(volume.getPath().length() + 1));
-				selectedFolder.setFlags(195);
+				if (mApplication.getSdkInt() > 20 && volume != null) {
+					selectedFolder.setPath(selectedPath.substring(volume.getPath().length() + 1));
+					selectedFolder.setSchema("content");
+					selectedFolder.setAuthority("com.android.externalstorage.documents");
+					selectedFolder.setUuid(volume.getUuid());
+					selectedFolder.setFlags(195);
+				} else {
+					selectedFolder.setRootPath("");
+					selectedFolder.setPath(selectedPath);
+				}
 				mSelectFolderListener.onFolderSelected(mFolderIndex, selectedFolder);
 			}
 		} else if (mBtnNewFolder == view) {

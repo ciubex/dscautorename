@@ -19,6 +19,7 @@
 package ro.ciubex.dscautorename.activity;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
@@ -30,7 +31,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
+import android.preference.Preference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -56,6 +57,7 @@ import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -83,17 +85,17 @@ public class SettingsActivity extends PreferenceActivity implements
 	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
 	private ListPreference mServiceTypeList;
-	private CheckBoxPreference mRenameVideoEnabled;
+	private Preference mRenameVideoEnabled;
 	private SeekBarPreference mRenameServiceStartDelay;
 	private ListPreference mDelayUnit;
 	private ListPreference mRenameFileDateType;
 	private Preference mDefineFileNamePatterns;
 	private EditTextPreference mFileNameSuffixFormat;
-	private CheckBoxPreference mEnabledFolderScanning;
+	private Preference mEnabledFolderScanning;
 	private Preference mFolderScanningPref;
 	private Preference mEnableScanForFiles;
 	private Preference mToggleRenameShortcut;
-	private CheckBoxPreference mHideRenameServiceStartConfirmation;
+	private Preference mHideRenameServiceStartConfirmation;
 	private Preference mManuallyStartRename;
 	private Preference mFileRenameCount;
 	private Preference mRequestPermissions;
@@ -101,7 +103,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private Preference mSendDebugReport;
 	private Preference mLicensePref;
 	private Preference mDonatePref;
-	private CheckBoxPreference mAppendOriginalName;
+	private Preference mAppendOriginalName;
 	private SelectFoldersListDialog selectFoldersListDialog;
 	private SelectFileNamePatternDialog selectFileNamePatternDialog;
 	private PreferenceCategory mOtherSettings;
@@ -124,7 +126,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.pref_activity);
+		addPreferencesFromResource(R.xml.preferences);
 		mApplication = (DSCApplication) getApplication();
 		initPreferences();
 		initCommands();
@@ -138,18 +140,18 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void initPreferences() {
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
-		mRenameVideoEnabled = (CheckBoxPreference) findPreference("renameVideoEnabled");
+		mRenameVideoEnabled = (Preference) findPreference("renameVideoEnabled");
 		mRenameServiceStartDelay = (SeekBarPreference) findPreference("renameServiceStartDelay");
 		mDelayUnit = (ListPreference) findPreference("delayUnit");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefineFileNamePatterns = (Preference) findPreference("definePatterns");
 		mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
-		mEnabledFolderScanning = (CheckBoxPreference) findPreference("enabledFolderScanning");
+		mEnabledFolderScanning = (Preference) findPreference("enabledFolderScanning");
 		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
 		mEnableScanForFiles = (Preference) findPreference("enableScanForFiles");
 		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
-		mHideRenameServiceStartConfirmation = (CheckBoxPreference) findPreference("hideRenameServiceStartConfirmation");
-		mAppendOriginalName = (CheckBoxPreference) findPreference("appendOriginalName");
+		mHideRenameServiceStartConfirmation = (Preference) findPreference("hideRenameServiceStartConfirmation");
+		mAppendOriginalName = (Preference) findPreference("appendOriginalName");
 		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
 		mFileRenameCount = (Preference) findPreference("fileRenameCount");
 		mRequestPermissions = (Preference) findPreference("requestPermissions");
@@ -297,6 +299,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		checkAndroidVersion();
 		checkForPermissions();
 		setColorPreferencesSummary(mEnableScanForFiles, Color.RED);
+		checkAllSelectedFolders();
 	}
 
 	/**
@@ -743,18 +746,19 @@ public class SettingsActivity extends PreferenceActivity implements
 				break;
 		}
 		mApplication.hideProgressDialog();
-		showAlertDialog(message);
+		showAlertDialog(android.R.drawable.ic_dialog_info, message);
 	}
 
 	/**
 	 * Display an alert dialog with a custom message.
 	 *
+	 * @param iconId  The resource ID for the dialog icon.
 	 * @param message Message to be displayed on an alert dialog.
 	 */
-	private void showAlertDialog(String message) {
+	private void showAlertDialog(int iconId, String message) {
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 				.setTitle(R.string.app_name).setMessage(message)
-				.setIcon(android.R.drawable.ic_dialog_info)
+				.setIcon(iconId)
 				.setNeutralButton(R.string.ok, null);
 		dialog.show();
 	}
@@ -1119,5 +1123,59 @@ public class SettingsActivity extends PreferenceActivity implements
 		Spannable coloredTitle = new SpannableString(plainTitle);
 		coloredTitle.setSpan(new ForegroundColorSpan(color), 0, coloredTitle.length(), 0);
 		preference.setSummary(coloredTitle);
+	}
+
+	/**
+	 * Check for all selected folders used if have grant URI permissions.
+	 */
+	private void checkAllSelectedFolders() {
+		if (mApplication.getSdkInt() < 21) { // do not check for old API
+			return;
+		}
+		SelectedFolderModel folderMove;
+		List<SelectedFolderModel> selectedFolders = new ArrayList<>();
+		for (SelectedFolderModel folder : mApplication.getSelectedFolders()) {
+			if (!selectedFolders.contains(folder)) {
+				selectedFolders.add(folder);
+			}
+		}
+		for (FileNameModel fileNameModel : mApplication.getOriginalFileNamePattern()) {
+			folderMove = fileNameModel.getSelectedFolder();
+			if (Utilities.isMoveFiles(folderMove)) {
+				if (!selectedFolders.contains(folderMove)) {
+					selectedFolders.add(folderMove);
+				}
+			}
+		}
+		if (!selectedFolders.isEmpty()) {
+			List<String> list = mApplication.doGrantUriPermission(mApplication.getContentResolver(), selectedFolders);
+			if (!list.isEmpty()) {
+				displayNotGrantUriPermissionAlertFor(list);
+			}
+		}
+	}
+
+	/**
+	 * Display in error message for all folders which do not have granted URI permission.
+	 *
+	 * @param folderList List of folders for which the application do not have access permission.
+	 */
+	private void displayNotGrantUriPermissionAlertFor(List<String> folderList) {
+		String message;
+		if (folderList.size() == 1) {
+			message = DSCApplication.getAppContext().
+					getString(R.string.folder_list_no_grant_permission_1, folderList.get(0));
+		} else {
+			StringBuilder sb = new StringBuilder();
+			for (String folder : folderList) {
+				if (sb.length() > 0) {
+					sb.append('\n');
+				}
+				sb.append(folder);
+			}
+			message = DSCApplication.getAppContext().
+					getString(R.string.folder_list_no_grant_permission_2, sb.toString());
+		}
+		showAlertDialog(android.R.drawable.ic_dialog_alert, message);
 	}
 }

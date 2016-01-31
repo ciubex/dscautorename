@@ -54,6 +54,8 @@
     <string name="folder_list_no_selection">Select at least one folder to delete!</string>
     <string name="folder_list_confirmation">Do you want to remove selected folders?</string>
     <string name="folder_list_no_open_document_tree_support">Your Android version do not have support to chose folders (ACTION_OPEN_DOCUMENT_TREE).\nDo you want to use internal folder picker to select a folder? Using internal folder picker the application will not have granted rights to rename and move files!</string>
+    <string name="folder_list_no_grant_permission_1">Your system revoked permissions for below folder:\n\n%s\n\nCheck where this folder was defined and try to select it again!</string>
+    <string name="folder_list_no_grant_permission_2">Your system revoked permissions for below folders:\n\n%s\n\nCheck where these folders were defined and try to select them again!</string>
     <string name="filter_folder_title">Select a folder.</string>
     <string name="filter_folder_desc" translatable="false">/</string>
     <string name="filter_folder_no_folder">[No folder]</string>

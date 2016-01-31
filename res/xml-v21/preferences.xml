@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+                  xmlns:ciubex="http://schemas.android.com/apk/res/ro.ciubex.dscautorename">
+
+    <PreferenceCategory android:title="@string/general_settings">
+        <ListPreference
+            android:defaultValue="en"
+            android:entries="@array/language_labels"
+            android:entryValues="@array/language_values"
+            android:key="languageCode"
+            android:summary="@string/change_language_desc"
+            android:title="@string/change_language_title"/>
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/service_type_labels"
+            android:entryValues="@array/service_type_values"
+            android:key="serviceType"
+            android:summary="@string/enable_desc"
+            android:title="@string/enable_title"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="renameVideoEnabled"
+            android:summary="@string/rename_video_enabled_desc"
+            android:title="@string/rename_video_enabled_title"/>
+
+        <ro.ciubex.dscautorename.preference.SeekBarPreference
+            android:defaultValue="3"
+            android:key="renameServiceStartDelay"
+            android:summary="@string/rename_service_start_delay_desc"
+            android:title="@string/rename_service_start_delay_title"
+            ciubex:maxValue="30"
+            ciubex:minValue="0"
+            ciubex:units="@string/seconds_unit"/>
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/delay_units_labels"
+            android:entryValues="@array/delay_units_values"
+            android:key="delayUnit"
+            android:summary="@string/choose_units_desc"
+            android:title="@string/choose_units_title"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="enabledFolderScanning"
+            android:summary="@string/enable_filter_folder_desc"
+            android:title="@string/enable_filter_folder_title"/>
+
+        <Preference
+            android:dependency="enabledFolderScanning"
+            android:key="folderScanningPref"
+            android:persistent="false"
+            android:summary="@string/filter_folder_no_folder"
+            android:title="@string/filter_folder_title"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:dependency="enabledFolderScanning"
+            android:key="enableScanForFiles"
+            android:summary="@string/enable_folder_scanning_desc"
+            android:title="@string/enable_folder_scanning_title"/>
+
+        <Preference
+            android:key="definePatterns"
+            android:persistent="false"
+            android:summary="@string/define_file_name_pattern_desc"
+            android:title="@string/define_file_name_pattern_title"/>
+
+        <EditTextPreference
+            android:defaultValue="@string/file_name_suffix_format_value"
+            android:key="fileNameSuffixFormat"
+            android:summary="@string/file_name_suffix_format_desc"
+            android:title="@string/file_name_suffix_format_title"/>
+
+        <ListPreference
+            android:defaultValue="2"
+            android:entries="@array/rename_file_using_labels"
+            android:entryValues="@array/rename_file_using_values"
+            android:key="renameFileDateType"
+            android:summary="@string/rename_file_using_desc"
+            android:title="@string/rename_file_using_title"/>
+
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="appendOriginalName"
+            android:summary="@string/append_original_name_desc"
+            android:title="@string/append_original_name_title"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/rename_shortcut">
+        <Preference
+            android:key="toggleRenameShortcut"
+            android:persistent="false"
+            android:summary="@string/create_rename_shortcut_desc"
+            android:title="@string/create_rename_shortcut"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="hideRenameServiceStartConfirmation"
+            android:summary="@string/confirmation_rename_dialog_desc"
+            android:title="@string/confirmation_rename_dialog"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="otherSettings"
+        android:title="@string/other_settings">
+        <Preference
+            android:key="manuallyStartRename"
+            android:persistent="false"
+            android:summary="@string/manually_start_desc"
+            android:title="@string/manually_start_title"/>
+        <Preference
+            android:key="fileRenameCount"
+            android:persistent="false"
+            android:summary="@string/file_rename_count_desc"
+            android:title="@string/file_rename_count_title"/>
+        <Preference
+            android:key="requestPermissions"
+            android:persistent="false"
+            android:summary="@string/request_permissions_desc"
+            android:title="@string/request_permissions_title"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/about_section">
+        <Preference
+            android:key="buildVersion"
+            android:persistent="false"
+            android:summary="@string/build_version_desc"
+            android:title="@string/build_version_title"/>
+        <Preference
+            android:key="sendDebugReport"
+            android:persistent="false"
+            android:summary="@string/send_debug_desc"
+            android:title="@string/send_debug_title"/>
+        <Preference
+            android:key="licensePref"
+            android:persistent="false"
+            android:summary="@string/license_desc"
+            android:title="@string/license_title"/>
+        <Preference
+            android:key="donatePref"
+            android:persistent="false"
+            android:summary="@string/donate_desc"
+            android:title="@string/donate_title"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

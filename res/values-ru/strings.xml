@@ -44,6 +44,8 @@
     <string name="folder_list_no_selection">Выберите как минимум одну папку для удаления!</string>
     <string name="folder_list_confirmation">Вы хотите удалить выбранные папки?</string>
     <string name="folder_list_no_open_document_tree_support">Ваша версия Андроид не поддерживает выбор папок (ACTION_OPEN_DOCUMENT_TREE).\nВы хотите использовать внутреннюю палитру папки, чтобы выбрать папку? Использование внутреннего палитру папок приложение не будет предоставлено право на переименовывать и перемещать файлы!</string>
+    <string name="folder_list_no_grant_permission_1">Ваша система отменено разрешения для папки ниже:\n\n%s\n\nПроверьте, где был определен в этой папке и пытаются выбрать его снова!</string>
+    <string name="folder_list_no_grant_permission_2">Ваша система отменено разрешения для папок ниже:.\n\n%s\n\nПроверьте, где были определены эти папки и попытаться выбрать их снова!</string>
     <string name="filter_folder_title">Выбор папки.</string>
     <string name="filter_folder_no_folder">[Нет папки]</string>
     <string name="enable_folder_scanning_title">Включение сканирования в папке.</string>

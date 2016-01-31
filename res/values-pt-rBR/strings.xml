@@ -44,6 +44,8 @@
     <string name="folder_list_no_selection">Selecionar ao menos uma pasta para excluir!</string>
     <string name="folder_list_confirmation">Você realmente deseja excluir as pastas selecionadas?</string>
     <string name="folder_list_no_open_document_tree_support">Sua versão do Android não tem suporte para escolha de pastas (ACTION_OPEN_DOCUMENT_TREE).\nVocê quer usar selecionador de pasta interno para selecionar uma pasta? Usando selecionador de pasta interno a aplicação não concederam direitos para renomear e mover arquivos!</string>
+    <string name="folder_list_no_grant_permission_1">Seu sistema revogado as permissões para pasta a seguir:\n\n%s\n\nVerifique onde esta pasta foi definida e tentar selecioná-lo novamente!</string>
+    <string name="folder_list_no_grant_permission_2">Seu sistema de permissões para pastas abaixo revogada:\n\n%s\n\nVerifique onde essas pastas foram definidas e tentar selecioná-los novamente!</string>
     <string name="filter_folder_title">Selecione uma pasta.</string>
     <string name="filter_folder_no_folder">[Nenhuma pasta]</string>
     <string name="enable_folder_scanning_title">Habilitar busca de arquivos na pasta.</string>

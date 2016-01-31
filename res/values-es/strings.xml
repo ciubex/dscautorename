@@ -44,6 +44,8 @@
     <string name="folder_list_no_selection">Seleccione al menos una carpeta para borrar!</string>
     <string name="folder_list_confirmation">¿Quiere remover las carpetas seleccionadas?</string>
     <string name="folder_list_no_open_document_tree_support">Tu versión de Android no tiene soporte para seleccionar carpetas (ACTION_OPEN_DOCUMENT_TREE).\n¿Quieres usar selector de carpeta interna para seleccionar una carpeta? Usando selector de carpeta interna la aplicación no se han concedido derechos para cambiar el nombre y mover archivos!</string>
+    <string name="folder_list_no_grant_permission_1">Su sistema revocado los permisos de carpeta a continuación:\n\n%s\n\nComprobar dónde se definió esta carpeta y tratar de seleccionar de nuevo!</string>
+    <string name="folder_list_no_grant_permission_2">Su sistema de permisos para las carpetas siguientes revocada:\n\n%s\n\nComprobar dónde se definieron estas carpetas y tratar de seleccionar de nuevo!</string>
     <string name="filter_folder_title">Selecccionar carpeta.</string>
     <string name="filter_folder_no_folder">[No hay carpeta]</string>
     <string name="enable_folder_scanning_title">Habilitar escaneo de carpeta para archivos.</string>

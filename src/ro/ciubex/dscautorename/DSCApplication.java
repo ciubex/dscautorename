@@ -1262,16 +1262,16 @@ public class DSCApplication extends Application {
 	/**
 	 * Apply URI permission to selected folders.
 	 *
-	 * @return True if all folders received permissions.
+	 * @return A list of not granted folders.
 	 */
-	public boolean doGrantUriPermission(ContentResolver resolver, List<SelectedFolderModel> folders) {
-		int count = 0;
+	public List<String> doGrantUriPermission(ContentResolver resolver, List<SelectedFolderModel> folders) {
+		List<String> list = new ArrayList<>();
 		for (SelectedFolderModel folder : folders) {
-			if (doGrantUriPermission(resolver, folder.getUri(), folder.getFlags())) {
-				count++;
+			if (!doGrantUriPermission(resolver, folder.getUri(), folder.getFlags())) {
+				list.add(folder.getFullPath());
 			}
 		}
-		return count == folders.size(); // all folders received permissions
+		return list; // list of folders which do not received access permissions
 	}
 
 	/**

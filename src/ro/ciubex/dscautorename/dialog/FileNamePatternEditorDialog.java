@@ -308,10 +308,13 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 							.getString(R.string.file_name_pattern_validation_error_new);
 				}
 				for (index = 0; index < length; index++) {
+					if (index == mPosition) {
+						continue;
+					}
 					fileNameModel = mFileNameModels[index];
 					str1 = fileNameModel.getBefore().toLowerCase(locale);
 					// check for original name pattern
-					if (index != mPosition && str11.indexOf(str1) == 0) {
+					if (str11.indexOf(str1) == 0) {
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_old);
 					}
@@ -322,13 +325,11 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 						return DSCApplication.getAppContext()
 								.getString(R.string.file_name_pattern_validation_error_original);
 					}
-					if (index != mPosition) {
-						newFileName = getDemoFileName(after, fileNameExt);
-						if (renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(),
-								newFileName) == 0) {
-							return DSCApplication.getAppContext()
-									.getString(R.string.file_name_pattern_validation_error_rename);
-						}
+					newFileName = getDemoFileName(after, fileNameExt);
+					if (renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(),
+							newFileName) == 0) {
+						return DSCApplication.getAppContext()
+								.getString(R.string.file_name_pattern_validation_error_rename);
 					}
 				}
 			}
