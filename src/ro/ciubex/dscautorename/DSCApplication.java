@@ -1614,7 +1614,7 @@ public class DSCApplication extends Application {
 	 * Get all not granted permissions.
 	 */
 	public String[] getNotGrantedPermissions() {
-		List<String> permissions = new ArrayList<String>();
+		List<String> permissions = new ArrayList<>();
 		buildRequiredPermissions(permissions, DSCApplication.FUNCTIONAL_PERMISSIONS, true);
 		buildRequiredPermissions(permissions, DSCApplication.SHORTCUT_PERMISSIONS, true);
 //		buildRequiredPermissions(permissions, DSCApplication.LOGS_PERMISSIONS, true);
@@ -1632,7 +1632,7 @@ public class DSCApplication extends Application {
 	 * @return Array with permissions to be requested.
 	 */
 	public String[] getAllRequiredPermissions() {
-		List<String> permissions = new ArrayList<String>();
+		List<String> permissions = new ArrayList<>();
 		buildRequiredPermissions(permissions, DSCApplication.FUNCTIONAL_PERMISSIONS, false);
 		buildRequiredPermissions(permissions, DSCApplication.SHORTCUT_PERMISSIONS, false);
 //		buildRequiredPermissions(permissions, DSCApplication.LOGS_PERMISSIONS, false);
@@ -1655,6 +1655,32 @@ public class DSCApplication extends Application {
 			if ((force && !hasPermission(permission)) ||
 					(!isPermissionAsked(permission) && !hasPermission(permission))) {
 				permissions.add(permission);
+			}
+		}
+	}
+
+	/**
+	 * Invalidate stored paths.
+	 */
+	public void invalidatePaths() {
+		saveBooleanValue(KEY_ENABLED_FOLDER_SCANNING, false);
+		removeSharedPreference(KEY_FOLDER_SCANNING);
+		String value = mSharedPreferences.getString(KEY_ORIGINAL_FILE_NAME_PATTERN, null);
+		if (value != null) { //  remove paths from file rename prefix
+			StringBuilder sb = new StringBuilder();
+			String[] items = value.split(",");
+			String[] arr;
+			for(String item : items) {
+				arr = item.split("\\|");
+				if (arr.length > 0) {
+					if (sb.length() > 0) {
+						sb.append(',');
+					}
+					sb.append(arr[0]);
+				}
+			}
+			if (sb.length() > 0) {
+				saveStringValue(KEY_ORIGINAL_FILE_NAME_PATTERN, sb.toString());
 			}
 		}
 	}

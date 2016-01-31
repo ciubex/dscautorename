@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * <p/>
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,15 +26,12 @@ import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.FileRenameData;
-import ro.ciubex.dscautorename.model.MediaStoreEntity;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
@@ -74,7 +71,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private RenamePatternsUtilities renamePatternsUtilities;
 	private static final int BUFFER = 1024;
 	private boolean mNoDelay;
-	private List<MediaStoreEntity> mUpdateMediaStoreEntities;
+	List<Uri> mMediaStoreURIs;
 
 	public interface Listener {
 		public void onTaskStarted();
@@ -93,10 +90,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay) {
 		this.mApplication = application;
 		this.mListener = new WeakReference<Listener>(listener);
-		mUpdateMediaStoreEntities = new ArrayList<MediaStoreEntity>();
-		mApplication.setRenameFileTaskRunning(true);
-		mFileNameModels = mApplication.getOriginalFileNamePattern();
-		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
 		mNoDelay = noDelay;
 	}
 
@@ -109,6 +102,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
+		mApplication.setRenameFileTaskRunning(true);
+		mFileNameModels = mApplication.getOriginalFileNamePattern();
+		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
+		mMediaStoreURIs = new ArrayList<>();
+		mMediaStoreURIs.add(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		mMediaStoreURIs.add(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+		if (mApplication.isRenameVideoEnabled()) {
+			mMediaStoreURIs.add(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+			mMediaStoreURIs.add(MediaStore.Video.Media.INTERNAL_CONTENT_URI);
+		}
 		mProgressPosition = 0;
 		mProgressLastPosition = -1;
 		boolean enableFilter;
@@ -120,7 +123,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			mApplication.updateMountedVolumes();
 			mApplication.updateSelectedFolders();
 			while (mApplication.isRenameFileRequested()) {
-				mUpdateMediaStoreEntities.clear();
 				mApplication.setRenameFileRequested(false);
 				if (!mNoDelay) {
 					executeDelay();
@@ -142,7 +144,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					}
 					populateAllListFiles();
 				}
-				updateMediaStore();
 			}
 		}
 		mApplication.setRenameFileTaskRunning(false);
@@ -222,6 +223,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 
 	/**
 	 * Check if the file can be renamed.
+	 *
 	 * @param file The file to be checked.
 	 * @return
 	 */
@@ -372,7 +374,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			data.setFileName(newFile.getName());
 			success = renameFileUseApiLevel(data, oldFile, newFile);
 			if (success) {
-				storeToUpdateMediaStoreEntities(id, data.getUri(),
+				updateFileRecord(data.getUri(), id,
 						data.getFullPath(), oldFileName, data.getFileTitle(),
 						data.getFileName(), data.getSize());
 				data.setParentFolder(newFile.getParentFile());
@@ -400,8 +402,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			if (renameFileUseApiLevel(data, zeroFile, newFile)) {
 				mApplication.logD(TAG, "ZERO File renamed from "
 						+ zeroFile.getName() + " to " + newFile.getName());
-				storeToUpdateMediaStoreEntities(mPreviousFileModelId,
-						data.getUri(),
+				updateFileRecord(data.getUri(),
+						mPreviousFileModelId,
 						newFile.getAbsolutePath(),
 						zeroFile.getAbsolutePath(),
 						data.getFileTitleZero(),
@@ -603,25 +605,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Save the media store data details.
-	 *
-	 * @param id          The file ID.
-	 * @param uri         The file URI.
-	 * @param data        The file data, normally this is the file path.
-	 * @param title       The file title, usually is the file name without path and
-	 *                    extension.
-	 * @param displayName The file display name, usually is the file name without the
-	 *                    path.
-	 * @param size        The file size.
-	 */
-	private void storeToUpdateMediaStoreEntities(int id, Uri uri, String data, String oldData,
-												 String title, String displayName,
-												 long size) {
-		MediaStoreEntity entity = new MediaStoreEntity(id, uri, data, oldData, title, displayName, size);
-		mUpdateMediaStoreEntities.add(entity);
-	}
-
-	/**
 	 * Rename the file provided as parameter.
 	 *
 	 * @param data Original data information.
@@ -776,7 +759,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private void populateAllListFiles() {
 		if (mListFiles == null) {
-			mListFiles = new ArrayList<FileRenameData>();
+			mListFiles = new ArrayList<>();
 		} else {
 			mListFiles.clear();
 		}
@@ -850,11 +833,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private void scanMediaStore() {
 		mApplication.logD(TAG, "Scanning for the files using media store.");
-		populateListFiles(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		populateListFiles(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-		if (mApplication.isRenameVideoEnabled()) {
-			populateListFiles(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-			populateListFiles(MediaStore.Video.Media.INTERNAL_CONTENT_URI);
+		for (Uri uri : mMediaStoreURIs) {
+			populateListFiles(uri);
 		}
 	}
 
@@ -876,7 +856,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				MediaStore.MediaColumns.SIZE
 		};
 		try {
-//			doQuery(mContentResolver, uri);
+			// doQuery(mContentResolver, uri);
 			cursor = mContentResolver.query(uri, columns, null, null, null);
 			if (cursor != null) {
 				int index, id;
@@ -1006,16 +986,83 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
-	 * Update media store DB with modified data.
+	 * Update the media store database with data file details.
+	 *
+	 * @param uri         The file URI.
+	 * @param id          The file ID.
+	 * @param data        The file data, normally this is the file path.
+	 * @param title       The file title, usually is the file name without path and
+	 *                    extension.
+	 * @param displayName The file display name, usually is the file name without the
+	 *                    path.
+	 * @param size        The file size.
+	 * @return True if the media store was updated.
 	 */
-	private void updateMediaStore() {
-		if (!mUpdateMediaStoreEntities.isEmpty()) {
-			try {
-				Thread t = new Thread(new MediaStorageCleanupThread(mApplication, mUpdateMediaStoreEntities));
-				t.start();
-				t.join();
-			} catch (InterruptedException e) {
+	private boolean updateFileRecord(Uri uri, int id, String data, String oldData,
+									 String title, String displayName,
+									 long size) {
+		String whereClause;
+		String[] whereParam = new String[1];
+		if (id != -1) {
+			whereClause = MediaStore.MediaColumns._ID + "=?";
+			whereParam[0] = "" + id;
+		} else {
+			whereClause = MediaStore.MediaColumns.DATA + "=?";
+			whereParam[0] = oldData;
+		}
+		return updateMediaStoreData(uri, data, title, displayName, whereClause, whereParam);
+	}
+
+	/**
+	 * Update the media store database with data file details.
+	 *
+	 * @param uri         The file URI.
+	 * @param data        The file data, normally this is the file path.
+	 * @param title       The file title, usually is the file name without path and
+	 *                    extension.
+	 * @param displayName The file display name, usually is the file name without the
+	 *                    path.
+	 * @param whereClause An SQL WHERE clause.
+	 * @param whereParam  The SQL WHERE parameter.
+	 * @return True if the media store was updated.
+	 */
+	private boolean updateMediaStoreData(Uri uri, String data, String title, String displayName,
+										 String whereClause, String[] whereParam) {
+		boolean result = false;
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(MediaStore.MediaColumns.DATA, data);
+		contentValues.put(MediaStore.MediaColumns.TITLE, title);
+		contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
+		try {
+			int count = mContentResolver.update(uri, contentValues,
+					whereClause, whereParam);
+			result = (count == 1);
+			mApplication.logD(TAG, "Media store update where: " + whereParam[0] + " data: " + data + " result:" + result);
+		} catch (Exception ex) {
+			mApplication.logE(TAG, "Cannot be updated the content resolver: "
+					+ uri.toString() + " where: " + whereParam[0] + " data: " + data +
+					" Exception: " + ex.getMessage(), ex);
+			if (ex instanceof android.database.sqlite.SQLiteConstraintException) {
+				deleteWrongRecordMediaStoreData(uri, whereClause, whereParam);
 			}
+		}
+		return result;
+	}
+
+	/**
+	 * Method used to remove wrong media store record.
+	 *
+	 * @param uri         Wrong media store URI root.
+	 * @param whereClause An SQL WHERE clause.
+	 * @param whereParam  The SQL WHERE parameter.
+	 */
+	private void deleteWrongRecordMediaStoreData(Uri uri, String whereClause, String[] whereParam) {
+		try {
+			int count = mContentResolver.delete(uri, whereClause, whereParam);
+			mApplication.logD(TAG, "Media store delete where: " + whereParam[0] + " count:" + count);
+		} catch (Exception ex) {
+			mApplication.logE(TAG, "Cannot be deleted the wrong record: "
+					+ whereParam[0] + " Exception: " + ex.getMessage(), ex);
 		}
 	}
 }

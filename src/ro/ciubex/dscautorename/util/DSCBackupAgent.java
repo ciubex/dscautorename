@@ -20,6 +20,7 @@ package ro.ciubex.dscautorename.util;
 
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.SharedPreferencesBackupHelper;
+import android.content.Context;
 
 import ro.ciubex.dscautorename.DSCApplication;
 
@@ -30,9 +31,14 @@ import ro.ciubex.dscautorename.DSCApplication;
  */
 public class DSCBackupAgent extends BackupAgentHelper {
 
+	private DSCApplication mApplication;
 	static final String MY_PREFS_BACKUP_KEY = "backup_prefs";
 
 	public void onCreate() {
+		Context app = getApplicationContext();
+		if (app instanceof DSCApplication) {
+			mApplication = (DSCApplication) app;
+		}
 		SharedPreferencesBackupHelper helper =
 				new SharedPreferencesBackupHelper(this, getDefaultSharedPreferencesName());
 		addHelper(MY_PREFS_BACKUP_KEY, helper);
@@ -40,5 +46,16 @@ public class DSCBackupAgent extends BackupAgentHelper {
 
 	private static String getDefaultSharedPreferencesName() {
 		return DSCApplication.getAppContext().getPackageName() + "_preferences";
+	}
+
+	/**
+	 * Invoked when the application's restore operation has completed.
+	 */
+	@Override
+	public void onRestoreFinished() {
+		super.onRestoreFinished();
+		if (mApplication != null && mApplication.getSdkInt() > 18) {
+			mApplication.invalidatePaths();
+		}
 	}
 }
