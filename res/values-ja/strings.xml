@@ -1,2 +1,25 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='utf-8'?>
+<resources><string name="app_name">DSC 自動リネーム</string>
+
+    <string name="general_settings">全般設定</string>
+    <string name="enable_title">自動リネーム サービスのトリガー。</string>
+    <string name="enable_desc">トリガーが発生した後、ファイルが自動的にリネームされます。</string>
+
+    <string name="service_choice_0">自動リネーム サービスは無効です。</string>
+    <string name="service_choice_1">カメラのイベントによって、自動リネーム サービスはトリガーされます。</string>
+    <string name="service_choice_2">メディア コンテンツのイベントによって、自動リネームサービスはトリガーされます。</string>
+    <string name="service_choice_3">選択したフォルダーにファイルが追加されたときに、自動リネーム サービスはトリガーされます。\"フォルダー内のリネーム\" をチェックし、\"フォルダーを選択\" で少なくとも 1 つのフォルダーを選択する必要があります。</string>
+    <string name="rename_service_start_delay_title">リネーム サービスの開始を遅延</string>
+    <string name="rename_service_start_delay_desc">リネーム サービスを開始するまでの時間</string>
+    <string name="seconds_unit">秒</string>
+    <string name="minutes_unit">分</string>
+
+    <string name="choose_units_title">遅延の単位を選択:</string>
+    <string name="choose_units_title_param">指定された遅延の単位: %s</string>
+    <string name="choose_units_desc">このオプションでは、秒と分の間で遅延の単位を選択することができます。</string>
+    <string name="rename_video_enabled_title">ビデオ ファイルのリネームを有効にする</string>
+    <string name="rename_video_enabled_desc">このオプションをチェックすることで、ビデオも自動的にリネームします。デフォルトでは、写真のみリネームします。</string>
+    <string name="enable_filter_folder_title">フォルダー内のリネーム</string>
+    <string name="enable_filter_folder_desc">通常、リネーム サービスはお使いのデバイスからすべてのファイルをスキャンします。このオプションを有効にすると、リネーム サービスをフォルダー内に限定することができます。</string>
+    <string name="enable_filter_folder_desc_v21">Android Lollipop のユーザーは、この機能を有効にして、カメラ アプリケーションがファイルを保存するフォルダーを選択してください。</string>
+    </resources>
