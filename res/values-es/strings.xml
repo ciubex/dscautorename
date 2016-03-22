@@ -14,6 +14,16 @@
         <item>Observador de archivos: Monitorea las carpetas seleccionadas cuando se agregan archivos. Se debe activar \"Renombrar dentro de carpeta\" y tener al menos una carpeta en \"Selecccionar carpeta\".</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">Ajustes de interfaz de usuario</string>
+    <string name="app_theme_title">El tema de la aplicación:</string>
+    <string name="app_theme_title_param">El tema de la aplicación: %s</string>
+    <string name="app_theme_desc">Establecer el tema de aplicaciones: claro u oscuro.</string>
+    <string-array name="app_theme_labels">
+        <item>Claro</item>
+        <item>Oscuro</item>
+    </string-array>
+
     <string name="service_choice_0">El servicio de autorenombrado está deshabilitado.</string>
     <string name="service_choice_1">El servicio de autorenombrado es disparado por eventos de la cámara.</string>
     <string name="service_choice_2">El servicio de autorenombrado es disparado por eventos de contenido de medios.</string>
@@ -116,6 +126,7 @@
     <string name="no_folders">No hay carpetas</string>
     <string name="no_file_name_pattern">Ningún patrón de nombre de archivos definido</string>
     <string name="list_info_press">Agregar o eliminar items.</string>
+    <string name="do_not_show_again">No mostrar de nuevo</string>
     <string name="file_name_pattern_list_all_selected">¡Al menos un patrón de nombre de archivo debe ser dejado sin seleccionar!</string>
     <string name="file_name_pattern_list_no_selection">¡Selecciones al menos un patrón de nombre de archivo para borrar!</string>
     <string name="file_name_pattern_list_confirmation">¿Quiere quitar el patrón de nombre de archivo seleccionado?</string>

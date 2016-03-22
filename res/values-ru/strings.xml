@@ -14,6 +14,16 @@
         <item>Обозреватель файлов: наблюдать за выбранными папками, когда файлы добавлены. Вы должны выбрать \"Переименовать внутри папки\" не менее одной папки \"Выбор папки\".</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">настройки пользовательского интерфейса</string>
+    <string name="app_theme_title">тема применения:</string>
+    <string name="app_theme_title_param">тема применения: %s</string>
+    <string name="app_theme_desc">Установить тему приложения: Легкий или Темно.</string>
+    <string-array name="app_theme_labels">
+        <item>Легкий</item>
+        <item>Темно</item>
+    </string-array>
+
     <string name="service_choice_0">Сервис отключен.</string>
     <string name="service_choice_1">Запуск сервиса по событиям камеры.</string>
     <string name="service_choice_2">Запуск сервиса по событиям медиа контента.</string>
@@ -23,9 +33,9 @@
     <string name="seconds_unit">секунд</string>
     <string name="minutes_unit">минут</string>
 
-    <string name="choose_units_title">Выберите блоки задержки:</string>
-    <string name="choose_units_title_param">Выбранные блоки задержки: %s</string>
-    <string name="choose_units_desc">Эта опция позволит вам выбрать выше задержки единиц между секунды и минуты.</string>
+    <string name="choose_units_title">Выберите задержку:</string>
+    <string name="choose_units_title_param">Выбранные задержки: %s</string>
+    <string name="choose_units_desc">Эта опция позволит вам выбрать задержку между секундами и минутами.</string>
     <string-array name="delay_units_labels">
         <item>секунд</item>
         <item>минут</item>
@@ -49,9 +59,9 @@
     <string name="filter_folder_title">Выбор папки.</string>
     <string name="filter_folder_no_folder">[Нет папки]</string>
     <string name="enable_folder_scanning_title">Включение сканирования в папке.</string>
-    <string name="enable_folder_scanning_desc">Как правило, это не должна быть выбрана! Выбрав эту опцию сервис переименования будет сканировать наличие медиафайлов в выбранных выше папках. Выберите это, если в вашем аппарате выключен сканер медиа контента.</string>
+    <string name="enable_folder_scanning_desc">Как правило, это должно быть выключено! Выбрав эту опцию сервис переименования будет сканировать медиафайлы в выбранных выше папках. Включите, если в вашем аппарате выключен сканер медиа контента.</string>
     <string name="define_file_name_pattern_title">Определенные шаблоны имен файлов</string>
-    <string name="define_file_name_pattern_desc">Эти шаблоны используются для поиска файлов для переименования (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nГрупповые символы * и ? также могут быть использованы.</string>
+    <string name="define_file_name_pattern_desc">Эти шаблоны используются для поиска файлов под переименование (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nГрупповые символы * и ? также могут быть использованы.</string>
     <string name="file_name_pattern_dialog_title_add">Добавить шаблоны имен файлов</string>
     <string name="file_name_pattern_dialog_title_editor">Редактировать шаблоны имен файлов</string>
     <string name="file_name_pattern_dialog_from">1. Оригинальный шаблон имени файла:</string>
@@ -116,6 +126,7 @@
     <string name="no_folders">Нет папок</string>
     <string name="no_file_name_pattern">Нет Имя файла шаблон определенный</string>
     <string name="list_info_press">Добавить или удалить пункты.</string>
+    <string name="do_not_show_again">Не показывать снова</string>
     <string name="file_name_pattern_list_all_selected">Как минимум один шаблон должен остаться не отмеченным!</string>
     <string name="file_name_pattern_list_no_selection">Выберите как минимум один шаблон для удаления!</string>
     <string name="file_name_pattern_list_confirmation">Вы хотите удалить выбранные шаблоны?</string>
@@ -128,7 +139,7 @@
 
     <!-- Change locale -->
     <string name="change_language_title">Language: язык приложения</string>
-    <string name="change_language_desc">Заявление должно быть перезапущен, чтобы применить выбранный язык.</string>
+    <string name="change_language_desc">Приложение должно быть перезапущено, чтобы применить выбранный язык.</string>
     <string-array name="language_labels">
         <item>English - английский</item>
         <item>Portuguese (Brasil) - португальский</item>
@@ -145,7 +156,7 @@
     <string name="request_permissions_ok">Все необходимые разрешения выдаются!</string>
 
     <!-- About -->
-    <string name="about_section">Около</string>
+    <string name="about_section">О программе</string>
     <string name="build_version_title">версия сборки</string>
     <string name="send_debug_title">Послать отладочные логи</string>
     <string name="send_debug_desc">Послать по e-mail отладочные логи</string>
@@ -154,7 +165,7 @@
     <string name="license_title">Открыть лицензии</string>
     <string name="license_desc">Подробнее о лицензиях на открытое ПО</string>
     <string name="donate_title">Пожертвовать</string>
-    <string name="donate_desc">Пожалуйста пожертвуйте, если Вам понравилось приложение .</string>
+    <string name="donate_desc">Пожалуйста пожертвуйте, если Вам понравилось приложение.</string>
     <string name="donate_confirmation">Если Вам приложение понравилось, купите версию PRO!\nНажмите ДА для перехода к DSC Auto Rename PRO на Google Play Store.\nСпасибо за использование приложения!</string>
     <string name="thank_you_title">Спасибо за пожертвование!</string>
     <string name="thank_you_desc">Спасибо за покупку.</string>

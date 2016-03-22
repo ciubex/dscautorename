@@ -14,6 +14,16 @@
         <item>ตรวจจับไฟล์: คอยเฝ้าดูโฟลเดอร์ที่เลือกเมื่อมีการเพิ่มไฟล์  โดยต้องเลือกตัวเลือก \"เปลี่ยนชื่อไฟล์เฉพาะในโฟลเดอร์\" และเพิ่มโฟลเดอร์ไว้ใน \"เลือกโฟลเดอร์\" อย่างน้อย 1 โฟลเดอร์</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">การตั้งค่า UI</string>
+    <string name="app_theme_title">การประยุกต์ใช้ชุดรูปแบบ:</string>
+    <string name="app_theme_title_param">การประยุกต์ใช้ชุดรูปแบบ: %s</string>
+    <string name="app_theme_desc">ตั้งค่าธีมแอพลิเคชัน: เบา หรือ มืด.</string>
+    <string-array name="app_theme_labels">
+        <item>เบา</item>
+        <item>มืด</item>
+    </string-array>
+
     <string name="service_choice_0">ไม่ใช้งานการเปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
     <string name="service_choice_1">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อถ่ายภาพหรือวีดิโอด้วยกล้อง</string>
     <string name="service_choice_2">เปลี่ยนชื่อไฟล์โดยอัตโนมัติเมื่อบันทึกภาพหรือวีดิโอไปยังโฟลเดอร์</string>
@@ -116,6 +126,7 @@
     <string name="no_folders">ไม่มีโฟลเดอร์</string>
     <string name="no_file_name_pattern">ไม่ได้กำหนดรูปแบบชื่อไฟล์</string>
     <string name="list_info_press">เพิ่มหรือลบรายการ</string>
+    <string name="do_not_show_again">ไม่ต้องแสดงอีก</string>
     <string name="file_name_pattern_list_all_selected">ต้องมีรูปแบบชื่อไฟล์อย่างน้อย 1 รูปแบบ</string>
     <string name="file_name_pattern_list_no_selection">โปรดเลือกรูปแบบที่ต้องการลบ</string>
     <string name="file_name_pattern_list_confirmation">ต้องการลบรูปแบบที่เลือกหรือไม่?</string>

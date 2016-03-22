@@ -14,6 +14,16 @@
         <item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">Setari interfata</string>
+    <string name="app_theme_title">Tema aplicatiei:</string>
+    <string name="app_theme_title_param">Tema aplicatiei: %s</string>
+    <string name="app_theme_desc">Seateaza tema aplicatiei: luminoasa sau inchisa.</string>
+    <string-array name="app_theme_labels">
+        <item>Luminoasa</item>
+        <item>Inchisa</item>
+    </string-array>
+
     <string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
     <string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
     <string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
@@ -116,6 +126,7 @@
     <string name="no_folders">Nici un director</string>
     <string name="no_file_name_pattern">Nici un model definit</string>
     <string name="list_info_press">Adauga sau sterge elemente.</string>
+    <string name="do_not_show_again">Nu mai afisa mesajul</string>
     <string name="file_name_pattern_list_all_selected">Cel putin un model trebuie pastrat!</string>
     <string name="file_name_pattern_list_no_selection">Pentru stergere selecteaza cel putin un model!</string>
     <string name="file_name_pattern_list_confirmation">Confirmi stergerea modelelor selectate?</string>

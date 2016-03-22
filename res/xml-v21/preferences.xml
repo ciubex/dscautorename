@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:ciubex="http://schemas.android.com/apk/res/ro.ciubex.dscautorename">
 
-    <PreferenceCategory android:title="@string/general_settings">
+    <PreferenceCategory android:title="@string/ui_settings">
         <ListPreference
             android:defaultValue="en"
             android:entries="@array/language_labels"
@@ -10,6 +10,16 @@
             android:key="languageCode"
             android:summary="@string/change_language_desc"
             android:title="@string/change_language_title"/>
+        <ListPreference
+            android:defaultValue="light"
+            android:entries="@array/app_theme_labels"
+            android:entryValues="@array/app_theme_values"
+            android:key="appTheme"
+            android:summary="@string/app_theme_desc"
+            android:title="@string/app_theme_title"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/general_settings">
 
         <ListPreference
             android:defaultValue="1"

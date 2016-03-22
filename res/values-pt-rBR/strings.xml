@@ -14,6 +14,16 @@
         <item>Observador de arquivos: monitora as pastas selecionadas quando arquivos são adicionados. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">Configurações de interface do usuário</string>
+    <string name="app_theme_title">Tema aplicação:</string>
+    <string name="app_theme_title_param">Tema aplicação: %s</string>
+    <string name="app_theme_desc">Escolha o tema aplicativo: Leve ou Escuro.</string>
+    <string-array name="app_theme_labels">
+        <item>Leve</item>
+        <item>Escuro</item>
+    </string-array>
+
     <string name="service_choice_0">O serviço de auto-renomeamento está desabilitado.</string>
     <string name="service_choice_1">O serviço de auto-renomeamento está habilitado para eventos da câmera.</string>
     <string name="service_choice_2">O serviço de auto-renomeamento está habilitado para observador de mídia.</string>
@@ -116,6 +126,7 @@
     <string name="no_folders">Nenhuma pasta</string>
     <string name="no_file_name_pattern">Nenhum padrão de nome definido</string>
     <string name="list_info_press">Adicionar ou excluir itens.</string>
+    <string name="do_not_show_again">Não mostrar novamente</string>
     <string name="file_name_pattern_list_all_selected">Ao menos um padrão de nome de arquivo deve permanecer desmarcado!</string>
     <string name="file_name_pattern_list_no_selection">Selecione ao menos um padrão de nome de arquivo para excluir!</string>
     <string name="file_name_pattern_list_confirmation">Você deseja excluir os itens selecionados?</string>

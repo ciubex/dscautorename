@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="67"
-    android:versionName="5.0.0" >
+    android:versionCode="68"
+    android:versionName="5.1.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -23,7 +23,7 @@
         android:icon="@drawable/ic_launcher"
         android:grantUriPermissions="true"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppThemeLight"
         android:fullBackupContent="@xml/backupscheme">
 
         <!-- backup data for API < 23 -->
