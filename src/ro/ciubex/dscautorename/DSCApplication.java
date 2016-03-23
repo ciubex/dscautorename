@@ -1427,9 +1427,17 @@ public class DSCApplication extends Application {
 				mFolderObserverMap.put(path, observer);
 			}
 			// check for subfolders
-			for (File subfolder : file.listFiles()) {
-				if (isValidFolder(subfolder)) {
-					registerRecursivelyPath(subfolder, startWatching);
+			File[] files = null;
+			try {
+				files = file.listFiles();
+			} catch (Exception e) {
+				logE(TAG, "Exception on registerRecursivelyPath: " + path, e);
+			}
+			if (files != null) {
+				for (File subfolder : files) {
+					if (isValidFolder(subfolder)) {
+						registerRecursivelyPath(subfolder, startWatching);
+					}
 				}
 			}
 		}
