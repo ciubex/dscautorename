@@ -1,2 +1,115 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">DSC Auto Rename</string>
+
+    <string name="general_settings">常规设置</string>
+    <string name="enable_title">自动重命名服务触发器。</string>
+    <string name="enable_desc">文件会在触发器触发时自动重命名。</string>
+
+    <string name="service_choice_0">自动重命名服务已禁用。</string>
+    <string name="service_choice_1">自动重命名服务被相机事件触发。</string>
+    <string name="service_choice_2">自动重命名服务被媒体内容事件触发。</string>
+    <string name="rename_service_start_delay_title">重命名服务开始延迟</string>
+    <string name="rename_service_start_delay_desc">开始重命名服务在</string>
+    <string name="seconds_unit">秒后</string>
+    <string name="minutes_unit">分钟后</string>
+
+    <string name="choose_units_title">选择延时单位：</string>
+    <string name="choose_units_title_param">选择延时单位：%s</string>
+    <string name="service_choice_3">自动重命名服务将在文件添加到选定文件夹后触发。您必须选中“重命名文件夹内”并且设置至少一个文件夹在“选择文件夹”。</string>
+    <string name="rename_video_enabled_title">启用视频文件重命名</string>
+    <string name="enable_filter_folder_title">重命名文件夹内</string>
+    <string name="folder_list_title">扫描的文件夹列表。</string>
+    <string name="folder_list_all_selected">应该选中至少一个文件夹！</string>
+    <string name="folder_list_no_selection">请选择至少一个文件夹要删除的文件夹！</string>
+    <string name="folder_list_confirmation">您确定要移除选中文件夹？</string>
+    <string name="file_name_pattern_dialog_from">1. 原有文件名模式：</string>
+    <string name="file_name_pattern_dialog_to">2. 重命名后文件名模式：</string>
+    <string name="file_name_pattern_dialog_bottom">旧文件名例如：\n\t %1$s\n重命名后文件名例如：\n\t %2$s</string>
+    <string name="file_name_pattern_validation_error_old_empty">原模式不能为空。</string>
+    <string name="file_name_pattern_validation_error_new_empty">重命名文件名模式不能为空。</string>
+    <string name="new_folder">新建文件夹</string>
+
+    <string name="move_file_text_selected_folder">选中文件夹：%s</string>
+    <string name="move_file_text_no_folder">没有选择文件夹，触摸此文本以选择一个文件夹。</string>
+    <string name="append_original_name_title">追加原名称</string>
+    <string name="rename_shortcut_name">DSC 重命名服务</string>
+    <string name="rename_shortcut">DSC 重命名服务捷径</string>
+    <string name="create_rename_shortcut">创建 DSC 重命名服务捷径</string>
+    <string name="remove_rename_shortcut">移除 DSC 重命名服务捷径</string>
+    <string name="create_rename_shortcut_desc">在您的主屏幕创建一个 DSC 重命名服务捷径，用于手动启动重命名服务。</string>
+    <string name="confirmation_rename_dialog">隐藏确认对话框</string>
+    <string name="confirmation_rename_question">您想手动开始重命名服务？</string>
+    <string name="other_settings">其他设置</string>
+    <string name="manually_start_title">手动开始重命名服务</string>
+    <string name="manually_start_desc">触摸以手动开始重命名服务</string>
+    <string name="manually_service_running">手动重命名服务正在运行。</string>
+    <string name="manually_file_rename_count_0">无文件被重命名。</string>
+    <string name="manually_file_rename_count_1">一个文件已被重命名。</string>
+    <string name="manually_file_rename_count_more">%d 个文件已被重命名。</string>
+    <string name="manually_file_rename_progress_1">%1$d / %2$d 个文件已被重命名。</string>
+    <string name="manually_file_rename_progress_more">"%1$d / %2$d  个文件已被重命名。"</string>
+    <string name="file_rename_count_title">重命名文件数：%d</string>
+    <string name="file_rename_count_desc">触摸以重置重命名文件数。</string>
+    <string name="file_rename_count_confirmation">确定要重置重命名文件计数器？</string>
+    <string name="ok">确定</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="cancel">取消</string>
+    <string name="close">关闭</string>
+    <string name="add">添加</string>
+    <string name="delete">删除</string>
+    <string name="please_wait">请稍候…</string>
+    <string name="loading_wait">正在载入…</string>
+    <string name="no_folders">无文件夹</string>
+    <string name="no_file_name_pattern">尚未定义文件名模式</string>
+    <string name="list_info_press">添加或删除项目。</string>
+    <string name="file_name_pattern_list_all_selected">应该至少选中一个文件名模式！</string>
+    <string name="file_name_pattern_list_no_selection">请选择至少一个要删除的文件名模式！</string>
+    <string name="file_name_pattern_list_confirmation">您确定要移除选中的文件名模式？</string>
+    <string name="error_rename_file_no_read_write">文件无法被读取和写入</string>
+    <string name="error_rename_file">文件 %s 无法被重命名！</string>
+    <string name="obtain_logs">生成报告日志…</string>
+    <string name="report_subject">DSC Auto Rename 的报告</string>
+    <string name="report_body">"描述： "</string>
+    <string name="send_report">发送报告…</string>
+
+    <string name="change_language_title">语言：应用程序语言</string>
+    <string name="change_language_desc">需要重启本应用才能应用选中的语言。</string>
+    <string name="request_permissions_title">请求所需的应用权限。</string>
+    <string name="request_permissions_desc">触摸此选项请求应用所需的权限：相机（用于接收拍摄事件），存储（用于重命名和移动文件）。</string>
+    <string name="request_permissions_confirmation">您确定要请求所需的应用权限？</string>
+    <string name="request_permissions_ok">已获得所有必需的权限！</string>
+
+    <string name="about_section">关于</string>
+    <string name="build_version_title">构建版本</string>
+    <string name="send_debug_title">发送调试日志</string>
+    <string name="send_debug_desc">发送电子邮件附上调试文件</string>
+    <string name="send_debug_email_title">DSC Auto Rename 的调试日志</string>
+    <string name="license_title">打开源代码许可协议</string>
+    <string name="license_desc">开源软件的许可协议详情</string>
+    <string name="donate_title">捐助</string>
+    <string name="donate_desc">如果您欣赏本应用，欢迎为它捐款。</string>
+    <string name="thank_you_title">感谢您的捐助！</string>
+    <string name="thank_you_desc">感谢您欣赏我的成果，购买专业版应用。</string>
+    <string name="choose_units_desc">此选项允许您选择秒与分钟之间的延时单位。</string>
+    <string name="rename_video_enabled_desc">点击此选项，视频也将自动重命名，默认是只重命名图片。</string>
+    <string name="enable_filter_folder_desc_v21">对于 Android 棒棒糖（Lollipop，5.0）用户，请启用此功能并选择您的相机应用保存文件的文件夹。</string>
+    <string name="enable_filter_alert_v21">因为是您 Android 棒棒糖（Lollipop，5.0）用户，您需要启用“重命名文件夹内”选项并且在“扫描的文件夹列表”选择至少一个要扫描的文件夹。</string>
+    <string name="filter_folder_title">选择一个文件夹。</string>
+    <string name="filter_folder_no_folder">[无文件夹]</string>
+    <string name="enable_folder_scanning_title">启用扫描文件夹内的文件。</string>
+    <string name="define_file_name_pattern_title">定义文件名模式</string>
+    <string name="file_name_pattern_dialog_title_add">添加文件名模式</string>
+    <string name="file_name_pattern_dialog_title_editor">编辑文件名模式</string>
+    <string name="file_name_pattern_validation_error_new">原模式和新模式不应该相同！</string>
+    <string name="file_name_suffix_format_title">定义文件名额外后缀</string>
+    <string name="file_extension_note">文件扩展名会在重命名时保留。</string>
+    <string name="rename_file_using_title">重命名文件使用：</string>
+    <string name="rename_file_using_desc">文件的最后修改时间。</string>
+    <string name="move_file_enable">移动重命名后的文件到下列选中文件夹。</string>
+    <string name="append_original_name_desc">保留并追加到原名称，例如 DSC_09.JPG 的新名称将是 %s_DSC_09.JPG</string>
+
+    <string name="remove_rename_shortcut_desc">移除在您主页上的 DSC 重命名服务捷径</string>
+    <string name="confirmation_rename_dialog_desc">从捷径启动 DSC 重命名服务时是否显示确认对话框。</string>
+    <string name="enable_filter_folder_desc">正常来说，重命名服务将扫描您的设备上的所有文件。您可以启用此选项限制重命名服务只扫描特定文件夹。</string>
+    </resources>
