@@ -1107,7 +1107,7 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Send a {@link #ERROR} log message and log the exception.
+	 * Send a log message and log the exception.
 	 *
 	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
@@ -1119,7 +1119,7 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Send a {@link #ERROR} log message and log the exception.
+	 * Send a log message and log the exception.
 	 *
 	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
@@ -1133,7 +1133,7 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Send a {@link #DEBUG} log message.
+	 * Send a log message.
 	 *
 	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
@@ -1229,11 +1229,11 @@ public class DSCApplication extends Application {
 		String keyEntry;
 		for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
 			keyEntry = entry.getKey();
-			if (keyEntry.startsWith(FIRST_TIME) && !keyEntry.equals(key)) {
-				return false;
+			if (keyEntry.startsWith(FIRST_TIME)) {
+				return keyEntry.equals(key);
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**

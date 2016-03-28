@@ -364,10 +364,17 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private String getUpdateMessage() {
 		String message = null;
-		int id = DSCApplication.getAppContext().getResources().getIdentifier("update_message",
+		String key = "update_message_v" + mApplication.getVersionCode();
+		int id = DSCApplication.getAppContext().getResources().getIdentifier(key,
 				"string", mApplication.getPackageName());
 		if (id > 0) {
-			message = DSCApplication.getAppContext().getString(id);
+			if ("update_message_v70".equals(key)) {
+				message = DSCApplication.getAppContext().getString(id,
+						DSCApplication.getAppContext().getString(R.string.define_file_name_pattern_title),
+						DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_value));
+			} else {
+				message = DSCApplication.getAppContext().getString(id);
+			}
 		}
 		return message;
 	}
@@ -459,10 +466,10 @@ public class SettingsActivity extends PreferenceActivity implements
 		mDefineFileNamePatterns.setSummary(label);
 
 		label = "" + newFileName;
-		label += "_" + mApplication.getFormattedFileNameSuffix(0);
+		label += mApplication.getFormattedFileNameSuffix(0);
 		label += "." + originalArr[0].getDemoExtension();
 		label += ", " + newFileName;
-		label += "_" + mApplication.getFormattedFileNameSuffix(1);
+		label += mApplication.getFormattedFileNameSuffix(1);
 		label += "." + originalArr[0].getDemoExtension();
 
 		label = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_desc, label);

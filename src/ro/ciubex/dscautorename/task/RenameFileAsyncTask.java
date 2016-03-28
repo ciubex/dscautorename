@@ -639,12 +639,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			mPreviousFileModelId = data.getId();
 		}
 		if (mPreviousFileNameModelCount > 0) {
-			fileNameZero = newFileName + "_" + mApplication.getFormattedFileNameSuffix(0);
+			fileNameZero = newFileName + mApplication.getFormattedFileNameSuffix(0);
 			suffix = mApplication.getFormattedFileNameSuffix(mPreviousFileNameModelCount);
 			if (mApplication.isAppendOriginalNameEnabled()) {
 				fileNameZero += "_" + oldFileName;
 			}
-			newFileName += "_" + suffix;
+			newFileName += suffix;
 			data.setFileTitleZero(fileNameZero);
 			fileNameZero += extension;
 			data.setFileNameZero(fileNameZero);
