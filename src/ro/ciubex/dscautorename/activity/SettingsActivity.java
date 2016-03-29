@@ -364,7 +364,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private String getUpdateMessage() {
 		String message = null;
-		String key = "update_message_v" + mApplication.getVersionCode();
+		String key = "update_message_v70";// + mApplication.getVersionCode();
 		int id = DSCApplication.getAppContext().getResources().getIdentifier(key,
 				"string", mApplication.getPackageName());
 		if (id > 0) {
