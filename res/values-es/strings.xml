@@ -14,6 +14,16 @@
         <item>Observador de archivos: Monitorea las carpetas seleccionadas cuando se agregan archivos. Se debe activar \"Renombrar dentro de carpeta\" y tener al menos una carpeta en \"Selecccionar carpeta\".</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">Ajustes de interfaz de usuario</string>
+    <string name="app_theme_title">El tema de la aplicación:</string>
+    <string name="app_theme_title_param">El tema de la aplicación: %s</string>
+    <string name="app_theme_desc">Establecer el tema de aplicaciones: claro u oscuro.</string>
+    <string-array name="app_theme_labels">
+        <item>Claro</item>
+        <item>Oscuro</item>
+    </string-array>
+
     <string name="service_choice_0">El servicio de autorenombrado está deshabilitado.</string>
     <string name="service_choice_1">El servicio de autorenombrado es disparado por eventos de la cámara.</string>
     <string name="service_choice_2">El servicio de autorenombrado es disparado por eventos de contenido de medios.</string>
@@ -39,6 +49,7 @@
     <string name="first_time_alert">LEER CUIDADOSAMENTE:\nEl proceso de renombrado y movida de archivos no se puede deshacer!\nUse este software con precaución!\n Defina los patrones de nombre de archivos individualmente para fotos o videos, los archivos renombrados pueden ser movidos a otra carpeta también. Los comodines * y ? pueden ser usados también.\nNo use patrones muy genéricos como *.JPG para evitar un ciclo infinito de renombrado.\nMejor use ? para definir un simple posible caracter en combinación con otro caracter constante como _.\nPor ejemplo si el nombre del archivo original es como 20150729_212537.JPG use un patrón como ????????_??????.JPG y ponga un prefijo \'PIC_\' (use las comillas simples para definir texto constante) en el patrón de renombre como \"\'PIC_\'yyyyMMdd_HHmmss\" para renombar el archivo a: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Debido a que en Android KitKat existen algunas restricciones de seguridad, esta aplicación no podrá renombrar archivos de la tarjeta SD.\nVisite el link http://goo.gl/kJeED3 por una posible solución.\nEsta aplicación puede renombrar archivos de la memoria interna solamente.\nConfigure su aplicación de cámara para guardar en la memoria interna.</string>
     <string name="enable_filter_alert_v21">Como usuario de Android Lollipop, debe habilitar la opción \"Renombrar dentro de carpeta\" y debe definir al menos una carpeta para ser escaneada en \"Lista de carpetas escaneadas.\".</string>
+    <string name="update_message_v70">Por favor, eche un vistazo a la opción \"%1$s\" porque se eliminó el carácter separador predeterminado _, usted debe poner manualmente el carácter que desea en frente de formato de número \"%2$s\".</string>
     <string name="folder_list_title">Lista de carpetas escaneadas.</string>
     <string name="folder_list_all_selected">Al menos una carpeta debe ser dejada sin seleccionar!</string>
     <string name="folder_list_no_selection">Seleccione al menos una carpeta para borrar!</string>
@@ -116,6 +127,7 @@
     <string name="no_folders">No hay carpetas</string>
     <string name="no_file_name_pattern">Ningún patrón de nombre de archivos definido</string>
     <string name="list_info_press">Agregar o eliminar items.</string>
+    <string name="do_not_show_again">No mostrar de nuevo</string>
     <string name="file_name_pattern_list_all_selected">¡Al menos un patrón de nombre de archivo debe ser dejado sin seleccionar!</string>
     <string name="file_name_pattern_list_no_selection">¡Selecciones al menos un patrón de nombre de archivo para borrar!</string>
     <string name="file_name_pattern_list_confirmation">¿Quiere quitar el patrón de nombre de archivo seleccionado?</string>

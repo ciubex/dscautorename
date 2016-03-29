@@ -19,9 +19,7 @@
 package ro.ciubex.dscautorename.activity;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.AlertDialog;
-import android.app.backup.BackupManager;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,7 +32,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.text.Spannable;
@@ -42,6 +39,9 @@ import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.util.Linkify;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -56,6 +56,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -84,6 +85,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		DSCApplication.ProgressCancelListener, RenameShortcutUpdateListener {
 	private static final String TAG = SettingsActivity.class.getName();
 	private DSCApplication mApplication;
+	private Preference mAppTheme;
 	private ListPreference mServiceTypeList;
 	private Preference mRenameVideoEnabled;
 	private SeekBarPreference mRenameServiceStartDelay;
@@ -120,45 +122,61 @@ public class SettingsActivity extends PreferenceActivity implements
 	private static final int PERMISSIONS_REQUEST_CODE = 44;
 	private static final int BUFFER = 1024;
 
+	private final static int DO_NOT_SHOW_IGNORED = 0;
+	private final static int DO_NOT_SHOW_GRANT_URI_PERMISSION = 1;
+
+	private boolean doNotDisplayNotGrantUriPermission;
+
 	/**
 	 * Method called when the activity is created
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		mApplication = (DSCApplication) getApplication();
+		applyApplicationTheme();
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		mApplication = (DSCApplication) getApplication();
 		initPreferences();
 		initCommands();
 		initPreferencesByPermissions();
 		checkProVersion();
 		updateShortcutFields();
+		doNotDisplayNotGrantUriPermission = (mApplication.getSdkInt() < 21 || // do not check for old API
+				mApplication.isDisplayNotGrantUriPermission());
+	}
+
+	/**
+	 * Apply application theme.
+	 */
+	private void applyApplicationTheme() {
+		this.setTheme(mApplication.getApplicationTheme());
 	}
 
 	/**
 	 * Initialize preferences controls.
 	 */
 	private void initPreferences() {
+		mAppTheme = findPreference("appTheme");
 		mServiceTypeList = (ListPreference) findPreference("serviceType");
-		mRenameVideoEnabled = (Preference) findPreference("renameVideoEnabled");
+		mRenameVideoEnabled = findPreference("renameVideoEnabled");
 		mRenameServiceStartDelay = (SeekBarPreference) findPreference("renameServiceStartDelay");
 		mDelayUnit = (ListPreference) findPreference("delayUnit");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
-		mDefineFileNamePatterns = (Preference) findPreference("definePatterns");
+		mDefineFileNamePatterns = findPreference("definePatterns");
 		mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
-		mEnabledFolderScanning = (Preference) findPreference("enabledFolderScanning");
-		mFolderScanningPref = (Preference) findPreference("folderScanningPref");
-		mEnableScanForFiles = (Preference) findPreference("enableScanForFiles");
-		mToggleRenameShortcut = (Preference) findPreference("toggleRenameShortcut");
-		mHideRenameServiceStartConfirmation = (Preference) findPreference("hideRenameServiceStartConfirmation");
-		mAppendOriginalName = (Preference) findPreference("appendOriginalName");
-		mManuallyStartRename = (Preference) findPreference("manuallyStartRename");
-		mFileRenameCount = (Preference) findPreference("fileRenameCount");
-		mRequestPermissions = (Preference) findPreference("requestPermissions");
-		mBuildVersion = (Preference) findPreference("buildVersion");
-		mSendDebugReport = (Preference) findPreference("sendDebugReport");
-		mLicensePref = (Preference) findPreference("licensePref");
-		mDonatePref = (Preference) findPreference("donatePref");
+		mEnabledFolderScanning = findPreference("enabledFolderScanning");
+		mFolderScanningPref = findPreference("folderScanningPref");
+		mEnableScanForFiles = findPreference("enableScanForFiles");
+		mToggleRenameShortcut = findPreference("toggleRenameShortcut");
+		mHideRenameServiceStartConfirmation = findPreference("hideRenameServiceStartConfirmation");
+		mAppendOriginalName = findPreference("appendOriginalName");
+		mManuallyStartRename = findPreference("manuallyStartRename");
+		mFileRenameCount = findPreference("fileRenameCount");
+		mRequestPermissions = findPreference("requestPermissions");
+		mBuildVersion = findPreference("buildVersion");
+		mSendDebugReport = findPreference("sendDebugReport");
+		mLicensePref = findPreference("licensePref");
+		mDonatePref = findPreference("donatePref");
 		mOtherSettings = (PreferenceCategory) findPreference("otherSettings");
 	}
 
@@ -346,10 +364,17 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private String getUpdateMessage() {
 		String message = null;
-		int id = DSCApplication.getAppContext().getResources().getIdentifier("update_message",
+		String key = "update_message_v70";// + mApplication.getVersionCode();
+		int id = DSCApplication.getAppContext().getResources().getIdentifier(key,
 				"string", mApplication.getPackageName());
 		if (id > 0) {
-			message = DSCApplication.getAppContext().getString(id);
+			if ("update_message_v70".equals(key)) {
+				message = DSCApplication.getAppContext().getString(id,
+						DSCApplication.getAppContext().getString(R.string.define_file_name_pattern_title),
+						DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_value));
+			} else {
+				message = DSCApplication.getAppContext().getString(id);
+			}
 		}
 		return message;
 	}
@@ -380,7 +405,8 @@ public class SettingsActivity extends PreferenceActivity implements
 		} else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
 			mApplication.updateFolderObserverList();
 			mApplication.sharedPreferencesDataChanged();
-		} else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key)) {
+		} else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key) ||
+				DSCApplication.KEY_APP_THEME.equals(key)) {
 			doPrepareSummaries = false;
 			restartActivity();
 		} else {
@@ -404,6 +430,20 @@ public class SettingsActivity extends PreferenceActivity implements
 	}
 
 	/**
+	 * Get the application theme label.
+	 * @return The application theme label.
+	 */
+	private String getSelectedThemeLabel() {
+		String[] labels = DSCApplication.getAppContext().getResources().
+				getStringArray(R.array.app_theme_labels);
+		int themeId = mApplication.getApplicationTheme();
+		if (R.style.AppThemeDark == themeId) {
+			return labels[1];
+		}
+		return labels[0];
+	}
+
+	/**
 	 * Restart this activity.
 	 */
 	private void restartActivity() {
@@ -421,19 +461,19 @@ public class SettingsActivity extends PreferenceActivity implements
 		Date now = new Date();
 		FileNameModel[] originalArr = mApplication.getOriginalFileNamePattern();
 		String newFileName = mApplication.getFileNameFormatted(originalArr[0].getAfter(), now);
-		String summary = DSCApplication.getAppContext().getString(
+		String label = DSCApplication.getAppContext().getString(
 				R.string.define_file_name_pattern_desc, originalArr[0].getDemoBefore());
-		mDefineFileNamePatterns.setSummary(summary);
+		mDefineFileNamePatterns.setSummary(label);
 
-		summary = "" + newFileName;
-		summary += "_" + mApplication.getFormattedFileNameSuffix(0);
-		summary += "." + originalArr[0].getDemoExtension();
-		summary += ", " + newFileName;
-		summary += "_" + mApplication.getFormattedFileNameSuffix(1);
-		summary += "." + originalArr[0].getDemoExtension();
+		label = "" + newFileName;
+		label += mApplication.getFormattedFileNameSuffix(0);
+		label += "." + originalArr[0].getDemoExtension();
+		label += ", " + newFileName;
+		label += mApplication.getFormattedFileNameSuffix(1);
+		label += "." + originalArr[0].getDemoExtension();
 
-		summary = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_desc, summary);
-		mFileNameSuffixFormat.setSummary(summary);
+		label = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_desc, label);
+		mFileNameSuffixFormat.setSummary(label);
 		switch (mApplication.getServiceType()) {
 			case DSCApplication.SERVICE_TYPE_CAMERA:
 				mServiceTypeList.setSummary(R.string.service_choice_1);
@@ -448,11 +488,15 @@ public class SettingsActivity extends PreferenceActivity implements
 				mServiceTypeList.setSummary(R.string.service_choice_0);
 				break;
 		}
-		summary = getSelectedUnits();
-		mRenameServiceStartDelay.setUnits(summary);
+		label = DSCApplication.getAppContext().getString(R.string.app_theme_title_param,
+				getSelectedThemeLabel());
+		mAppTheme.setTitle(label);
+
+		label = getSelectedUnits();
+		mRenameServiceStartDelay.setUnits(label);
 		mDelayUnit.setTitle(
 				DSCApplication.getAppContext().getString(R.string.choose_units_title_param,
-						summary));
+						label));
 		if (mApplication.getSdkInt() >= 21) {
 			mEnabledFolderScanning.setSummary(R.string.enable_filter_folder_desc_v21);
 		}
@@ -462,8 +506,8 @@ public class SettingsActivity extends PreferenceActivity implements
 				R.array.rename_file_using_labels);
 		mRenameFileDateType
 				.setSummary(arr[mApplication.getRenameFileDateType()]);
-		summary = getString(R.string.append_original_name_desc, newFileName);
-		mAppendOriginalName.setSummary(summary);
+		label = getString(R.string.append_original_name_desc, newFileName);
+		mAppendOriginalName.setSummary(label);
 		mFileRenameCount.setTitle(mApplication.getString(
 				R.string.file_rename_count_title,
 				mApplication.getFileRenameCount()));
@@ -746,21 +790,52 @@ public class SettingsActivity extends PreferenceActivity implements
 				break;
 		}
 		mApplication.hideProgressDialog();
-		showAlertDialog(android.R.drawable.ic_dialog_info, message);
+		showAlertDialog(android.R.drawable.ic_dialog_info, message, DO_NOT_SHOW_IGNORED);
 	}
 
 	/**
 	 * Display an alert dialog with a custom message.
 	 *
-	 * @param iconId  The resource ID for the dialog icon.
-	 * @param message Message to be displayed on an alert dialog.
+	 * @param iconId           The resource ID for the dialog icon.
+	 * @param message          Message to be displayed on an alert dialog.
+	 * @param doNotShowAgainId ID for cases when the user chose to not show again this message.
 	 */
-	private void showAlertDialog(int iconId, String message) {
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.app_name).setMessage(message)
+	private void showAlertDialog(int iconId, String message, final int doNotShowAgainId) {
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+		final LayoutInflater layoutInflater = LayoutInflater.from(this);
+		final View view = layoutInflater.inflate(R.layout.do_not_show_again, null);
+
+		if (doNotShowAgainId != DO_NOT_SHOW_IGNORED) {
+			dialog.setView(view);
+		}
+		dialog.setTitle(R.string.app_name)
+				.setMessage(message)
 				.setIcon(iconId)
-				.setNeutralButton(R.string.ok, null);
+				.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog,
+										int whichButton) {
+						boolean flag = false;
+						View dlgView = view.findViewById(R.id.skip);
+						if (dlgView instanceof CheckBox) {
+//							flag = ((CheckBox)dlgView).isChecked();
+						}
+						doShowAlertDialog(doNotShowAgainId, flag);
+					}
+				});
 		dialog.show();
+	}
+
+	/**
+	 * Invoked when the user close the Alert Dialog.
+	 *
+	 * @param noShowAgainId ID for cases when the user chose to not show again this message.
+	 * @param checked       Boolean flag which indicate if the do not show checkbox was checked.
+	 */
+	private void doShowAlertDialog(int noShowAgainId, boolean checked) {
+		if (DO_NOT_SHOW_GRANT_URI_PERMISSION == noShowAgainId && checked) {
+			mApplication.setDisplayNotGrantUriPermission(false);
+		}
 	}
 
 	@Override
@@ -999,6 +1074,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		doNotDisplayNotGrantUriPermission = true;
 		if (requestCode == REQUEST_SEND_REPORT) {
 //			mApplication.deleteLogFile();
 		} else if (resultCode == RESULT_OK && (
@@ -1129,7 +1205,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Check for all selected folders used if have grant URI permissions.
 	 */
 	private void checkAllSelectedFolders() {
-		if (mApplication.getSdkInt() < 21) { // do not check for old API
+		if (doNotDisplayNotGrantUriPermission) {
 			return;
 		}
 		SelectedFolderModel folderMove;
@@ -1176,6 +1252,6 @@ public class SettingsActivity extends PreferenceActivity implements
 			message = DSCApplication.getAppContext().
 					getString(R.string.folder_list_no_grant_permission_2, sb.toString());
 		}
-		showAlertDialog(android.R.drawable.ic_dialog_alert, message);
+		showAlertDialog(android.R.drawable.ic_dialog_alert, message, DO_NOT_SHOW_GRANT_URI_PERMISSION);
 	}
 }

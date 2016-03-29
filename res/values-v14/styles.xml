@@ -1,7 +1,17 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppThemeDark" parent="Theme.AppCompat">
+    </style>
+
+    <style name="DialogThemeLight" parent="Theme.AppCompat.Light.Dialog">
+    </style>
+
+    <style name="DialogThemeDark" parent="Theme.AppCompat.Dialog">
     </style>
 
 </resources>

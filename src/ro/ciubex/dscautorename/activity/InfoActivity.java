@@ -41,6 +41,7 @@ import android.widget.TextView;
  * 
  */
 public class InfoActivity extends Activity {
+	private DSCApplication mApplication;
 	public static final String TITLE = "title";
 	public static final String FILE_NAME = "file_name";
 	public static final String MESSAGE = "message";
@@ -55,10 +56,19 @@ public class InfoActivity extends Activity {
 	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		mApplication = (DSCApplication) getApplication();
+		applyApplicationTheme();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info_layout);
 		checkBundle();
 		initControls();
+	}
+
+	/**
+	 * Apply application theme.
+	 */
+	private void applyApplicationTheme() {
+		this.setTheme(mApplication.getApplicationTheme());
 	}
 
 	/**

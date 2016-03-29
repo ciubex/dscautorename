@@ -45,7 +45,7 @@ public class DSCBackupAgent extends BackupAgentHelper {
 	}
 
 	private static String getDefaultSharedPreferencesName() {
-		return DSCApplication.getAppContext().getPackageName() + "_preferences";
+		return "ro.ciubex.dscautorename_preferences";
 	}
 
 	/**

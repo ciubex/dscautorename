@@ -14,6 +14,16 @@
         <item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
     </string-array>
 
+    <!-- UI settings -->
+    <string name="ui_settings">Setari interfata</string>
+    <string name="app_theme_title">Tema aplicatiei:</string>
+    <string name="app_theme_title_param">Tema aplicatiei: %s</string>
+    <string name="app_theme_desc">Seateaza tema aplicatiei: luminoasa sau inchisa.</string>
+    <string-array name="app_theme_labels">
+        <item>Luminoasa</item>
+        <item>Inchisa</item>
+    </string-array>
+
     <string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
     <string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
     <string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
@@ -39,6 +49,7 @@
     <string name="first_time_alert">ATENTIE:\nRedenumirea si mutarea fisierelor nu este reversibila!\nUtilizati aceasta aplicatie cu precautie!\nDefineste formate de redenumire individuale pentru poze si pentru filme, de asemenea fisierele pot fi mutate intr-un director ales. Se pot folosi de asemenea * sau ? .\nNu folositi formate asemanatoare sau generice precum *.JPG pentru a evita blocarea aplicatiei in functia de redenumire.\nMai bine folositi semnul ? in combinatie cu alte caractere fixe precum _ pentru un mai bun control al numelor de fisiere ce urmeaza a fi redenumite.\nDe exemplu pentru un fisier cu numele original in forma 20150729_212537.JPG se poate folosi un format de genul ????????_??????.JPG si se poate adauga un prefix ca \'PIC_\' (se poate folosi apostroful pentru evitarea transformarilor in data sau ora) astfel in acest caz formatul de redenumire poate fi de forma \"\'PIC_\'yyyyMMdd_HHmmss\" iar fisierul redenumit va avea numele: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Din cauza unor restrictii din sistemul de operare Android KitKa, aceasta aplicatie nu poate redenumi fisierele salvate pe cardul extern (SD Card).\nVedeti http://goo.gl/kJeED3 pentru o posibila rezolvare.\nIn mod normal, in Android KitKat fara interventii aplicatia poate redenumi doar fisierele stocate intern.\nSetati aplicatia de camera sa foloseasca memoria interna ca destinatie pentru fisierele salvate.</string>
     <string name="enable_filter_alert_v21">Android Lollipop activeaza optiunea \"Restrictie redenumire\" dupa care selecteaza directoarele in care sunt salvate pozele si filmele de aplicatia camerei in \"Lista directoarelor selectate.\".</string>
+    <string name="update_message_v70">Va rog verificati optiunea \"%1$s\" deoarece am sters caracterul _, ar trebui adaugat manual la inceputul formatarii numerice \"%2$s\".</string>
     <string name="folder_list_title">Lista directoarelor selectate.</string>
     <string name="folder_list_all_selected">Trebuie lasat cel putin un director neselectat!</string>
     <string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
@@ -116,6 +127,7 @@
     <string name="no_folders">Nici un director</string>
     <string name="no_file_name_pattern">Nici un model definit</string>
     <string name="list_info_press">Adauga sau sterge elemente.</string>
+    <string name="do_not_show_again">Nu mai afisa mesajul</string>
     <string name="file_name_pattern_list_all_selected">Cel putin un model trebuie pastrat!</string>
     <string name="file_name_pattern_list_no_selection">Pentru stergere selecteaza cel putin un model!</string>
     <string name="file_name_pattern_list_confirmation">Confirmi stergerea modelelor selectate?</string>

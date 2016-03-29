@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- *
+ * <p/>
  * Copyright (C) 2015 Claudiu Ciobotariu
- *
+ * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ * <p/>
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ * <p/>
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -107,6 +107,8 @@ public class DSCApplication extends Application {
 	private static final String KEY_RENAME_FILE_DATE_TYPE = "renameFileDateType";
 	private static final String KEY_APPEND_ORIGINAL_NAME = "appendOriginalName";
 	public static final String KEY_LANGUAGE_CODE = "languageCode";
+	private static final String KEY_DISPLAY_NOT_GRANT_URI_PERMISSION = "displayNotGrantUriPermission";
+	public static final String KEY_APP_THEME = "appTheme";
 
 	private static final String FIRST_TIME = "firstTime";
 
@@ -159,7 +161,7 @@ public class DSCApplication extends Application {
 		checkRegisteredServiceType(true);
 		updateMountedVolumes();
 		updateSelectedFolders();
-		mFolderObserverMap = new HashMap<String, FolderObserver>();
+		mFolderObserverMap = new HashMap<>();
 		if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
 			initFolderObserverList(false);
 		}
@@ -635,6 +637,26 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Check if should be displayed the alert message when the application do not have permission to selected
+	 * folders.
+	 *
+	 * @return True if the alert message should be displayed.
+	 */
+	public boolean isDisplayNotGrantUriPermission() {
+		return false;//mSharedPreferences.getBoolean(KEY_DISPLAY_NOT_GRANT_URI_PERMISSION, true);
+	}
+
+	/**
+	 * Set to show or not the alert message when the application do not have permission to selected
+	 * folders.
+	 *
+	 * @param flag A boolean flag to be saved.
+	 */
+	public void setDisplayNotGrantUriPermission(boolean flag) {
+		saveBooleanValue(KEY_DISPLAY_NOT_GRANT_URI_PERMISSION, flag);
+	}
+
+	/**
 	 * Obtain the number of renamed files.
 	 *
 	 * @return Number of renamed files.
@@ -1085,7 +1107,7 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Send a {@link #ERROR} log message and log the exception.
+	 * Send a log message and log the exception.
 	 *
 	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
@@ -1097,7 +1119,7 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Send a {@link #ERROR} log message and log the exception.
+	 * Send a log message and log the exception.
 	 *
 	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
@@ -1111,7 +1133,7 @@ public class DSCApplication extends Application {
 	}
 
 	/**
-	 * Send a {@link #DEBUG} log message.
+	 * Send a log message.
 	 *
 	 * @param tag Used to identify the source of a log message. It usually
 	 *            identifies the class or activity where the log call occurs.
@@ -1207,11 +1229,11 @@ public class DSCApplication extends Application {
 		String keyEntry;
 		for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
 			keyEntry = entry.getKey();
-			if (keyEntry.startsWith(FIRST_TIME) && !keyEntry.equals(key)) {
-				return false;
+			if (keyEntry.startsWith(FIRST_TIME)) {
+				return keyEntry.equals(key);
 			}
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -1376,11 +1398,11 @@ public class DSCApplication extends Application {
 	public void initFolderObserverList(boolean startWatching) {
 		if (isEnabledFolderScanning()) {
 			SelectedFolderModel[] folders = getSelectedFolders();
-			if (folders.length > 0) {
+			if (folders != null && folders.length > 0) {
 				File file;
 				for (SelectedFolderModel folder : folders) {
 					file = new File(folder.getFullPath());
-					registerRecursivelyPath(file, false, startWatching);
+					registerRecursivelyPath(file, startWatching);
 				}
 			}
 		}
@@ -1390,11 +1412,10 @@ public class DSCApplication extends Application {
 	 * Method used to recursive register file observers on selected path and its subfolders.
 	 *
 	 * @param file          Path to be registered and subfolders.
-	 * @param skipCheck     Boolean flag used to check the validity of provided file.
 	 * @param startWatching If true the created observer will start watching.
 	 */
-	private void registerRecursivelyPath(File file, boolean skipCheck, boolean startWatching) {
-		if (skipCheck || isValidFolder(file)) {
+	private void registerRecursivelyPath(File file, boolean startWatching) {
+		if (isValidFolder(file)) {
 			String path = file.getAbsolutePath();
 			FolderObserver observer = mFolderObserverMap.get(path);
 			if (observer == null) {
@@ -1406,9 +1427,17 @@ public class DSCApplication extends Application {
 				mFolderObserverMap.put(path, observer);
 			}
 			// check for subfolders
-			for (File subfolder : file.listFiles()) {
-				if (isValidFolder(subfolder)) {
-					registerRecursivelyPath(subfolder, true, startWatching);
+			File[] files = null;
+			try {
+				files = file.listFiles();
+			} catch (Exception e) {
+				logE(TAG, "Exception on registerRecursivelyPath: " + path, e);
+			}
+			if (files != null) {
+				for (File subfolder : files) {
+					if (isValidFolder(subfolder)) {
+						registerRecursivelyPath(subfolder, startWatching);
+					}
 				}
 			}
 		}
@@ -1670,7 +1699,7 @@ public class DSCApplication extends Application {
 			StringBuilder sb = new StringBuilder();
 			String[] items = value.split(",");
 			String[] arr;
-			for(String item : items) {
+			for (String item : items) {
 				arr = item.split("\\|");
 				if (arr.length > 0) {
 					if (sb.length() > 0) {
@@ -1683,5 +1712,31 @@ public class DSCApplication extends Application {
 				saveStringValue(KEY_ORIGINAL_FILE_NAME_PATTERN, sb.toString());
 			}
 		}
+	}
+
+	/**
+	 * Get the application theme.
+	 *
+	 * @return The application theme.
+	 */
+	public int getApplicationTheme() {
+		String theme = mSharedPreferences.getString(KEY_APP_THEME, "light");
+		if ("dark".equals(theme)) {
+			return R.style.AppThemeDark;
+		}
+		return R.style.AppThemeLight;
+	}
+
+	/**
+	 * Get the application dialog window theme.
+	 *
+	 * @return The application dialog window theme.
+	 */
+	public int getApplicationDialogTheme() {
+		String theme = mSharedPreferences.getString(KEY_APP_THEME, "light");
+		if ("dark".equals(theme)) {
+			return R.style.DialogThemeDark;
+		}
+		return R.style.DialogThemeLight;
 	}
 }

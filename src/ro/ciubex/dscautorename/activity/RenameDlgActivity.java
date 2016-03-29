@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,12 +48,23 @@ public class RenameDlgActivity extends Activity implements
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		mApplication = (DSCApplication) getApplication();
+		applyApplicationTheme();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rename_dialog_layout);
-		mApplication = (DSCApplication) getApplication();
 		initView();
 	}
 
+	/**
+	 * Apply application theme.
+	 */
+	private void applyApplicationTheme() {
+		this.setTheme(mApplication.getApplicationDialogTheme());
+	}
+
+	/**
+	 * Initialize the view.
+	 */
 	private void initView() {
 		mRenameProgressMessage = (TextView) findViewById(R.id.renameProgressMessage);
 		mRenameProgressBar = (ProgressBar) findViewById(R.id.renameProgressBar);
