@@ -112,4 +112,10 @@
     <string name="remove_rename_shortcut_desc">移除在您主页上的 DSC 重命名服务捷径</string>
     <string name="confirmation_rename_dialog_desc">从捷径启动 DSC 重命名服务时是否显示确认对话框。</string>
     <string name="enable_filter_folder_desc">正常来说，重命名服务将扫描您的设备上的所有文件。您可以启用此选项限制重命名服务只扫描特定文件夹。</string>
+    <string name="ui_settings">界面设置</string>
+    <string name="app_theme_title">界面主题：</string>
+    <string name="app_theme_title_param">界面主题：%s</string>
+    <string name="app_theme_desc">设置界面主题：亮或暗。</string>
+    <string name="do_not_show_again">不再显示</string>
+    <string name="send_debug_confirmation">是否发送一份调试报告？\n将使用您的默认邮件程序发送一封电子邮件，其中附加两个文件。如果必要，请简单描述一下你的问题。\n感谢您的帮助！</string>
     </resources>
