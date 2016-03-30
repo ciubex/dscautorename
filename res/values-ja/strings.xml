@@ -30,8 +30,8 @@
     <string name="folder_list_no_selection">少なくとも 1 つ削除するフォルダーを選択してください!</string>
     <string name="folder_list_confirmation">選択したフォルダーを削除しますか?</string>
     <string name="folder_list_no_open_document_tree_support">お使いの Android のバージョンは、フォルダーの選択がサポートされていません (ACTION_OPEN_DOCUMENT_TREE)。\n内蔵のフォルダー ピッカーを使用して、フォルダーを選択しますか? 内蔵のフォルダー ピッカーを使用する場合、アプリケーションは名前の変更、ファイルの移動をする権限がないことがあります!</string>
-    <string name="folder_list_no_grant_permission_1">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこのフォルダーが定義されているか確認して、再度選択してください!</string>
-    <string name="folder_list_no_grant_permission_2">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこれらのフォルダーが定義されているか確認して、再度選択してください!</string>
+    <string name="folder_list_no_grant_permission_1">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこのフォルダーが定義されている場所を確認して、再度選択してください!\n\nこのメッセージを無視することはできますが、上のフォルダーのアクセスを取得するまで、アプリケーションは正しく動作しません。</string>
+    <string name="folder_list_no_grant_permission_2">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこれらのフォルダーが定義されている場所を確認して、再度選択してください!\n\nこのメッセージを無視することはできますが、上のフォルダーのアクセスを取得するまで、アプリケーションは正しく動作しません。</string>
     <string name="filter_folder_title">フォルダーを選択。</string>
     <string name="filter_folder_no_folder">[フォルダーなし]</string>
     <string name="enable_folder_scanning_title">フォルダーのファイルのスキャンを有効にする。</string>
@@ -128,4 +128,10 @@
     <string name="thank_you_desc">Pro アプリケーションのご購入と、私の作業へのご理解をいただき、ありがとうございました。</string>
     <string name="about_text"><Data> &lt;b&gt;Simon W の 4.0.0 バージョン開発へのフルサポートに大変感謝します!&lt;/b&gt;&lt;br/&gt; このアプリケーションは、自動的にファイルが作成されたときの日時に基づき、カメラで撮影した画像ファイルの名前を変更します。&lt;br/&gt; &lt;br/&gt; ファイルの名前を変更する形式は Java の日付と時刻の形式のパラメーターを使用します:&lt;br/&gt; - 年の yyyy;&lt;br/&gt; - 月の MM&lt;br/&gt; - 日の dd&lt;br/&gt; - 時のHH;&lt;br/&gt; - 分の mm;&lt;br/&gt; - 秒の ss;&lt;br/&gt; - ミリ秒の SSS。&lt;br/&gt; 残念ながら EXIF による仕様と Android ファイル名日付時刻のため、内部的にミリ秒は使用されません。&lt;br/&gt; 形式の詳細な情報は、次を参照してください: &lt;a href=http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html&gt;Java SimpleDateFormat クラス&lt;/a&gt;&lt;br/&gt; &lt;br/&gt; 複数のファイルが同時に生成された場合、ファイルは _01 のようなカウントのサフィックスを持ちます。設定で定義された桁数に依存します。&lt;br/&gt;&lt;br/&gt; 写真やクリップのファイル名のパターンを個別に定義します。ワイルドカード * または ? も使用することができます。&lt;br/&gt; 名前変更の無限ループを避けるために、*.JPG のようなあまりにも包括的なパターンは使用しないでください。&lt;br/&gt; ? を活用して、_ など他の定数の既存の文字との組み合わせで 1 つで可能な文字を定義するようにしてください。 &lt;br/&gt; たとえば、元のファイル名が 20150729_212537.JPG のようなパターンを使用している場合、????????_??????.JPG のようなパターンを使用して、名前の変更パターンに \"\'PIC_\' yyyyMMdd_HHmmss\" のようにプレフィックス \'PIC_\' をつけて (定数のテキストを定義するアポストロフィを使用して) ファイルの名前を変更します: PIC_20150729_212537.JPG &lt;br/&gt; &lt;br/&gt; リネームサービスが有効な場合、デバイスのメディア ストレージにイメージ ファイルを保存されると、リネームサービスが自動的にトリガーされます。&lt;br/&gt; &lt;br/&gt; トリガーは、写真を撮るカメラ アプリケーションによって異なります。カメラ アプリケーションは &lt;b&gt;com.android.camera.NEW_PICTURE&lt;/b&gt; または &lt;b&gt;android.hardware.action.NEW_PICTURE&lt;/b&gt; を送信する必要があります。それ以外の場合、リネームサービスはトリガーされません。&lt;br/&gt; 一部のケースでカメラは何のメッセージも送信しないため、メディア コンテンツ イベントをトリガーとして選択することが可能です、しかし、これは完全にバックグラウンドでサービスを実行することを意味します。 &lt;br/&gt; &lt;br/&gt; 詳細は、アプリケーションの説明ページを参照してください &lt;a href=https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename&gt;Google Play - DSC 自動リネーム&lt;/a&gt;.&lt;br/&gt; &lt;b&gt; 翻訳ありがとうございます:&lt;/b&gt;&lt;br/&gt; - Chawalit &lt;b&gt;タイ語&lt;/b&gt;&lt;br/&gt; - Runels for 4PDA &lt;b&gt;ロシア語&lt;/b&gt;&lt;br/&gt; - Leo Manias &lt;b&gt;ポルトガル語&lt;/b&gt; (ブラジル)&lt;br/&gt; - Dave &lt;b&gt;スペイン語&lt;/b&gt;&lt;br/&gt;</Data></string>
 
-</resources>
+<string name="ui_settings">UI 設定</string>
+    <string name="app_theme_title">アプリケーション テーマ:</string>
+    <string name="app_theme_title_param">アプリケーション テーマ: %s</string>
+    <string name="app_theme_desc">アプリケーション テーマを設定します: ライトまたはダーク。</string>
+    <string name="update_message_v70">オプション \"%1$s\" をご覧ください。デフォルトの区切り文字 _ が削除されました。番号形式 \"%2$s\" の前に付けたい文字を手動で入力する必要があります。</string>
+    <string name="do_not_show_again">次回から表示しない</string>
+    </resources>
