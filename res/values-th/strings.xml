@@ -103,6 +103,7 @@
     <string name="confirmation_rename_dialog">ไม่แสดงหน้าจอยืนยัน</string>
     <string name="confirmation_rename_dialog_desc">แสดงหรือซ่อนหน้าจอยืนยันสำหรับการทำงานผ่านทางลัดการเปลี่ยนชื่อ</string>
     <string name="confirmation_rename_question">ต้องการเริ่มการทำงานเปลี่ยนชื่อไฟล์หรือไม่?</string>
+    <string name="confirmation_rename_question_v19">หากไฟล์ที่เลือกไม่ได้อยู่ในโฟลเดอร์ที่เลือกเปลี่ยนชื่อแล้วจะไม่สมบูรณ์เนื่องจากข้อ จำกัด ของ Android การรักษาความปลอดภัย\nต้องการเริ่มการทำงานเปลี่ยนชื่อไฟล์หรือไม่?</string>
     <string name="other_settings">การตั้งค่าอื่นๆ</string>
     <string name="manually_start_title">เริ่มต้นการเปลี่ยนชื่อด้วยตนเอง</string>
     <string name="manually_start_desc">แตะเพื่อเริ่มเปลี่ยนชื่อไฟล์</string>

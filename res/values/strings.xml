@@ -129,6 +129,7 @@
     <string name="confirmation_rename_dialog">Hide confirmation dialog</string>
     <string name="confirmation_rename_dialog_desc">Show or not the confirmation dialog when the DSC rename service is launched from shortcut.</string>
     <string name="confirmation_rename_question">Do you want to start manually the rename service?</string>
+    <string name="confirmation_rename_question_v19">If selected file(s) are not on a selected folder then rename will not be completed due to Android security restrictions.\nDo you want to start manually the rename service?</string>
     <string name="other_settings">Other settings</string>
     <string name="manually_start_title">Start manually rename service</string>
     <string name="manually_start_desc">Touch to start manually rename service</string>

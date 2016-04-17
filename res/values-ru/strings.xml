@@ -103,6 +103,7 @@
     <string name="confirmation_rename_dialog">Скрыть окно подтверждения</string>
     <string name="confirmation_rename_dialog_desc">Показывать или нет окно подтверждения, когда сервис запущен с домашнего экрана.</string>
     <string name="confirmation_rename_question">Вы хотите запустить сервис вручную?</string>
+    <string name="confirmation_rename_question_v19">Если выбранный файл не в выбранной папке переименовать не будет завершена из-за ограничений безопасности Android.\nВы хотите запустить сервис вручную?</string>
     <string name="other_settings">Прочие настройки</string>
     <string name="manually_start_title">Ручной запуск сервиса</string>
     <string name="manually_start_desc">Нажать для ручного запуска сервиса</string>

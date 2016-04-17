@@ -30,6 +30,7 @@ import android.content.Intent;
  * 
  */
 public class CameraEventReceiver extends BroadcastReceiver {
+	private static final String TAG = CameraEventReceiver.class.getName();
 	private DSCApplication mApplication;
 
 	/**
@@ -46,6 +47,7 @@ public class CameraEventReceiver extends BroadcastReceiver {
 		Context appCtx = context.getApplicationContext();
 		if (appCtx instanceof DSCApplication) {
 			mApplication = (DSCApplication) appCtx;
+			mApplication.logD(TAG, "onReceive: " + intent.getAction() + ":" + intent.getDataString());
 		}
 		if (mApplication != null
 				&& DSCApplication.SERVICE_TYPE_CAMERA == mApplication

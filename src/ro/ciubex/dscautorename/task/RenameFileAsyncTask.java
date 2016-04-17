@@ -71,26 +71,28 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private RenamePatternsUtilities renamePatternsUtilities;
 	private static final int BUFFER = 1024;
 	private boolean mNoDelay;
-	List<Uri> mMediaStoreURIs;
+	private List<Uri> mMediaStoreURIs;
+	private List<Uri> mFileUris;
 
 	public interface Listener {
-		public void onTaskStarted();
+		void onTaskStarted();
 
-		public void onTaskUpdate(int position, int max, String message);
+		void onTaskUpdate(int position, int max, String message);
 
-		public void onTaskFinished(int count);
+		void onTaskFinished(int count);
 
-		public boolean isFinishing();
+		boolean isFinishing();
 	}
 
 	public RenameFileAsyncTask(DSCApplication application) {
-		this(application, null, false);
+		this(application, null, false, null);
 	}
 
-	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay) {
+	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay, List<Uri> fileUris) {
 		this.mApplication = application;
-		this.mListener = new WeakReference<Listener>(listener);
+		this.mListener = new WeakReference<>(listener);
 		mNoDelay = noDelay;
+		mFileUris = fileUris;
 	}
 
 	/**
@@ -764,10 +766,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		} else {
 			mListFiles.clear();
 		}
-		if (mApplication.isEnabledScanForFiles()) {
+		if (mFileUris != null && !mFileUris.isEmpty()) {
+			scanSelectedFiles();
+		} else if (mApplication.isEnabledScanForFiles()) {
 			scanForFiles();
 		} else {
-			scanMediaStore();
+			scanMediaStore(null, null);
 		}
 		mProgressMax = mListFiles.size();
 	}
@@ -832,11 +836,33 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	/**
 	 * Scan for files on media storage content.
 	 */
-	private void scanMediaStore() {
+	private void scanMediaStore(String selection, String[] selectionArgs) {
 		mApplication.logD(TAG, "Scanning for the files using media store.");
 		for (Uri uri : mMediaStoreURIs) {
-			populateListFiles(uri);
+			populateListFiles(uri, selection, selectionArgs);
 		}
+	}
+
+	/**
+	 * Scan for files from selected URI.
+	 */
+	private void scanSelectedFiles() {
+		StringBuilder selection = new StringBuilder();
+		String[] selectionArgs = new String[mFileUris.size()];
+		int i = 0;
+		for (Uri uri : mFileUris) {
+			if (selection.length() > 0) {
+				selection.append(',');
+			} else {
+				selection.append("content".equals(uri.getScheme()) ?
+						MediaStore.MediaColumns._ID : MediaStore.MediaColumns.DISPLAY_NAME);
+				selection.append(" IN (");
+			}
+			selection.append('?');
+			selectionArgs[i++] = uri.getLastPathSegment(); // media id or file name
+		}
+		selection.append(")");
+		scanMediaStore(selection.toString(), selectionArgs);
 	}
 
 	/**
@@ -844,8 +870,14 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *
 	 * @param uri The URI, using the content:// scheme, for the content to
 	 *            retrieve.
+	 * @param selection A filter declaring which rows to return, formatted as an
+	 *         SQL WHERE clause (excluding the WHERE itself). Passing null will
+	 *         return all rows for the given URI.
+	 * @param selectionArgs You may include ?s in selection, which will be
+	 *         replaced by the values from selectionArgs, in the order that they
+	 *         appear in the selection. The values will be bound as Strings.
 	 */
-	private void populateListFiles(Uri uri) {
+	private void populateListFiles(Uri uri, String selection, String[] selectionArgs) {
 		Cursor cursor = null;
 		String[] columns = new String[]{
 				MediaStore.MediaColumns._ID,
@@ -858,7 +890,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		};
 		try {
 			// doQuery(mContentResolver, uri);
-			cursor = mContentResolver.query(uri, columns, null, null, null);
+			cursor = mContentResolver.query(uri, columns, selection, selectionArgs, null);
 			if (cursor != null) {
 				int index, id;
 				long dateAdded;

@@ -103,6 +103,7 @@
     <string name="confirmation_rename_dialog">Não mostrar diálogo de confirmação</string>
     <string name="confirmation_rename_dialog_desc">Mostrar ou não o diálogo de confirmação quando o serviço de renomeamento é executado pelo atalho.</string>
     <string name="confirmation_rename_question">Você deseja iniciar manualmente o serviço de renomeamento?</string>
+    <string name="confirmation_rename_question_v19">Se o arquivo selecionado não estiver em uma pasta selecionada, em seguida, mudar o nome não será concluída devido a restrições de segurança do Android.\nVocê deseja iniciar manualmente o serviço de renomeamento?</string>
     <string name="other_settings">Outras configurações</string>
     <string name="manually_start_title">Iniciar manualmente o serviço de renomeamento</string>
     <string name="manually_start_desc">Toque para iniciar manualmente o serviço de renomeamento</string>
