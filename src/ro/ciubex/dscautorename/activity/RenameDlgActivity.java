@@ -18,17 +18,24 @@
  */
 package ro.ciubex.dscautorename.activity;
 
-import ro.ciubex.dscautorename.DSCApplication;
-import ro.ciubex.dscautorename.R;
-import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.R;
+import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
+import ro.ciubex.dscautorename.util.Utilities;
 
 /**
  * This class define a dialog activity for the manually launched rename service.
@@ -42,6 +49,8 @@ public class RenameDlgActivity extends Activity implements
 	private TextView mRenameProgressMessage;
 	private ProgressBar mRenameProgressBar;
 	private Button mCancelButton;
+	private boolean mValidRenameAction;
+	private List<Uri> mFileUris;
 
 	/**
 	 * Method called when the activity is created.
@@ -53,6 +62,9 @@ public class RenameDlgActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rename_dialog_layout);
 		initView();
+		mValidRenameAction = false;
+		mFileUris = null;
+		initIntent();
 	}
 
 	/**
@@ -79,15 +91,64 @@ public class RenameDlgActivity extends Activity implements
 	}
 
 	/**
+	 * Initialize the intent data.
+	 */
+	private void initIntent() {
+		Intent intent = getIntent();
+		String action = intent.getAction();
+		String type = intent.getType();
+		if (Intent.ACTION_MAIN.equals(action)) {
+			mValidRenameAction = true;
+		} else if (type != null && (type.startsWith("image/") || type.startsWith("video/"))) {
+			if (Intent.ACTION_SEND.equals(action)) {
+				handleActionSend(intent);
+			} else if (Intent.ACTION_SEND_MULTIPLE.equals(action)) {
+				handleActionSendMultiple(intent);
+			}
+		}
+	}
+
+	/**
+	 * Handle ACTION_SEND for one file.
+	 *
+	 * @param intent The intent data to extract the file.
+	 */
+	private void handleActionSend(Intent intent) {
+		Uri fileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+		if (fileUri != null) {
+			mValidRenameAction = true;
+			mFileUris = new ArrayList<>(1);
+			mFileUris.add(fileUri);
+		}
+	}
+
+	/**
+	 * Handle ACTION_SEND_MULTIPLE for more than one file.
+	 *
+	 * @param intent The intent data to extract the files.
+	 */
+	private void handleActionSendMultiple(Intent intent) {
+		ArrayList<Uri> fileUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
+		if (fileUris != null) {
+			mValidRenameAction = true;
+			mFileUris = new ArrayList<>(fileUris);
+		}
+	}
+
+	/**
 	 * This method is invoked when the activity is started
 	 */
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (mApplication.hideRenameServiceStartConfirmation()) {
-			doStartRenameService();
-		} else {
-			showServiceStartConfirmationDialog();
+		if (mValidRenameAction) {
+			if (!Utilities.isEmpty(mFileUris) && mApplication.getSdkInt() > 18) {
+				showServiceStartConfirmationDialog();
+			} else if (mApplication.hideRenameServiceStartConfirmation()) {
+				doStartRenameService();
+			} else {
+				showServiceStartConfirmationDialog();
+			}
 		}
 	}
 
@@ -106,7 +167,9 @@ public class RenameDlgActivity extends Activity implements
 	private void showServiceStartConfirmationDialog() {
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.app_name)
-				.setMessage(R.string.confirmation_rename_question)
+				.setMessage(mApplication.getSdkInt() > 18 ?
+						R.string.confirmation_rename_question_v19
+						: R.string.confirmation_rename_question)
 				.setIcon(android.R.drawable.ic_dialog_info)
 				.setPositiveButton(R.string.yes,
 						new DialogInterface.OnClickListener() {
@@ -132,7 +195,7 @@ public class RenameDlgActivity extends Activity implements
 	private void doStartRenameService() {
 		mApplication.setRenameFileRequested(true);
 		if (!mApplication.isRenameFileTaskRunning()) {
-			new RenameFileAsyncTask(mApplication, this, true).execute();
+			new RenameFileAsyncTask(mApplication, this, true, mFileUris).execute();
 		}
 	}
 

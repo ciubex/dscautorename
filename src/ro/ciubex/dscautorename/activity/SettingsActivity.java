@@ -364,17 +364,11 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private String getUpdateMessage() {
 		String message = null;
-		String key = "update_message_v70";// + mApplication.getVersionCode();
+		String key = "update_message_v" + mApplication.getVersionCode();
 		int id = DSCApplication.getAppContext().getResources().getIdentifier(key,
 				"string", mApplication.getPackageName());
 		if (id > 0) {
-			if ("update_message_v70".equals(key)) {
-				message = DSCApplication.getAppContext().getString(id,
-						DSCApplication.getAppContext().getString(R.string.define_file_name_pattern_title),
-						DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_value));
-			} else {
-				message = DSCApplication.getAppContext().getString(id);
-			}
+			message = DSCApplication.getAppContext().getString(id);
 		}
 		return message;
 	}
@@ -584,8 +578,9 @@ public class SettingsActivity extends PreferenceActivity implements
 	 */
 	private void startRenameServiceManually() {
 		mApplication.setRenameFileRequested(true);
+		mApplication.logD(TAG, "startRenameServiceManually");
 		if (!mApplication.isRenameFileTaskRunning()) {
-			new RenameFileAsyncTask(mApplication, this, true).execute();
+			new RenameFileAsyncTask(mApplication, this, true, null).execute();
 		}
 	}
 

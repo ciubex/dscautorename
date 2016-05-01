@@ -103,6 +103,7 @@
     <string name="confirmation_rename_dialog">Ascunde confirmarea redenumirii</string>
     <string name="confirmation_rename_dialog_desc">Ascunde sau nu fereastra de confirmare a redenumirii manuale a fisierelor.</string>
     <string name="confirmation_rename_question">Doresti redenumirea fisierelor pornind manual serviciul de redenumire?</string>
+    <string name="confirmation_rename_question_v19">Daca fisierul(le) selectat(e) nu se afla intr-un director selectat atunci procesul de redenumire a fisierelor nu va fi realizat din motive de securitate specifice versiunii de Android avute.\nDoresti redenumirea fisierelor pornind manual serviciul de redenumire?</string>
     <string name="other_settings">Alte setari</string>
     <string name="manually_start_title">Porneste manual serviciul de redenumire</string>
     <string name="manually_start_desc">Porneste manual serviciul de redenumit fisiere.</string>

@@ -103,6 +103,7 @@
     <string name="confirmation_rename_dialog">Ocultar diálogo de confirmación</string>
     <string name="confirmation_rename_dialog_desc">Muestra o no el diálogo de confirmación cuando el servicio de renombrado DSC es ejecutado desde el acceso directo.</string>
     <string name="confirmation_rename_question">¿Quiere iniciar manualmente el servicio de renombrado?</string>
+    <string name="confirmation_rename_question_v19">Si el archivo seleccionado no se encuentran en una carpeta seleccionada a continuación, cambiar el nombre no se concluya debido a restricciones de seguridad de Android.\n¿Quiere iniciar manualmente el servicio de renombrado?</string>
     <string name="other_settings">Otras configuraciones</string>
     <string name="manually_start_title">Iniciar manualmente el servicio de renombrado</string>
     <string name="manually_start_desc">Tocar para iniciar manualmente el servicio de renombrado</string>

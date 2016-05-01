@@ -279,8 +279,11 @@ public class DSCApplication extends Application {
 	public MountVolume getMountVolumeByUuid(String uuid) {
 		if (uuid != null && !"null".equalsIgnoreCase(uuid)) {
 			for (MountVolume volume : mMountVolumes) {
-				if (volume.getUuid() != null && volume.getUuid().equals(uuid)) {
-					return volume;
+				if (volume.getUuid() != null) {
+					if (volume.getUuid().equals(uuid)
+							|| ("primary".equalsIgnoreCase(uuid) && volume.isPrimary())) {
+						return volume;
+					}
 				}
 			}
 		}
