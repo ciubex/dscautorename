@@ -134,5 +134,5 @@
     <string name="app_theme_desc">アプリケーション テーマを設定します: ライトまたはダーク。</string>
     <string name="update_message_v70">オプション \"%1$s\" をご覧ください。デフォルトの区切り文字 _ が削除されました。番号形式 \"%2$s\" の前に付けたい文字を手動で入力する必要があります。</string>
     <string name="do_not_show_again">次回から表示しない</string>
-    <string name="confirmation_rename_question_v19">選択したファイルが選択したフォルダーにない場合、Android のセキュリティ制限のため名前の変更は完了できません。\n名前の変更サービスを手動で開始しますか?</string>
+    <string name="confirmation_rename_question_v19">選択したファイルが選択したフォルダーにない場合、Android のセキュリティ制限のため名前の変更は完了できません。\nリネーム サービスを手動で開始しますか?</string>
     </resources>
