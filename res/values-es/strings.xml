@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">DSC Auto Rename</string>
-
     <!-- Strings related to Settings -->
     <string name="general_settings">Configuración General</string>
     <string name="enable_title">Disparador del servicio de Autorenombrado.</string>
@@ -88,7 +86,7 @@
     <string-array name="rename_file_using_labels">
         <item>Fecha y hora cuando el archivo fue agregado al proveedor de medios;</item>
         <item>Fecha y hora de la última modificación del archivo;</item>
-        <item>EXIF para imágenes y para videos usar la segunda opción.</item>
+        <item>EXIF o MetaData si está disponible.</item>
     </string-array>
     <string name="append_original_name_title">Agregar el nombre original</string>
     <string name="append_original_name_desc">Conserva y añade el nombre original, por ejemplo, DSC_09.JPG el nuevo nombre será %s_DSC_09.JPG</string>
@@ -135,8 +133,6 @@
     <string name="error_rename_file_no_read_write">El archivo no puede ser leído y escrito</string>
     <string name="error_rename_file">¡El archivo %s no puede ser renombrado!</string>
     <string name="obtain_logs">Genera archcivo de log para el reporte&#8230;</string>
-    <string name="report_subject">Reporte para DSC Auto Rename</string>
-    <string name="report_body">Descripción: </string>
     <string name="send_report">Enviar reporte&#8230;</string>
 
     <!-- Change locale -->

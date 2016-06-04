@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">DSC Auto Rename</string>
-
     <!-- Strings related to Settings -->
     <string name="general_settings">Основные настройки</string>
     <string name="enable_title">Запуск сервиса.</string>
@@ -88,7 +86,7 @@
     <string-array name="rename_file_using_labels">
         <item>Дата и время, когда файлы были добавлены в медиа;</item>
         <item>Дата и время, когда файлы были последний раз модифицированы;</item>
-        <item>EXIF для изображений и клипов используется второй вариант.</item>
+        <item>EXIF или MetaData если таковые имеются.</item>
     </string-array>
     <string name="append_original_name_title">Добавить оригинальное имя</string>
     <string name="append_original_name_desc">Сохранить и добавить оригинальное имя, на пример, с DSC_09.JPG на %s_DSC_09.JPG</string>
@@ -135,8 +133,6 @@
     <string name="error_rename_file_no_read_write">Файл невозможно прочитать и записать</string>
     <string name="error_rename_file">Файл %s невозможно переименовать!</string>
     <string name="obtain_logs">Сгенерировать лог для отчета&#8230;</string>
-    <string name="report_subject">Отчет о DSC Auto Rename</string>
-    <string name="report_body">Описание:</string>
     <string name="send_report">Отправить отчет&#8230;</string>
 
     <!-- Change locale -->

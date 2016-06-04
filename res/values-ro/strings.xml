@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">DSC Auto Rename</string>
-
     <!-- Strings related to Settings -->
     <string name="general_settings">Setari generale</string>
     <string name="enable_title">Declansator serviciu redenumire.</string>
@@ -88,7 +86,7 @@
     <string-array name="rename_file_using_labels">
         <item>data si timpul cand fisierul a fost indexat de sistem;</item>
         <item>data si timpul cand fisierul a fost modificat ultima oara;</item>
-        <item>data si timpul prezente in EXIF, doar pentru imagini, pentru clipuri se va folosi a doua optiune.</item>
+        <item>data si timpul prezente in EXIF sau MetaData daca exista.</item>
     </string-array>
     <string name="append_original_name_title">Adauga denumirea originala</string>
     <string name="append_original_name_desc">Pastreaza si adauga denumirea originala dupa numele redenumit. De exemplu din DSC_09.JPG noul fisier va fi redenumit in %s_DSC_09.JPG</string>
@@ -135,8 +133,6 @@
     <string name="error_rename_file_no_read_write">Fisierul nu poate fi citit sau scris.</string>
     <string name="error_rename_file">Fisierul %s nu poate fi redenumit!</string>
     <string name="obtain_logs">Genereaza fisierele de log-uri pentru raport&#8230;</string>
-    <string name="report_subject">Raporteaza DSC Auto Rename</string>
-    <string name="report_body">Descriere: </string>
     <string name="send_report">Trimitere raport&#8230;</string>
 
     <!-- Change locale -->

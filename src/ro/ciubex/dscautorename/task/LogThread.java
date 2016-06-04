@@ -18,14 +18,20 @@
  */
 package ro.ciubex.dscautorename.task;
 
+import android.util.Log;
+
 import java.io.BufferedWriter;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
+import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.util.Utilities;
 
 /**
@@ -40,27 +46,47 @@ public class LogThread implements Runnable, Closeable {
 	private File logFile;
 	private boolean closing;
 	private boolean closed;
+	private SimpleDateFormat sFormatter;
 
 	public LogThread(File file) {
-		logs = new ArrayList<String>();
+		logs = new ArrayList<>();
 		this.logFile = file;
 		closing = false;
 		closed = false;
+		sFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", DSCApplication.getLocale());
+		sFormatter.setTimeZone(TimeZone.getDefault());
 	}
 
 	/**
 	 * Add a log string to logs collection
-	 * 
-	 * @param log
-	 *            Log to be added.
+	 *
+	 * @param milliseconds Log timestamp.
+	 * @param message      Log text.
+	 * @param throwable    An exception to log
 	 */
-	public void addLog(String log) {
+	public void addLog(long milliseconds, String message, Throwable throwable) {
 		if (!closing) {
 			synchronized (logs) {
-				logs.add(log);
+				logs.add(getLogMessage(milliseconds, message, throwable));
 				logs.notifyAll();
 			}
 		}
+	}
+
+	/**
+	 * Compose the log message by formatting date and time and add text message.
+	 *
+	 * @param milliseconds Log timestamp.
+	 * @param message      Log text.
+	 * @param throwable    An exception to log
+	 * @return Composed log message.
+	 */
+	private String getLogMessage(long milliseconds, String message, Throwable throwable) {
+		String log = sFormatter.format(new Date(milliseconds)) + "\t" + message;
+		if (throwable != null) {
+			log += "\t" + Log.getStackTraceString(throwable);
+		}
+		return log;
 	}
 
 	/**

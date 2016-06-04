@@ -42,8 +42,10 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.media.ExifInterface;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
@@ -73,6 +75,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private boolean mNoDelay;
 	private List<Uri> mMediaStoreURIs;
 	private List<Uri> mFileUris;
+	private Object mMediaMetadataRetriever;
 
 	public interface Listener {
 		void onTaskStarted();
@@ -667,7 +670,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private String getFileExtension(String fileName) {
 		int idx = fileName.lastIndexOf(".");
-		String extension = fileName.substring(idx);
+		String extension = idx > 0 ? fileName.substring(idx) : "";
 		return extension;
 	}
 
@@ -706,6 +709,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					milliseconds = datetime.getTime();
 				}
 			}
+			if (milliseconds == -1) {
+				milliseconds = extractMetadataDate(fileName);
+			}
 		} catch (IOException e) {
 			mApplication.logE(TAG, "IOException:" + e.getMessage() + " file:"
 					+ fileName, e);
@@ -717,6 +723,28 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			milliseconds = getDateAdded(data, file);
 		}
 		return milliseconds;
+	}
+
+	/**
+	 * Extract the file original timestamp or -1.
+	 *
+	 * @param fileName The path of the input media file.
+	 * @return Extracted file timestamp or -1.
+	 */
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
+	private long extractMetadataDate(String fileName) {
+		MediaMetadataRetriever retriever;
+		if (mMediaMetadataRetriever instanceof MediaMetadataRetriever) {
+			retriever = (MediaMetadataRetriever) mMediaMetadataRetriever;
+		} else {
+			retriever = new MediaMetadataRetriever();
+			mMediaMetadataRetriever = retriever;
+		}
+		retriever.setDataSource(fileName);
+		String date = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
+		mApplication.logD(TAG, "METADATA_DATE: " + date + " fileName: " + fileName);
+		Date datetime = Utilities.parseMetadataDateTimeString(date);
+		return datetime != null ? datetime.getTime() : -1;
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">DSC Auto Rename</string>
+    <string name="app_name" translatable="false">DSC Auto Rename</string>
 
     <!-- Strings related to Settings -->
     <string name="general_settings">General settings</string>
@@ -109,7 +109,7 @@
     <string-array name="rename_file_using_labels">
         <item>date and time when file was added to media provider;</item>
         <item>date and time when file was last time modified;</item>
-        <item>EXIF for images and for clips use second choice.</item>
+        <item>EXIF or Metadata if available.</item>
     </string-array>
     <string-array name="rename_file_using_values" translatable="false">
         <item>0</item>
@@ -161,8 +161,8 @@
     <string name="error_rename_file_no_read_write">File can not be read and write</string>
     <string name="error_rename_file">The file %s cannot be renamed!</string>
     <string name="obtain_logs">Generate log file for report&#8230;</string>
-    <string name="report_subject">Report for DSC Auto Rename</string>
-    <string name="report_body">Description: </string>
+    <string name="report_subject" translatable="false">Report for DSC Auto Rename</string>
+    <string name="report_body" translatable="false">Description: (in english)</string>
     <string name="send_report">Send report&#8230;</string>
 
     <!-- Change locale -->

@@ -38,6 +38,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
@@ -491,6 +492,42 @@ public class Utilities {
 				calendar.set(Calendar.HOUR_OF_DAY, parseToInt(timeString[0]));
 				calendar.set(Calendar.MINUTE, parseToInt(timeString[1]));
 				calendar.set(Calendar.SECOND, parseToInt(timeString[2]));
+				calendar.set(Calendar.MILLISECOND, 0);
+				date = calendar.getTime();
+			}
+		}
+		return date;
+	}
+
+	/**
+	 * Parse a string date time value in format yyyyMMddTHHmmss.zzzZ to a date.
+	 *
+	 * @param dateTime Date time to be parsed.
+	 * @return The parsed date time.
+	 */
+	public static Date parseMetadataDateTimeString(String dateTime) {
+		String[] arr = dateTime != null ? dateTime.split("\\.") : null;
+		Date date = null;
+		if (arr != null && arr.length > 1) {
+			String dateTimeString = arr[0];
+			int k = 0, year;
+			if (dateTimeString.length() == 15) {
+				Calendar calendar = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"));
+				k = 0;
+				year = parseToInt(dateTimeString.substring(k, k + 4));
+				if (calendar.get(Calendar.YEAR) - year < 5) { // avoid possible wrong year
+					calendar.set(Calendar.YEAR, year);
+				}
+				k += 4;
+				calendar.set(Calendar.MONTH, parseToInt(dateTimeString.substring(k, k + 2)) - 1);
+				k += 2;
+				calendar.set(Calendar.DAY_OF_MONTH, parseToInt(dateTimeString.substring(k, k + 2)));
+				k += 3; // skip T
+				calendar.set(Calendar.HOUR_OF_DAY, parseToInt(dateTimeString.substring(k, k + 2)));
+				k += 2;
+				calendar.set(Calendar.MINUTE, parseToInt(dateTimeString.substring(k, k + 2)));
+				k += 2;
+				calendar.set(Calendar.SECOND, parseToInt(dateTimeString.substring(k, k + 2)));
 				calendar.set(Calendar.MILLISECOND, 0);
 				date = calendar.getTime();
 			}

@@ -69,7 +69,7 @@ import android.util.Log;
 public class DSCApplication extends Application {
 	private static final String TAG = DSCApplication.class.getName();
 	private static Context mContext;
-	private Locale mLocale;
+	private static Locale mLocale;
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
 	private BackupManager mBackupManager;
@@ -88,7 +88,6 @@ public class DSCApplication extends Application {
 	public static final String LOG_FILE_NAME = "DSC_app_logs.log";
 	private static File logFile;
 	private static LogThread logFileThread;
-	private static SimpleDateFormat sFormatter;
 
 	public static final String KEY_SERVICE_TYPE = "serviceType";
 	private static final String KEY_FOLDER_SCANNING = "folderScanning";
@@ -466,7 +465,7 @@ public class DSCApplication extends Application {
 	 *
 	 * @return The locale of the application.
 	 */
-	public Locale getLocale() {
+	public static Locale getLocale() {
 		return mLocale;
 	}
 
@@ -1118,21 +1117,20 @@ public class DSCApplication extends Application {
 	 */
 	public void logE(String tag, String msg) {
 		Log.e(tag, msg);
-		writeLogFile(System.currentTimeMillis(), "ERROR\t" + tag + "\t" + msg);
+		writeLogFile(System.currentTimeMillis(), "ERROR\t" + tag + "\t" + msg, null);
 	}
 
 	/**
 	 * Send a log message and log the exception.
 	 *
-	 * @param tag Used to identify the source of a log message. It usually
-	 *            identifies the class or activity where the log call occurs.
-	 * @param msg The message you would like logged.
-	 * @param tr  An exception to log
+	 * @param tag       Used to identify the source of a log message. It usually
+	 *                  identifies the class or activity where the log call occurs.
+	 * @param msg       The message you would like logged.
+	 * @param throwable An exception to log
 	 */
-	public void logE(String tag, String msg, Throwable tr) {
-		Log.e(tag, msg, tr);
-		writeLogFile(System.currentTimeMillis(), "ERROR\t" + tag + "\t" + msg
-				+ "\t" + Log.getStackTraceString(tr));
+	public void logE(String tag, String msg, Throwable throwable) {
+		Log.e(tag, msg, throwable);
+		writeLogFile(System.currentTimeMillis(), "ERROR\t" + tag + "\t" + msg, throwable);
 	}
 
 	/**
@@ -1144,18 +1142,19 @@ public class DSCApplication extends Application {
 	 */
 	public void logD(String tag, String msg) {
 		Log.d(tag, msg);
-		writeLogFile(System.currentTimeMillis(), "DEBUG\t" + tag + "\t" + msg);
+		writeLogFile(System.currentTimeMillis(), "DEBUG\t" + tag + "\t" + msg, null);
 	}
 
 	/**
 	 * Write the log message to the app log file.
-	 *
-	 * @param logmessage The log message.
+	 *	 *
+	 * @param milliseconds Log timestamp.
+	 * @param message      Log text.
+	 * @param throwable    An exception to log
 	 */
-	private void writeLogFile(long milliseconds, String logmessage) {
+	private void writeLogFile(long milliseconds, String message, Throwable throwable) {
 		if (checkLogFileThread()) {
-			logFileThread.addLog(sFormatter.format(new Date(milliseconds))
-					+ "\t" + logmessage);
+			logFileThread.addLog(milliseconds, message, throwable);
 		}
 	}
 
@@ -1167,9 +1166,6 @@ public class DSCApplication extends Application {
 			try {
 				logFile = new File(getLogsFolder(), DSCApplication.LOG_FILE_NAME);
 				logFileThread = new LogThread(logFile);
-				sFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS",
-						mLocale);
-				sFormatter.setTimeZone(TimeZone.getDefault());
 				new Thread(logFileThread).start();
 			} catch (Exception e) {
 				logE(TAG, "Exception: " + e.getMessage(), e);

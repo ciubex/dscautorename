@@ -1,7 +1,5 @@
 ﻿<resources>
 
-    <string name="app_name">DSC Auto Rename</string>
-
     <!-- Strings related to Settings -->
     <string name="general_settings">การตั้งค่าทั่วไป</string>
     <string name="enable_title">เปลี่ยนชื่อไฟล์โดยอัตโนมัติ</string>
@@ -88,7 +86,7 @@
     <string-array name="rename_file_using_labels">
         <item>วันและเวลาที่ไฟล์ถูกเพิ่มไปยังตัวจัดการมีเดีย</item>
         <item>วันและเวลาที่ไฟล์ถูกแก้ไขล่าสุด</item>
-        <item>ข้อมูล EXIF จากรูปถ่ายหรือวีดิโอ</item>
+        <item>EXIF MetaData หรือถ้ามี</item>
     </string-array>
     <string name="append_original_name_title">ต่อท้ายไฟล์ด้วยชื่อไฟล์ต้นทาง</string>
     <string name="append_original_name_desc">นำชื่อไฟล์ต้นทางมาต่อท้ายไฟล์ปลายทาง เช่น จาก DSC_09.JPG ถูกเปลี่ยนชื่อเป็น %s_DSC_09.JPG</string>
@@ -135,8 +133,6 @@
     <string name="error_rename_file_no_read_write">ไม่สามารถอ่านหรือเขียนไฟล์ได้</string>
     <string name="error_rename_file">พบไฟล์ที่ไม่สามารถเปลี่ยนชื่อได้ %s ไฟล์</string>
     <string name="obtain_logs">สร้างล็อกเพื่อรายงาน&#8230;</string>
-    <string name="report_subject">Report for DSC Auto Rename</string>
-    <string name="report_body">Description: </string>
     <string name="send_report">ส่งรายงาน&#8230;</string>
 
     <!-- Change locale -->
