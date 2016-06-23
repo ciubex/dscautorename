@@ -140,6 +140,7 @@
     <string name="change_language_desc">Pentru a se folosi limba selectata trebuie ca aplicatia sa fie restartata.</string>
     <string-array name="language_labels">
         <item>English - Engeza</item>
+        <item>Japanese - Japoneza</item>
         <item>Portuguese (Brasil) - Portugheza</item>
         <item>Romanian - Romana</item>
         <item>Russian - Ruseste</item>

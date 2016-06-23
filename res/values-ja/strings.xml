@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <string name="general_settings">全般設定</string>
+    <string name="enable_title">自動リネーム サービスのトリガー。</string>
+    <string name="enable_desc">トリガーが発生した後、ファイルが自動的にリネームされます。</string>
+
+    <string-array name="service_type_labels">
+        <item>Disabled</item>
+        <item>Camera events: pictures or videos taken.</item>
+        <item>Media content observer: pictures or videos saved.</item>
+        <item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
+    </string-array>
+
+    <string name="service_choice_0">自動リネーム サービスは無効です。</string>
+    <string name="service_choice_1">カメラのイベントによって、自動リネーム サービスはトリガーされます。</string>
+    <string name="service_choice_2">メディア コンテンツのイベントによって、自動リネームサービスはトリガーされます。</string>
+    <string name="service_choice_3">選択したフォルダーにファイルが追加されたときに、自動リネーム サービスはトリガーされます。\"フォルダー内のリネーム\" をチェックし、\"フォルダーを選択\" で少なくとも 1 つのフォルダーを選択する必要があります。</string>
+    <string name="rename_service_start_delay_title">リネーム サービスの開始を遅延</string>
+    <string name="rename_service_start_delay_desc">リネーム サービスを開始するまでの時間</string>
+    <string name="seconds_unit">秒</string>
+    <string name="minutes_unit">分</string>
+
+    <string name="choose_units_title">遅延の単位を選択:</string>
+    <string name="choose_units_title_param">指定された遅延の単位: %s</string>
+    <string name="choose_units_desc">このオプションでは、秒と分の間で遅延の単位を選択することができます。</string>
+    <string-array name="delay_units_labels">
+        <item>seconds</item>
+        <item>minutes</item>
+    </string-array>
+    <string name="rename_video_enabled_title">ビデオ ファイルのリネームを有効にする</string>
+    <string name="rename_video_enabled_desc">このオプションをチェックすることで、ビデオも自動的にリネームします。デフォルトでは、写真のみリネームします。</string>
+    <string name="enable_filter_folder_title">フォルダー内のリネーム</string>
+    <string name="enable_filter_folder_desc">通常、リネーム サービスはお使いのデバイスからすべてのファイルをスキャンします。このオプションを有効にすると、リネーム サービスをフォルダー内に限定することができます。</string>
+    <string name="enable_filter_folder_desc_v21">Android Lollipop のユーザーは、この機能を有効にして、カメラ アプリケーションがファイルを保存するフォルダーを選択してください。</string>
+    <string name="folder_list_title">スキャンしたフォルダーの一覧。</string>
+    <string name="first_time_alert">熟読の上ご注意ください:\n名前の変更、ファイルの移動プロセスは元に戻すことはできません!\n注意してこのソフトウェアをご利用ください!\n写真やクリップを個別にファイル名のパターンを定義したり、名前を変更したファイルを別のフォルダーに移動することもできます。ワイルドカード * または ? も使用できます。\n名前の変更の無限ループを避けるために、*.JPG のような全般的なパターンは使用しないでください。\n_ などその他の一定の既存の文字との組み合わせて、 1 つ可能な文字を定義することが ? の良い使用方法です。\n例えば、元のファイル名が 20150729_212537.JPG の場合、????????_??????.JPG のようなパターンを使用して、名前変更のパターンに \"\'PIC_\'yyyyMMdd_HHmmss\" のようにプレフィックス \'PIC_\' をつけると (定数のテキストを定義するためアポストロフィを使用して) ファイルの名前を次のように変更します: PIC_20150729_212537.JPG</string>
+    <string name="enable_filter_alert_v19">Android KitKat ではいくつかのセキュリティの制約が有効になるため、このアプリケーションは SD カードからファイルの名前を変更することができません。\n可能な修正は http://goo.gl/kJeED3 のリンクを参照してください。\nこのアプリケーションは、内蔵メモリのみファイルの名前を変更できます。\nカメラ アプリケーションで内蔵メモリに保存する設定をしてください。</string>
+    <string name="enable_filter_alert_v21">Android Lollipop ユーザーは、\"フォルダー内の名前を変更\" オプションを有効にして、\"スキャン対象フォルダーのリスト\" に少なくとも 1 つスキャンするフォルダーを定義する必要があります。</string>
+    <string name="folder_list_all_selected">少なくとも 1 つのフォルダーはオフのままにする必要があります!</string>
+    <string name="folder_list_no_selection">少なくとも 1 つ削除するフォルダーを選択してください!</string>
+    <string name="folder_list_confirmation">選択したフォルダーを削除しますか?</string>
+    <string name="folder_list_no_open_document_tree_support">お使いの Android のバージョンは、フォルダーの選択がサポートされていません (ACTION_OPEN_DOCUMENT_TREE)。\n内蔵のフォルダー ピッカーを使用して、フォルダーを選択しますか? 内蔵のフォルダー ピッカーを使用する場合、アプリケーションは名前の変更、ファイルの移動をする権限がないことがあります!</string>
+    <string name="folder_list_no_grant_permission_1">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこのフォルダーが定義されている場所を確認して、再度選択してください!\n\nこのメッセージを無視することはできますが、上のフォルダーのアクセスを取得するまで、アプリケーションは正しく動作しません。</string>
+    <string name="folder_list_no_grant_permission_2">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこれらのフォルダーが定義されている場所を確認して、再度選択してください!\n\nこのメッセージを無視することはできますが、上のフォルダーのアクセスを取得するまで、アプリケーションは正しく動作しません。</string>
+    <string name="filter_folder_title">フォルダーを選択。</string>
+    <string name="filter_folder_no_folder">[フォルダーなし]</string>
+    <string name="enable_folder_scanning_title">フォルダーのファイルのスキャンを有効にする。</string>
+    <string name="enable_folder_scanning_desc">通常これは選択すべきではありません! このオプションを選択すると、リネーム サービスは上記の選択したフォルダーに対してメディア ファイルをスキャンします。お使いのデバイスでメディア コンテンツ スキャナーが無効になっている場合、これを選択してください。</string>
+    <string name="define_file_name_pattern_title">ファイル名のパターンを定義</string>
+    <string name="define_file_name_pattern_desc">ファイル名のパターンは、名前を変更するファイルを検索するために使用します (\"DSC_*.JPG\" or \"MOV_*.MP4\")。例えば %s\nワイルドカード * と ? も使用できます。</string>
+    <string name="file_name_pattern_dialog_title_add">ファイル名のパターンを追加</string>
+    <string name="file_name_pattern_dialog_title_editor">ファイル名のパターンを編集</string>
+    <string name="file_name_pattern_dialog_from">1. 元ファイル名のパターン:</string>
+    <string name="file_name_pattern_dialog_to">2. 名前を変更したファイル名のパターン:</string>
+    <string name="file_name_pattern_dialog_bottom">古いファイル名の例:\n\t %1$s\n名前を変更したファイル名の例:\n\t %2$s</string>
+    <string name="file_name_pattern_validation_error_old_empty">元のパターンは、空にすることはできません。</string>
+    <string name="file_name_pattern_validation_error_new_empty">名前を変更したファイル名のパターンを空にすることはできません。</string>
+    <string name="file_name_pattern_validation_error_generic">元のパターンが全般的のため、何度もファイルの名前を変更する原因になります。より厳密なパターンを使用して定義するようにするか、他の文字を使用してください。</string>
+    <string name="file_name_pattern_validation_error_old">元のファイル名のパターンは既に存在します。新しいテキストに変更してください。</string>
+    <string name="file_name_pattern_validation_error_new">元と名前を変更したパターンが一致しています!</string>
+    <string name="file_name_pattern_validation_error_original">元のパターンが、他のケースで定義されている名前を変更したパターンと一致しています!</string>
+    <string name="file_name_pattern_validation_error_rename">名前を変更したパターンが、他のケースで定義されている元のパターンと一致しています!</string>
+    <string name="file_name_suffix_format_title">ファイル名の追加の接尾語を定義</string>
+    <string name="file_name_suffix_format_desc">この接尾語は、2 つ以上のファイルが同じ名前のとき、区別するために使用します。デフォルトでは、カウンターは 5 桁です。\n例:\n%s</string>
+    <string name="file_extension_note">ファイルの拡張子は名前の変更処理中に保持されます。</string>
+    <string name="rename_file_using_title">次を使用してファイルの名前を変更:</string>
+    <string name="rename_file_using_desc">ファイルが最後に変更された、日付と時刻。</string>
+    <string name="move_file_enable">選択したフォルダーの下に名前を変更したファイルを移動。</string>
+    <string name="move_file_text_no_folder">フォルダーが選択されていません。このテキストをタッチしてフォルダーを選択します。</string>
+    <string name="move_file_text_selected_folder">選択したフォルダー: %s</string>
+    <string name="new_folder">新しいフォルダー</string>
+    <string-array name="rename_file_using_labels">
+        <item>date and time when file was added to media provider;</item>
+        <item>date and time when file was last time modified;</item>
+        <item>EXIF or Metadata if available.</item>
+    </string-array>
+
+    <string name="append_original_name_title">元の名前を追加</string>
+    <string name="append_original_name_desc">元の名前を維持して追加します。例えば、DSC_09.JPG から、新しい名前は %s_DSC_09.JPG になります</string>
+
+    <string name="rename_shortcut">DSC リネーム サービスのショートカット</string>
+    <string name="rename_shortcut_name">DSC リネーム サービス</string>
+    <string name="create_rename_shortcut">DSC リネーム サービスのショートカットを作成</string>
+    <string name="create_rename_shortcut_desc">リネーム サービスを手動で起動する DSC リネーム サービスのショートカットをホーム画面に作成します。</string>
+    <string name="remove_rename_shortcut">DSC リネーム サービスのショートカットを削除</string>
+    <string name="remove_rename_shortcut_desc">DSC リネーム サービス ショートカットをホーム画面から削除します</string>
+    <string name="confirmation_rename_dialog">確認のダイアログ ボックスを非表示</string>
+    <string name="confirmation_rename_dialog_desc">ショートカットから DSC リネーム サービスが起動されたときに、確認のダイアログ ボックスを表示します。</string>
+    <string name="confirmation_rename_question">リネーム サービスを手動で開始しますか?</string>
+    <string name="other_settings">その他の設定</string>
+    <string name="manually_start_title">リネーム サービスを手動で開始</string>
+    <string name="manually_start_desc">タッチするとリネーム サービスを手動で開始します</string>
+    <string name="manually_service_running">手動でリネーム サービスを実行しています。</string>
+    <string name="manually_file_rename_count_0">名前を変更したファイルはありません。</string>
+    <string name="manually_file_rename_count_1">1 ファイルの名前が変更されました。</string>
+    <string name="manually_file_rename_count_more">%d ファイルの名前が変更されました。</string>
+    <string name="manually_file_rename_progress_1">%1$d / %2$d ファイルの名前が変更されました。</string>
+    <string name="manually_file_rename_progress_more">%1$d / %2$d ファイルの名前が変更されました。</string>
+    <string name="file_rename_count_title">名前を変更したファイルの数: %d</string>
+    <string name="file_rename_count_desc">タッチすると、名前を変更したファイルの数をリセットします。</string>
+    <string name="file_rename_count_confirmation">名前を変更したファイルのカウンターをリセットしますか?</string>
+    <string name="ok">OK</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="cancel">キャンセル</string>
+    <string name="close">閉じる</string>
+    <string name="add">追加</string>
+    <string name="delete">削除</string>
+    <string name="please_wait">お待ちください…</string>
+    <string name="loading_wait">読み込んでいます…</string>
+    <string name="no_folders">フォルダーがありません</string>
+    <string name="no_file_name_pattern">ファイル名のパターンが定義されていません</string>
+    <string name="list_info_press">アイテムを追加または削除。</string>
+    <string name="file_name_pattern_list_all_selected">少なくとも 1 つのファイル名のパターンはオフのままにする必要があります!</string>
+    <string name="file_name_pattern_list_no_selection">少なくとも 1 つ削除するファイル名のパターンを選択してください!</string>
+    <string name="file_name_pattern_list_confirmation">選択したファイル名のパターンを削除しますか?</string>
+    <string name="error_rename_file_no_read_write">ファイルの読み取りと書き込みができません</string>
+    <string name="error_rename_file">ファイル %s の名前を変更できません!</string>
+    <string name="obtain_logs">報告するログファイルを生成…</string>
+    <string name="send_report">報告を送信…</string>
+
+    <string name="change_language_title">言語: アプリケーションの言語</string>
+    <string name="change_language_desc">選択した言語を適用するには、アプリケーションを再起動する必要があります。</string>
+    <string-array name="language_labels">
+        <item>English</item>
+        <item>Japanese</item>
+        <item>Portuguese (Brasil)</item>
+        <item>Romanian</item>
+        <item>Russian</item>
+        <item>Spanish</item>
+        <item>Thai</item>
+    </string-array>
+    <string name="request_permissions_title">必要なアプリケーションのアクセス許可を要求。</string>
+    <string name="request_permissions_desc">このオプションをタッチすると、必要なアプリケーションのアクセス許可を要求します: カメラ (瞬間のキャプチャを受け取るために使用)、ストレージ (名前の変更、ファイルの移動のために使用)。</string>
+    <string name="request_permissions_confirmation">必要なアプリケーションのアクセス許可を要求しますか?</string>
+    <string name="request_permissions_ok">必要なすべての権限が与えられました!</string>
+
+    <string name="about_section">アプリについて</string>
+    <string name="build_version_title">ビルドバージョン</string>
+    <string name="send_debug_title">デバッグ ログを送信</string>
+    <string name="send_debug_desc">デバッグ ファイルをメールで送信します</string>
+    <string name="send_debug_confirmation">デバッグ報告を送信しますか?\nデフォルトのメール アプリケーションが、2 つのファイルを添付してメールを送信します。必要な問題の簡単な説明を記入してください。\nありがとうございます!</string>
+    <string name="send_debug_email_title">DSC 自動リネームのデバッグ ログ</string>
+    <string name="license_title">オープンソース ライセンス</string>
+    <string name="license_desc">オープンソース ソフトウェアのライセンス詳細</string>
+    <string name="donate_title">寄付</string>
+    <string name="donate_desc">このアプリケーションをご理解いただいた場合、寄付をお願いします。</string>
+    <string name="donate_confirmation">このアプリケーションをご理解いただいた場合、DSC 自動リネーム PRO を購入して寄付をお願いします!\nはいボタンを押すと、Google Play ストアから、DSC 自動リネーム PRO が送られます。\nこのアプリケーションをご利用いただき、ありがとうございます!</string>
+    <string name="thank_you_title">寄付をいただき、ありがとうございます!</string>
+    <string name="thank_you_desc">Pro アプリケーションのご購入と、私の作業へのご理解をいただき、ありがとうございました。</string>
+    <string name="about_text"><Data><![CDATA[<b>Simon W の 4.0.0 バージョン開発へのフルサポートに大変感謝します!</b><br/> このアプリケーションは、自動的にファイルが作成されたときの日時に基づき、カメラで撮影した画像ファイルの名前を変更します。<br/> <br/> ファイルの名前を変更する形式は Java の日付と時刻の形式のパラメーターを使用します:<br/> - 年の yyyy;<br/> - 月の MM<br/> - 日の dd<br/> - 時のHH;<br/> - 分の mm;<br/> - 秒の ss;<br/> - ミリ秒の SSS。<br/> 残念ながら EXIF による仕様と Android ファイル名日付時刻のため、内部的にミリ秒は使用されません。<br/> 形式の詳細な情報は、次を参照してください: <a href=http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html>Java SimpleDateFormat クラス</a><br/> <br/> 複数のファイルが同時に生成された場合、ファイルは _01 のようなカウントのサフィックスを持ちます。設定で定義された桁数に依存します。<br/><br/> 写真やクリップのファイル名のパターンを個別に定義します。ワイルドカード * または ? も使用することができます。<br/> 名前変更の無限ループを避けるために、*.JPG のようなあまりにも包括的なパターンは使用しないでください。<br/> ? を活用して、_ など他の定数の既存の文字との組み合わせで 1 つで可能な文字を定義するようにしてください。 <br/> たとえば、元のファイル名が 20150729_212537.JPG のようなパターンを使用している場合、????????_??????.JPG のようなパターンを使用して、名前の変更パターンに \"\'PIC_\' yyyyMMdd_HHmmss\" のようにプレフィックス \'PIC_\' をつけて (定数のテキストを定義するアポストロフィを使用して) ファイルの名前を変更します: PIC_20150729_212537.JPG <br/> <br/> リネームサービスが有効な場合、デバイスのメディア ストレージにイメージ ファイルを保存されると、リネームサービスが自動的にトリガーされます。<br/> <br/> トリガーは、写真を撮るカメラ アプリケーションによって異なります。カメラ アプリケーションは <b>com.android.camera.NEW_PICTURE</b> または <b>android.hardware.action.NEW_PICTURE</b> を送信する必要があります。それ以外の場合、リネームサービスはトリガーされません。<br/> 一部のケースでカメラは何のメッセージも送信しないため、メディア コンテンツ イベントをトリガーとして選択することが可能です、しかし、これは完全にバックグラウンドでサービスを実行することを意味します。 <br/> <br/> 詳細は、アプリケーションの説明ページを参照してください <a href=https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename>Google Play - DSC 自動リネーム</a>.<br/> <b> 翻訳ありがとうございます:</b><br/> - Chawalit <b>タイ語</b><br/> - Runels for 4PDA <b>ロシア語</b><br/> - Leo Manias <b>ポルトガル語</b> (ブラジル)<br/> - Dave <b>スペイン語</b><br/>]]></Data></string>
+
+<string name="ui_settings">UI 設定</string>
+    <string name="app_theme_title">アプリケーション テーマ:</string>
+    <string name="app_theme_title_param">アプリケーション テーマ: %s</string>
+    <string name="app_theme_desc">アプリケーション テーマを設定します: ライトまたはダーク。</string>
+    <string-array name="app_theme_labels">
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+    <string name="update_message_v70">オプション \"%1$s\" をご覧ください。デフォルトの区切り文字 _ が削除されました。番号形式 \"%2$s\" の前に付けたい文字を手動で入力する必要があります。</string>
+    <string name="do_not_show_again">次回から表示しない</string>
+    <string name="confirmation_rename_question_v19">選択したファイルが選択したフォルダーにない場合、Android のセキュリティ制限のため名前の変更は完了できません。\nリネーム サービスを手動で開始しますか?</string>
+    </resources>

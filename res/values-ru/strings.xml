@@ -140,6 +140,7 @@
     <string name="change_language_desc">Приложение должно быть перезапущено, чтобы применить выбранный язык.</string>
     <string-array name="language_labels">
         <item>English - английский</item>
+        <item>Japanese - Японский</item>
         <item>Portuguese (Brasil) - португальский</item>
         <item>Romanian - румынский</item>
         <item>Russian - Русский</item>

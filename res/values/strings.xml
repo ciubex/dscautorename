@@ -170,6 +170,7 @@
     <string name="change_language_desc">The application should be restarted to be applied selected language.</string>
     <string-array name="language_labels">
         <item>English</item>
+        <item>Japanese</item>
         <item>Portuguese (Brasil)</item>
         <item>Romanian</item>
         <item>Russian</item>
@@ -178,6 +179,7 @@
     </string-array>
     <string-array name="language_values" translatable="false">
         <item>en</item>
+        <item>ja</item>
         <item>pt_BR</item>
         <item>ro</item>
         <item>ru</item>

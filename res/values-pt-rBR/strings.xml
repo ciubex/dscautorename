@@ -140,6 +140,7 @@
     <string name="change_language_desc">O aplicativo deve ser reiniciado para aplicar o novo idioma.</string>
     <string-array name="language_labels">
         <item>English</item>
+        <item>Japanese</item>
         <item>Portuguese (Brasil)</item>
         <item>Romanian</item>
         <item>Russian</item>
