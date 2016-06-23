@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="add">Dodaj</string>
+	<string name="build_version_title">Wersja</string>
+	<string name="cancel">Anuluj</string>
+	<string name="close">Zamknij</string>
+	<string-array name="delay_units_labels">
+		<item>sekundy</item>
+		<item>minuty</item>
+	</string-array>
+	<string name="delete">Usuń</string>
+	<string name="donate_title">Wesprzyj</string>
+	<string name="filter_folder_no_folder">Brak folderu</string>
+	<string name="filter_folder_title">Wybierz folder</string>
+	<string name="folder_list_no_selection">Wybierz przynajmniej jeden folder by usunąć</string>
+	<string name="folder_list_title">Lista skanowanych folderów</string>
+	<string name="general_settings">Ustawienia</string>
+	<string name="license_desc">Szczegóły licencji darmowego oprogramowania</string>
+	<string name="license_title">Licencja</string>
+	<string name="list_info_press">Dodaj lub usuń</string>
+	<string name="loading_wait">Ładowanie&#8230;</string>
+	<string name="manually_file_rename_progress_more">%1$d z %2$d zostało zmienionych</string>
+	<string name="manually_start_desc">Dotknij by ręcznie uruchomić zmianę nazw</string>
+	<string name="manually_start_title">Uruchom ręcznie zmianę nazw</string>
+	<string name="minutes_unit">Minuty</string>
+	<string name="move_file_enable">Przenieś zmieniony plik do wybranego folderu</string>
+	<string name="move_file_text_no_folder">Nie wybrano folderu, naciśnij by wybrać</string>
+	<string name="move_file_text_selected_folder">Wybrany folder</string>
+	<string name="new_folder">Nowy folder</string>
+	<string name="no">Nie</string>
+	<string name="no_file_name_pattern">Nie utworzono wzoru nazwy pliku</string>
+	<string name="no_folders">Brak folderów</string>
+	<string name="obtain_logs">Generuj plik z logami</string>
+	<string name="ok">Ok</string>
+	<string name="other_settings">Inne ustawienia</string>
+	<string name="please_wait">Proszę czekać&#8230;</string>
+	<string name="remove_rename_shortcut">Usuń skrót DSC rename</string>
+	<string name="seconds_unit">Sekundy</string>
+	<string name="send_report">Wyślij raport</string>
+	<string-array name="service_type_labels">
+		<item>Wyłączony</item>
+		<item>Camera events: pictures or videos taken.</item>
+		<item>Media content observer: pictures or videos saved.</item>
+		<item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
+	</string-array>
+	<string name="yes">Tak</string>
+</resources>

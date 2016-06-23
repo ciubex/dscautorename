@@ -138,15 +138,6 @@
     <!-- Change locale -->
     <string name="change_language_title">Language: ภาษาแอพลิเคชัน</string>
     <string name="change_language_desc">แอพลิเคชันที่ควรจะเริ่มต้นใหม่ที่จะใช้ภาษาที่เลือก</string>
-    <string-array name="language_labels">
-        <item>English - อังกฤษ</item>
-        <item>Japanese - ชาวญี่ปุ่น</item>
-        <item>Portuguese (Brasil) - โปรตุเกส</item>
-        <item>Romanian - โรมาเนีย</item>
-        <item>Russian - รัสเซีย</item>
-        <item>Spanish - สเปน</item>
-        <item>Thai - ภาษาไทย</item>
-    </string-array>
 
     <!-- Permission sections -->
     <string name="request_permissions_title">ขออนุญาตการประยุกต์ใช้ที่จำเป็น</string>

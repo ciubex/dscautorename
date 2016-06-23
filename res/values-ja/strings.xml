@@ -122,15 +122,6 @@
 
     <string name="change_language_title">言語: アプリケーションの言語</string>
     <string name="change_language_desc">選択した言語を適用するには、アプリケーションを再起動する必要があります。</string>
-    <string-array name="language_labels">
-        <item>English</item>
-        <item>Japanese</item>
-        <item>Portuguese (Brasil)</item>
-        <item>Romanian</item>
-        <item>Russian</item>
-        <item>Spanish</item>
-        <item>Thai</item>
-    </string-array>
     <string name="request_permissions_title">必要なアプリケーションのアクセス許可を要求。</string>
     <string name="request_permissions_desc">このオプションをタッチすると、必要なアプリケーションのアクセス許可を要求します: カメラ (瞬間のキャプチャを受け取るために使用)、ストレージ (名前の変更、ファイルの移動のために使用)。</string>
     <string name="request_permissions_confirmation">必要なアプリケーションのアクセス許可を要求しますか?</string>

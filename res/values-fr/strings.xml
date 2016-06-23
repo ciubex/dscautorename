@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="add">Ajouter</string>
+	<string name="append_original_name_desc">Conserver et ajouter le nom original, par exemple, pour DSC_09.JPG, le nouveau nom serait %s_DSC_09.JPG</string>
+	<string name="append_original_name_title">Ajouter le nom original</string>
+	<string name="build_version_title">Version de Build</string>
+	<string name="cancel">Annuler</string>
+	<string name="change_language_desc">L\'application doit être redémarrée afin d\'appliquer le langage sélectionné.</string>
+	<string name="close">Fermer</string>
+	<string name="confirmation_rename_dialog">Masquer le dialogue de confirmation</string>
+	<string name="confirmation_rename_dialog_desc">Afficher ou non le dialogue de confirmation lorsque le service DSC est lancé depuis le raccourci.</string>
+	<string name="confirmation_rename_question">Voulez-vous démarrer le service manuellement ?</string>
+	<string name="create_rename_shortcut">Créer un raccourci pour le service DSC</string>
+	<string name="create_rename_shortcut_desc">Créer un raccourci sur votre écran d\'accueil pour lancer le service manuellement.</string>
+	<string name="define_file_name_pattern_desc">Les motifs des noms de fichiers utilisés pour rechercher les fichiers à renommer (\"DSC_*.JPG\" or \"MOV_*.MP4\"), ex: %s\nLes caractères génériques * et ? peuvent être utilisés.</string>
+	<string name="define_file_name_pattern_title">Définir les motifs des fichiers</string>
+	<string-array name="delay_units_labels">
+		<item>secondes</item>
+		<item>minutes</item>
+	</string-array>
+	<string name="delete">Supprimer</string>
+	<string name="donate_confirmation">Si vous appréciez cette application, merci d\'effectuer une donation en achetant DSC Auto Rename PRO !\nAppuyez sur le bouton OUI et vous serez envoyé à DSC Auto Rename PRO depuis Google Play Store.\nMerci d\'utiliser cette application !</string>
+	<string name="donate_desc">Merci d\'effectuer une donation si vous appréciez cette application.</string>
+	<string name="donate_title">Donation</string>
+	<string name="enable_desc">Les fichiers seront automatiquement renommés après apparition de l\'événement.</string>
+	<string name="enable_filter_alert_v19">Android KitKat dispose de contraintes de sécurité qui empêchent l\'application de renommer les fichiers depuis la Carte SD.\nVoir la page http://goo.gl/kJeED3 pour une possible solution.\nCette application peut renommer les fichiers depuis la mémoire interne seulement.\nParamétrez votre appareil photo pour enregistrer vos fichiers sur la mémoire interne.</string>
+	<string name="enable_filter_alert_v21">En tant qu\'utilisateur Android Lollipop, vous devez activer \"Renommer au sein d\'un dossier\" et avoir au moins un dossier sélectionné dans \"Sélectionner un dossier\"</string>
+	<string name="enable_filter_folder_desc">Normalement le service de renommage va scanner tous les fichiers de votre périphérique, en activant cette option, vous pouvez limiter l\'étendue du service à un dossier.</string>
+	<string name="enable_filter_folder_desc_v21">Pour les utilisateurs Android Lollipop, merci d\'activer cette option et de choisir les dossiers où votre appareil photo enregistre les fichiers.</string>
+	<string name="enable_filter_folder_title">Renommer au sein d\'un dossier</string>
+	<string name="filter_folder_title">Sélectionner un dossier</string>
+	<string name="folder_list_confirmation">Voulez-vous supprimer les dossiers sélectionnés ?</string>
+	<string name="folder_list_no_grant_permission_1">Votre système a révoqué les permissions pour le dossier suivant.\n\n%s\n\nVérifier où est défini ce dossier et réessayer de l\'ajouter !</string>
+	<string name="folder_list_no_grant_permission_2">Votre système a révoqué les permissions pour les dossiers suivants.\n\n%s\n\nVérifier où sont définis ces dossiers et réessayer de les ajouter !</string>
+	<string name="folder_list_no_open_document_tree_support">Votre version Android ne supporte pas le choix des dossiers (ACTION_OPEN_DOCUMENT_TREE).\nVoulez-vous utiliser le sélectionneur interne pour ajouter un dossier ? L\'utilisation du sélectionneur interne ne nous permet pas de renommer et de déplacer les fichiers !</string>
+	<string name="folder_list_no_selection">Sélectionner au moins un dossier à supprimer !</string>
+	<string name="folder_list_title">Liste des dossiers scannés.</string>
+	<string name="general_settings">Paramètres généraux</string>
+	<string name="license_desc">Détail des licences pour les logiciels open source</string>
+	<string name="license_title">Licences open source</string>
+	<string name="list_info_press">Ajouter ou supprimer des éléments</string>
+	<string name="loading_wait">Chargement&#8230;</string>
+	<string name="manually_file_rename_count_0">Aucun fichier renommé.</string>
+	<string name="manually_file_rename_count_1">Un fichier renommé.</string>
+	<string name="manually_file_rename_count_more">%d fichiers renommés.</string>
+	<string name="manually_file_rename_progress_1">%1$d of %2$d fichiers renommés.</string>
+	<string name="manually_file_rename_progress_more">%1$d de %2$d fichiers renommés.</string>
+	<string name="manually_service_running">Service manuel démarré.</string>
+	<string name="manually_start_desc">Toucher pour démarrer manuellement le service</string>
+	<string name="manually_start_title">Démarrer manuellement le service</string>
+	<string name="move_file_enable">Déplacer le ficher renommé dans le dossier suivant.</string>
+	<string name="move_file_text_no_folder">Aucun dossier sélectionné, toucher ce texte pour sélectionner un dossier.</string>
+	<string name="move_file_text_selected_folder">Dossier sélectionné : %s</string>
+	<string name="new_folder">Nouveau Dossier</string>
+	<string name="no">Non</string>
+	<string name="no_file_name_pattern">Aucun motif de nom défini</string>
+	<string name="no_folders">Aucun dossier</string>
+	<string name="obtain_logs">Générer un ficher de log pour rapport&#8230;</string>
+	<string name="other_settings">Autres paramètres</string>
+	<string name="please_wait">Attendre merci&#8230;</string>
+	<string name="remove_rename_shortcut">Supprimer le raccourci du service DSC</string>
+	<string name="remove_rename_shortcut_desc">Supprimer le raccourci du service DSC de votre écran d\'accueil</string>
+	<string name="rename_file_using_desc">la date et l\'heure de la dernière modification.</string>
+	<string-array name="rename_file_using_labels">
+		<item>la date et l\'heure du dernier ajout au fournisseur de média.</item>
+		<item>la date et l\'heure de la dernière modification ;</item>
+		<item>les données EXIF pour les images et le second choix pour les clips vidéo.</item>
+	</string-array>
+	<string name="rename_file_using_title">Renommer le fichier en utilisant :</string>
+	<string name="rename_service_start_delay_desc">Démarrer le service après</string>
+	<string name="rename_service_start_delay_title">Délai de démarrage du service</string>
+	<string name="rename_shortcut">Raccourci du service DSC</string>
+	<string name="rename_video_enabled_desc">En sélectionnant cette option, les vidéos seront également renommées, par défaut seules les images le sont.</string>
+	<string name="rename_video_enabled_title">Activer le renommage des vidéos</string>
+	<string name="request_permissions_confirmation">Voulez-vous effectuer une requête d\'autorisation pour l\'application ?</string>
+	<string name="request_permissions_desc">Sélectionner cette option pour effectuer une requête d\'autorisation : Appareil photo (utilisé pour recevoir les notifications de prise de vue), Stockage (utilisé pour renommer et déplacer les fichiers).</string>
+	<string name="request_permissions_ok">Toutes les autorisations sont approuvées !</string>
+	<string name="request_permissions_title">La requête nécessite les autorisations de l\'application</string>
+	<string name="seconds_unit">secondes</string>
+	<string name="send_debug_confirmation">Voulez-vous envoyer un rapport de débug ?\nVotre application courriel par défaut va créer un courriel avec deux fichiers attachés, merci d\'ajouter une description de votre problème si nécessaire.\nMerci !</string>
+	<string name="send_debug_desc">Envoyer un courriel avec les fichiers de débug</string>
+	<string name="send_debug_email_title">Logs de débug pour DSC Auto Rename</string>
+	<string name="send_debug_title">Envoyer rapport de bug</string>
+	<string name="send_report">Envoyer rapport&#8230;</string>
+	<string name="service_choice_0">Le service DSC est désactivé</string>
+	<string name="service_choice_1">Le service est activé par les événements de l\'appareil photo.</string>
+	<string name="service_choice_2">Le service de renommage est déclenché par l\'observateur de médias.</string>
+	<string name="service_choice_3">Le service de renommage est déclenché lorsqu\'un fichier est ajouté aux dossiers sélectionnés. Vous devez activer \"Renommer au sein d\'un dossier\" et avoir au moins un dossier sélectionné dans \"Sélectionner un dossier\".</string>
+	<string-array name="service_type_labels">
+		<item>Désactivé</item>
+		<item>Événements de l\'appareil : photos ou vidéos prises.</item>
+		<item>Observateur de médias : photos ou vidéos enregistrées.</item>
+		<item>Observateur de fichiers : surveille les dossiers sélectionnés lors de l\'ajout de fichiers. Vous devez activer \"Renommer au sein d\'un dossier\" et avoir au moins un dossier sélectionné dans \"Sélectionner un dossier\"</item>
+	</string-array>
+	<string name="thank_you_desc">Merci pour l\'appréciation de mon travail en achetant l\'application pro.</string>
+	<string name="thank_you_title">Merci pour votre donation !</string>
+	<string name="yes">Oui</string>
+</resources>
