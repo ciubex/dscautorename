@@ -47,7 +47,6 @@
     <string name="first_time_alert">ATENTIE:\nRedenumirea si mutarea fisierelor nu este reversibila!\nUtilizati aceasta aplicatie cu precautie!\nDefineste formate de redenumire individuale pentru poze si pentru filme, de asemenea fisierele pot fi mutate intr-un director ales. Se pot folosi de asemenea * sau ? .\nNu folositi formate asemanatoare sau generice precum *.JPG pentru a evita blocarea aplicatiei in functia de redenumire.\nMai bine folositi semnul ? in combinatie cu alte caractere fixe precum _ pentru un mai bun control al numelor de fisiere ce urmeaza a fi redenumite.\nDe exemplu pentru un fisier cu numele original in forma 20150729_212537.JPG se poate folosi un format de genul ????????_??????.JPG si se poate adauga un prefix ca \'PIC_\' (se poate folosi apostroful pentru evitarea transformarilor in data sau ora) astfel in acest caz formatul de redenumire poate fi de forma \"\'PIC_\'yyyyMMdd_HHmmss\" iar fisierul redenumit va avea numele: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Din cauza unor restrictii din sistemul de operare Android KitKa, aceasta aplicatie nu poate redenumi fisierele salvate pe cardul extern (SD Card).\nVedeti http://goo.gl/kJeED3 pentru o posibila rezolvare.\nIn mod normal, in Android KitKat fara interventii aplicatia poate redenumi doar fisierele stocate intern.\nSetati aplicatia de camera sa foloseasca memoria interna ca destinatie pentru fisierele salvate.</string>
     <string name="enable_filter_alert_v21">Android Lollipop activeaza optiunea \"Restrictie redenumire\" dupa care selecteaza directoarele in care sunt salvate pozele si filmele de aplicatia camerei in \"Lista directoarelor selectate.\".</string>
-    <string name="update_message_v70">Va rog verificati optiunea \"%1$s\" deoarece am sters caracterul _, ar trebui adaugat manual la inceputul formatarii numerice \"%2$s\".</string>
     <string name="folder_list_title">Lista directoarelor selectate.</string>
     <string name="folder_list_all_selected">Trebuie lasat cel putin un director neselectat!</string>
     <string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
@@ -161,6 +160,7 @@
     <string name="thank_you_desc">Multumesc pentru aprecierea realizata prin cumpararea aplicatiei PRO.</string>
     <string name="about_text"><Data>
 <![CDATA[<b>Multumiri lui Simon W pentru suportul adus la dezvoltarea versiunii 4.0.0!</b><br/>
+<br/>
 Scopul acestei aplicatieii este acela de a redenumit automat fisierele multimedia, imagini si clipuri, in functie de data si timpul cand acestea au fost create.<br/>
 <br/>
 Pentru redenumirea fisierelor sunt folosite niste marcatori specifici limbajului de programare Java:<br/>
@@ -186,11 +186,6 @@ Daca serviciul de redenumit fisiere este activ, acesta va functiona in fundal pe
 Declansatorii depinde de aplicatia folosita pentru camera. Aplicatia de camera trebuie sa trimita un mesaj boradcast <b>com.android.camera.NEW_PICTURE</b> sau <b>android.hardware.action.NEW_PICTURE</b>, altfel, serviciul de redenumire atomanta nu poate fi declansat.<br/>
 Daca asemenea mesaje nu sunt trimise de aplicatia folosita pentru camera, se pot folosi ca declansatori notificarile media, dar acest aspect presupune rularea unui alt serviciu in fundal.<br/>
 <br/>
-Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
-<b>Multumesc pentru traducere:</b><br/>
-- Chawalit pentru <b>tailandeza</b><br/>
-- Runels for 4PDA pentru <b>ruseste</b><br/>
-- Leo Manias pentru <b>Portugeza</b> (Brazilia)<br/>
-- Dave pentru <b>Spaniola</b><br/>]]></Data></string>
+Pentru mai multe detalii viziteaza pagina aplicatiei <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data></string>
 
 </resources>

@@ -47,7 +47,6 @@
     <string name="first_time_alert">LEER CUIDADOSAMENTE:\nEl proceso de renombrado y movida de archivos no se puede deshacer!\nUse este software con precaución!\n Defina los patrones de nombre de archivos individualmente para fotos o videos, los archivos renombrados pueden ser movidos a otra carpeta también. Los comodines * y ? pueden ser usados también.\nNo use patrones muy genéricos como *.JPG para evitar un ciclo infinito de renombrado.\nMejor use ? para definir un simple posible caracter en combinación con otro caracter constante como _.\nPor ejemplo si el nombre del archivo original es como 20150729_212537.JPG use un patrón como ????????_??????.JPG y ponga un prefijo \'PIC_\' (use las comillas simples para definir texto constante) en el patrón de renombre como \"\'PIC_\'yyyyMMdd_HHmmss\" para renombar el archivo a: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Debido a que en Android KitKat existen algunas restricciones de seguridad, esta aplicación no podrá renombrar archivos de la tarjeta SD.\nVisite el link http://goo.gl/kJeED3 por una posible solución.\nEsta aplicación puede renombrar archivos de la memoria interna solamente.\nConfigure su aplicación de cámara para guardar en la memoria interna.</string>
     <string name="enable_filter_alert_v21">Como usuario de Android Lollipop, debe habilitar la opción \"Renombrar dentro de carpeta\" y debe definir al menos una carpeta para ser escaneada en \"Lista de carpetas escaneadas.\".</string>
-    <string name="update_message_v70">Por favor, eche un vistazo a la opción \"%1$s\" porque se eliminó el carácter separador predeterminado _, usted debe poner manualmente el carácter que desea en frente de formato de número \"%2$s\".</string>
     <string name="folder_list_title">Lista de carpetas escaneadas.</string>
     <string name="folder_list_all_selected">Al menos una carpeta debe ser dejada sin seleccionar!</string>
     <string name="folder_list_no_selection">Seleccione al menos una carpeta para borrar!</string>
@@ -161,6 +160,7 @@
     <string name="thank_you_desc">Gracias por el reconocimiento a mi trabajo, comprando la versión PRO.</string>
     <string name="about_text"><Data>
 <![CDATA[<b>Muchas gracias a Simon W por el soporte completo para la versión 4.0.0 de desarrollo!</b><br/>
+<br/>
 Esta aplicación fue hecha para cambiar automáticamente el nombre de los arrchivos de imagen tomados por la cámara basado en la fecha y hora en la que el archivo fue creado.<br/>
 <br/>
 El formato de renombrado de archivo usa el formato de parámetros de java para la fecha y hora:<br/>
@@ -186,11 +186,6 @@ El servicio de renombrado, si está habilitado, automáticamente se dispara cuan
 El disparador depende de la aplicación de cámara usada para tomar las fotos. La aplicación de cámara debe enviar <b>com.android.camera.NEW_PICTURE</b> o <b>android.hardware.action.NEW_PICTURE</b>, de otra forma, el servicio de renombrado no se dispara.<br/>
 En algunos casos, la cámara no manda ningún mensaje, así que es posible seleccionar los eventos de contenido de medios como disparador, pero esto implica una ejecución permanente del servicio corriendo en background.<br/>
 <br/>
-Para mas detalles, por favor ver la descripción de la aplicación en <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
-<b>Gracias por las traducciones a:</b><br/>
-- Chawalit por <b>Thai</b><br/>
-- Runels for 4PDA por <b>Ruso</b><br/>
-- Leo Manias por <b>Portugués</b> (Brazilia)<br/>
-- Dave por <b>Español</b><br/>]]></Data></string>
+Para mas detalles, por favor ver la descripción de la aplicación en <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data></string>
 
 </resources>

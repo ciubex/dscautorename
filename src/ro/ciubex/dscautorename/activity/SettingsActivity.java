@@ -339,12 +339,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void checkAndroidVersion() {
 		if (mApplication.isFirstTime()) {
 			String message;
-			boolean messageContainLink = false;
 			if (mApplication.isFirstInstallation()) {
 				message = DSCApplication.getAppContext().getString(R.string.first_time_alert);
 				if (mApplication.getSdkInt() > 18 && mApplication.getSdkInt() < 21) { // KitKat
 					message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v19);
-					messageContainLink = true;
 				} else if (mApplication.getSdkInt() > 20) { // Lollipop
 					message += "\n" + DSCApplication.getAppContext().getString(R.string.enable_filter_alert_v21);
 				}
@@ -352,7 +350,7 @@ public class SettingsActivity extends PreferenceActivity implements
 				message = getUpdateMessage();
 			}
 			if (message != null) { // show the message only if is necessary
-				showConfirmationDialog(message, messageContainLink, ID_CONFIRMATION_ALERT);
+				showConfirmationDialog(message, true, ID_CONFIRMATION_ALERT);
 			}
 		}
 	}
@@ -611,10 +609,12 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Show about pop up dialog message.
 	 */
 	private void onBuildVersion() {
+		String messageContent = DSCApplication.getAppContext().getString(R.string.about_text_translations);
+		messageContent += DSCApplication.getAppContext().getString(R.string.about_text);
 		Intent intent = new Intent(getBaseContext(), InfoActivity.class);
 		Bundle b = new Bundle();
 		b.putInt(InfoActivity.TITLE, R.string.about_section);
-		b.putInt(InfoActivity.MESSAGE, R.string.about_text);
+		b.putString(InfoActivity.MESSAGE_CONTENT, messageContent);
 		b.putBoolean(InfoActivity.HTML_MESSAGE, true);
 		intent.putExtras(b);
 		startActivity(intent);

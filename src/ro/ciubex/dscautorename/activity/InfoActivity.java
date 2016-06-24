@@ -45,6 +45,7 @@ public class InfoActivity extends Activity {
 	public static final String TITLE = "title";
 	public static final String FILE_NAME = "file_name";
 	public static final String MESSAGE = "message";
+	public static final String MESSAGE_CONTENT = "message_content";
 	public static final String HTML_MESSAGE = "html_message";
 	private TextView mInfoTextView;
 	private String mBufferedText;
@@ -89,6 +90,8 @@ public class InfoActivity extends Activity {
 			} else if (b.containsKey(FILE_NAME)) {
 				bundleValue = b.getString(FILE_NAME);
 				mBufferedText = getStreamText(bundleValue);
+			} else if (b.containsKey(MESSAGE_CONTENT)) {
+				mBufferedText = b.getString(MESSAGE_CONTENT);
 			}
 			if (b.containsKey(HTML_MESSAGE)) {
 				mIsHtmlMessage = b.getBoolean(HTML_MESSAGE);

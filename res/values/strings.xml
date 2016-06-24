@@ -63,7 +63,7 @@
     <string name="first_time_alert">READ CAREFULLY:\nRenamed and moved files process cannot be rolled back!\nUse this software with caution!\nDefine file name patterns individually for pictures or clips, renamed files can be moved to another folder also. Wildcards * or ? can be used too.\nDo not use too generics pattern like *.JPG to avoid infinite renaming looping.\nBetter use ? to define a single possible character in combination with other constant existing character like _.\nFor example if original file name are like 20150729_212537.JPG use a pattern like ????????_??????.JPG and put a prefix \'PIC_\' (use the apostrophes to define constant texts) into the rename pattern like \"\'PIC_\'yyyyMMdd_HHmmss\" to rename the file to: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Because on Android KitKat are enabled some security constraints, this application will not be able to rename files from SD Card.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis application can rename files from internal memory only.\nSet your camera application to save on internal memory.</string>
     <string name="enable_filter_alert_v21">As an Android Lollipop user, you should enable \"Rename within a folder\" option and you should define at least one folder to be scanned on \"List of scanned folders.\".</string>
-    <string name="update_message_v70">Please take a look to option \"%1$s\" because was removed the default separator character _, you should put it manually which character you want in front of number format \"%2$s\".</string>
+    <string name="update_message_v79" translatable="false">I\'m from Romania and my native language is not English or other languages, only Romanian, if you want to contribute and make better translations follow the link https://www.localize.im/v/pn many thanks to the volunteer\'s which helped me till now!\nFor some languages the translation is not completed, English is used for missing translations.</string>
     <string name="folder_list_title">List of scanned folders.</string>
     <string name="folder_list_all_selected">At least one folder should be left unchecked!</string>
     <string name="folder_list_no_selection">Select at least one folder to delete!</string>
@@ -219,8 +219,18 @@
     <string name="donate_url" translatable="false"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">Thank you for donation!</string>
     <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
+    <string name="about_text_translations" translatable="false"><Data>
+<![CDATA[I\'m from Romania and my native language is not English or other languages, only Romanian, if you want to contribute and make better translations follow the link <a href="https://www.localize.im/v/pn">https://www.localize.im/v/pn</a> many thanks to the volunteer\'s which helped me till now!<br/>
+<br/>
+<b>Many thanks for translations to:</b><br/>
+- Chawalit for <b>Thai</b><br/>
+- Runels for 4PDA for <b>Russian</b><br/>
+- Leo Manias for <b>Portuguese</b> (Brazil)<br/>
+- Dave for <b>Spanish</b><br/>
+<br/>]]></Data></string>
     <string name="about_text"><Data>
 <![CDATA[<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>
+<br/>
 This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/>
 <br/>
 The file rename format use Java date and time format parameters:<br/>
@@ -246,11 +256,7 @@ The rename service, if is enabled, automatically is triggered when the image fil
 The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.<br/>
 In some cases, the camera do not send any message, so is possible to select as a trigger the media content events, but this imply a permanently running service in background.<br/>
 <br/>
-For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.<br/>
-<b>Thank you for translations to:</b><br/>
-- Chawalit for <b>Thai</b><br/>
-- Runels for 4PDA for <b>Russian</b><br/>
-- Leo Manias for <b>Portuguese</b> (Brazil)<br/>
-- Dave for <b>Spanish</b><br/>]]></Data></string>
+For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
+]]></Data></string>
 
 </resources>
