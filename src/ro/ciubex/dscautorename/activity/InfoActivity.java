@@ -27,6 +27,8 @@ import ro.ciubex.dscautorename.util.Utilities;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -59,6 +61,7 @@ public class InfoActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		mApplication = (DSCApplication) getApplication();
 		applyApplicationTheme();
+		applyApplicationLocale();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.info_layout);
 		checkBundle();
@@ -70,6 +73,16 @@ public class InfoActivity extends Activity {
 	 */
 	private void applyApplicationTheme() {
 		this.setTheme(mApplication.getApplicationTheme());
+	}
+
+	/**
+	 * Apply application locale.
+	 */
+	private void applyApplicationLocale() {
+		Resources resources = getBaseContext().getResources();
+		Configuration config = resources.getConfiguration();
+		config.locale = DSCApplication.getLocale();
+		resources.updateConfiguration(config, resources.getDisplayMetrics());
 	}
 
 	/**
@@ -86,7 +99,7 @@ public class InfoActivity extends Activity {
 			}
 			if (b.containsKey(MESSAGE)) {
 				resId = b.getInt(MESSAGE);
-				mBufferedText = DSCApplication.getAppContext().getString(resId);
+				mBufferedText = mApplication.getApplicationContext().getString(resId);
 			} else if (b.containsKey(FILE_NAME)) {
 				bundleValue = b.getString(FILE_NAME);
 				mBufferedText = getStreamText(bundleValue);

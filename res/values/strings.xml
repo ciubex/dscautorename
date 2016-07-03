@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name" translatable="false">DSC Auto Rename</string>
 
     <!-- Strings related to Settings -->
@@ -105,6 +105,8 @@
     <string name="move_file_text_no_folder">No folder selected, touch this text to select a folder.</string>
     <string name="move_file_text_selected_folder">Selected folder: %s</string>
     <string name="new_folder">New Folder</string>
+    <string name="send_broadcast_msg_title">Send broadcast message</string>
+    <string name="send_broadcast_msg_desc">Send broadcast message with renamed file, using this option other application could be announced to pick new renamed file.</string>
 
     <string-array name="rename_file_using_labels">
         <item>date and time when file was added to media provider;</item>
@@ -227,6 +229,9 @@
 - Runels for 4PDA for <b>Russian</b><br/>
 - Leo Manias for <b>Portuguese</b> (Brazil)<br/>
 - Dave for <b>Spanish</b><br/>
+- Naofumi for <b>Japanese</b><br/>
+- Andreas Hauff for <b>German</b><br/>
+- RobertoDS for <b>Italian</b><br/>
 <br/>]]></Data></string>
     <string name="about_text"><Data>
 <![CDATA[<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>

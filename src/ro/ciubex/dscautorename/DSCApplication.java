@@ -68,7 +68,6 @@ import android.util.Log;
  */
 public class DSCApplication extends Application {
 	private static final String TAG = DSCApplication.class.getName();
-	private static Context mContext;
 	private static Locale mLocale;
 	private ProgressDialog mProgressDialog;
 	private SharedPreferences mSharedPreferences;
@@ -128,6 +127,11 @@ public class DSCApplication extends Application {
 	public static final String PERMISSION_FOR_UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";
 	public static final String PERMISSION_FOR_LOGS = "android.permission.READ_LOGS";
 
+	public static final String SKIP_RENAME = "SKIP_RENAME";
+	public static final String KEY_SEND_BROADCAST = "sendBroadcastEnabled";
+	public static final String NEW_PICTURE = "android.hardware.action.NEW_PICTURE";
+	public static final String NEW_VIDEO = "android.hardware.action.NEW_VIDEO";
+
 	public static final List<String> FUNCTIONAL_PERMISSIONS = Arrays.asList(
 			PERMISSION_FOR_CAMERA,
 			PERMISSION_FOR_READ_EXTERNAL_STORAGE,
@@ -152,9 +156,8 @@ public class DSCApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		DSCApplication.mContext = getApplicationContext();
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		mBackupManager = new BackupManager(DSCApplication.mContext);
+		mBackupManager = new BackupManager(getApplicationContext());
 		initLocale();
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
 		checkRegisteredServiceType(true);
@@ -172,9 +175,6 @@ public class DSCApplication extends Application {
 	public void initLocale() {
 		mLocale = getLocaleSharedPreferences();
 		Locale.setDefault(mLocale);
-		android.content.res.Configuration config = new android.content.res.Configuration();
-		config.locale = mLocale;
-		DSCApplication.mContext.getResources().updateConfiguration(config, DSCApplication.mContext.getResources().getDisplayMetrics());
 	}
 
 	/**
@@ -206,15 +206,11 @@ public class DSCApplication extends Application {
 		return locale;
 	}
 
-	public static Context getAppContext() {
-		return DSCApplication.mContext;
-	}
-
 	/**
 	 * Update mounted volumes.
 	 */
 	public void updateMountedVolumes() {
-		mMountVolumes = Utilities.MountService.getVolumeList(getMountService(), DSCApplication.mContext);
+		mMountVolumes = Utilities.MountService.getVolumeList(getMountService(), getApplicationContext());
 	}
 
 	/**
@@ -481,7 +477,7 @@ public class DSCApplication extends Application {
 		try {
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 		} catch (Exception e) {
-			fileNameFormat = DSCApplication.getAppContext().getString(R.string.file_name_format);
+			fileNameFormat = getApplicationContext().getString(R.string.file_name_format);
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 			saveStringValue(KEY_FILE_NAME_FORMAT, fileNameFormat);
 		}
@@ -526,9 +522,9 @@ public class DSCApplication extends Application {
 	 */
 	public FileNameModel[] getOriginalFileNamePattern() {
 		String value = mSharedPreferences.getString(KEY_ORIGINAL_FILE_NAME_PATTERN,
-				DSCApplication.getAppContext().getString(R.string.original_file_name_pattern));
+				getApplicationContext().getString(R.string.original_file_name_pattern));
 		if (value.length() < 1) {
-			value = DSCApplication.getAppContext().getString(R.string.original_file_name_pattern);
+			value = getApplicationContext().getString(R.string.original_file_name_pattern);
 			saveStringValue(KEY_ORIGINAL_FILE_NAME_PATTERN, value);
 		}
 		String[] arr = value.split(",");
@@ -570,7 +566,7 @@ public class DSCApplication extends Application {
 			sb.append(fileNameModel.toString());
 		}
 		if (sb.length() < 1) {
-			sb.append(DSCApplication.getAppContext().getString(R.string.original_file_name_pattern));
+			sb.append(getApplicationContext().getString(R.string.original_file_name_pattern));
 		}
 		saveFileNamePattern(sb.toString());
 	}
@@ -809,7 +805,7 @@ public class DSCApplication extends Application {
 	 * @return Formatted value.
 	 */
 	public String getFormattedFileNameSuffix(int value) {
-		String defFormat = DSCApplication.getAppContext().getString(R.string.file_name_suffix_format_value);
+		String defFormat = getApplicationContext().getString(R.string.file_name_suffix_format_value);
 		String format = mSharedPreferences.getString(KEY_FILE_NAME_SUFFIX_FORMAT, defFormat);
 		String result;
 		try {
@@ -828,6 +824,15 @@ public class DSCApplication extends Application {
 	 */
 	public boolean isAppendOriginalNameEnabled() {
 		return mSharedPreferences.getBoolean(KEY_APPEND_ORIGINAL_NAME, false);
+	}
+
+	/**
+	 * Check if the application should send a broadcast message when files are renamed.
+	 *
+	 * @return True if should be send a broadcast message.
+	 */
+	public boolean isSendBroadcastEnabled() {
+		return mSharedPreferences.getBoolean(KEY_SEND_BROADCAST, false);
 	}
 
 	/**
@@ -961,7 +966,7 @@ public class DSCApplication extends Application {
 		mProgressDialog.setMessage(message);
 		mProgressDialog.setCancelable(false);
 		mProgressDialog.setButton(DialogInterface.BUTTON_NEGATIVE,
-				DSCApplication.getAppContext().getString(R.string.cancel),
+				getApplicationContext().getString(R.string.cancel),
 				new DialogInterface.OnClickListener() {
 
 					@Override

@@ -139,7 +139,7 @@ public class SelectFoldersListDialog extends BaseDialog implements
 		} catch (Exception e) {
 			mApplication.logE(TAG, "startIntentActionOpenDocumentTree: " + e.getMessage(), e);
 			showConfirmationDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support),
+					mApplication.getApplicationContext().getString(R.string.folder_list_no_open_document_tree_support),
 					CONFIRMATION_USE_INTERNAL_SELECT_FOLDER,
 					null);
 		}
@@ -178,13 +178,13 @@ public class SelectFoldersListDialog extends BaseDialog implements
 		}
 		if (k == 0) {
 			showAlertDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_no_selection));
+					mApplication.getApplicationContext().getString(R.string.folder_list_no_selection));
 		} else if (k == len) {
 			showAlertDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_all_selected));
+					mApplication.getApplicationContext().getString(R.string.folder_list_all_selected));
 		} else {
 			showConfirmationDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_confirmation), CONFIRMATION_DELETE_FOLDER,
+					mApplication.getApplicationContext().getString(R.string.folder_list_confirmation), CONFIRMATION_DELETE_FOLDER,
 					null);
 		}
 	}

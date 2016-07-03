@@ -40,12 +40,14 @@ import ro.ciubex.dscautorename.util.Utilities;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
@@ -253,9 +255,34 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private boolean invokeRenameFile(FileRenameData data, final File file, String oldFileName) {
 		boolean result = mainRenameFile(data, file, oldFileName);
 		if (result) {
+			if (mApplication.isSendBroadcastEnabled()) {
+				sendBroadcastMessage(data);
+			}
 			mProgressPosition++;
 		}
 		return result;
+	}
+
+	/**
+	 * Send a broadcast message with data of renamed file.
+	 *
+	 * @param data Original data information.
+	 */
+	private void sendBroadcastMessage(FileRenameData data) {
+		Uri uri = data.getUri();
+		if (uri != null && data.getId() > -1) {
+			Uri.Builder builder = uri.buildUpon();
+			builder.appendPath(String.valueOf(data.getId()));
+			Uri broadcastUri = builder.build();
+			String action = uri.getPath().contains("images") ?
+					DSCApplication.NEW_PICTURE : DSCApplication.NEW_VIDEO;
+			mApplication.logD(TAG, "action: " + action + " broadcastUri:" + broadcastUri);
+			Intent intent = new Intent(action, broadcastUri);
+			Bundle b = new Bundle();
+			b.putBoolean(DSCApplication.SKIP_RENAME, true);
+			intent.putExtras(b);
+			mApplication.sendBroadcast(intent);
+		}
 	}
 
 	/**
@@ -317,7 +344,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			Listener listener = mListener.get();
 			if (listener != null) {
 				if (listener != null && !listener.isFinishing()) {
-					mProgressMessage = DSCApplication.getAppContext().getString(
+					mProgressMessage = mApplication.getApplicationContext().getString(
 							mProgressPosition == 1 ? R.string.manually_file_rename_progress_1
 									: R.string.manually_file_rename_progress_more,
 							mProgressPosition, mProgressMax);
@@ -488,10 +515,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		try {
 			String fullFilePath = oldFile.getAbsolutePath();
 			if (mIsUriPermissionGranted) {
-				if (mustMoveFile(oldFile, newFile)) {
-					result = doMoveFilesNewAPI(data, oldFile, newFile);
-				} else {
-					result = doRenameFilesNewAPI(data, oldFile, newFile);
+				boolean moveFile = mustMoveFile(oldFile, newFile);
+				Uri newUri = doRenameFilesNewAPI(data, oldFile, newFile);
+				result = newUri != null;
+				if (result && moveFile) {
+					doMoveFilesNewAPI(newUri, data, oldFile, newFile);
 				}
 				if (!result) {
 					mApplication.logD(TAG, "Can not be renamed using new API, rename using old Java File API: " + fullFilePath);
@@ -530,16 +558,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * @param data    File rename data info.
 	 * @param oldFile Old file reference.
 	 * @param newFile New file reference.
-	 * @return True if the file was moved.
+	 * @return New file URI.
 	 */
 	@TargetApi(21)
-	private boolean doRenameFilesNewAPI(FileRenameData data, File oldFile, File newFile) {
+	private Uri doRenameFilesNewAPI(FileRenameData data, File oldFile, File newFile) {
 		Uri oldUri = mApplication.getDocumentUri(mSelectedFolders, oldFile.getAbsolutePath());
 		Uri newUri = null;
 		if (oldUri != null) {
 			newUri = DocumentsContract.renameDocument(mContentResolver, oldUri, newFile.getName());
 		}
-		return newUri != null;
+		return newUri;
 	}
 
 	/**
@@ -551,8 +579,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * @return True if the file was moved.
 	 */
 	@TargetApi(21)
-	private boolean doMoveFilesNewAPI(FileRenameData data, File oldFile, File newFile) {
-		Uri oldUri = mApplication.getDocumentUri(mSelectedFolders, oldFile.getAbsolutePath());
+	private boolean doMoveFilesNewAPI(Uri oldUri, FileRenameData data, File oldFile, File newFile) {
 		File newParent = newFile.getParentFile();
 		Uri newParentUri = mApplication.getDocumentUri(mSelectedFolders, newParent.getAbsolutePath());
 		Uri newUri = DocumentsContract.createDocument(mContentResolver, newParentUri,
@@ -604,8 +631,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		} catch (IOException e) {
 			size = 0;
 		} finally {
-			Utilities.doClose(outStream);
 			Utilities.doClose(inStream);
+			Utilities.doClose(outStream);
 		}
 		return size;
 	}
@@ -917,7 +944,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				MediaStore.MediaColumns.SIZE
 		};
 		try {
-			// doQuery(mContentResolver, uri);
+//			doQuery(mContentResolver, uri);
 			cursor = mContentResolver.query(uri, columns, selection, selectionArgs, null);
 			if (cursor != null) {
 				int index, id;

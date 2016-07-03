@@ -141,8 +141,8 @@ public class SelectFolderDialog extends BaseDialog implements
 	 */
 	private void setSelectedFolder(int position) {
 		if (mIsFolderScanning) {
-			mApplication.createProgressDialog(null, DSCApplication.getAppContext(),
-					DSCApplication.getAppContext().getString(R.string.loading_wait));
+			mApplication.createProgressDialog(null, mApplication.getApplicationContext(),
+					mApplication.getApplicationContext().getString(R.string.loading_wait));
 			mApplication.showProgressDialog();
 		} else {
 			if (position > -1 && position < mFileListAdapter.getCount()) {

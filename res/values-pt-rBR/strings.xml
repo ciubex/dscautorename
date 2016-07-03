@@ -1,191 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <!-- Strings related to Settings -->
-    <string name="general_settings">Configurações</string>
-    <string name="enable_title">Gatilho do serviço de Auto-renomeamento.</string>
-    <string name="enable_desc">Os arquivos são automaticamente renomeados depois que o gatilho ocorrer.</string>
-
-    <string-array name="service_type_labels">
-        <item>Desabilitado</item>
-        <item>Eventos da câmera: fotos ou vídeos capturados.</item>
-        <item>Observador de mídia: fotos ou vídeos salvos.</item>
-        <item>Observador de arquivos: monitora as pastas selecionadas quando arquivos são adicionados. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</item>
-    </string-array>
-
-    <!-- UI settings -->
-    <string name="ui_settings">Configurações de interface do usuário</string>
-    <string name="app_theme_title">Tema aplicação:</string>
-    <string name="app_theme_title_param">Tema aplicação: %s</string>
-    <string name="app_theme_desc">Escolha o tema aplicativo: Leve ou Escuro.</string>
-    <string-array name="app_theme_labels">
-        <item>Leve</item>
-        <item>Escuro</item>
-    </string-array>
-
-    <string name="service_choice_0">O serviço de auto-renomeamento está desabilitado.</string>
-    <string name="service_choice_1">O serviço de auto-renomeamento está habilitado para eventos da câmera.</string>
-    <string name="service_choice_2">O serviço de auto-renomeamento está habilitado para observador de mídia.</string>
-    <string name="service_choice_3">O serviço de auto-renomeamento está habilitado para observador de arquivos na pasta selecionada. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</string>
-    <string name="rename_service_start_delay_title">Atraso para inicio do serviço de renomeamento</string>
-    <string name="rename_service_start_delay_desc">Iniciar o serviço de renomeamento após</string>
-    <string name="seconds_unit">seg.</string>
-    <string name="minutes_unit">min.</string>
-
-    <string name="choose_units_title">Escolha unidades de atraso:</string>
-    <string name="choose_units_title_param">Unidades de atraso escolhidos: %s</string>
-    <string name="choose_units_desc">Esta opção permitirá que você escolha acima unidades de atraso entre segundos e minutos.</string>
-    <string-array name="delay_units_labels">
-        <item>segundos</item>
-        <item>minutos</item>
-    </string-array>
-
-    <string name="rename_video_enabled_title">Habilitar renomeamento em arquivos de vídeo</string>
-    <string name="rename_video_enabled_desc">Marcando essa opção, os vídeos também são renomeados automaticamente. Padrão é renomear apenas fotos.</string>
-    <string name="enable_filter_folder_title">Renomear arquivos na pasta</string>
-    <string name="enable_filter_folder_desc">Normalmente o serviço de renomeamento irá buscar todos os arquivos do seu dispositivo. Habilitando essa opção você pode limitar o serviço de renomeamento apenas a uma pasta.</string>
-    <string name="enable_filter_folder_desc_v21">Para usuários do Android Lollipop, por favor habilitar essa opção e marcar a pasta onde seu aplicativo da câmera salva os arquivos.</string>
-    <string name="first_time_alert">LER ATENTAMENTE:\nRenomeamentos e movimentos de arquivos não podem ser desfeitos!\nUsar esse aplicativo com cuidado!\nDefinição de padrões de nome de arquivo individualmente para fotos ou vídeos. Arquivos renomeados também podem ser movidos para outra pasta. Coringas * ou ? podem ser usados.\nNão usar padrão muito genérico como *.JPG para evitar um looping de renomeamentos.\nMelhor usar ? para definir um caracter único possível em combinação com outro caracter fixo como _.\nPor exemplo se o nome original for 20150729_212537.JPG usar um padrão como ????????_??????.JPG e adicionar o prefixo \'PIC_\' (usar apóstrofes para definir textos fixos) no padrão como \"\'PIC_\'yyyyMMdd_HHmmss\" para renomear o arquivo para: PIC_20150729_212537.JPG</string>
-    <string name="enable_filter_alert_v19">Devido ao Android KitKat ter habilitado algumas restrições de segurança, este aplicativo não será capaz de renomear arquivos armazenados em SD Card.\nVeja o link http://goo.gl/kJeED3 para uma potencial solução.\nEste aplicativo pode renomear arquivos armazenados apenas na memória interna.\nPortanto configure seu aplicativo da câmera para salvar na memória interna.</string>
-    <string name="enable_filter_alert_v21">Sendo um usuário do Android Lollipop, você deve marcar a opção \"Renomear arquivos na pasta\" e definir ao menos uma pasta para ser vasculhada em \"Lista de pastas vasculhadas.\".</string>
-    <string name="folder_list_title">Lista de pastas vasculhadas.</string>
-    <string name="folder_list_all_selected">Ao menos uma pasta deve permanecer desmarcada!</string>
-    <string name="folder_list_no_selection">Selecionar ao menos uma pasta para excluir!</string>
-    <string name="folder_list_confirmation">Você realmente deseja excluir as pastas selecionadas?</string>
-    <string name="folder_list_no_open_document_tree_support">Sua versão do Android não tem suporte para escolha de pastas (ACTION_OPEN_DOCUMENT_TREE).\nVocê quer usar selecionador de pasta interno para selecionar uma pasta? Usando selecionador de pasta interno a aplicação não concederam direitos para renomear e mover arquivos!</string>
-    <string name="folder_list_no_grant_permission_1">Seu sistema revogado as permissões para pasta a seguir:\n\n%s\n\nVerifique onde esta pasta foi definida e tentar selecioná-lo novamente!</string>
-    <string name="folder_list_no_grant_permission_2">Seu sistema de permissões para pastas abaixo revogada:\n\n%s\n\nVerifique onde essas pastas foram definidas e tentar selecioná-los novamente!</string>
-    <string name="filter_folder_title">Selecione uma pasta.</string>
-    <string name="filter_folder_no_folder">[Nenhuma pasta]</string>
-    <string name="enable_folder_scanning_title">Habilitar busca de arquivos na pasta.</string>
-    <string name="enable_folder_scanning_desc">Normalmente, este não deve ser especificado! Selecionando esta opção o serviço de renomeamento irá buscar por arquivos de mídia nas pastas selecionadas acima. Selecione esta opção se seu dispositivo possuir a busca de mídia desabilitada.</string>
-    <string name="define_file_name_pattern_title">Definir padrão de nome de arquivos</string>
-    <string name="define_file_name_pattern_desc">Os padrões de nome de arquivo usados para buscar arquivos para o renomeamento (\"DSC_*.JPG\" ou \"MOV_*.MP4\"), Info. %s\nCoringas * e ? também podem ser usados.</string>
-    <string name="file_name_pattern_dialog_title_add">Adicionar padrão de nome de arquivo</string>
-    <string name="file_name_pattern_dialog_title_editor">Editar padrão de nome de arquivo</string>
-    <string name="file_name_pattern_dialog_from">1. Padrão de nome de arquivo original:</string>
-    <string name="file_name_pattern_dialog_to">2. Padrão de nome de arquivo renomeado:</string>
-    <string name="file_name_pattern_dialog_bottom">Exemplo do nome antigo:\n\t %1$s\nExemplo do arquivo renomeado:\n\t %2$s</string>
-    <string name="file_name_pattern_validation_error_old_empty">O padrão original não pode estar vazio.</string>
-    <string name="file_name_pattern_validation_error_new_empty">O padrão para renomeamento não pode estar vazio.</string>
-    <string name="file_name_pattern_validation_error_generic">Padrão original muito genérico, causando renomeamentos em looping. Tente definir um padrão mais restritivo usando ? e outros caracteres.</string>
-    <string name="file_name_pattern_validation_error_old">Padrão do arquivo original já existe. Escolher outro texto.</string>
-    <string name="file_name_pattern_validation_error_new">O padrão original e renomear estão combinando!</string>
-    <string name="file_name_pattern_validation_error_original">O padrão original está combinando com um padrão de mudança de nome definido em outro caso!</string>
-    <string name="file_name_pattern_validation_error_rename">O padrão de renomeação está combinando com um teste padrão original definido em outro caso!</string>
-    <string name="file_name_suffix_format_title">Definir sufixo extra para o nome do arquivo</string>
-    <string name="file_name_suffix_format_desc">Sufixo extra usado quando mais de uma arquivo possuir o mesmo nome. Por padrão o contador possui 5 digitos.\nExemplo:\n%s</string>
-    <string name="file_extension_note">A extensão do arquivo é preservada durante o processo de renomemento.</string>
-    <string name="rename_file_using_title">Renomear arquivo usando:</string>
-    <string name="rename_file_using_desc">data e hora quando o arquivo foi modificado.</string>
-    <string name="move_file_enable">Mover o arquivo renomeado para a pasta selecionada abaixo.</string>
-    <string name="move_file_text_no_folder">Nenhuma pasta selecionada, toque aqui para selecionar uma pasta.</string>
-    <string name="move_file_text_selected_folder">Pasta selecionada: %s</string>
-    <string name="new_folder">Nova Pasta</string>
-
-    <string-array name="rename_file_using_labels">
-        <item>data e hora quando o arquivo foi adicionada ao provedor de mídia;</item>
-        <item>data e hora quando o arquivo foi modificado;</item>
-        <item>EXIF ou MetaData se disponível.</item>
-    </string-array>
-    <string name="append_original_name_title">Adicionar ao nome original</string>
-    <string name="append_original_name_desc">Manter e adicionar ao nome original. Por exemplo: de DSC_09.JPG o novo nome sera %s_DSC_09.JPG</string>
-
-    <!-- rename shortcut -->
-    <string name="rename_shortcut">Atalho ao serviço DSC Rename</string>
-    <string name="rename_shortcut_name">Serviço DSC Rename</string>
-    <string name="create_rename_shortcut">Criar atalho para o serviço de renomeamento</string>
-    <string name="create_rename_shortcut_desc">Criar um atalho na tela principal para executar manualmente o serviço de renomeamento.</string>
-    <string name="remove_rename_shortcut">Remover o atalho da tela principal</string>
-    <string name="remove_rename_shortcut_desc">Remover da tela principal o atalho para executar manualmente o serviço de renomeamento.</string>
-    <string name="confirmation_rename_dialog">Não mostrar diálogo de confirmação</string>
-    <string name="confirmation_rename_dialog_desc">Mostrar ou não o diálogo de confirmação quando o serviço de renomeamento é executado pelo atalho.</string>
-    <string name="confirmation_rename_question">Você deseja iniciar manualmente o serviço de renomeamento?</string>
-    <string name="confirmation_rename_question_v19">Se o arquivo selecionado não estiver em uma pasta selecionada, em seguida, mudar o nome não será concluída devido a restrições de segurança do Android.\nVocê deseja iniciar manualmente o serviço de renomeamento?</string>
-    <string name="other_settings">Outras configurações</string>
-    <string name="manually_start_title">Iniciar manualmente o serviço de renomeamento</string>
-    <string name="manually_start_desc">Toque para iniciar manualmente o serviço de renomeamento</string>
-    <string name="manually_service_running">Serviço de renomeamento manual está sendo executado.</string>
-    <string name="manually_file_rename_count_0">Nenhum arquivo foi renomeado.</string>
-    <string name="manually_file_rename_count_1">Um arquivo foi renomeado.</string>
-    <string name="manually_file_rename_count_more">%d arquivos foram renomeados.</string>
-    <string name="manually_file_rename_progress_1">%1$d de %2$d arquivo foi renomeado.</string>
-    <string name="manually_file_rename_progress_more">%1$d de %2$d arquivos foram renomeados.</string>
-    <string name="file_rename_count_title">Número de arquivos renomeados: %d</string>
-    <string name="file_rename_count_desc">Toque para reiniciar o contador de arquivos renomeados.</string>
-    <string name="file_rename_count_confirmation">Você deseja reiniciar o contador de arquivos renomeados?</string>
-    <string name="ok">OK</string>
-    <string name="yes">Sim</string>
-    <string name="no">Não</string>
-    <string name="cancel">Cancelar</string>
-    <string name="close">Fechar</string>
-    <string name="add">Adicionar</string>
-    <string name="delete">Excluir</string>
-    <string name="please_wait">Aguarde&#8230;</string>
-    <string name="loading_wait">Carregando&#8230;</string>
-    <string name="no_folders">Nenhuma pasta</string>
-    <string name="no_file_name_pattern">Nenhum padrão de nome definido</string>
-    <string name="list_info_press">Adicionar ou excluir itens.</string>
-    <string name="do_not_show_again">Não mostrar novamente</string>
-    <string name="file_name_pattern_list_all_selected">Ao menos um padrão de nome de arquivo deve permanecer desmarcado!</string>
-    <string name="file_name_pattern_list_no_selection">Selecione ao menos um padrão de nome de arquivo para excluir!</string>
-    <string name="file_name_pattern_list_confirmation">Você deseja excluir os itens selecionados?</string>
-    <string name="error_rename_file_no_read_write">Arquivo não pode ser lido e gravado</string>
-    <string name="error_rename_file">O arquivo %s não pode ser renomeado!</string>
-    <string name="obtain_logs">Gerar um arquivo de Log para&#8230;</string>
-    <string name="send_report">Enviar relatório&#8230;</string>
-
-    <!-- Change locale -->
-    <string name="change_language_title">Idioma: Idioma do aplicativo</string>
-    <string name="change_language_desc">O aplicativo deve ser reiniciado para aplicar o novo idioma.</string>
-
-    <!-- Permission sections -->
-    <string name="request_permissions_title">Permissões requeridas pelo aplicativo.</string>
-    <string name="request_permissions_desc">Toque nesta opção para confirmar as permissões requeridas pelo aplicativo: Câmera (usado para receber o gatilho da captura), Armazenamento (usado para renomear e mover arquivos).</string>
-    <string name="request_permissions_confirmation">Você deseja confirmar as permissões requeridas para o aplicativo?</string>
-    <string name="request_permissions_ok">Todas as permissões requeridas foram concedidas!</string>
-
-    <!-- About -->
-    <string name="about_section">Sobre</string>
-    <string name="build_version_title">Versão Build</string>
-    <string name="send_debug_title">Enviar Logs de Depuração</string>
-    <string name="send_debug_desc">Enviar um e-mail com os arquivos de depuração</string>
-    <string name="send_debug_confirmation">Você deseja enviar um relatório de depuração?\nSeu aplicativo de email padrão irá enviar um e-mail com dois arquivos anexados. Por favor, informar uma breve descrição do seu problema se necessário.\nObrigado!</string>
-    <string name="send_debug_email_title">Logs de Depuração para DSC Auto Rename</string>
-    <string name="license_title">Licenças de código aberto</string>
-    <string name="license_desc">Detalhes da licença para aplicativo de código aberto</string>
-    <string name="donate_title">Doar</string>
-    <string name="donate_desc">Por favor fazer uma doação se você aprecia esse aplicativo.</string>
-    <string name="donate_confirmation">Se você aprecia esse aplicativo, por favor fazer uma doação comprando o DSC Auto Rename PRO!\nPressionando o botão SIM, você será direcionado para o DSC Auto Rename PRO na Google Play Store.\nObrigado por usar este aplicativo!</string>
-    <string name="thank_you_title">Obrigado por sua doação!</string>
-    <string name="thank_you_desc">Obrigado por apreciar meu trabalho comprando a versão PRO.</string>
-    <string name="about_text"><Data>
-<![CDATA[<b>Muito obrigado a Simon W pelo suporte no desenvolvimento da versão 4.0.0!</b><br/>
-<br/>
-Este aplicativo foi criado para renomear automaticamente fotos obtidas pela câmera baseado na data e hora de criação do arquivo.<br/>
-<br/>
-O formato usado para renomear os arquivos usa os parâmetros de data e hora do Java:<br/>
-- yyyy para anos;<br/>
-- MM para meses;<br/>
-- dd para dias;<br/>
-- HH para horas;<br/>
-- mm para minutos;<br/>
-- ss para segundos;<br/>
-- SSS para milissegundos.<br/>
-Infelizmente devido a especificações do EXIF e do Android os milissegundos não são usados internamente.<br/>
-Veja mais informações em: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Classe Java SimpleDateFormat</a><br/>
-<br/>
-Se vários arquivos forem gerados ao mesmo tempo, os nomes gerados terão um contador no sufixo como _01 (dependendo de quantos digitos forem definidos nas configurações).<br/>
-<br/>
-Definição de padrões de nome de arquivo individualmente para fotos ou vídeos. Coringas * ou ? também podem ser usados.<br/>
-Não usar padrão muito genérico como *.JPG para evitar um looping infinito de renomeamentos.<br/>
-Melhor usar ? para definir um caracter único possível em combinação com outro caracter fixo como _.<br/>
-Por exemplo se o nome original for 20150729_212537.JPG usar um padrão como ????????_??????.JPG e adicionar o prefixo \'PIC_\' (usar apóstrofes para definir textos fixos) no padrão como \"\'PIC_\'yyyyMMdd_HHmmss\" para renomear o arquivo para: PIC_20150729_212537.JPG<br/>
-<br/>
-O serviço de renomeamento, se habilitado, é automaticamente ativado quando um arquivo de imagem é salvo na pasta de mídia do dispositivo.<br/>
-<br/>
-O gatilho depende do aplicativo da câmera usado para obter as imagens. O aplicativo da câmera deve enviar <b>com.android.camera.NEW_PICTURE</b> ou <b>android.hardware.action.NEW_PICTURE</b>, caso contrário o gatilho do serviço de renomeamento não é ativado.<br/>
-Em alguns casos a câmera não envia nenhuma mensagem, então é possível definir como gatilho os eventos de mídia (o que implica em um serviço rodando permanentemente em segundo plano).<br/>
-<br/>
-Para mais detalhes, por favor verificar a página de descrição do aplicativo em <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data></string>
-
+	<string name="about_section">Sobre</string>
+	<string name="about_text"><Data><![CDATA[<b>Muito obrigado a Simon W pelo suporte no desenvolvimento da versão 4.0.0!</b><br/>\n<br/>\nEste aplicativo foi criado para renomear automaticamente fotos obtidas pela câmera baseado na data e hora de criação do arquivo.<br/>\n<br/>\nO formato usado para renomear os arquivos usa os parâmetros de data e hora do Java:<br/>\n- yyyy para anos;<br/>\n- MM para meses;<br/>\n- dd para dias;<br/>\n- HH para horas;<br/>\n- mm para minutos;<br/>\n- ss para segundos;<br/>\n- SSS para milissegundos.<br/>\nInfelizmente devido a especificações do EXIF e do Android os milissegundos não são usados internamente.<br/>\nVeja mais informações em: <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Classe Java SimpleDateFormat</a><br/>\n<br/>\nSe vários arquivos forem gerados ao mesmo tempo, os nomes gerados terão um contador no sufixo como _01 (dependendo de quantos digitos forem definidos nas configurações).<br/>\n<br/>\nDefinição de padrões de nome de arquivo individualmente para fotos ou vídeos. Coringas * ou ? também podem ser usados.<br/>\nNão usar padrão muito genérico como *.JPG para evitar um looping infinito de renomeamentos.<br/>\nMelhor usar ? para definir um caracter único possível em combinação com outro caracter fixo como _.<br/>\nPor exemplo se o nome original for 20150729_212537.JPG usar um padrão como ????????_??????.JPG e adicionar o prefixo \'PIC_\' (usar apóstrofes para definir textos fixos) no padrão como \"\'PIC_\'yyyyMMdd_HHmmss\" para renomear o arquivo para: PIC_20150729_212537.JPG<br/>\n<br/>\nO serviço de renomeamento, se habilitado, é automaticamente ativado quando um arquivo de imagem é salvo na pasta de mídia do dispositivo.<br/>\n<br/>\nO gatilho depende do aplicativo da câmera usado para obter as imagens. O aplicativo da câmera deve enviar <b>com.android.camera.NEW_PICTURE</b> ou <b>android.hardware.action.NEW_PICTURE</b>, caso contrário o gatilho do serviço de renomeamento não é ativado.<br/>\nEm alguns casos a câmera não envia nenhuma mensagem, então é possível definir como gatilho os eventos de mídia (o que implica em um serviço rodando permanentemente em segundo plano).<br/>\n<br/>\nPara mais detalhes, por favor verificar a página de descrição do aplicativo em <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
+	<string name="add">Adicionar</string>
+	<string name="app_theme_desc">Escolha o tema aplicativo: Leve ou Escuro.</string>
+	<string-array name="app_theme_labels">
+		<item>Leve</item>
+		<item>Escuro</item>
+	</string-array>
+	<string name="app_theme_title">Tema aplicação:</string>
+	<string name="app_theme_title_param">Tema aplicação: %s</string>
+	<string name="append_original_name_desc">Manter e adicionar ao nome original. Por exemplo: de DSC_09.JPG o novo nome sera %s_DSC_09.JPG</string>
+	<string name="append_original_name_title">Adicionar ao nome original</string>
+	<string name="build_version_title">Versão Build</string>
+	<string name="cancel">Cancelar</string>
+	<string name="change_language_desc">O aplicativo deve ser reiniciado para aplicar o novo idioma.</string>
+	<string name="change_language_title">Idioma: Idioma do aplicativo</string>
+	<string name="choose_units_desc">Esta opção permitirá que você escolha acima unidades de atraso entre segundos e minutos.</string>
+	<string name="choose_units_title">Escolha unidades de atraso:</string>
+	<string name="choose_units_title_param">Unidades de atraso escolhidos: %s</string>
+	<string name="close">Fechar</string>
+	<string name="confirmation_rename_dialog">Não mostrar diálogo de confirmação</string>
+	<string name="confirmation_rename_dialog_desc">Mostrar ou não o diálogo de confirmação quando o serviço de renomeamento é executado pelo atalho.</string>
+	<string name="confirmation_rename_question">Você deseja iniciar manualmente o serviço de renomeamento?</string>
+	<string name="confirmation_rename_question_v19">Se o arquivo selecionado não estiver em uma pasta selecionada, em seguida, mudar o nome não será concluída devido a restrições de segurança do Android.\nVocê deseja iniciar manualmente o serviço de renomeamento?</string>
+	<string name="create_rename_shortcut">Criar atalho para o serviço de renomeamento</string>
+	<string name="create_rename_shortcut_desc">Criar um atalho na tela principal para executar manualmente o serviço de renomeamento.</string>
+	<string name="define_file_name_pattern_desc">Os padrões de nome de arquivo usados para buscar arquivos para o renomeamento (\"DSC_*.JPG\" ou \"MOV_*.MP4\"), Info. %s\nCoringas * e ? também podem ser usados.</string>
+	<string name="define_file_name_pattern_title">Definir padrão de nome de arquivos</string>
+	<string-array name="delay_units_labels">
+		<item>segundos</item>
+		<item>minutos</item>
+	</string-array>
+	<string name="delete">Excluir</string>
+	<string name="do_not_show_again">Não mostrar novamente</string>
+	<string name="donate_confirmation">Se você aprecia esse aplicativo, por favor fazer uma doação comprando o DSC Auto Rename PRO!\nPressionando o botão SIM, você será direcionado para o DSC Auto Rename PRO na Google Play Store.\nObrigado por usar este aplicativo!</string>
+	<string name="donate_desc">Por favor fazer uma doação se você aprecia esse aplicativo.</string>
+	<string name="donate_title">Doar</string>
+	<string name="enable_desc">Os arquivos são automaticamente renomeados depois que o gatilho ocorrer.</string>
+	<string name="enable_filter_alert_v19">Devido ao Android KitKat ter habilitado algumas restrições de segurança, este aplicativo não será capaz de renomear arquivos armazenados em SD Card.\nVeja o link http://goo.gl/kJeED3 para uma potencial solução.\nEste aplicativo pode renomear arquivos armazenados apenas na memória interna.\nPortanto configure seu aplicativo da câmera para salvar na memória interna.</string>
+	<string name="enable_filter_alert_v21">Sendo um usuário do Android Lollipop, você deve marcar a opção \"Renomear arquivos na pasta\" e definir ao menos uma pasta para ser vasculhada em \"Lista de pastas vasculhadas.\".</string>
+	<string name="enable_filter_folder_desc">Normalmente o serviço de renomeamento irá buscar todos os arquivos do seu dispositivo. Habilitando essa opção você pode limitar o serviço de renomeamento apenas a uma pasta.</string>
+	<string name="enable_filter_folder_desc_v21">Para usuários do Android Lollipop, por favor habilitar essa opção e marcar a pasta onde seu aplicativo da câmera salva os arquivos.</string>
+	<string name="enable_filter_folder_title">Renomear arquivos na pasta</string>
+	<string name="enable_folder_scanning_desc">Normalmente, este não deve ser especificado! Selecionando esta opção o serviço de renomeamento irá buscar por arquivos de mídia nas pastas selecionadas acima. Selecione esta opção se seu dispositivo possuir a busca de mídia desabilitada.</string>
+	<string name="enable_folder_scanning_title">Habilitar busca de arquivos na pasta.</string>
+	<string name="enable_title">Gatilho do serviço de Auto-renomeamento.</string>
+	<string name="error_rename_file">O arquivo %s não pode ser renomeado!</string>
+	<string name="error_rename_file_no_read_write">Arquivo não pode ser lido e gravado</string>
+	<string name="file_extension_note">A extensão do arquivo é preservada durante o processo de renomemento.</string>
+	<string name="file_name_pattern_dialog_bottom">Exemplo do nome antigo:\n\t %1$s\nExemplo do arquivo renomeado:\n\t %2$s</string>
+	<string name="file_name_pattern_dialog_from">1. Padrão de nome de arquivo original:</string>
+	<string name="file_name_pattern_dialog_title_add">Adicionar padrão de nome de arquivo</string>
+	<string name="file_name_pattern_dialog_title_editor">Editar padrão de nome de arquivo</string>
+	<string name="file_name_pattern_dialog_to">2. Padrão de nome de arquivo renomeado:</string>
+	<string name="file_name_pattern_list_all_selected">Ao menos um padrão de nome de arquivo deve permanecer desmarcado!</string>
+	<string name="file_name_pattern_list_confirmation">Você deseja excluir os itens selecionados?</string>
+	<string name="file_name_pattern_list_no_selection">Selecione ao menos um padrão de nome de arquivo para excluir!</string>
+	<string name="file_name_pattern_validation_error_generic">Padrão original muito genérico, causando renomeamentos em looping. Tente definir um padrão mais restritivo usando ? e outros caracteres.</string>
+	<string name="file_name_pattern_validation_error_new">O padrão original e renomear estão combinando!</string>
+	<string name="file_name_pattern_validation_error_new_empty">O padrão para renomeamento não pode estar vazio.</string>
+	<string name="file_name_pattern_validation_error_old">Padrão do arquivo original já existe. Escolher outro texto.</string>
+	<string name="file_name_pattern_validation_error_old_empty">O padrão original não pode estar vazio.</string>
+	<string name="file_name_pattern_validation_error_original">O padrão original está combinando com um padrão de mudança de nome definido em outro caso!</string>
+	<string name="file_name_pattern_validation_error_rename">O padrão de renomeação está combinando com um teste padrão original definido em outro caso!</string>
+	<string name="file_name_suffix_format_desc">Sufixo extra usado quando mais de uma arquivo possuir o mesmo nome. Por padrão o contador possui 5 digitos.\nExemplo:\n%s</string>
+	<string name="file_name_suffix_format_title">Definir sufixo extra para o nome do arquivo</string>
+	<string name="file_rename_count_confirmation">Você deseja reiniciar o contador de arquivos renomeados?</string>
+	<string name="file_rename_count_desc">Toque para reiniciar o contador de arquivos renomeados.</string>
+	<string name="file_rename_count_title">Número de arquivos renomeados: %d</string>
+	<string name="filter_folder_no_folder">[Nenhuma pasta]</string>
+	<string name="filter_folder_title">Selecione uma pasta.</string>
+	<string name="first_time_alert">LER ATENTAMENTE:\nRenomeamentos e movimentos de arquivos não podem ser desfeitos!\nUsar esse aplicativo com cuidado!\nDefinição de padrões de nome de arquivo individualmente para fotos ou vídeos. Arquivos renomeados também podem ser movidos para outra pasta. Coringas * ou ? podem ser usados.\nNão usar padrão muito genérico como *.JPG para evitar um looping de renomeamentos.\nMelhor usar ? para definir um caracter único possível em combinação com outro caracter fixo como _.\nPor exemplo se o nome original for 20150729_212537.JPG usar um padrão como ????????_??????.JPG e adicionar o prefixo \'PIC_\' (usar apóstrofes para definir textos fixos) no padrão como \"\'PIC_\'yyyyMMdd_HHmmss\" para renomear o arquivo para: PIC_20150729_212537.JPG</string>
+	<string name="folder_list_all_selected">Ao menos uma pasta deve permanecer desmarcada!</string>
+	<string name="folder_list_confirmation">Você realmente deseja excluir as pastas selecionadas?</string>
+	<string name="folder_list_no_grant_permission_1">Seu sistema revogado as permissões para pasta a seguir:\n\n%s\n\nVerifique onde esta pasta foi definida e tentar selecioná-lo novamente!</string>
+	<string name="folder_list_no_grant_permission_2">Seu sistema de permissões para pastas abaixo revogada:\n\n%s\n\nVerifique onde essas pastas foram definidas e tentar selecioná-los novamente!</string>
+	<string name="folder_list_no_open_document_tree_support">Sua versão do Android não tem suporte para escolha de pastas (ACTION_OPEN_DOCUMENT_TREE).\nVocê quer usar selecionador de pasta interno para selecionar uma pasta? Usando selecionador de pasta interno a aplicação não concederam direitos para renomear e mover arquivos!</string>
+	<string name="folder_list_no_selection">Selecionar ao menos uma pasta para excluir!</string>
+	<string name="folder_list_title">Lista de pastas vasculhadas.</string>
+	<string name="general_settings">Configurações</string>
+	<string name="license_desc">Detalhes da licença para aplicativo de código aberto</string>
+	<string name="license_title">Licenças de código aberto</string>
+	<string name="list_info_press">Adicionar ou excluir itens.</string>
+	<string name="loading_wait">Carregando&#8230;</string>
+	<string name="manually_file_rename_count_0">Nenhum arquivo foi renomeado.</string>
+	<string name="manually_file_rename_count_1">Um arquivo foi renomeado.</string>
+	<string name="manually_file_rename_count_more">%d arquivos foram renomeados.</string>
+	<string name="manually_file_rename_progress_1">%1$d de %2$d arquivo foi renomeado.</string>
+	<string name="manually_file_rename_progress_more">%1$d de %2$d arquivos foram renomeados.</string>
+	<string name="manually_service_running">Serviço de renomeamento manual está sendo executado.</string>
+	<string name="manually_start_desc">Toque para iniciar manualmente o serviço de renomeamento</string>
+	<string name="manually_start_title">Iniciar manualmente o serviço de renomeamento</string>
+	<string name="minutes_unit">min.</string>
+	<string name="move_file_enable">Mover o arquivo renomeado para a pasta selecionada abaixo.</string>
+	<string name="move_file_text_no_folder">Nenhuma pasta selecionada, toque aqui para selecionar uma pasta.</string>
+	<string name="move_file_text_selected_folder">Pasta selecionada: %s</string>
+	<string name="new_folder">Nova Pasta</string>
+	<string name="no">Não</string>
+	<string name="no_file_name_pattern">Nenhum padrão de nome definido</string>
+	<string name="no_folders">Nenhuma pasta</string>
+	<string name="obtain_logs">Gerar um arquivo de Log para&#8230;</string>
+	<string name="other_settings">Outras configurações</string>
+	<string name="please_wait">Aguarde&#8230;</string>
+	<string name="remove_rename_shortcut">Remover o atalho da tela principal</string>
+	<string name="remove_rename_shortcut_desc">Remover da tela principal o atalho para executar manualmente o serviço de renomeamento.</string>
+	<string name="rename_file_using_desc">data e hora quando o arquivo foi modificado.</string>
+	<string-array name="rename_file_using_labels">
+		<item>data e hora quando o arquivo foi adicionada ao provedor de mídia;</item>
+		<item>data e hora quando o arquivo foi modificado;</item>
+		<item>EXIF ou MetaData se disponível.</item>
+	</string-array>
+	<string name="rename_file_using_title">Renomear arquivo usando:</string>
+	<string name="rename_service_start_delay_desc">Iniciar o serviço de renomeamento após</string>
+	<string name="rename_service_start_delay_title">Atraso para inicio do serviço de renomeamento</string>
+	<string name="rename_shortcut">Atalho ao serviço DSC Rename</string>
+	<string name="rename_shortcut_name">Serviço DSC Rename</string>
+	<string name="rename_video_enabled_desc">Marcando essa opção, os vídeos também são renomeados automaticamente. Padrão é renomear apenas fotos.</string>
+	<string name="rename_video_enabled_title">Habilitar renomeamento em arquivos de vídeo</string>
+	<string name="request_permissions_confirmation">Você deseja confirmar as permissões requeridas para o aplicativo?</string>
+	<string name="request_permissions_desc">Toque nesta opção para confirmar as permissões requeridas pelo aplicativo: Câmera (usado para receber o gatilho da captura), Armazenamento (usado para renomear e mover arquivos).</string>
+	<string name="request_permissions_ok">Todas as permissões requeridas foram concedidas!</string>
+	<string name="request_permissions_title">Permissões requeridas pelo aplicativo.</string>
+	<string name="seconds_unit">seg.</string>
+	<string name="send_debug_confirmation">Você deseja enviar um relatório de depuração?\nSeu aplicativo de email padrão irá enviar um e-mail com dois arquivos anexados. Por favor, informar uma breve descrição do seu problema se necessário.\nObrigado!</string>
+	<string name="send_debug_desc">Enviar um e-mail com os arquivos de depuração</string>
+	<string name="send_debug_email_title">Logs de Depuração para DSC Auto Rename</string>
+	<string name="send_debug_title">Enviar Logs de Depuração</string>
+	<string name="send_report">Enviar relatório&#8230;</string>
+	<string name="service_choice_0">O serviço de auto-renomeamento está desabilitado.</string>
+	<string name="service_choice_1">O serviço de auto-renomeamento está habilitado para eventos da câmera.</string>
+	<string name="service_choice_2">O serviço de auto-renomeamento está habilitado para observador de mídia.</string>
+	<string name="service_choice_3">O serviço de auto-renomeamento está habilitado para observador de arquivos na pasta selecionada. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</string>
+	<string-array name="service_type_labels">
+		<item>Desabilitado</item>
+		<item>Eventos da câmera: fotos ou vídeos capturados.</item>
+		<item>Observador de mídia: fotos ou vídeos salvos.</item>
+		<item>Observador de arquivos: monitora as pastas selecionadas quando arquivos são adicionados. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</item>
+	</string-array>
+	<string name="thank_you_desc">Obrigado por apreciar meu trabalho comprando a versão PRO.</string>
+	<string name="thank_you_title">Obrigado por sua doação!</string>
+	<string name="ui_settings">Configurações de interface do usuário</string>
+	<string name="yes">Sim</string>
 </resources>

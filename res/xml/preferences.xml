@@ -77,6 +77,12 @@
             android:summary="@string/define_file_name_pattern_desc"
             android:title="@string/define_file_name_pattern_title"/>
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="sendBroadcastEnabled"
+            android:summary="@string/send_broadcast_msg_desc"
+            android:title="@string/send_broadcast_msg_title"/>
+
         <EditTextPreference
             android:defaultValue="@string/file_name_suffix_format_value"
             android:key="fileNameSuffixFormat"

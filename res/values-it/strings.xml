@@ -1,60 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_section">Info</string>
+	<string name="about_text"><Data><![CDATA[<b>I miei ringraziamenti a Simon W per il pieno supporto allo sviluppo della versione 4.0.0!</b><br/>\n<br/>\nQuesta applicazione è stata creata per cambiare automaticamente il nome delle foto scattate dalla vostra fotocamera sulla base della data e del tempo di quando il file è stato creato.<br/>\n<br/>\nIl formato di rinomina del file usa Java con la data e il tempo come parametri:<br/>\n- yyyy per gli anni;<br/>\n- MM per i mesi;<br/>\n- dd per i giorni;<br/>\n- HH per le ore;<br/>\n- mm per i minuti;<br/>\n- ss per i secondi;<br/>\n- SSS per i millisecondi.<br/>\nSfortunatamente, per via delle specifiche EXIF e Android, i millisecondi non sono usati internamente.<br/>\nVedere di più per maggiori informazioni sui formati su: <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Java SimpleDateFormat class</a><br/>\n<br/>\nSe più file sono stati generati allo stesso tempo, come nel caso di foto Timeshift, i file avranno un suffisso finale come _01. Ciò dipende da quante cifre sono state definite nelle impostazioni.<br/>\n.<br/>\nDefinire la rinomina dei file individualmente per le immagini e/o i video. Possono essere usati anche caratteri speciali come */?.<br/>\nNon usare caratteri generici come *.JPG per evitare un processo infinito di rinomina.<br/>\né meglio usare \"?\" per definire un possibile carattere singolo in combinazione con altri caratteri esistenti come _.<br/>\nPer esempio, se il nome del file originale è 20150729_212537.JPG, usare un modello come ????????_??????.JPG e inserire un prefisso \'Foto_\' (usare l\'apostrofo per definire testi costanti) nel modello di rinomina come  \"\'Foto_\'yyyyMMdd_HHmmss\" per rinominare il file in: Foto_20150729_212537.JPG<br/>\n<br/>\nIl servizio di rinomina, se abilitato, è automaticamente attivato quando l\'immagine è salvata sulla memoria del dispositivo.<br/>\n<br/>\nL\'attivazione dipende dall\'applicazione Fotocamera usata per scattare fotografie. L\'applicazione Fotocamera deve inviare <b>com.android.camera.NEW_PICTURE</b> oppure <b>android.hardware.action.NEW_PICTURE</b>, altrimenti, il servizio di rinomina non è attivato.<br/>\nIn alcuni casi, la fotocamera non manda alcun messaggio, cosi è possibilie selezionare come attivatore Gli Eventi di contenuto multimediale, ma questo implica un processo perennemente in background.<br/>\n<br/>\nPer maggiori dettagli, sei pregato di vedere la descrizione dell\'applicazione su <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
 	<string name="add">Aggiungere</string>
-	<string name="append_original_name_title">Aggiunge nome originale</string>
-	<string name="cancel">Annulla</string>
-	<string name="change_language_desc">L\'applicazione deve essere riavviato per applicare la lingua selezionata.</string>
-	<string name="change_language_title">Lingua: Lingua dell\'applicazione</string>
-	<string name="choose_units_title">Scegliere unità di ritardo:</string>
-	<string name="choose_units_title_param">Unità di ritardo scelta: %s</string>
-	<string name="close">Chiudi</string>
-	<string name="confirmation_rename_dialog">Nascondi messaggio di conferma</string>
-	<string name="confirmation_rename_question">Vuoi avviare manualmente il servizio di rinomina?</string>
-	<string name="create_rename_shortcut">Creare DSC rename service shortcut</string>
-	<string name="define_file_name_pattern_title">Definire modelli di nomi di file</string>
-	<string-array name="delay_units_labels">
-		<item>secondi</item>
-		<item>minuti</item>
+	<string name="app_theme_desc">Imposta il tema: Chiaro o Scuro</string>
+	<string-array name="app_theme_labels">
+		<item>Chiaro</item>
+		<item>Scuro</item>
 	</string-array>
-	<string name="delete">Elimina</string>
+	<string name="app_theme_title">Tema:</string>
+	<string name="app_theme_title_param">Tema: %s</string>
+	<string name="append_original_name_desc">Mantenere ed aggiungere il nome originale, per esempio, da DSC_09.JPG il nuovo nome sarà %s_DSC_09.JPG</string>
+	<string name="append_original_name_title">Aggiungere nome originale</string>
+	<string name="build_version_title">Versione Build</string>
+	<string name="cancel">Annullare</string>
+	<string name="change_language_desc">L\'applicazione deve essere riavviata per applicare la lingua selezionata.</string>
+	<string name="change_language_title">Lingua: Lingua dell\'applicazione</string>
+	<string name="choose_units_desc">Questa opzione ti permetterà di settare il ritardo tra secondi o minuti.</string>
+	<string name="choose_units_title">Scegliere l\'unità di ritardo:</string>
+	<string name="choose_units_title_param">Unità di ritardo scelta: %s</string>
+	<string name="close">Chiudere</string>
+	<string name="confirmation_rename_dialog">Nascondere il messaggio di conferma</string>
+	<string name="confirmation_rename_dialog_desc">Scegliere se mostrare o meno il Popup di conferma quando il servizio di rinomina è lanciato dalla scorciatoia.</string>
+	<string name="confirmation_rename_question">Vuoi avviare manualmente il servizio di rinomina?</string>
+	<string name="confirmation_rename_question_v19">Se i file selezionati non sono nella cartella selezionata allora la rinomina non sarà completata per via delle restrizioni sulla sicurezza di Android.\nVuoi che il servizio di rinomina inizi manualmente?</string>
+	<string name="create_rename_shortcut">Creare la scorciatoia DSC Rename</string>
+	<string name="create_rename_shortcut_desc">Creare sulla tua home una scorciatoia per lanciare il servizio manuale di rinomina.</string>
+	<string name="define_file_name_pattern_desc">Il modello di nomenclatura dei file usato per cercare i file da rinominare (\"DSC_*.JPG\" oppure \"MOV_*.MP4\"), e.g. %s\nPossono essere usati anche caratteri speciali come */?.</string>
+	<string name="define_file_name_pattern_title">Definire i modelli di nomi del file</string>
+	<string-array name="delay_units_labels">
+		<item>Secondi</item>
+		<item>Minuti</item>
+	</string-array>
+	<string name="delete">Eliminare</string>
+	<string name="do_not_show_again">Non mostrare più</string>
+	<string name="donate_confirmation">Se apprezzi questa applicazione, puoi fare una donazione comprando la versione DSC Auto Rename PRO! Premendo su YES, sarai indirizzato alla versione DSC Auto Rename PRO sul Google Play Store.\nGrazie per usare questa applicazione!</string>
 	<string name="donate_desc">Si prega di fare una donazione se apprezzate questa applicazione.</string>
 	<string name="donate_title">Donare</string>
 	<string name="enable_desc">I file vengono rinominati automaticamente quando l\'avviatore viene premuto.</string>
+	<string name="enable_filter_alert_v19">Poiché in Android KitKat sono applicati dei vincoli di sicurezza, questa applicazione non sarà in grado di rinominare i file localizzati nella MicroSD.\nVedere il link http://goo.gl/kJeED3 per un possibile rimedio.\nQuesta applicazione può rinominare solo i file dalla memoria interna.\nImpostare il salvataggio delle foto, dalla tua fotocamera, nella memoria interna.</string>
+	<string name="enable_filter_alert_v21">Come utente Android Lollipop, sei pregato di attivare l\'opzione \"Rinomina all\'interno della cartella\" e definire, così, almeno una cartella da poter esser analizzata nella \"Lista di cartelle analizzate\"</string>
+	<string name="enable_filter_folder_desc">Normalmente il servizio di rinomina analizzerà tutti i file dal tuo dispositivo, ma attivando questa opzione puoi limitare il servizio di rinomina ad una cartella prescelta.</string>
 	<string name="enable_filter_folder_desc_v21">Per gli utenti Android Lollipop, si prega di abilitare questa funzione e selezionare le cartelle in cui l\'applicazione della fotocamera salva i file.</string>
 	<string name="enable_filter_folder_title">Rinominare all\'interno di una cartella</string>
-	<string name="enable_folder_scanning_desc">Normalmente questo non dovrebbe essere selezionato! Attivando questa opzione cercherà dei file multimediali nelle cartelle selezionate sopra. Selezionare questa opzione se il tuo dispositivo ha disattivata la scansione di contenuti multimediali.</string>
-	<string name="enable_folder_scanning_title">Abilita scansione cartella per i file.</string>
-	<string name="enable_title">Avviatore servizio di autorinomina.</string>
+	<string name="enable_folder_scanning_desc">Normalmente questa opzione NON DOVREBBE ESSERE SELEZIONATA! Attivando questa opzione, il programma cercherà dei file multimediali nelle cartelle selezionate sopra. Selezionare questa opzione se il tuo dispositivo ha disattivato la scansione di contenuti multimediali.</string>
+	<string name="enable_folder_scanning_title">Abilita la scansione della cartella per i file.</string>
+	<string name="enable_title">Avvio automatico del servizio di rinomina</string>
 	<string name="error_rename_file">Il file %s non può essere rinominato!</string>
 	<string name="error_rename_file_no_read_write">Il file non può essere letto e scritto</string>
 	<string name="file_extension_note">L\'estensione del file viene conservato durante il processo di rinomina.</string>
-	<string name="file_name_pattern_dialog_bottom">Esempio di nome di file vecchio:\n\t %1$s\nEsempio di nome di file rinominato:\n\t %2$s</string>
-	<string name="file_name_pattern_dialog_from">1. Modello di nome di file originale:</string>
-	<string name="file_name_pattern_dialog_title_add">Aggiungere modelli di nomi di file</string>
-	<string name="file_name_pattern_dialog_title_editor">Modifica modelli di nomi di file</string>
-	<string name="file_name_pattern_dialog_to">Modello di nome file rinominato:</string>
-	<string name="file_name_pattern_list_all_selected">Almeno un modello di nome di file dovrebbe rimanere non selezionato!</string>
-	<string name="file_name_pattern_list_confirmation">Rimuovere il modello di nome di file selezionato?</string>
-	<string name="file_name_pattern_list_no_selection">Selezionare almeno un modello di nome file da eliminare!</string>
-	<string name="file_name_pattern_validation_error_generic">Modello originale è troppo generico provocando la rinomina dei file più e più volte. Cerca di definire un modello più restrittivo usando ? e altri caratteri.</string>
-	<string name="file_name_pattern_validation_error_new">Il modello originale e di rinominazione sono idèntici!</string>
+	<string name="file_name_pattern_dialog_bottom">Esempio di nome del file vecchio:\n\t %1$s\nEsempio del nome del file rinominato:\n\t %2$s</string>
+	<string name="file_name_pattern_dialog_from">1. Modello del nome del file originale:</string>
+	<string name="file_name_pattern_dialog_title_add">Aggiungere i modelli di nomi del file</string>
+	<string name="file_name_pattern_dialog_title_editor">Modificare i modelli di nomi del file</string>
+	<string name="file_name_pattern_dialog_to">2. Modello di nome del file rinominato:</string>
+	<string name="file_name_pattern_list_all_selected">Almeno un modello di nome del file dovrebbe rimanere non selezionato!</string>
+	<string name="file_name_pattern_list_confirmation">Rimuovere il modello dil nome del file selezionato?</string>
+	<string name="file_name_pattern_list_no_selection">Selezionare almeno un modello di nome del file da eliminare!</string>
+	<string name="file_name_pattern_validation_error_generic">Il modello originale è troppo generico provocando la rinomina dei file più e più volte. Cerca di definire un modello più restrittivo usando ? e altri caratteri.</string>
+	<string name="file_name_pattern_validation_error_new">Il modello del nome, originale e rinominato, è identico!</string>
 	<string name="file_name_pattern_validation_error_new_empty">Il modello per la rinomina non può essere vuoto.</string>
-	<string name="file_name_pattern_validation_error_old">Modello di nome di file originale esiste già, modificare il testo con uno nuovo.</string>
-	<string name="file_name_pattern_validation_error_old_empty">Modello originale non può essere vuoto.</string>
-	<string name="file_name_suffix_format_title">Definiresuffissoaggiuntivo per il nome del file</string>
-	<string name="file_rename_count_confirmation">Vuoi azzerare il contatore di file rinominati.</string>
+	<string name="file_name_pattern_validation_error_old">Il modello del nome del file originale esiste già, modificare il testo con uno nuovo.</string>
+	<string name="file_name_pattern_validation_error_old_empty">Il modello originale non può essere vuoto.</string>
+	<string name="file_name_pattern_validation_error_original">Il modello di rinomina predefinito si eguaglierà con un modello definito di rinominazione in altri casi!</string>
+	<string name="file_name_pattern_validation_error_rename">Il modello di rinomina si eguaglierà con un modello originale predefinito in altri casi!</string>
+	<string name="file_name_suffix_format_desc">Questo suffisso è usato quando più di un file hanno lo stesso nome, come nel caso delle foto Timeshift. Di default il contatore ha 5 cifre.\nEsempio:\n%s</string>
+	<string name="file_name_suffix_format_title">Definire il suffisso aggiuntivo per il nome del file</string>
+	<string name="file_rename_count_confirmation">Vuoi azzerare il contatore dei file rinominati?</string>
 	<string name="file_rename_count_desc">Toccare per azzerare il numero di file rinominati.</string>
 	<string name="file_rename_count_title">Numero di file rinominati: %d</string>
 	<string name="filter_folder_no_folder">[Nessuna cartella]</string>
 	<string name="filter_folder_title">Selezionare una cartella.</string>
+	<string name="first_time_alert">LEGGERE ATTENTAMENTE:\nI file rinominati e spostati dal processo non possono essere rigenerati!\nUsare questo programma con attenzione!\nDefinire la rinomina dei file individualmente per le immagini e/o i video; i file rinominati possono essere spostati anche in un\'altra cartella. Possono essere usati anche caratteri speciali come */?.\nNon usare caratteri generici come *.JPG per evitare un processo infinito di rinomina.\né meglio usare \"?\" per definire un possibile carattere singolo in combinazione con altri caratteri esistenti come _.\nPer esempio, se il nome del file originale è 20150729_212537.JPG, usare un modello come ????????_??????.JPG e inserire un prefisso \'Foto_\' (usa l\'apostrofo per definire testi costanti) nel modello di rinomina come \'\'Foto_\'yyyyMMdd_HHmmss\"  per rinominare il file in: Foto_20150729_212537.JPG</string>
 	<string name="folder_list_all_selected">Almeno una cartella deve essere deselezionata!</string>
 	<string name="folder_list_confirmation">Vuoi rimuovere le cartelle selezionate?</string>
+	<string name="folder_list_no_grant_permission_1">Il tuo sistema ha revocato i permessi per la seguente cartella:\n\n%s\n\n Controlla dov\'è la tua cartella e prova a riselezionarla!\n\n Puoi ignorare questo messaggio, ma l\'applicazione non funzionerà bene fino a che non ci sarà pieno accesso alla cartella selezionata.</string>
+	<string name="folder_list_no_grant_permission_2">Il tuo sistema ha revocato i permessi per le seguenti cartelle:\n\n%s\n\n Controlla dove sono le tue cartelle e prova a riselezionarle!\n\n Puoi ignorare questo messaggio, ma l\'applicazione non funzionerà bene fino a che non ci sarà pieno accesso alle cartelle selezionate.</string>
+	<string name="folder_list_no_open_document_tree_support">La tua versione Android non ha il supporto per scegliere le cartelle (ACTION_OPEN_DOCUMENT_TREE).\n Vuoi usare la memoria interna per selezionare una cartella? Usando la memoria interna, l\'applicazione non avrà i permessi necessari per rinominare e spostare i file!</string>
 	<string name="folder_list_no_selection">Selezionare almeno una cartella da eliminare!</string>
 	<string name="folder_list_title">Elenco delle cartelle scansionate.</string>
 	<string name="general_settings">Impostazioni generali</string>
-	<string name="license_desc">Dettagli della licenza per il software open source</string>
-	<string name="license_title">Licenze open source</string>
+	<string name="license_desc">Dettagli della licenza per il Software Open Source</string>
+	<string name="license_title">Licenze Open Source</string>
 	<string name="list_info_press">Aggiungere o eliminare elementi.</string>
 	<string name="loading_wait">Caricamento in corso&#8230;</string>
 	<string name="manually_file_rename_count_0">Nessun file è stato rinominato.</string>
@@ -62,47 +89,56 @@
 	<string name="manually_file_rename_count_more">%d file sono stati rinominati.</string>
 	<string name="manually_file_rename_progress_1">%1$d di %2$d file sono stati rinominati.</string>
 	<string name="manually_file_rename_progress_more">%1$d di %2$d file sono stati rinominati.</string>
-	<string name="manually_service_running">Il processo di rinominazione è in esecuzione</string>
-	<string name="manually_start_desc">Toccare per avviare manualmente il processo di rinominazione</string>
-	<string name="manually_start_title">Inizia manualmente il servizio di rinomina</string>
-	<string name="minutes_unit">minuti</string>
+	<string name="manually_service_running">Il processo di rinomina è in esecuzione</string>
+	<string name="manually_start_desc">Toccare per avviare manualmente il processo di rinomina</string>
+	<string name="manually_start_title">Iniziare manualmente il servizio di rinomina</string>
+	<string name="minutes_unit">Minuti</string>
 	<string name="move_file_enable">Spostare il file rinominato nella cartella selezionata di seguito.</string>
 	<string name="move_file_text_no_folder">Nessuna cartella selezionata, toccare questo testo per selezionare una cartella.</string>
 	<string name="move_file_text_selected_folder">Cartella selezionata: %s</string>
 	<string name="new_folder">Nuova cartella</string>
-	<string name="no_file_name_pattern">Nessun modello di nome file</string>
+	<string name="no_file_name_pattern">Nessun modello definito dil nome del file</string>
 	<string name="no_folders">Nessuna cartella selezionata</string>
-	<string name="obtain_logs">Genera file di registro per la segnalazione&#8230;</string>
+	<string name="obtain_logs">Generare file di registro per la segnalazione&#8230;</string>
 	<string name="other_settings">Altre impostazioni</string>
 	<string name="please_wait">Attendere prego&#8230;</string>
-	<string name="remove_rename_shortcut">Rimuovere DSC rename service shortcut</string>
-	<string name="remove_rename_shortcut_desc">Rimuovere dalla schermata iniziale il DSC rename service shortcut</string>
-	<string name="rename_file_using_desc">data e ora in cui il file è stato modificato l\'ultima volta.</string>
+	<string name="remove_rename_shortcut">Rimuovere la scorciatoia del servizio DSC Rename</string>
+	<string name="remove_rename_shortcut_desc">Rimuovere dalla schermata iniziale la scorciatoia DSC Rename</string>
+	<string name="rename_file_using_desc">Data e ora in cui il file è stato modificato l\'ultima volta.</string>
 	<string-array name="rename_file_using_labels">
-		<item>la data e l\'ora in cui il file è stato aggiunto al fornitore di media;</item>
-		<item>la data e l\'ora in cui file è stato modificato l\'ultima volta;</item>
-		<item>EXIF per le immagini e per i video utilizzare la seconda opzione.</item>
+		<item>La data e l\'ora in cui il file è stato aggiunto al fornitore di contenuti multimediali;</item>
+		<item>La data e l\'ora in cui file è stato modificato l\'ultima volta;</item>
+		<item>EXIF o Metadata se disponibili.</item>
 	</string-array>
-	<string name="rename_file_using_title">Rinominare file utilizzando:</string>
-	<string name="rename_service_start_delay_desc">Iniziare servizio dopo</string>
-	<string name="rename_service_start_delay_title">Ritardo di avvio del servizio</string>
-	<string name="rename_shortcut">Scorciatoia per DSC Rename service</string>
-	<string name="rename_video_enabled_title">Abilita rinomina dei file video</string>
+	<string name="rename_file_using_title">Rinominare il file utilizzando:</string>
+	<string name="rename_service_start_delay_desc">Iniziare il processo di rinomina dopo</string>
+	<string name="rename_service_start_delay_title">Ritardo di avvio del processo</string>
+	<string name="rename_shortcut">Scorciatoia per il servizio DSC Rename</string>
+	<string name="rename_shortcut_name">Servizio DSC Rename</string>
+	<string name="rename_video_enabled_desc">Flaggando questa opzione, i video sono automaticamente rinominati, poiché di default sono rinominate soltanto le immagini.</string>
+	<string name="rename_video_enabled_title">Abilitare la rinomina dei file video</string>
 	<string name="request_permissions_confirmation">Vuoi ottenere le autorizzazioni necessarie per l\'applicazione?</string>
+	<string name="request_permissions_desc">Selezionare questa opzione per richiedere i permessi richiesti dall\'applicazione : Camera (usato per ricevere l\'input dello scatto), Storage (usato per rinominare e spostare i file).</string>
 	<string name="request_permissions_ok">Tutte le autorizzazioni necessarie sono state concesse!</string>
-	<string name="request_permissions_title">Richiesta dei permessi necessari per la applicazione.</string>
-	<string name="seconds_unit">secondi</string>
-	<string name="send_debug_desc">Invia una e-mail con il file di debug</string>
+	<string name="request_permissions_title">Richiesta dei permessi necessari per l\'applicazione.</string>
+	<string name="seconds_unit">Secondi</string>
+	<string name="send_debug_confirmation">Vuoi inviare un report di Debug?\nLa tua applicazione predefinita di E-mail invierà una e-mail con due file allegati; sei pregato di inviarci anche una piccola descrizione dei tuoi problemi se è necessario.\nGrazie!</string>
+	<string name="send_debug_desc">Invia una e-mail con il file di Debug</string>
 	<string name="send_debug_email_title">Registri di debug per DSC Auto Rename</string>
-	<string name="send_debug_title">Invia i log di debug</string>
-	<string name="send_report">Spedisci la segnalazione&#8230;</string>
-	<string name="service_choice_0">Il servizio di autorinomina è disabilitato.</string>
+	<string name="send_debug_title">Inviare i log di Debug</string>
+	<string name="send_report">Inviare una segnalazione&#8230;</string>
+	<string name="service_choice_0">Il servizio di auto rinomina è disabilitato.</string>
+	<string name="service_choice_1">Il servizio di rinomina automatico è attivato dagli scatti fotografici.</string>
+	<string name="service_choice_2">Il servizio di rinomina automatico è attivato da nuovi eventi a contenuto multimediale.</string>
+	<string name="service_choice_3">Il servizio di rinomina automatico è attivato quando un file è aggiunto alle cartelle selezionate. Dovresti flaggare \"Rinomina all\'interno della cartella\" ed avere almeno una cartella in \"Seleziona una cartella\"</string>
 	<string-array name="service_type_labels">
 		<item>Disabilitato</item>
-		<item>eventi della fotocamera: le foto scattate o video.</item>
-		<item>Osservatore di contenuti multimediali: foto o video salvati.</item>
-		<item>Osservatore di file: Controlla le cartelle selezionate quando vengono aggiunti dei file. È necessario attivare \\"Rinomina all\'interno della cartella\\" e avere almeno una cartella in \\"selezionare cartella\\".</item>
+		<item>Eventi della fotocamera: Foto o video scattati.</item>
+		<item>Osservatore di contenuti multimediali: Foto o video salvati.</item>
+		<item>Osservatore di file: Controlla le cartelle selezionate quando vengono aggiunti dei file. È necessario attivare \"Rinomina all\'interno della cartella\" e avere almeno una cartella in \"selezionare cartella\".</item>
 	</string-array>
-	<string name="thank_you_title">Grazie per la donazione!</string>
+	<string name="thank_you_desc">Puoi ringraziarmi per l\'apprezzamento del mio lavoro comprando l\'applicazione PRO.</string>
+	<string name="thank_you_title">Grazie per la tua donazione!</string>
+	<string name="ui_settings">Impostazioni Interfaccia</string>
 	<string name="yes">Si</string>
 </resources>

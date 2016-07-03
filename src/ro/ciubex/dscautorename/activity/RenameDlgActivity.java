@@ -22,6 +22,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -59,6 +61,7 @@ public class RenameDlgActivity extends Activity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		mApplication = (DSCApplication) getApplication();
 		applyApplicationTheme();
+		applyApplicationLocale();
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.rename_dialog_layout);
 		initView();
@@ -72,6 +75,16 @@ public class RenameDlgActivity extends Activity implements
 	 */
 	private void applyApplicationTheme() {
 		this.setTheme(mApplication.getApplicationDialogTheme());
+	}
+
+	/**
+	 * Apply application locale.
+	 */
+	private void applyApplicationLocale() {
+		Resources resources = getBaseContext().getResources();
+		Configuration config = resources.getConfiguration();
+		config.locale = DSCApplication.getLocale();
+		resources.updateConfiguration(config, resources.getDisplayMetrics());
 	}
 
 	/**
@@ -256,15 +269,15 @@ public class RenameDlgActivity extends Activity implements
 		String message;
 		switch (count) {
 		case 0:
-			message = DSCApplication.getAppContext()
+			message = mApplication.getApplicationContext()
 					.getString(R.string.manually_file_rename_count_0);
 			break;
 		case 1:
-			message = DSCApplication.getAppContext()
+			message = mApplication.getApplicationContext()
 					.getString(R.string.manually_file_rename_count_1);
 			break;
 		default:
-			message = DSCApplication.getAppContext()
+			message = mApplication.getApplicationContext()
 					.getString(R.string.manually_file_rename_count_more, count);
 			break;
 		}

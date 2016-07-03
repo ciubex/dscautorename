@@ -105,7 +105,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	@Override
 	protected void onStart() {
 		mNow = new Date();
-		mDefaultFileName = new FileNameModel(mApplication, DSCApplication.getAppContext().getString(R.string.default_file_name_pattern));
+		mDefaultFileName = new FileNameModel(mApplication, mApplication.getApplicationContext().getString(R.string.default_file_name_pattern));
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		updateDialogTitle();
 		initValues();
@@ -193,9 +193,9 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 			String path = mDefaultFileName.getSelectedFolder().getFullPath();
 			String text;
 			if (Utilities.isEmpty(path)) {
-				text = DSCApplication.getAppContext().getString(R.string.move_file_text_no_folder);
+				text = mApplication.getApplicationContext().getString(R.string.move_file_text_no_folder);
 			} else {
-				text = DSCApplication.getAppContext().getString(R.string.move_file_text_selected_folder,
+				text = mApplication.getApplicationContext().getString(R.string.move_file_text_selected_folder,
 						path);
 			}
 			mSelectedFolderField.setText(text);
@@ -248,7 +248,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 				mDefaultFileName.setAfter(prefAfter);
 			}
 
-			text = DSCApplication.getAppContext().getString(R.string.file_name_pattern_dialog_bottom,
+			text = mApplication.getApplicationContext().getString(R.string.file_name_pattern_dialog_bottom,
 					mDefaultFileName.getDemoBefore(), getDemoFileName(prefAfter, mDefaultFileName.getDemoExtension()));
 		}
 		mFileNamePatternInfo.setText(text);
@@ -293,18 +293,18 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 		int index, length = mFileNameModels.length;
 		FileNameModel fileNameModel;
 		if (str11.length() < 1) {
-			return DSCApplication.getAppContext()
+			return mApplication.getApplicationContext()
 					.getString(R.string.file_name_pattern_validation_error_old_empty);
 		} else if (after.length() < 1) {
-			return DSCApplication.getAppContext()
+			return mApplication.getApplicationContext()
 					.getString(R.string.file_name_pattern_validation_error_new_empty);
 		} else {
 			if (before.startsWith("*.")) {
-				return DSCApplication.getAppContext().getString(R.string.file_name_pattern_validation_error_generic);
+				return mApplication.getApplicationContext().getString(R.string.file_name_pattern_validation_error_generic);
 			} else {
 				newFileName = getDemoFileName(after, getFileNameExtension(before));
 				if (renamePatternsUtilities.matchFileNameBefore(before, newFileName) != -1) {
-					return DSCApplication.getAppContext()
+					return mApplication.getApplicationContext()
 							.getString(R.string.file_name_pattern_validation_error_new);
 				}
 				for (index = 0; index < length; index++) {
@@ -315,20 +315,20 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 					str1 = fileNameModel.getBefore().toLowerCase(locale);
 					// check for original name pattern
 					if (str11.indexOf(str1) == 0) {
-						return DSCApplication.getAppContext()
+						return mApplication.getApplicationContext()
 								.getString(R.string.file_name_pattern_validation_error_old);
 					}
 					fileNameExt = getFileNameExtension(str1);
 					newFileName = getDemoFileName(fileNameModel.getAfter(), fileNameExt);
 					if (renamePatternsUtilities.matchFileNameBefore(before,
 							newFileName) == 0) {
-						return DSCApplication.getAppContext()
+						return mApplication.getApplicationContext()
 								.getString(R.string.file_name_pattern_validation_error_original);
 					}
 					newFileName = getDemoFileName(after, fileNameExt);
 					if (renamePatternsUtilities.matchFileNameBefore(fileNameModel.getBefore(),
 							newFileName) == 0) {
-						return DSCApplication.getAppContext()
+						return mApplication.getApplicationContext()
 								.getString(R.string.file_name_pattern_validation_error_rename);
 					}
 				}
@@ -385,7 +385,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 		} catch (Exception e) {
 			mApplication.logE(TAG, "startIntentActionOpenDocumentTree: " + e.getMessage(), e);
 			showConfirmationDialog(R.string.folder_list_title,
-					DSCApplication.getAppContext().getString(R.string.folder_list_no_open_document_tree_support),
+					mApplication.getApplicationContext().getString(R.string.folder_list_no_open_document_tree_support),
 					CONFIRMATION_USE_INTERNAL_SELECT_FOLDER,
 					null);
 		}
