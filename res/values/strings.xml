@@ -54,6 +54,8 @@
         <item>1</item>
         <item>60</item>
     </string-array>
+    <string name="rename_file_delay_title">Rename files delay</string>
+    <string name="rename_file_delay_desc">Rename next file after</string>
 
     <string name="rename_video_enabled_title">Enable video file rename</string>
     <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
@@ -233,8 +235,7 @@
 - Andreas Hauff for <b>German</b><br/>
 - RobertoDS for <b>Italian</b><br/>
 <br/>]]></Data></string>
-    <string name="about_text"><Data>
-<![CDATA[<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>
+    <string name="about_text"><Data><![CDATA[<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>
 <br/>
 This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/>
 <br/>
@@ -261,7 +262,6 @@ The rename service, if is enabled, automatically is triggered when the image fil
 The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.<br/>
 In some cases, the camera do not send any message, so is possible to select as a trigger the media content events, but this imply a permanently running service in background.<br/>
 <br/>
-For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.
-]]></Data></string>
+For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data></string>
 
 </resources>

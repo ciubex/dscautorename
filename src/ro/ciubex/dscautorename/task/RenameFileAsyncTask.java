@@ -18,7 +18,24 @@
  */
 package ro.ciubex.dscautorename.task;
 
+import android.annotation.TargetApi;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.database.Cursor;
+import android.media.ExifInterface;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.Preference;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,20 +53,6 @@ import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
 import ro.ciubex.dscautorename.util.Utilities;
-
-import android.annotation.TargetApi;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Intent;
-import android.database.Cursor;
-import android.media.ExifInterface;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 
 /**
  * An AsyncTask used to rename a file.
@@ -121,10 +124,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		}
 		mProgressPosition = 0;
 		mProgressLastPosition = -1;
-		boolean enableFilter;
 		if (mContentResolver != null) {
-			enableFilter = mApplication.isEnabledFolderScanning();
-			if (enableFilter) {
+			if (mApplication.isEnabledFolderScanning()) {
 				mFoldersScanning = mApplication.getSelectedFolders();
 			}
 			mApplication.updateMountedVolumes();
@@ -134,9 +135,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				if (!mNoDelay) {
 					executeDelay();
 				}
-				doGrantUriPermission();
 				renamePatternsUtilities.buildPatterns();
 				populateAllListFiles();
+				doGrantUriPermission();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
 					mPreviousFileNameModelCount = 0;
@@ -145,6 +146,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					publishProgress();
 					for (FileRenameData data : mListFiles) {
 						renameCurrentFile(data);
+						if (!mNoDelay) {
+							executeFileRenameDelay();
+						}
 					}
 					if (mProgressPosition > 0) {
 						mApplication.increaseFileRenameCount(mProgressPosition);
@@ -221,7 +225,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					mApplication.logD(TAG, "Skip rename file: " + currentFileName);
 				}
 			} else {
-				mApplication.logE(TAG, "The file:" + currentFileName + " does not exist.");
+				mApplication.logE(TAG, "The file: " + currentFileName + " does not exist.");
 			}
 		} else {
 			mApplication.logE(TAG, "oldFileName is null.");
@@ -307,8 +311,26 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private void executeDelay() {
 		long sec = mApplication.getRenameServiceStartDelay();
-		int unit = mApplication.getDelayUnit();
-		long delayMillis = sec * unit * 1000;
+		if (sec > 0) {
+			executeCustomDelay(sec * mApplication.getDelayUnit() * 1000);
+		}
+	}
+
+	/**
+	 * Execute a file rename delay period.
+	 */
+	private void executeFileRenameDelay() {
+		long sec = mApplication.getRenameFileDelay();
+		if (sec > 0) {
+			executeCustomDelay(sec * 1000);
+		}
+	}
+
+	/**
+	 * A common method to handle a delay.
+	 * @param delayMillis Delay period in milliseconds.
+     */
+	private void executeCustomDelay(long delayMillis) {
 		try {
 			Thread.sleep(delayMillis);
 		} catch (InterruptedException e) {
@@ -475,12 +497,16 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * @return True, if the rename process succeeded.
 	 */
 	private boolean renameFileApiLevelPriorKitKat(FileRenameData data, File oldFile, File newFile) {
+		boolean success = true;
 		if (mustMoveFile(oldFile, newFile)) {
 			if (!newFile.getParentFile().exists()) {
-				newFile.getParentFile().mkdirs();
+				success = newFile.getParentFile().mkdirs();
 			}
 		}
-		return oldFile.renameTo(newFile);
+		if (success) {
+			success = oldFile.renameTo(newFile);
+		}
+		return success;
 	}
 
 	/**
@@ -584,13 +610,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		Uri newParentUri = mApplication.getDocumentUri(mSelectedFolders, newParent.getAbsolutePath());
 		Uri newUri = DocumentsContract.createDocument(mContentResolver, newParentUri,
 				data.getMimeType(), newFile.getName());
-		if (newUri != null) {
-			String newExtension = getFileExtension(newUri.getPath());
-			String expectedExtension = getFileExtension(newFile.getName());
-			if (!newExtension.equals(expectedExtension)) { // rename the file with the right extension
-				newUri = DocumentsContract.renameDocument(mContentResolver, newUri, newFile.getName());
-			}
-		}
 		boolean result = false;
 		int size = 0;
 		try {
@@ -647,7 +666,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		String oldFileName = file.getName();
 		String suffix;
 		int idx = oldFileName.lastIndexOf(".");
-		String extension = getFileExtension(oldFileName);
+		String extension = "." + getFileExtension(oldFileName);
 		oldFileName = oldFileName.substring(0, idx);
 		String fileNameZero;
 		long milliseconds = 0;
@@ -697,7 +716,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private String getFileExtension(String fileName) {
 		int idx = fileName.lastIndexOf(".");
-		String extension = idx > 0 ? fileName.substring(idx) : "";
+		String extension = idx > 0 ? fileName.substring(idx + 1) : "";
 		return extension;
 	}
 
@@ -716,6 +735,20 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
+	 * Check if the file is an image based on its extenstion.
+	 *
+	 * @param fileName File name.
+	 * @return True if the file is an image.
+	 */
+	private boolean isImageFile(String fileName) {
+		String extension = String.valueOf(getFileExtension(fileName)).toLowerCase();
+		if (extension.startsWith("jp") || extension.startsWith("png")) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Obtain and calculate in milliseconds the date and time from EXIF meta
 	 * data.
 	 *
@@ -728,23 +761,24 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		long milliseconds = -1;
 		String fileName = file.getAbsolutePath();
 		try {
-			ExifInterface exifInterface = new ExifInterface(fileName);
-			dateTimeString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
-			if (dateTimeString != null) {
-				Date datetime = Utilities.parseExifDateTimeString(dateTimeString);
-				if (datetime != null) {
-					milliseconds = datetime.getTime();
+			if (isImageFile(fileName)) {
+				ExifInterface exifInterface = new ExifInterface(fileName);
+				dateTimeString = exifInterface.getAttribute(ExifInterface.TAG_DATETIME);
+				if (dateTimeString != null) {
+					Date datetime = Utilities.parseExifDateTimeString(dateTimeString);
+					if (datetime != null) {
+						milliseconds = datetime.getTime();
+					}
 				}
-			}
-			if (milliseconds == -1) {
+			} else {
 				milliseconds = extractMetadataDate(fileName);
 			}
 		} catch (IOException e) {
-			mApplication.logE(TAG, "IOException:" + e.getMessage() + " file:"
+			mApplication.logE(TAG, "IOException: " + e.getMessage() + " file:"
 					+ fileName, e);
 		} catch (Exception e) {
-			mApplication.logE(TAG, "Exception:" + e.getMessage() + " file:"
-					+ fileName + " dateTimeString:" + dateTimeString, e);
+			mApplication.logE(TAG, "Exception: " + e.getMessage() + " file: "
+					+ fileName + " dateTimeString: " + dateTimeString, e);
 		}
 		if (milliseconds == -1) {
 			milliseconds = getDateAdded(data, file);
@@ -761,17 +795,38 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@TargetApi(Build.VERSION_CODES.GINGERBREAD_MR1)
 	private long extractMetadataDate(String fileName) {
 		MediaMetadataRetriever retriever;
-		if (mMediaMetadataRetriever instanceof MediaMetadataRetriever) {
-			retriever = (MediaMetadataRetriever) mMediaMetadataRetriever;
-		} else {
-			retriever = new MediaMetadataRetriever();
-			mMediaMetadataRetriever = retriever;
+		FileInputStream inputStream = null;
+		FileDescriptor fileDescriptor;
+		try {
+			inputStream = new FileInputStream(fileName);
+			fileDescriptor = inputStream.getFD();
+			if (fileDescriptor == null) {
+				return -1;
+			}
+			if (mMediaMetadataRetriever instanceof MediaMetadataRetriever) {
+				retriever = (MediaMetadataRetriever) mMediaMetadataRetriever;
+			} else {
+				retriever = new MediaMetadataRetriever();
+				mMediaMetadataRetriever = retriever;
+			}
+			retriever.setDataSource(fileDescriptor);
+			String date = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
+			mApplication.logD(TAG, "METADATA_DATE: " + date + " fileName: " + fileName);
+			Date datetime = Utilities.parseMetadataDateTimeString(date);
+			return datetime != null ? datetime.getTime() : -1;
+		} catch (RuntimeException e) {
+			mApplication.logE(TAG, "extractMetadataDate(" + fileName
+					+ ") RuntimeException: " + e.getMessage(), e);
+		} catch (FileNotFoundException e) {
+			mApplication.logE(TAG, "extractMetadataDate(" + fileName
+					+ ") FileNotFoundException: " + e.getMessage(), e);
+		} catch (IOException e) {
+			mApplication.logE(TAG, "extractMetadataDate(" + fileName
+					+ ") IOException: " + e.getMessage(), e);
+		} finally {
+			Utilities.doClose(inputStream);
 		}
-		retriever.setDataSource(fileName);
-		String date = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DATE);
-		mApplication.logD(TAG, "METADATA_DATE: " + date + " fileName: " + fileName);
-		Date datetime = Utilities.parseMetadataDateTimeString(date);
-		return datetime != null ? datetime.getTime() : -1;
+		return -1;
 	}
 
 	/**

@@ -92,6 +92,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private Preference mRenameVideoEnabled;
 	private SeekBarPreference mRenameServiceStartDelay;
 	private ListPreference mDelayUnit;
+	private SeekBarPreference mRenameFileDelay;
 	private ListPreference mRenameFileDateType;
 	private Preference mDefineFileNamePatterns;
 	private Preference mSendBroadcastEnabled;
@@ -175,6 +176,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mRenameVideoEnabled = findPreference("renameVideoEnabled");
 		mRenameServiceStartDelay = (SeekBarPreference) findPreference("renameServiceStartDelay");
 		mDelayUnit = (ListPreference) findPreference("delayUnit");
+		mRenameFileDelay = (SeekBarPreference) findPreference("renameFileDelay");
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefineFileNamePatterns = findPreference("definePatterns");
 		mSendBroadcastEnabled = findPreference("sendBroadcastEnabled");
@@ -1179,6 +1181,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			mRenameVideoEnabled.setEnabled(allowed);
 			mRenameServiceStartDelay.setEnabled(allowed);
 			mDelayUnit.setEnabled(allowed);
+			mRenameFileDelay.setEnabled(allowed);
 			mEnabledFolderScanning.setEnabled(allowed);
 			mFolderScanningPref.setEnabled(allowed);
 			mEnableScanForFiles.setEnabled(allowed);

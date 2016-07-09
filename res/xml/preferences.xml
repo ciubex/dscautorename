@@ -51,6 +51,15 @@
             android:summary="@string/choose_units_desc"
             android:title="@string/choose_units_title"/>
 
+        <ro.ciubex.dscautorename.preference.SeekBarPreference
+            android:defaultValue="0"
+            android:key="renameFileDelay"
+            android:summary="@string/rename_file_delay_desc"
+            android:title="@string/rename_file_delay_title"
+            ciubex:maxValue="30"
+            ciubex:minValue="0"
+            ciubex:units="@string/seconds_unit"/>
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="enabledFolderScanning"

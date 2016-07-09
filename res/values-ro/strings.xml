@@ -102,6 +102,8 @@
 	<string name="please_wait">Te rog asteata&#8230;</string>
 	<string name="remove_rename_shortcut">Sterge scurtatura de lansare a serviciului de redenumire fisiere.</string>
 	<string name="remove_rename_shortcut_desc">Sterge scurtatura creata pentru lansarea manuala a serviciului de redenumit fisiere.</string>
+	<string name="rename_file_delay_desc">Redenumeste urmatorul fisier dupa</string>
+	<string name="rename_file_delay_title">Intarziere redenumire fisiere</string>
 	<string name="rename_file_using_desc">data si timpul cand a fost ultima oara modificat fisierul.</string>
 	<string-array name="rename_file_using_labels">
 		<item>data si timpul cand fisierul a fost indexat de sistem;</item>
