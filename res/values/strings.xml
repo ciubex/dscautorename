@@ -109,6 +109,8 @@
     <string name="new_folder">New Folder</string>
     <string name="send_broadcast_msg_title">Send broadcast message</string>
     <string name="send_broadcast_msg_desc">Send broadcast message with renamed file, using this option other application could be announced to pick new renamed file.</string>
+    <string name="invoke_media_scanner_for_file_title">Request the media scanner</string>
+    <string name="invoke_media_scanner_for_file_desc">Request the media scanner to scan renamed file, use this with caution, normally should not be selected! Use this to force the MTP cache to be updated, unfortunately not always is working!</string>
 
     <string-array name="rename_file_using_labels">
         <item>date and time when file was added to media provider;</item>

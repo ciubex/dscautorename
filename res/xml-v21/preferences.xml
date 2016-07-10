@@ -92,6 +92,12 @@
             android:summary="@string/send_broadcast_msg_desc"
             android:title="@string/send_broadcast_msg_title"/>
 
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="invokeMediaScannerEnabled"
+            android:summary="@string/invoke_media_scanner_for_file_desc"
+            android:title="@string/invoke_media_scanner_for_file_title"/>
+
         <EditTextPreference
             android:defaultValue="@string/file_name_suffix_format_value"
             android:key="fileNameSuffixFormat"

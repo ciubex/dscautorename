@@ -21,15 +21,13 @@ package ro.ciubex.dscautorename.task;
 import android.annotation.TargetApi;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.media.ExifInterface;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
-import android.preference.Preference;
+import android.os.ParcelFileDescriptor;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
@@ -37,13 +35,15 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.ref.WeakReference;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
@@ -55,7 +55,7 @@ import ro.ciubex.dscautorename.util.RenamePatternsUtilities;
 import ro.ciubex.dscautorename.util.Utilities;
 
 /**
- * An AsyncTask used to rename a file.
+ * An AsyncTask used to rename files.
  *
  * @author Claudiu Ciobotariu
  */
@@ -68,7 +68,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private SelectedFolderModel[] mFoldersScanning;
 	private boolean isGrantUriPermissionRequested;
 	private static int mProgressPosition, mProgressLastPosition, mProgressMax;
-	private static String mProgressMessage;
 	private FileNameModel[] mFileNameModels;
 	private List<SelectedFolderModel> mSelectedFolders;
 	private int mPreviousFileModelId;
@@ -76,11 +75,12 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private int mPreviousFileNameModelCount;
 	private boolean mIsUriPermissionGranted;
 	private RenamePatternsUtilities renamePatternsUtilities;
-	private static final int BUFFER = 1024;
 	private boolean mNoDelay;
 	private List<Uri> mMediaStoreURIs;
 	private List<Uri> mFileUris;
 	private Object mMediaMetadataRetriever;
+	private Set<String> mFilesToUpdate;
+	private Set<Uri> mBroadcastingMessages;
 
 	public interface Listener {
 		void onTaskStarted();
@@ -99,6 +99,8 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay, List<Uri> fileUris) {
 		this.mApplication = application;
 		this.mListener = new WeakReference<>(listener);
+		mFilesToUpdate = new TreeSet<>();
+		mBroadcastingMessages = new TreeSet<>();
 		mNoDelay = noDelay;
 		mFileUris = fileUris;
 	}
@@ -156,9 +158,39 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 					populateAllListFiles();
 				}
 			}
+			mApplication.setRenameFileTaskRunning(false);
+			if (!mFilesToUpdate.isEmpty() && mApplication.isInvokeMediaScannerEnabled()) {
+				invokeMediaScanner();
+			}
+			if (!mBroadcastingMessages.isEmpty()) {
+				doBroadcastingMessages();
+			}
+		} else {
+			mApplication.setRenameFileTaskRunning(false);
 		}
-		mApplication.setRenameFileTaskRunning(false);
 		return mProgressPosition;
+	}
+
+	/**
+	 * Invoke the Media Scanner.
+	 */
+	private void invokeMediaScanner() {
+		try {
+			Thread t = new Thread(new MediaStorageUpdateThread(mApplication, mFilesToUpdate));
+			t.start();
+			t.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Send broadcast messages with all available URIs.
+	 */
+	private void doBroadcastingMessages() {
+		for (Uri uri : mBroadcastingMessages) {
+			mApplication.sendBroadcastMessage(uri);
+		}
 	}
 
 	/**
@@ -259,34 +291,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	private boolean invokeRenameFile(FileRenameData data, final File file, String oldFileName) {
 		boolean result = mainRenameFile(data, file, oldFileName);
 		if (result) {
-			if (mApplication.isSendBroadcastEnabled()) {
-				sendBroadcastMessage(data);
-			}
 			mProgressPosition++;
 		}
 		return result;
-	}
-
-	/**
-	 * Send a broadcast message with data of renamed file.
-	 *
-	 * @param data Original data information.
-	 */
-	private void sendBroadcastMessage(FileRenameData data) {
-		Uri uri = data.getUri();
-		if (uri != null && data.getId() > -1) {
-			Uri.Builder builder = uri.buildUpon();
-			builder.appendPath(String.valueOf(data.getId()));
-			Uri broadcastUri = builder.build();
-			String action = uri.getPath().contains("images") ?
-					DSCApplication.NEW_PICTURE : DSCApplication.NEW_VIDEO;
-			mApplication.logD(TAG, "action: " + action + " broadcastUri:" + broadcastUri);
-			Intent intent = new Intent(action, broadcastUri);
-			Bundle b = new Bundle();
-			b.putBoolean(DSCApplication.SKIP_RENAME, true);
-			intent.putExtras(b);
-			mApplication.sendBroadcast(intent);
-		}
 	}
 
 	/**
@@ -344,11 +351,9 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected void onPreExecute() {
 		super.onPreExecute();
-		if (mListener.get() != null) {
-			Listener listener = mListener.get();
-			if (listener != null && !listener.isFinishing()) {
-				listener.onTaskStarted();
-			}
+		Listener listener = mListener.get();
+		if (listener != null && !listener.isFinishing()) {
+			listener.onTaskStarted();
 		}
 	}
 
@@ -364,15 +369,13 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		if (mProgressLastPosition != mProgressPosition) {
 			mProgressLastPosition = mProgressPosition;
 			Listener listener = mListener.get();
-			if (listener != null) {
-				if (listener != null && !listener.isFinishing()) {
-					mProgressMessage = mApplication.getApplicationContext().getString(
-							mProgressPosition == 1 ? R.string.manually_file_rename_progress_1
-									: R.string.manually_file_rename_progress_more,
-							mProgressPosition, mProgressMax);
-					mApplication.logD(TAG, "progress position: " + mProgressPosition);
-					listener.onTaskUpdate(mProgressPosition, mProgressMax, mProgressMessage);
-				}
+			if (listener != null && !listener.isFinishing()) {
+				String message = mApplication.getApplicationContext().getString(
+						mProgressPosition == 1 ? R.string.manually_file_rename_progress_1
+								: R.string.manually_file_rename_progress_more,
+						mProgressPosition, mProgressMax);
+				mApplication.logD(TAG, "progress position: " + mProgressPosition);
+				listener.onTaskUpdate(mProgressPosition, mProgressMax, message);
 			}
 		}
 	}
@@ -431,7 +434,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			if (success) {
 				updateFileRecord(data.getUri(), id,
 						data.getFullPath(), oldFileName, data.getFileTitle(),
-						data.getFileName(), data.getSize());
+						data.getFileName());
 				data.setParentFolder(newFile.getParentFile());
 				renameZeroFile(data);
 			} else {
@@ -462,8 +465,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 						newFile.getAbsolutePath(),
 						zeroFile.getAbsolutePath(),
 						data.getFileTitleZero(),
-						data.getFileNameZero(),
-						data.getSize());
+						data.getFileNameZero());
 			}
 		}
 	}
@@ -611,15 +613,13 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		Uri newUri = DocumentsContract.createDocument(mContentResolver, newParentUri,
 				data.getMimeType(), newFile.getName());
 		boolean result = false;
-		int size = 0;
+		long size = 0;
 		try {
 			if (oldUri != null && newUri != null) {
-				size = copyFileUseStream(mContentResolver.openInputStream(oldUri),
-						mContentResolver.openOutputStream(newUri));
-
+				size = copyFileWithStreams(oldUri, newUri);
 			}
 			result = (size > 0);
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			mApplication.logE(TAG, "doMoveFilesNewAPI " + oldFile + " to " + newFile, e);
 		}
 		if (result) {
@@ -628,33 +628,62 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		return result;
 	}
 
-	/**
-	 * Method used to copy a file content using stream buffering.
-	 *
-	 * @param inStream  The input stream.
-	 * @param outStream The output stream.
-	 * @return The copy size.
-	 */
-	private int copyFileUseStream(InputStream inStream, OutputStream outStream) {
-		int size = 0;
-		byte[] buffer = new byte[BUFFER];
-		int length;
-		try {
-			while ((length = inStream.read(buffer)) != -1) {
-				outStream.write(buffer, 0, length);
-				size += length;
-			}
-			if (size > 0) {
-				outStream.flush();
-			}
-		} catch (IOException e) {
-			size = 0;
-		} finally {
-			Utilities.doClose(inStream);
-			Utilities.doClose(outStream);
-		}
-		return size;
-	}
+    /**
+     * Method used to copy a file from a source to a destination.
+     *
+     * @param source      The source file URI.
+     * @param destination The destination file URI.
+     * @return The copy size.
+     */
+    @TargetApi(19)
+    private long copyFileWithStreams(Uri source, Uri destination) {
+        ParcelFileDescriptor sourceFileDesc = null;
+        ParcelFileDescriptor destFileDesc = null;
+        FileChannel inChannel = null;
+        FileChannel outChannel = null;
+        long size = 0;
+        long expectedSize;
+        boolean copyError = false;
+        try {
+            sourceFileDesc = mContentResolver.openFileDescriptor(source, "r", null);
+            destFileDesc = mContentResolver.openFileDescriptor(destination, "w", null);
+            FileInputStream fis = new FileInputStream(sourceFileDesc.getFileDescriptor());
+            FileOutputStream fos = new FileOutputStream(destFileDesc.getFileDescriptor());
+            inChannel = fis.getChannel();
+            outChannel = fos.getChannel();
+            expectedSize = inChannel.size();
+            size = outChannel.transferFrom(inChannel, 0, expectedSize);
+            if (size != expectedSize) {
+                copyError = true;
+                mApplication.logE(TAG, "Copy error, different size, expected: " + expectedSize
+                        + " but copied: " + size + " from: " + source.toString()
+                        + " to " + destination.toString());
+                size = 0;
+            }
+        } catch (IOException e) {
+            copyError = true;
+            size = 0;
+            if (destFileDesc != null) {
+                try {
+                    destFileDesc.closeWithError(e.getMessage());
+                } catch (IOException e1) {
+                    mApplication.logE(TAG, "Error closing destination: " + destination.toString(),
+                            e1);
+                }
+            }
+            mApplication.logE(TAG, "copyFileWithStreams " + source.toString()
+                    + " to " + destination.toString(), e);
+        } finally {
+            Utilities.doClose(sourceFileDesc);
+            Utilities.doClose(destFileDesc);
+            Utilities.doClose(inChannel);
+            Utilities.doClose(outChannel);
+        }
+        if (copyError) { // delete wrong destination file
+            DocumentsContract.deleteDocument(mContentResolver, destination);
+        }
+        return size;
+    }
 
 	/**
 	 * Rename the file provided as parameter.
@@ -1138,12 +1167,10 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 *                    extension.
 	 * @param displayName The file display name, usually is the file name without the
 	 *                    path.
-	 * @param size        The file size.
 	 * @return True if the media store was updated.
 	 */
 	private boolean updateFileRecord(Uri uri, int id, String data, String oldData,
-									 String title, String displayName,
-									 long size) {
+									 String title, String displayName) {
 		String whereClause;
 		String[] whereParam = new String[1];
 		if (id != -1) {
@@ -1153,10 +1180,30 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			whereClause = MediaStore.MediaColumns.DATA + "=?";
 			whereParam[0] = oldData;
 		}
+		if (mApplication.isInvokeMediaScannerEnabled()) {
+			mFilesToUpdate.add(oldData);
+			mFilesToUpdate.add(data);
+		} else if (mApplication.isSendBroadcastEnabled()) {
+			prepareBroadcastMessage(uri, id);
+		}
 		if (uri == null) {
 			return updateMediaStoreData(data, title, displayName, whereClause, whereParam);
 		}
 		return updateMediaStoreData(uri, data, title, displayName, whereClause, whereParam);
+	}
+
+	/**
+	 * Prepare list of renamed files to be broadcasting.
+	 *
+	 * @param uri Base URI.
+	 * @param id  ID of file to be broadcast.
+	 */
+	private void prepareBroadcastMessage(Uri uri, int id) {
+		if (uri != null && id > -1) {
+			Uri.Builder builder = uri.buildUpon();
+			builder.appendPath(String.valueOf(id));
+			mBroadcastingMessages.add(builder.build());
+		}
 	}
 
 	/**

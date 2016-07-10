@@ -96,6 +96,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private ListPreference mRenameFileDateType;
 	private Preference mDefineFileNamePatterns;
 	private Preference mSendBroadcastEnabled;
+	private Preference mInvokeMediaScannerEnabled;
 	private EditTextPreference mFileNameSuffixFormat;
 	private Preference mEnabledFolderScanning;
 	private Preference mFolderScanningPref;
@@ -180,6 +181,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		mRenameFileDateType = (ListPreference) findPreference("renameFileDateType");
 		mDefineFileNamePatterns = findPreference("definePatterns");
 		mSendBroadcastEnabled = findPreference("sendBroadcastEnabled");
+		mInvokeMediaScannerEnabled = findPreference("invokeMediaScannerEnabled");
 		mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
 		mEnabledFolderScanning = findPreference("enabledFolderScanning");
 		mFolderScanningPref = findPreference("folderScanningPref");
@@ -1187,6 +1189,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			mEnableScanForFiles.setEnabled(allowed);
 			mDefineFileNamePatterns.setEnabled(allowed);
 			mSendBroadcastEnabled.setEnabled(allowed);
+			mInvokeMediaScannerEnabled.setEnabled(allowed);
 			mFileNameSuffixFormat.setEnabled(allowed);
 			mRenameFileDateType.setEnabled(allowed);
 			mAppendOriginalName.setEnabled(allowed);

@@ -418,9 +418,9 @@ public class Utilities {
 	 */
 	public static boolean contained(String string1, String string2) {
 		if (string1.length() > string2.length()) {
-			return (string1.indexOf(string2) > -1);
+			return (string1.contains(string2));
 		}
-		return (string2.indexOf(string1) > -1);
+		return (string2.contains(string1));
 	}
 
 	/**

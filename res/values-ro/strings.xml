@@ -79,6 +79,8 @@
 	<string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
 	<string name="folder_list_title">Lista directoarelor selectate.</string>
 	<string name="general_settings">Setari generale</string>
+	<string name="invoke_media_scanner_for_file_desc">Invoca Media Scanner pentru a scana fisierul redenumit, utilizeaza aceasta optiune cu grija, in mod normal nu ar trebui activata! Utilizeaza aceasta optiune pentru a forta actualizarea cache-ului MTP-ului, insa din pacate nu intotdeauna functioneaza.</string>
+	<string name="invoke_media_scanner_for_file_title">Invoca Media Scanner</string>
 	<string name="list_info_press">Adauga sau sterge elemente.</string>
 	<string name="loading_wait">Se incarca&#8230;</string>
 	<string name="manually_file_rename_count_0">Nici un fisier nu a fost redenumit.</string>

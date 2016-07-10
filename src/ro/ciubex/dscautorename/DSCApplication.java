@@ -31,7 +31,6 @@ import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import ro.ciubex.dscautorename.activity.RenameShortcutUpdateListener;
 import ro.ciubex.dscautorename.model.FileNameModel;
@@ -57,6 +56,7 @@ import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.util.Log;
@@ -130,6 +130,7 @@ public class DSCApplication extends Application {
 
 	public static final String SKIP_RENAME = "SKIP_RENAME";
 	public static final String KEY_SEND_BROADCAST = "sendBroadcastEnabled";
+	public static final String KEY_INVOKE_MEDIA_SCANNER = "invokeMediaScannerEnabled";
 	public static final String NEW_PICTURE = "android.hardware.action.NEW_PICTURE";
 	public static final String NEW_VIDEO = "android.hardware.action.NEW_VIDEO";
 
@@ -846,6 +847,15 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Check if the application should invoked the media scanner when files are renamed.
+	 *
+	 * @return True if should be invoked the media scanner.
+	 */
+	public boolean isInvokeMediaScannerEnabled() {
+		return mSharedPreferences.getBoolean(KEY_INVOKE_MEDIA_SCANNER, false);
+	}
+
+	/**
 	 * Method used to dynamically register a content observer service used to
 	 * launch automatically rename service.
 	 */
@@ -1239,15 +1249,15 @@ public class DSCApplication extends Application {
 	 */
 	public boolean isFirstInstallation() {
 		Map<String, ?> allEntries = mSharedPreferences.getAll();
-		String key = FIRST_TIME + getVersionCode();
 		String keyEntry;
+		int count = 0;
 		for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
 			keyEntry = entry.getKey();
 			if (keyEntry.startsWith(FIRST_TIME)) {
-				return keyEntry.equals(key);
+				count++;
 			}
 		}
-		return false;
+		return count == 1;
 	}
 
 	/**
@@ -1752,5 +1762,21 @@ public class DSCApplication extends Application {
 			return R.style.DialogThemeDark;
 		}
 		return R.style.DialogThemeLight;
+	}
+
+	/**
+	 * Send a broadcast message with uri of renamed file.
+	 *
+	 * @param uri URI to broadcast.
+	 */
+	public void sendBroadcastMessage(Uri uri) {
+		String action = uri.getPath().contains("images") ?
+				DSCApplication.NEW_PICTURE : DSCApplication.NEW_VIDEO;
+		logD(TAG, "action: " + action + " broadcastUri:" + uri);
+		Intent intent = new Intent(action, uri);
+		Bundle b = new Bundle();
+		b.putBoolean(DSCApplication.SKIP_RENAME, true);
+		intent.putExtras(b);
+		sendBroadcast(intent);
 	}
 }
