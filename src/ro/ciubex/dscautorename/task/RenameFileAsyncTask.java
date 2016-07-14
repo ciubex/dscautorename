@@ -427,12 +427,11 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			exist = newFile.exists();
 		} while (exist && mPreviousFileNameModelCount < 1000);
 		if (!exist) {
-			int id = data.getId();
 			data.setFullPath(newFile.getAbsolutePath());
 			data.setFileName(newFile.getName());
 			success = renameFileUseApiLevel(data, oldFile, newFile);
 			if (success) {
-				updateFileRecord(data.getUri(), id,
+				updateFileRecord(data.getUri(), data.getId(),
 						data.getFullPath(), oldFileName, data.getFileTitle(),
 						data.getFileName());
 				data.setParentFolder(newFile.getParentFile());
@@ -547,7 +546,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 				Uri newUri = doRenameFilesNewAPI(data, oldFile, newFile);
 				result = newUri != null;
 				if (result && moveFile) {
-					doMoveFilesNewAPI(newUri, data, oldFile, newFile);
+					result = doMoveFilesNewAPI(newUri, data, oldFile, newFile);
 				}
 				if (!result) {
 					mApplication.logD(TAG, "Can not be renamed using new API, rename using old Java File API: " + fullFilePath);
@@ -1181,7 +1180,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			whereParam[0] = oldData;
 		}
 		if (mApplication.isInvokeMediaScannerEnabled()) {
-			mFilesToUpdate.add(oldData);
+//			mFilesToUpdate.add(oldData);
 			mFilesToUpdate.add(data);
 		} else if (mApplication.isSendBroadcastEnabled()) {
 			prepareBroadcastMessage(uri, id);

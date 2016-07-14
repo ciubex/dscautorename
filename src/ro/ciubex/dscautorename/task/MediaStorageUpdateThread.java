@@ -21,6 +21,8 @@ package ro.ciubex.dscautorename.task;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 
+import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 import ro.ciubex.dscautorename.DSCApplication;
@@ -43,12 +45,15 @@ public class MediaStorageUpdateThread implements Runnable {
 
     @Override
     public void run() {
-        final int size = mFilesToUpdate.size();
-        String[] filesToScan = new String[size];
-        filesToScan = mFilesToUpdate.toArray(filesToScan);
-        MediaScannerConnection.scanFile(mApplication.getApplicationContext(), filesToScan, null,
-                new MediaScannerConnection.OnScanCompletedListener() {
+        useMediaScanner();
+    }
 
+    /**
+     * Method used to invoke the media scanner to scan renamed files.
+     */
+    private void useMediaScanner() {
+        MediaScannerConnection.scanFile(mApplication.getApplicationContext(), getFilesToScan(), null,
+                new MediaScannerConnection.OnScanCompletedListener() {
                     @Override
                     public void onScanCompleted(String path, Uri uri) {
                         mApplication.logD(TAG, "File " + path + " was scanned successfully: " + uri);
@@ -58,5 +63,24 @@ public class MediaStorageUpdateThread implements Runnable {
                     }
                 }
         );
+    }
+
+    /**
+     * Prepare only existing files.
+     *
+     * @return Array of existing files.
+     */
+    private String[] getFilesToScan() {
+        File file;
+        Set<String> updates = new HashSet<>();
+        for (String fileFullPath : mFilesToUpdate) {
+            file = new File(fileFullPath);
+            if (file.exists() && file.length() > 0) {
+                updates.add(fileFullPath);
+            }
+        }
+        String[] filesToScan = new String[updates.size()];
+        filesToScan = updates.toArray(filesToScan);
+        return filesToScan;
     }
 }
