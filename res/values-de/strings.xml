@@ -80,6 +80,8 @@
 	<string name="folder_list_no_selection">Wähle mindestens einen Ordner zum löschen aus!</string>
 	<string name="folder_list_title">Zu scannende Verzeichnisse</string>
 	<string name="general_settings">Einstellungen</string>
+	<string name="invoke_media_scanner_for_file_desc">Medien Scanner auffordern nach umbenannten Dateien zu suchen. Nutze dieses mit Vorsicht, normalerweise sollte diese Option nicht gewählt werden! Hiermit wird die Aktualisierung des MTP Caches erzwungen, was leider nicht immer funktioniert!</string>
+	<string name="invoke_media_scanner_for_file_title">Medien Scanner auffordern</string>
 	<string name="license_desc">Lizenzdetails für Open Source Software</string>
 	<string name="license_title">Open Source Lizenz</string>
 	<string name="list_info_press">Hinzufügen oder löschen von Dateien</string>
@@ -105,6 +107,8 @@
 	<string name="please_wait">Bitte warten&#8230;</string>
 	<string name="remove_rename_shortcut">Entferne DSC Rename Service Lesezeichen</string>
 	<string name="remove_rename_shortcut_desc">DSC Rename Service Lesezeichen vom Home Screen entfernen</string>
+	<string name="rename_file_delay_desc">Umbenennen der nächsten Datei nach</string>
+	<string name="rename_file_delay_title">Verzögerung der Umbenennung</string>
 	<string name="rename_file_using_desc">Datum und Zeit wann die Datei das letzte mal modifiziert wurde.</string>
 	<string-array name="rename_file_using_labels">
 		<item>Datum und Zeit der Erstellung.</item>
@@ -135,10 +139,10 @@
 	<string name="service_choice_2">Der Auto Rename Service wird durch Medienereignisse ausgelöst.</string>
 	<string name="service_choice_3">Der Auto Rename Service wird ausgelöst, wenn dem ausgewählten Verzeichnis eine Datei hinzugefügt wird. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</string>
 	<string-array name="service_type_labels">
-		<item>> Deaktiviert</item>
-		<item>> Kamera Ereignisse : Bilder oder Videos aufgenommen.</item>
-		<item>> Medien Überwachung: Bilder oder Videos wurden gespeichert.</item>
-		<item>> Datei Überwachung: Überwache die gewählten Verzeichnisse, ob Dateien hinzugefügt werden. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</item>
+		<item>Deaktiviert</item>
+		<item>Kamera Ereignisse : Bilder oder Videos aufgenommen.</item>
+		<item>Medien Überwachung: Bilder oder Videos wurden gespeichert.</item>
+		<item>Datei Überwachung: Überwache die gewählten Verzeichnisse, ob Dateien hinzugefügt werden. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</item>
 	</string-array>
 	<string name="thank_you_desc">Danke das Dir meine Arbeit gefällt und die Pro Version gekauft hast.</string>
 	<string name="thank_you_title">Danke für die Spende!</string>

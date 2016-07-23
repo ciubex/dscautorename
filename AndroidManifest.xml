@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="83"
-    android:versionName="5.2.6" >
+    android:versionCode="84"
+    android:versionName="5.3.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -106,11 +106,15 @@
         </receiver>
 
         <service
-            android:name="ro.ciubex.dscautorename.receiver.MediaStorageObserverService"
+            android:name="ro.ciubex.dscautorename.service.MediaStorageObserverService"
             android:enabled="true" />
 
         <service
-            android:name="ro.ciubex.dscautorename.receiver.FolderObserverService"
+            android:name="ro.ciubex.dscautorename.service.FolderObserverService"
+            android:enabled="true" />
+
+        <service
+            android:name="ro.ciubex.dscautorename.service.CameraRenameService"
             android:enabled="true" />
 
         <provider

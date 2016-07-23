@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * <p/>
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,9 +31,9 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.text.Spannable;
@@ -58,7 +58,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipEntry;
@@ -66,15 +65,15 @@ import java.util.zip.ZipOutputStream;
 
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
-import ro.ciubex.dscautorename.dialog.SelectFoldersListDialog;
 import ro.ciubex.dscautorename.dialog.SelectFileNamePatternDialog;
+import ro.ciubex.dscautorename.dialog.SelectFoldersListDialog;
 import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.preference.SeekBarPreference;
 import ro.ciubex.dscautorename.provider.CachedFileProvider;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
-import ro.ciubex.dscautorename.util.Devices;
+import ro.ciubex.dscautorename.util.DevicesUtils;
 import ro.ciubex.dscautorename.util.Utilities;
 
 /**
@@ -412,6 +411,7 @@ public class SettingsActivity extends PreferenceActivity implements
 										  String key) {
 		boolean doPrepareSummaries = true;
 		if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
+			mApplication.resetCameraServiceInstanceCount();
 			mApplication.checkRegisteredServiceType(false);
 		} else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
 			mApplication.updateFolderObserverList();
@@ -494,6 +494,9 @@ public class SettingsActivity extends PreferenceActivity implements
 				break;
 			case DSCApplication.SERVICE_TYPE_FILE_OBSERVER:
 				mServiceTypeList.setSummary(R.string.service_choice_3);
+				break;
+			case DSCApplication.SERVICE_TYPE_CAMERA_SERVICE:
+				mServiceTypeList.setSummary(R.string.service_choice_4);
 				break;
 			default:
 				mServiceTypeList.setSummary(R.string.service_choice_0);
@@ -596,9 +599,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	private void startRenameServiceManually() {
 		mApplication.setRenameFileRequested(true);
 		mApplication.logD(TAG, "startRenameServiceManually");
-		if (!mApplication.isRenameFileTaskRunning()) {
-			new RenameFileAsyncTask(mApplication, this, true, null).execute();
-		}
+		mApplication.launchAutoRenameTask(this, true, null, true);
 	}
 
 	/**
@@ -1052,7 +1053,7 @@ public class SettingsActivity extends PreferenceActivity implements
 			writer.write("Android version: " + Build.VERSION.SDK_INT +
 					" (" + Build.VERSION.CODENAME + ")" + LS);
 			writer.write("Device: " + model + LS);
-			writer.write("Device name: " + Devices.getDeviceName() + LS);
+			writer.write("Device name: " + DevicesUtils.getDeviceName(getAssets()) + LS);
 			writer.write("App version: " + mApplication.getVersionName() +
 					" (" + mApplication.getVersionCode() + ")" + LS);
 			mApplication.writeSharedPreferences(writer);

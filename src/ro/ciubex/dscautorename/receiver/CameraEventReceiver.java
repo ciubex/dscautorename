@@ -44,8 +44,8 @@ public class CameraEventReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(final Context context, final Intent intent) {
         Context appCtx = context.getApplicationContext();
-        boolean skipRenameFile = false;
         if (appCtx instanceof DSCApplication) {
+            boolean skipRenameFile = false;
             mApplication = (DSCApplication) appCtx;
             Bundle b = intent.getExtras();
             if (b != null) {
@@ -54,19 +54,21 @@ public class CameraEventReceiver extends BroadcastReceiver {
                 }
             }
             mApplication.logD(TAG, "onReceive: " + intent.getAction() + ":" + intent.getDataString() + " skipRename:" + skipRenameFile);
-        }
-        if (!skipRenameFile && mApplication != null
-                && DSCApplication.SERVICE_TYPE_CAMERA == mApplication
-                .getServiceType()) {
-            String action = intent.getAction();
-            boolean isVideo = (DSCApplication.NEW_VIDEO.equals(action)
-                    || "com.android.camera.NEW_VIDEO".equals(action));
-            boolean isPicture = (DSCApplication.NEW_PICTURE.equals(action)
-                    || "com.android.camera.NEW_PICTURE".equals(action));
-            boolean process = isPicture
-                    || (isVideo && mApplication.isRenameVideoEnabled());
-            if (process) {
-                mApplication.launchAutoRenameTask();
+            if (!skipRenameFile ) {
+                int serviceType = mApplication.getServiceType();
+                if (DSCApplication.SERVICE_TYPE_CAMERA == serviceType ||
+                        DSCApplication.SERVICE_TYPE_CAMERA_SERVICE == serviceType) {
+                    String action = intent.getAction();
+                    boolean isVideo = (DSCApplication.NEW_VIDEO.equals(action)
+                            || "com.android.camera.NEW_VIDEO".equals(action));
+                    boolean isPicture = (DSCApplication.NEW_PICTURE.equals(action)
+                            || "com.android.camera.NEW_PICTURE".equals(action));
+                    boolean process = isPicture
+                            || (isVideo && mApplication.isRenameVideoEnabled());
+                    if (process) {
+                        mApplication.launchAutoRenameTask(null, false, null, false);
+                    }
+                }
             }
         }
     }

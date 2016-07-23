@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,7 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 /**
- * @author Claudiu
+ * @author Claudiu Ciobotariu
  * 
  */
 public class FolderListAdapter extends BaseAdapter {

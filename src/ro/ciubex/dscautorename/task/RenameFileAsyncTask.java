@@ -92,10 +92,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		boolean isFinishing();
 	}
 
-	public RenameFileAsyncTask(DSCApplication application) {
-		this(application, null, false, null);
-	}
-
 	public RenameFileAsyncTask(DSCApplication application, Listener listener, boolean noDelay, List<Uri> fileUris) {
 		this.mApplication = application;
 		this.mListener = new WeakReference<>(listener);
@@ -168,6 +164,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		} else {
 			mApplication.setRenameFileTaskRunning(false);
 		}
+		mApplication.logD(TAG, "Finished doInBackground()");
 		return mProgressPosition;
 	}
 

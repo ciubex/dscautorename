@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,12 +22,12 @@ package ro.ciubex.dscautorename.activity;
  * @author Claudiu Ciobotariu
  */
 public interface RenameShortcutUpdateListener {
-	public enum TYPE {
+	enum TYPE {
 		INSTALL, UNINSTALL
 	}
 
-	public static final String INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
-	public static final String UNINSTALL_SHORTCUT = "com.android.launcher.action.UNINSTALL_SHORTCUT";
+	String INSTALL_SHORTCUT = "com.android.launcher.action.INSTALL_SHORTCUT";
+	String UNINSTALL_SHORTCUT = "com.android.launcher.action.UNINSTALL_SHORTCUT";
 
-	public void updateRenameShortcut();
+	void updateRenameShortcut();
 }

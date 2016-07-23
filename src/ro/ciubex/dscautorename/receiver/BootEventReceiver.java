@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,6 +30,7 @@ import android.content.Intent;
  * 
  */
 public class BootEventReceiver extends BroadcastReceiver {
+	private static final String TAG = BootEventReceiver.class.getName();
 
 	/**
 	 * This method is called when the BroadcastReceiver is receiving an Intent
@@ -42,17 +43,16 @@ public class BootEventReceiver extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		DSCApplication application = null;
 		Context appCtx = context.getApplicationContext();
 		if (appCtx instanceof DSCApplication) {
-			application = (DSCApplication) appCtx;
-		}
-		if (application != null
-				&& (DSCApplication.SERVICE_TYPE_CONTENT == application
-						.getServiceType() ||
-				DSCApplication.SERVICE_TYPE_FILE_OBSERVER == application
-						.getServiceType())) {
-			application.checkRegisteredServiceType(true);
+			DSCApplication application = (DSCApplication) appCtx;
+			application.logD(TAG, "onReceive: " + intent.getAction() + ":" + intent.getDataString());
+			int serviceType = application.getServiceType();
+			if (DSCApplication.SERVICE_TYPE_CONTENT == serviceType ||
+					DSCApplication.SERVICE_TYPE_FILE_OBSERVER == serviceType ||
+					DSCApplication.SERVICE_TYPE_CAMERA_SERVICE == serviceType) {
+				application.checkRegisteredServiceType(true);
+			}
 		}
 	}
 

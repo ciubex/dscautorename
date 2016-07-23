@@ -206,10 +206,7 @@ public class RenameDlgActivity extends Activity implements
 	 * This method will start the rename service.
 	 */
 	private void doStartRenameService() {
-		mApplication.setRenameFileRequested(true);
-		if (!mApplication.isRenameFileTaskRunning()) {
-			new RenameFileAsyncTask(mApplication, this, true, mFileUris).execute();
-		}
+		mApplication.launchAutoRenameTask(this, true, mFileUris, true);
 	}
 
 	/**

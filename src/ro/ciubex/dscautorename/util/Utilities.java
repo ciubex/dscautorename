@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,7 +45,8 @@ import ro.ciubex.dscautorename.model.SelectedFolderModel;
 
 /**
  * This is an utilities class with some useful methods.
- * Created by claudiu on 06.04.2015.
+ *
+ * @author Claudiu Ciobotariu
  */
 public class Utilities {
 	private static final String TAG = Utilities.class.getName();

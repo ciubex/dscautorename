@@ -70,7 +70,7 @@
 	<string name="file_rename_count_desc">Toccare per azzerare il numero di file rinominati.</string>
 	<string name="file_rename_count_title">Numero di file rinominati: %d</string>
 	<string name="filter_folder_no_folder">[Nessuna cartella]</string>
-	<string name="filter_folder_title">Selezionare una cartella.</string>
+	<string name="filter_folder_title">Selezionare una cartella</string>
 	<string name="first_time_alert">LEGGERE ATTENTAMENTE:\nI file rinominati e spostati dal processo non possono essere rigenerati!\nUsare questo programma con attenzione!\nDefinire la rinomina dei file individualmente per le immagini e/o i video; i file rinominati possono essere spostati anche in un\'altra cartella. Possono essere usati anche caratteri speciali come */?.\nNon usare caratteri generici come *.JPG per evitare un processo infinito di rinomina.\né meglio usare \"?\" per definire un possibile carattere singolo in combinazione con altri caratteri esistenti come _.\nPer esempio, se il nome del file originale è 20150729_212537.JPG, usare un modello come ????????_??????.JPG e inserire un prefisso \'Foto_\' (usa l\'apostrofo per definire testi costanti) nel modello di rinomina come \'\'Foto_\'yyyyMMdd_HHmmss\"  per rinominare il file in: Foto_20150729_212537.JPG</string>
 	<string name="folder_list_all_selected">Almeno una cartella deve essere deselezionata!</string>
 	<string name="folder_list_confirmation">Vuoi rimuovere le cartelle selezionate?</string>
@@ -78,8 +78,10 @@
 	<string name="folder_list_no_grant_permission_2">Il tuo sistema ha revocato i permessi per le seguenti cartelle:\n\n%s\n\n Controlla dove sono le tue cartelle e prova a riselezionarle!\n\n Puoi ignorare questo messaggio, ma l\'applicazione non funzionerà bene fino a che non ci sarà pieno accesso alle cartelle selezionate.</string>
 	<string name="folder_list_no_open_document_tree_support">La tua versione Android non ha il supporto per scegliere le cartelle (ACTION_OPEN_DOCUMENT_TREE).\n Vuoi usare la memoria interna per selezionare una cartella? Usando la memoria interna, l\'applicazione non avrà i permessi necessari per rinominare e spostare i file!</string>
 	<string name="folder_list_no_selection">Selezionare almeno una cartella da eliminare!</string>
-	<string name="folder_list_title">Elenco delle cartelle scansionate.</string>
+	<string name="folder_list_title">Elenco delle cartelle scansionate</string>
 	<string name="general_settings">Impostazioni generali</string>
+	<string name="invoke_media_scanner_for_file_desc">Attivare il Media Scanner per cercare file rinominati, usala con attenzione, normalmente non dovrebbe essere selezionato! Usala per forzare la cache MTP ad aggiornarsi, sfortunatamente non funzionerà sempre!</string>
+	<string name="invoke_media_scanner_for_file_title">Attivare il Media Scanner</string>
 	<string name="license_desc">Dettagli della licenza per il Software Open Source</string>
 	<string name="license_title">Licenze Open Source</string>
 	<string name="list_info_press">Aggiungere o eliminare elementi.</string>
@@ -104,6 +106,8 @@
 	<string name="please_wait">Attendere prego&#8230;</string>
 	<string name="remove_rename_shortcut">Rimuovere la scorciatoia del servizio DSC Rename</string>
 	<string name="remove_rename_shortcut_desc">Rimuovere dalla schermata iniziale la scorciatoia DSC Rename</string>
+	<string name="rename_file_delay_desc">Rinomina il prossimo file dopo</string>
+	<string name="rename_file_delay_title">Ritardo di rinomina dei file</string>
 	<string name="rename_file_using_desc">Data e ora in cui il file è stato modificato l\'ultima volta.</string>
 	<string-array name="rename_file_using_labels">
 		<item>La data e l\'ora in cui il file è stato aggiunto al fornitore di contenuti multimediali;</item>
@@ -122,6 +126,8 @@
 	<string name="request_permissions_ok">Tutte le autorizzazioni necessarie sono state concesse!</string>
 	<string name="request_permissions_title">Richiesta dei permessi necessari per l\'applicazione.</string>
 	<string name="seconds_unit">Secondi</string>
+	<string name="send_broadcast_msg_desc">Inviare messaggi broadcast con i file rinominati, usando questa applicazione, un\'altra applicaziona potrebbe essere segnalata per scegliere nuovi file rinominati</string>
+	<string name="send_broadcast_msg_title">Inviare messaggio broadcast</string>
 	<string name="send_debug_confirmation">Vuoi inviare un report di Debug?\nLa tua applicazione predefinita di E-mail invierà una e-mail con due file allegati; sei pregato di inviarci anche una piccola descrizione dei tuoi problemi se è necessario.\nGrazie!</string>
 	<string name="send_debug_desc">Invia una e-mail con il file di Debug</string>
 	<string name="send_debug_email_title">Registri di debug per DSC Auto Rename</string>

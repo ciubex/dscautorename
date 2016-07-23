@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * <p/>
- * Copyright (C) 2015 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * <p/>
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,6 +25,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
@@ -37,8 +38,9 @@ import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.receiver.FolderObserver;
-import ro.ciubex.dscautorename.receiver.FolderObserverService;
-import ro.ciubex.dscautorename.receiver.MediaStorageObserverService;
+import ro.ciubex.dscautorename.service.FolderObserverService;
+import ro.ciubex.dscautorename.service.MediaStorageObserverService;
+import ro.ciubex.dscautorename.service.CameraRenameService;
 import ro.ciubex.dscautorename.task.LogThread;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import ro.ciubex.dscautorename.util.Utilities;
@@ -47,16 +49,22 @@ import android.annotation.TargetApi;
 import android.app.Application;
 import android.app.ProgressDialog;
 import android.app.backup.BackupManager;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.util.Log;
@@ -83,6 +91,7 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_CAMERA = 1;
 	public static final int SERVICE_TYPE_CONTENT = 2;
 	public static final int SERVICE_TYPE_FILE_OBSERVER = 3;
+	public static final int SERVICE_TYPE_CAMERA_SERVICE = 4;
 
 	public static final String LOG_FILE_NAME = "DSC_app_logs.log";
 	private static File logFile;
@@ -108,6 +117,7 @@ public class DSCApplication extends Application {
 	public static final String KEY_LANGUAGE_CODE = "languageCode";
 	private static final String KEY_DISPLAY_NOT_GRANT_URI_PERMISSION = "displayNotGrantUriPermission";
 	public static final String KEY_APP_THEME = "appTheme";
+	private static final String KEY_CAMERA_SERVICE_INSTANCE_COUNT = "cameraServiceInstanceCount";
 
 	private static final String FIRST_TIME = "firstTime";
 
@@ -134,6 +144,10 @@ public class DSCApplication extends Application {
 	public static final String NEW_PICTURE = "android.hardware.action.NEW_PICTURE";
 	public static final String NEW_VIDEO = "android.hardware.action.NEW_VIDEO";
 
+	private Messenger mService = null;
+	private boolean mBound;
+	private Intent mCameraRenameService;
+
 	public static final List<String> FUNCTIONAL_PERMISSIONS = Arrays.asList(
 			PERMISSION_FOR_CAMERA,
 			PERMISSION_FOR_READ_EXTERNAL_STORAGE,
@@ -145,11 +159,26 @@ public class DSCApplication extends Application {
 			PERMISSION_FOR_UNINSTALL_SHORTCUT
 	);
 
-	public static final List<String> LOGS_PERMISSIONS = Arrays.asList(PERMISSION_FOR_LOGS);
+	public static final List<String> LOGS_PERMISSIONS = Collections.singletonList(PERMISSION_FOR_LOGS);
 
 	public interface ProgressCancelListener {
-		public void onProgressCancel();
+		void onProgressCancel();
 	}
+
+	/**
+	 * Class for interacting with the main interface of the service.
+	 */
+	private ServiceConnection mConnection = new ServiceConnection() {
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			mService = new Messenger(service);
+			mBound = true;
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			mService = null;
+			mBound = false;
+		}
+	};
 
 	/**
 	 * Called when the application is starting, before any activity, service, or
@@ -162,11 +191,16 @@ public class DSCApplication extends Application {
 		mBackupManager = new BackupManager(getApplicationContext());
 		initLocale();
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
-		checkRegisteredServiceType(true);
+		int serviceType = getServiceType();
+		if (SERVICE_TYPE_CAMERA == serviceType ||
+				SERVICE_TYPE_CONTENT == serviceType ||
+				SERVICE_TYPE_FILE_OBSERVER == serviceType) {
+			checkRegisteredServiceType(true);
+		}
 		updateMountedVolumes();
 		updateSelectedFolders();
 		mFolderObserverMap = new HashMap<>();
-		if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
+		if (SERVICE_TYPE_FILE_OBSERVER == serviceType) {
 			initFolderObserverList(false);
 		}
 	}
@@ -499,11 +533,11 @@ public class DSCApplication extends Application {
 	/**
 	 * Launch the auto rename task.
 	 */
-	public void launchAutoRenameTask() {
-		if (isAutoRenameEnabled()) {
+	public void launchAutoRenameTask(RenameFileAsyncTask.Listener listener, boolean noDelay, List<Uri> fileUris, boolean force) {
+		if (force || isAutoRenameEnabled()) {
 			setRenameFileRequested(true);
 			if (!isRenameFileTaskRunning()) {
-				new RenameFileAsyncTask(this).execute();
+				new RenameFileAsyncTask(this, listener, noDelay, fileUris).execute();
 			}
 		}
 	}
@@ -753,6 +787,30 @@ public class DSCApplication extends Application {
 	}
 
 	/**
+	 * Get the camera service instances counter.
+	 *
+	 * @return The camera service instances counter.
+	 */
+	public int getCameraServiceInstanceCount() {
+		return mSharedPreferences.getInt(KEY_CAMERA_SERVICE_INSTANCE_COUNT, 0);
+	}
+
+	/**
+	 * Reset the camera service instance counter.
+	 */
+	public void resetCameraServiceInstanceCount() {
+		removeSharedPreference(KEY_CAMERA_SERVICE_INSTANCE_COUNT);
+	}
+
+	/**
+	 * Increase the camera service instance counter.
+	 */
+	public void increaseCameraServiceInstanceCount() {
+		int value = getCameraServiceInstanceCount();
+		saveIntegerValue(KEY_CAMERA_SERVICE_INSTANCE_COUNT, value + 1);
+	}
+
+	/**
 	 * Check if the registered service type was changed.
 	 *
 	 * @return True if the registered service type was changed.
@@ -774,15 +832,18 @@ public class DSCApplication extends Application {
 	 * @param regServiceType The current service type registered.
 	 */
 	private void updateRegisteredServiceType(int serviceType, int regServiceType) {
-		switch (regServiceType) {
+		switch (regServiceType) { // existing registered service
 			case SERVICE_TYPE_CONTENT:
 				unregisterMediaStorageContentObserver();
 				break;
 			case SERVICE_TYPE_FILE_OBSERVER:
 				unregisterFolderObserver();
 				break;
+			case SERVICE_TYPE_CAMERA_SERVICE:
+				unregisterCameraRenameService();
+				break;
 		}
-		switch (serviceType) {
+		switch (serviceType) { // new registered service
 			case SERVICE_TYPE_CONTENT:
 				registerMediaStorageContentObserver();
 				break;
@@ -795,6 +856,10 @@ public class DSCApplication extends Application {
 						registerMediaStorageContentObserver();
 					}
 				}
+				break;
+			case SERVICE_TYPE_CAMERA_SERVICE:
+				registerCameraRenameService();
+				enableCameraRenameService(true);
 				break;
 		}
 		saveIntegerValue(KEY_REGISTERED_SERVICE_TYPE, serviceType);
@@ -1778,5 +1843,70 @@ public class DSCApplication extends Application {
 		b.putBoolean(DSCApplication.SKIP_RENAME, true);
 		intent.putExtras(b);
 		sendBroadcast(intent);
+	}
+
+	/**
+	 * Method used to register the camera rename service.
+	 */
+	private void registerCameraRenameService() {
+		logD(TAG, "registerCameraRenameService - startService");
+		try {
+			if (mCameraRenameService == null) {
+				mCameraRenameService = new Intent(this, CameraRenameService.class);
+			}
+			startService(mCameraRenameService);
+			enableCameraRenameService(true);
+			this.bindService(mCameraRenameService, mConnection, Context.BIND_AUTO_CREATE);
+		} catch (Exception e) {
+			logE(TAG, "registerCameraRenameService: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Method used to unregister the camera rename service.
+	 */
+	private void unregisterCameraRenameService() {
+		logD(TAG, "unregisterCameraRenameService - stopService");
+		try {
+			if (mBound) {
+				if (mConnection != null) {
+					enableCameraRenameService(false);
+					this.unbindService(mConnection);
+				}
+				mBound = false;
+			}
+		} catch (Exception e) {
+			logE(TAG, "unregisterCameraRenameService: " + e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Enable or disable the camera broadcast receiver.
+	 *
+	 * @param flag True if the broadcast receiver should be enabled.
+	 */
+	public void enableCameraRenameService(boolean flag) {
+		sendMessageToService(
+				CameraRenameService.ENABLE_CAMERA_RENAME_SERVICE,
+				String.valueOf(flag));
+	}
+
+	/**
+	 * Send a message to service.
+	 */
+	public void sendMessageToService(String messageKey, String messageValue) {
+		if (mBound) {
+			Message msg = Message.obtain();
+			Bundle bundle = new Bundle();
+			bundle.putString(messageKey, messageValue);
+			msg.setData(bundle);
+			try {
+				mService.send(msg);
+			} catch (RemoteException e) {
+				logE(TAG,
+						"sendMessageToService(" + messageKey + "," + messageValue + "): " +
+								e.getMessage(), e);
+			}
+		}
 	}
 }

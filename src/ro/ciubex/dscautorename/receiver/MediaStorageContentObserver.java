@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2016 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -67,7 +67,7 @@ public class MediaStorageContentObserver extends ContentObserver {
 	 */
 	private void checkAutoRenameTask() {
 		if (mApplication != null) {
-			mApplication.launchAutoRenameTask();
+			mApplication.launchAutoRenameTask(null, false, null, false);
 		}
 	}
 

@@ -3,13 +3,13 @@
 	<string name="about_section">О программе</string>
 	<string name="about_text"><Data><![CDATA[<b>Большое спасибо Simon W за полную поддержку для 4.0.0 version development!</b><br/>\n<br/>\nЭто приложение автоматически изменяет имена файлов изображений (с камеры) и основывается на дате и времени, когда эти файлы были созданы.<br/>\n<br/>\nФотмат переименования файлов использует параметры формата даты и времени Java:<br/>\n- yyyy год;<br/>\n- MM месяц;<br/>\n- dd день;<br/>\n- HH час;<br/>\n- mm минуты;<br/>\n- ss секунды;<br/>\n- SSS милисекунды.<br/>\nК сожалению, из-за особенностей ЕXIF и Андроида, время в милисек. не используется.<br/>\nНайти больше информации по форматам: <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Java SimpleDateFormat class</a><br/>\n<br/>\nЕсли вдруг несколько файлов будут сгенерированы в одно время, то они будут иметь числовой суффикс, такой как: _01. Зависит от того, как много цифр установлено в настройках.<br/>\n<br/>\nУстановленные шаблоны индивидуальны для фото и видео. Wildcards * или ? тоже могут быть использованы.<br/>\nНе используйте слишком общие шаблоны, такие как: *.JPG во избежание зациклевания переименования.<br/>\nБолее лучшее использование ? Определить единственно возможный символ в комбинации с другими существующими постоянными символами, такой как: _.<br/>\nНа пример, если оригинальный файл такой как: 20150729_212537.JPG используйте шаблон такой как: ????????_??????.JPG и добавте префикс \'PIC_\' (используйте апострофы для постоянных текстов) в шаблон: \"\'PIC_\'yyyyMMdd_HHmmss\" для переименования в: PIC_20150729_212537.JPG<br/>\n<br/>\nСервис, если включен, автоматически запускается при сохранении файл изображения на устройстве.<br/>\n<br/>\nЗапуск сервиса зависит от используемого приложения Камера. Приложение Камера должно отправлять <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, в противном случае, сервис не запустится.<br/>\nВ некоторых случаях, если камера не отправляет сообщений, можно использовать запуск по событию : медиа контент, но это подразумевает постоянно запущенный сервис в фоновом режиме.<br/>\n<br/>\nПодробнее здесь: <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
 	<string name="add">Добавить</string>
-	<string name="app_theme_desc">Установить тему приложения: Легкий или Темно.</string>
+	<string name="app_theme_desc">Светлая или тёмная</string>
 	<string-array name="app_theme_labels">
-		<item>Легкий</item>
-		<item>Темно</item>
+		<item>Светлая</item>
+		<item>Тёмная</item>
 	</string-array>
-	<string name="app_theme_title">тема применения:</string>
-	<string name="app_theme_title_param">тема применения: %s</string>
+	<string name="app_theme_title">Тема оформления:</string>
+	<string name="app_theme_title_param">Тема оформления: %s</string>
 	<string name="append_original_name_desc">Сохранить и добавить оригинальное имя, на пример, с DSC_09.JPG на %s_DSC_09.JPG</string>
 	<string name="append_original_name_title">Добавить оригинальное имя</string>
 	<string name="build_version_title">версия сборки</string>
@@ -45,7 +45,7 @@
 	<string name="enable_filter_folder_title">Переименовать в папках</string>
 	<string name="enable_folder_scanning_desc">Как правило, это должно быть выключено! Выбрав эту опцию сервис переименования будет сканировать медиафайлы в выбранных выше папках. Включите, если в вашем аппарате выключен сканер медиа контента.</string>
 	<string name="enable_folder_scanning_title">Включение сканирования в папке.</string>
-	<string name="enable_title">Запуск сервиса.</string>
+	<string name="enable_title">Когда запускать сервис</string>
 	<string name="error_rename_file">Файл %s невозможно переименовать!</string>
 	<string name="error_rename_file_no_read_write">Файл невозможно прочитать и записать</string>
 	<string name="file_extension_note">При переименовании расширение файла сохраняется.</string>
@@ -105,6 +105,8 @@
 	<string name="please_wait">Пожалуйста подождите&#8230;</string>
 	<string name="remove_rename_shortcut">Удалить иконку сервиса</string>
 	<string name="remove_rename_shortcut_desc">Удаление иконки сервиса с домашнего экрана</string>
+	<string name="rename_file_delay_desc">Следующий файл переименовать через</string>
+	<string name="rename_file_delay_title">Пауза между переименованиями</string>
 	<string name="rename_file_using_desc">Дата и время, когда файл был последний раз модифицирован.</string>
 	<string-array name="rename_file_using_labels">
 		<item>Дата и время, когда файлы были добавлены в медиа;</item>
