@@ -1837,7 +1837,6 @@ public class DSCApplication extends Application {
 	public void sendBroadcastMessage(Uri uri) {
 		String action = uri.getPath().contains("images") ?
 				DSCApplication.NEW_PICTURE : DSCApplication.NEW_VIDEO;
-		logD(TAG, "action: " + action + " broadcastUri:" + uri);
 		Intent intent = new Intent(action, uri);
 		Bundle b = new Bundle();
 		b.putBoolean(DSCApplication.SKIP_RENAME, true);

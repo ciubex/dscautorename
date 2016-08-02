@@ -102,6 +102,64 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	}
 
 	/**
+	 * Runs on the UI thread before doInBackground(Params...).
+	 */
+	@Override
+	protected void onPreExecute() {
+		super.onPreExecute();
+		Listener listener = mListener.get();
+		if (listener != null && !listener.isFinishing()) {
+			listener.onTaskStarted();
+		}
+	}
+
+	/**
+	 * Runs on the UI thread after publishProgress(Progress...) is invoked. The
+	 * specified values are the values passed to publishProgress(Progress...).
+	 *
+	 * @param values Not used.
+	 */
+	@Override
+	protected void onProgressUpdate(Void... values) {
+		super.onProgressUpdate(values);
+		if (mProgressLastPosition != mProgressPosition) {
+			mProgressLastPosition = mProgressPosition;
+			Listener listener = mListener.get();
+			if (listener != null && !listener.isFinishing()) {
+				String message = mApplication.getApplicationContext().getString(
+						mProgressPosition == 1 ? R.string.manually_file_rename_progress_1
+								: R.string.manually_file_rename_progress_more,
+						mProgressPosition, mProgressMax);
+				mApplication.logD(TAG, "progress position: " + mProgressPosition);
+				listener.onTaskUpdate(mProgressPosition, mProgressMax, message);
+			}
+		}
+	}
+
+	/**
+	 * Runs on the UI thread after doInBackground(Params...). The specified
+	 * result is the value returned by doInBackground(Params...).
+	 *
+	 * @param count The result of the operation computed by
+	 *              doInBackground(Params...).
+	 */
+	@Override
+	protected void onPostExecute(Integer count) {
+		super.onPostExecute(count);
+		if (mListener != null) {
+			Listener listener = mListener.get();
+			if (listener != null && !listener.isFinishing()) {
+				listener.onTaskFinished(count);
+			}
+		}
+		if (mListFiles != null) {
+			mListFiles.clear();
+		}
+		mListFiles = null;
+		mApplication.setRenameFileTaskCanceled(false);
+	}
+
+	/**
 	 * Method invoked on the background thread.
 	 *
 	 * @param params In this case are not used parameters.
@@ -110,32 +168,26 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	@Override
 	protected Integer doInBackground(Void... params) {
 		mContentResolver = mApplication.getContentResolver();
-		mApplication.setRenameFileTaskRunning(true);
-		mFileNameModels = mApplication.getOriginalFileNamePattern();
-		renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
-		mMediaStoreURIs = new ArrayList<>();
-		mMediaStoreURIs.add(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-		mMediaStoreURIs.add(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-		if (mApplication.isRenameVideoEnabled()) {
-			mMediaStoreURIs.add(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
-			mMediaStoreURIs.add(MediaStore.Video.Media.INTERNAL_CONTENT_URI);
-		}
-		mProgressPosition = 0;
-		mProgressLastPosition = -1;
 		if (mContentResolver != null) {
+			mApplication.setRenameFileTaskRunning(true);
+			mProgressPosition = 0;
+			mProgressLastPosition = -1;
+			mFileNameModels = mApplication.getOriginalFileNamePattern();
+			renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
+			renamePatternsUtilities.buildPatterns();
+			populateMediaStoreURI();
 			if (mApplication.isEnabledFolderScanning()) {
 				mFoldersScanning = mApplication.getSelectedFolders();
 			}
 			mApplication.updateMountedVolumes();
 			mApplication.updateSelectedFolders();
+			doGrantUriPermission();
 			while (mApplication.isRenameFileRequested()) {
 				mApplication.setRenameFileRequested(false);
 				if (!mNoDelay) {
 					executeDelay();
 				}
-				renamePatternsUtilities.buildPatterns();
 				populateAllListFiles();
-				doGrantUriPermission();
 				if (!mListFiles.isEmpty()
 						&& !mApplication.isRenameFileTaskCanceled()) {
 					mPreviousFileNameModelCount = 0;
@@ -147,11 +199,13 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 						if (!mNoDelay) {
 							executeFileRenameDelay();
 						}
+						if (mApplication.isRenameFileTaskCanceled()) {
+							break;
+						}
 					}
 					if (mProgressPosition > 0) {
 						mApplication.increaseFileRenameCount(mProgressPosition);
 					}
-					populateAllListFiles();
 				}
 			}
 			mApplication.setRenameFileTaskRunning(false);
@@ -161,11 +215,22 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			if (!mBroadcastingMessages.isEmpty()) {
 				doBroadcastingMessages();
 			}
-		} else {
-			mApplication.setRenameFileTaskRunning(false);
 		}
 		mApplication.logD(TAG, "Finished doInBackground()");
 		return mProgressPosition;
+	}
+
+	/**
+	 * Populate all needed media store URI.
+	 */
+	private void populateMediaStoreURI() {
+		mMediaStoreURIs = new ArrayList<>();
+		mMediaStoreURIs.add(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+		mMediaStoreURIs.add(MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+		if (mApplication.isRenameVideoEnabled()) {
+			mMediaStoreURIs.add(MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+			mMediaStoreURIs.add(MediaStore.Video.Media.INTERNAL_CONTENT_URI);
+		}
 	}
 
 	/**
@@ -266,7 +331,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 * Check if the file can be renamed.
 	 *
 	 * @param file The file to be checked.
-	 * @return
+	 * @return True if the file can be renamed.
 	 */
 	private boolean canRenameFile(File file) {
 		if (file.exists()) {
@@ -340,64 +405,6 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 		} catch (InterruptedException e) {
 			mApplication.logE(TAG, "InterruptedException", e);
 		}
-	}
-
-	/**
-	 * Runs on the UI thread before doInBackground(Params...).
-	 */
-	@Override
-	protected void onPreExecute() {
-		super.onPreExecute();
-		Listener listener = mListener.get();
-		if (listener != null && !listener.isFinishing()) {
-			listener.onTaskStarted();
-		}
-	}
-
-	/**
-	 * Runs on the UI thread after publishProgress(Progress...) is invoked. The
-	 * specified values are the values passed to publishProgress(Progress...).
-	 *
-	 * @param values Not used.
-	 */
-	@Override
-	protected void onProgressUpdate(Void... values) {
-		super.onProgressUpdate(values);
-		if (mProgressLastPosition != mProgressPosition) {
-			mProgressLastPosition = mProgressPosition;
-			Listener listener = mListener.get();
-			if (listener != null && !listener.isFinishing()) {
-				String message = mApplication.getApplicationContext().getString(
-						mProgressPosition == 1 ? R.string.manually_file_rename_progress_1
-								: R.string.manually_file_rename_progress_more,
-						mProgressPosition, mProgressMax);
-				mApplication.logD(TAG, "progress position: " + mProgressPosition);
-				listener.onTaskUpdate(mProgressPosition, mProgressMax, message);
-			}
-		}
-	}
-
-	/**
-	 * Runs on the UI thread after doInBackground(Params...). The specified
-	 * result is the value returned by doInBackground(Params...).
-	 *
-	 * @param count The result of the operation computed by
-	 *              doInBackground(Params...).
-	 */
-	@Override
-	protected void onPostExecute(Integer count) {
-		super.onPostExecute(count);
-		if (mListener != null) {
-			Listener listener = mListener.get();
-			if (listener != null && !listener.isFinishing()) {
-				listener.onTaskFinished(count);
-			}
-		}
-		if (mListFiles != null) {
-			mListFiles.clear();
-		}
-		mListFiles = null;
-		mApplication.setRenameFileTaskCanceled(false);
 	}
 
 	/**
@@ -643,19 +650,21 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
         try {
             sourceFileDesc = mContentResolver.openFileDescriptor(source, "r", null);
             destFileDesc = mContentResolver.openFileDescriptor(destination, "w", null);
-            FileInputStream fis = new FileInputStream(sourceFileDesc.getFileDescriptor());
-            FileOutputStream fos = new FileOutputStream(destFileDesc.getFileDescriptor());
-            inChannel = fis.getChannel();
-            outChannel = fos.getChannel();
-            expectedSize = inChannel.size();
-            size = outChannel.transferFrom(inChannel, 0, expectedSize);
-            if (size != expectedSize) {
-                copyError = true;
-                mApplication.logE(TAG, "Copy error, different size, expected: " + expectedSize
-                        + " but copied: " + size + " from: " + source.toString()
-                        + " to " + destination.toString());
-                size = 0;
-            }
+			if (sourceFileDesc != null && destFileDesc != null) {
+				FileInputStream fis = new FileInputStream(sourceFileDesc.getFileDescriptor());
+				FileOutputStream fos = new FileOutputStream(destFileDesc.getFileDescriptor());
+				inChannel = fis.getChannel();
+				outChannel = fos.getChannel();
+				expectedSize = inChannel.size();
+				size = outChannel.transferFrom(inChannel, 0, expectedSize);
+				if (size != expectedSize) {
+					copyError = true;
+					mApplication.logE(TAG, "Copy error, different size, expected: " + expectedSize
+							+ " but copied: " + size + " from: " + source.toString()
+							+ " to " + destination.toString());
+					size = 0;
+				}
+			}
         } catch (IOException e) {
             copyError = true;
             size = 0;
@@ -741,8 +750,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 	 */
 	private String getFileExtension(String fileName) {
 		int idx = fileName.lastIndexOf(".");
-		String extension = idx > 0 ? fileName.substring(idx + 1) : "";
-		return extension;
+		return idx > 0 ? fileName.substring(idx + 1) : "";
 	}
 
 	/**
@@ -909,6 +917,7 @@ public class RenameFileAsyncTask extends AsyncTask<Void, Void, Integer> {
 			scanMediaStore(null, null);
 		}
 		mProgressMax = mListFiles.size();
+		mApplication.logD(TAG, "Found: " + mProgressMax + " files to be renamed.");
 	}
 
 	/**
