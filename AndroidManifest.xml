@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ro.ciubex.dscautorename"
-    android:versionCode="85"
-    android:versionName="5.3.1" >
+    android:versionCode="86"
+    android:versionName="5.4.0" >
 
     <uses-sdk
         android:minSdkVersion="8"
@@ -115,6 +115,10 @@
 
         <service
             android:name="ro.ciubex.dscautorename.service.CameraRenameService"
+            android:enabled="true" />
+
+        <service
+            android:name="ro.ciubex.dscautorename.service.FileRenameService"
             android:enabled="true" />
 
         <provider

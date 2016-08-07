@@ -38,6 +38,7 @@ import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.receiver.FolderObserver;
+import ro.ciubex.dscautorename.service.FileRenameService;
 import ro.ciubex.dscautorename.service.FolderObserverService;
 import ro.ciubex.dscautorename.service.MediaStorageObserverService;
 import ro.ciubex.dscautorename.service.CameraRenameService;
@@ -129,6 +130,8 @@ public class DSCApplication extends Application {
 	private SelectedFolderModel[] mSelectedSelectedFolderModels;
 	private String mDefaultFolderScanning;
 	private Map<String, FolderObserver> mFolderObserverMap;
+	private boolean mInitializedVolume;
+	private boolean mUpdatedMountedVolumes;
 
 	private static final String KEY_HAVE_PERMISSIONS_ASKED = "havePermissionsAsked";
 	public static final String PERMISSION_FOR_CAMERA = "android.permission.CAMERA";
@@ -197,10 +200,9 @@ public class DSCApplication extends Application {
 				SERVICE_TYPE_FILE_OBSERVER == serviceType) {
 			checkRegisteredServiceType(true);
 		}
-		updateMountedVolumes();
-		updateSelectedFolders();
 		mFolderObserverMap = new HashMap<>();
 		if (SERVICE_TYPE_FILE_OBSERVER == serviceType) {
+			initVolumes();
 			initFolderObserverList(false);
 		}
 	}
@@ -211,6 +213,17 @@ public class DSCApplication extends Application {
 	public void initLocale() {
 		mLocale = getLocaleSharedPreferences();
 		Locale.setDefault(mLocale);
+	}
+
+	/**
+	 * Init volumes.
+	 */
+	public void initVolumes() {
+		if (!mInitializedVolume) {
+			mInitializedVolume = true;
+			updateMountedVolumes();
+			updateSelectedFolders();
+		}
 	}
 
 	/**
@@ -246,7 +259,10 @@ public class DSCApplication extends Application {
 	 * Update mounted volumes.
 	 */
 	public void updateMountedVolumes() {
-		mMountVolumes = Utilities.MountService.getVolumeList(getMountService(), getApplicationContext());
+		if (!mUpdatedMountedVolumes) {
+			mUpdatedMountedVolumes = true;
+			mMountVolumes = Utilities.MountService.getVolumeList(getMountService(), getApplicationContext());
+		}
 	}
 
 	/**
@@ -517,8 +533,7 @@ public class DSCApplication extends Application {
 			df = new SimpleDateFormat(fileNameFormat, mLocale);
 			saveStringValue(KEY_FILE_NAME_FORMAT, fileNameFormat);
 		}
-		String newFileName = df.format(date);
-		return newFileName;
+		return df.format(date);
 	}
 
 	/**
@@ -537,8 +552,25 @@ public class DSCApplication extends Application {
 		if (force || isAutoRenameEnabled()) {
 			setRenameFileRequested(true);
 			if (!isRenameFileTaskRunning()) {
-				new RenameFileAsyncTask(this, listener, noDelay, fileUris).execute();
+				logD(TAG, "launchAutoRenameTask");
+				if (listener != null) {
+					new RenameFileAsyncTask(this, listener, noDelay, fileUris).execute();
+				} else {
+					startFileRenameService();
+				}
 			}
+		}
+	}
+
+	/**
+	 * Start file rename service.
+	 */
+	private void startFileRenameService() {
+		logD(TAG, "startFileRenameService");
+		try {
+			startService(new Intent(this, FileRenameService.class));
+		} catch (Exception e) {
+			logE(TAG, "startFileRenameService: " + e.getMessage(), e);
 		}
 	}
 
@@ -631,6 +663,7 @@ public class DSCApplication extends Application {
 	 * @param renameFileRequested the renameFileRequested to set
 	 */
 	public void setRenameFileRequested(boolean renameFileRequested) {
+		logD(TAG, "setRenameFileRequested(" + renameFileRequested + ")");
 		DSCApplication.mRenameFileRequested = renameFileRequested;
 	}
 
@@ -677,7 +710,7 @@ public class DSCApplication extends Application {
 	 * @return True if the alert message should be displayed.
 	 */
 	public boolean isDisplayNotGrantUriPermission() {
-		return false;//mSharedPreferences.getBoolean(KEY_DISPLAY_NOT_GRANT_URI_PERMISSION, true);
+		return mSharedPreferences.getBoolean(KEY_DISPLAY_NOT_GRANT_URI_PERMISSION, true);
 	}
 
 	/**
