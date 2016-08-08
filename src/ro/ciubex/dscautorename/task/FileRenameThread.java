@@ -154,12 +154,12 @@ public class FileRenameThread implements Runnable {
         if (mContentResolver != null) {
             mApplication.setRenameFileTaskRunning(true);
             renameFileRequested = mApplication.isRenameFileRequested();
+            mApplication.updateMountedVolumes();
+            mApplication.updateSelectedFolders();
             mFileNameModels = mApplication.getOriginalFileNamePattern();
             renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
             renamePatternsUtilities.buildPatterns();
             populateMediaStoreURI();
-            mApplication.updateMountedVolumes();
-            mApplication.updateSelectedFolders();
             if (mApplication.isEnabledFolderScanning()) {
                 mFoldersScanning = mApplication.getSelectedFolders();
             }
