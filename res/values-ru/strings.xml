@@ -1,3 +1,4 @@
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
     <string name="app_name">DSC Auto Rename</string>
@@ -123,8 +124,8 @@
     <string name="close">Закрыть</string>
     <string name="add">Добавить</string>
     <string name="delete">Удалить</string>
-    <string name="please_wait">Пожалуйста подождите&#8230;</string>
-    <string name="loading_wait">Загрузка&#8230;</string>
+    <string name="please_wait">Пожалуйста подождите…</string>
+    <string name="loading_wait">Загрузка…</string>
     <string name="no_folders">Нет папок</string>
     <string name="no_file_name_pattern">Нет Имя файла шаблон определенный</string>
     <string name="list_info_press">Добавить или удалить пункты.</string>
@@ -134,10 +135,10 @@
     <string name="file_name_pattern_list_confirmation">Вы хотите удалить выбранные шаблоны?</string>
     <string name="error_rename_file_no_read_write">Файл невозможно прочитать и записать</string>
     <string name="error_rename_file">Файл %s невозможно переименовать!</string>
-    <string name="obtain_logs">Сгенерировать лог для отчета&#8230;</string>
+    <string name="obtain_logs">Сгенерировать лог для отчета…</string>
     <string name="report_subject">Отчет о DSC Auto Rename</string>
-    <string name="report_body">Описание:</string>
-    <string name="send_report">Отправить отчет&#8230;</string>
+    <string name="report_body">"Описание: "</string>
+    <string name="send_report">Отправить отчет…</string>
 
     <!-- Change locale -->
     <string name="change_language_title">Language: язык приложения</string>
