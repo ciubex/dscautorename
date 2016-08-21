@@ -1,18 +1,18 @@
 /**
  * This file is part of DSCAutoRename application.
- * <p/>
+ *
  * Copyright (C) 2016 Claudiu Ciobotariu
- * <p/>
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * <p/>
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * <p/>
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -95,7 +95,6 @@ public class DSCApplication extends Application {
 	public static final int SERVICE_TYPE_CAMERA_SERVICE = 4;
 
 	public static final String LOG_FILE_NAME = "DSC_app_logs.log";
-	private static File logFile;
 	private static LogThread logFileThread;
 
 	public static final String KEY_SERVICE_TYPE = "serviceType";
@@ -1287,8 +1286,7 @@ public class DSCApplication extends Application {
 	private boolean checkLogFileThread() {
 		if (logFileThread == null) {
 			try {
-				logFile = new File(getLogsFolder(), DSCApplication.LOG_FILE_NAME);
-				logFileThread = new LogThread(logFile);
+				logFileThread = new LogThread(getLogsFolder());
 				new Thread(logFileThread).start();
 			} catch (Exception e) {
 				logE(TAG, "Exception: " + e.getMessage(), e);
@@ -1303,27 +1301,7 @@ public class DSCApplication extends Application {
 	 * @return The log file.
 	 */
 	public File getLogFile() {
-		return logFile;
-	}
-
-	/**
-	 * Remove log file from disk.
-	 */
-	public void deleteLogFile() {
-		if (logFile != null && logFile.exists()) {
-			try {
-				logFileThread.close();
-				while (!logFileThread.isClosed()) {
-					Thread.sleep(1000);
-				}
-			} catch (IOException e) {
-				Log.e(TAG, "deleteLogFile: " + e.getMessage(), e);
-			} catch (InterruptedException e) {
-				Log.e(TAG, "deleteLogFile: " + e.getMessage(), e);
-			}
-			logFileThread = null;
-			logFile.delete();
-		}
+		return logFileThread != null ? logFileThread.getLogFile() : null;
 	}
 
 	/**

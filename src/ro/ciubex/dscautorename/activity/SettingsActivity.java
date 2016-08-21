@@ -36,8 +36,10 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.util.Linkify;
@@ -60,6 +62,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -606,8 +609,10 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Method invoked when was pressed the fileRenameCount preference.
 	 */
 	private void onResetFileRenameCounter() {
-		showConfirmationDialog(mApplication.getApplicationContext().getString(R.string.file_rename_count_confirmation), false,
-				ID_CONFIRMATION_RESET_RENAME_COUNTER);
+		if (mApplication.getFileRenameCount() > 0) {
+			showConfirmationDialog(mApplication.getApplicationContext().getString(R.string.file_rename_count_confirmation), false,
+					ID_CONFIRMATION_RESET_RENAME_COUNTER);
+		}
 	}
 
 	/**
@@ -622,6 +627,7 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * Confirmed reset file rename counter.
 	 */
 	private void confirmedResetFileRenameCounter() {
+		mApplication.logD(TAG, "Reset file rename counter!");
 		mApplication.increaseFileRenameCount(-1);
 	}
 
@@ -942,7 +948,7 @@ public class SettingsActivity extends PreferenceActivity implements
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, emailTitle);
 		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
 
-		ArrayList<Uri> uris = new ArrayList<Uri>();
+		ArrayList<Uri> uris = new ArrayList<>();
 		if (archive != null && archive.exists() && archive.length() > 0) {
 			uris.add(Uri.parse("content://" + CachedFileProvider.AUTHORITY
 					+ "/" + archive.getName()));
@@ -970,10 +976,15 @@ public class SettingsActivity extends PreferenceActivity implements
 	private File getLogArchive(File logsFolder) {
 		File logFile = mApplication.getLogFile();
 		File logcatFile = getLogcatFile(logsFolder);
+		List<File> files = new ArrayList<>();
+		if (logFile != null) {
+			files.add(logFile);
+		}
+		files.add(logcatFile);
 		Date now = new Date();
-		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss");
-		String fileName = "DSC_logs_" + format.format(now) + ".zip";
-		return getArchives(new File[]{logFile, logcatFile}, logsFolder, fileName);
+		SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+		String archiveName = "DSC_logs_" + format.format(now) + ".zip";
+		return getArchives(files, logsFolder, archiveName);
 	}
 
 	/**
@@ -984,19 +995,17 @@ public class SettingsActivity extends PreferenceActivity implements
 	 * @param archiveName The archive file name.
 	 * @return The archive file.
 	 */
-	private File getArchives(File[] files, File logsFolder, String archiveName) {
+	private File getArchives(List<File> files, File logsFolder, String archiveName) {
 		File archive = new File(logsFolder, archiveName);
 		try {
 			BufferedInputStream origin;
 			FileOutputStream dest = new FileOutputStream(archive);
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER];
-			File file;
 			FileInputStream fi;
 			ZipEntry entry;
 			int count;
-			for (int i = 0; i < files.length; i++) {
-				file = files[i];
+			for (File file : files) {
 				if (file.exists() && file.length() > 0) {
 					mApplication.logD(TAG, "Adding to archive: " + file.getName());
 					fi = new FileInputStream(file);

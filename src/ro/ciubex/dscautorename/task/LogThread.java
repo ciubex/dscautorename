@@ -42,15 +42,15 @@ import ro.ciubex.dscautorename.util.Utilities;
  */
 public class LogThread implements Runnable, Closeable {
 
-	private List<String> logs;
+	private static final List<String> logs = new ArrayList<>();
+	private File logsFolder;
 	private File logFile;
 	private boolean closing;
 	private boolean closed;
 	private SimpleDateFormat sFormatter;
 
-	public LogThread(File file) {
-		logs = new ArrayList<>();
-		this.logFile = file;
+	public LogThread(File logsFolder) {
+		this.logsFolder = logsFolder;
 		closing = false;
 		closed = false;
 		sFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", DSCApplication.getLocale());
@@ -109,8 +109,7 @@ public class LogThread implements Runnable, Closeable {
 		BufferedWriter bufferedWriter = null;
 		try {
 			createLogFile();
-			bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
-			writeLogs(bufferedWriter);
+			bufferedWriter = writeLogs();
 		} catch (IOException e) {
 			closing = true;
 		} finally {
@@ -124,11 +123,18 @@ public class LogThread implements Runnable, Closeable {
 	 * 
 	 * @throws IOException
 	 */
-	private void writeLogs(BufferedWriter bufferedWriter) throws IOException {
+	private BufferedWriter writeLogs() throws IOException {
+		BufferedWriter bufferedWriter = getBufferedWriter();
 		while (!closing) {
 			synchronized (logs) {
 				try {
 					logs.wait();
+					if (isLogFileSizeExceeded()) {
+						Utilities.doClose(bufferedWriter);
+						logFile.delete();
+						createLogFile();
+						bufferedWriter = getBufferedWriter();
+					}
 					for (String log : logs) {
 						bufferedWriter.append(log);
 						bufferedWriter.newLine();
@@ -139,6 +145,11 @@ public class LogThread implements Runnable, Closeable {
 				}
 			}
 		}
+		return bufferedWriter;
+	}
+
+	private BufferedWriter getBufferedWriter() throws IOException {
+		return new BufferedWriter(new FileWriter(logFile, true));
 	}
 
 	/**
@@ -147,8 +158,33 @@ public class LogThread implements Runnable, Closeable {
 	 * @throws IOException
 	 */
 	private void createLogFile() throws IOException {
+		logFile = new File(logsFolder, DSCApplication.LOG_FILE_NAME);
 		if (!logFile.exists()) {
 			logFile.createNewFile();
 		}
+	}
+
+	/**
+	 * Check the log file size to not exceed the 5MB.
+	 *
+	 * @return True if the file size is larger than 5MB.
+	 */
+	private boolean isLogFileSizeExceeded() {
+		if (logFile != null && logFile.exists()) {
+			long sizeInMB = logFile.length() / 1048576;
+			if (sizeInMB > 5) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Get the log file.
+	 *
+	 * @return The log file.
+	 */
+	public File getLogFile() {
+		return logFile;
 	}
 }

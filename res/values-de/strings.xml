@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_section">Über</string>
-	<string name="about_text"><Data><![CDATA[<b>Vielen Dank an Simon W für den vollen Support bei der 4.0.0 Version!</b><br/><br/>\nDiese App wurde erstellt, um automatisch den Dateinamen von neuen Fotos zu ändern, basierend auf dem Datum und Zeitpunkt der Aufnahme.<br/>\n<br/>\nDas Dateidatumsformat nutzt die Java Datum und Zeit Format Parameter:<br/>\n- yyyy für Jahre;<br/>\n- MM für Monate;<br/>\n- dd für Tage;<br/>\n- HH für Stunden;<br/>\n- mm für Minuten;<br/>\n- ss für Sekunden;<br/>\n- SSS für Miliisekunden.<br/>\nLeider können aufgrund Unstimmigkeiten zwischen EXIF und Android Spezifikationen die Millisekunden nicht korrekt ausgegeben werden.<br/>\nMehr Informationen auf:  <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Java SimpleDateFormat class</a><br/>\n<br/>\nWerden mehr Fotos zur selben Zeit gemacht, wie bei einer Timeshift-Aufnahme, werden die Dateien mit einem Suffix wie _01 versehen. Abhänigig davon wieviele Ziffern eingestellt wurden.<br/><br/>\nBenutze individeulle Dateinamenmuster für Fotos oder Videos. Umbenannte Dateien können auch in ein anderes Verzeichnis verschoben werden. Ebenfalls können Wildcards * und ? genutzt werden.<br/>\nNutze keine zu allgemeinen Muster, wie *.jpg, um eine Endlosschleife zu vermeiden.<br/>\nUm eine Endlosschleife zu vermeiden empfiehlt es sich, dass man ? nutzt, um Stellen im Dateinamen zu definieren und diese in Kombination mit anderen konstaten Zeichen des Ursprungsnamens nutzt, wie z.B. _ .<br/>\nAls Beispiel:<br/>\nWenn der originale Name wie folgt aussieht: 20150729_212537.JPG<br/>\nDann nutze ein Muster wie z.B. diese: ????????_??????.JPG<br/>\nUnd setze ein Präfix für den neuen Dateinamen, wie z.B.: \'PIC_\' (nutze die \' um einen konstanten Text zu definieren), in das Muster ein.<br/>\n\'PIC_\'yyyyMMdd_HHmmss benennt die Datei um in PIC_20150729_212537.JPG . Datum und Uhrzeit werden hierbei aus den EXIF-Daten entnommen.<br/>\nWeiteres Beispiel:<br/>\nOriginaldatei: imag*.jpg<br/>\nUmbennen in: yyyy-MM-dd_HH\'h\'mm\'m\'ss\'s_Gerätename\'.jpg<br/>\nErgebnis sind chronologisch geordnete Dateinamen:<br/>\n2015-07-29_21h25m37s_Gerätename.jpg<br/>\nDie Angabe eines Gerätenamens macht Sinn, wenn man die Daten unter mehreren Geräten synchronisiert, um doppelte Namen zu vermeiden.<br/>\n<br/>\nDer Rename Service, sofern aktiviert, startet automatisch, sobald eine Bilddatei im Medienverzeichnis des Gerätes gespeichert wird.<br/>\n<br/>\nDer automatische Start hängt davon ab, ob die Kamera-App folgendes sendet:<br/>\n<b>com.android.camera.NEW_PICTURE</b> oder<br/> <b>android.hardware.action.NEW_PICTURE</b>, ansonsten registriert der Dienst dieses Ereignis nicht automatisch und die Dateien werden nicht umbenannt.<br/>\nIn einigen Fällen sendet die Kamera-App keine Nachrichten, in diesen Fällen kann man wählen, dass umbeannt wird, sobald sich der Inhalt des Medienverzeichnisses ändert. Dieses startet allerdings einen permanent im Hintergrund laufenden zusätzlichen Dienst.<br/>\n<br/>\nFür mehr Details gehe bitte auf die Seite der App-Beschreibung: <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
+	<string name="about_text"><Data><![CDATA[<b>Vielen Dank an Simon W für den vollen Support bei der 4.0.0 Version!</b><br/><br/>\nDiese App wurde erstellt, um automatisch den Dateinamen von neuen Fotos zu ändern, basierend auf dem Datum und Zeitpunkt der Aufnahme.<br/>\n<br/>\nDas Dateidatumsformat nutzt die Java Datum- und Zeitformat Parameter:<br/>\n- yyyy für Jahre;<br/>\n- MM für Monate;<br/>\n- dd für Tage;<br/>\n- HH für Stunden;<br/>\n- mm für Minuten;<br/>\n- ss für Sekunden;<br/>\n- SSS für Miliisekunden.<br/>\nLeider können aufgrund Unstimmigkeiten zwischen EXIF und Android Spezifikationen die Millisekunden nicht korrekt ausgegeben werden.<br/>\nMehr Informationen auf:  <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Java SimpleDateFormat class</a><br/>\n<br/>\nWerden mehr Fotos zur selben Zeit gemacht, wie bei einer Timeshift-Aufnahme, werden die Dateien mit einem Suffix wie _01 versehen. Abhänigig davon, wie viele Ziffern eingestellt wurden.<br/><br/>\nBenutze individuelle Dateinamenmuster für Fotos oder Videos. Umbenannte Dateien können auch in ein anderes Verzeichnis verschoben werden. Ebenfalls können Wildcards * und ? genutzt werden.<br/>\nNutze keine zu allgemeinen Muster, wie *.jpg, um eine Endlosschleife zu vermeiden.<br/>\nUm eine Endlosschleife zu vermeiden empfiehlt es sich, dass man ? nutzt, um Stellen im Dateinamen zu definieren und diese in Kombination mit anderen konstanten Zeichen des Ursprungsnamens nutzt, wie z.B. _ .<br/>\nAls Beispiel:<br/>\nWenn der originale Name wie folgt aussieht: 20150729_212537.JPG<br/>\nDann nutze ein Muster wie z.B. dieses: ????????_??????.JPG<br/>\nUnd setze ein Präfix für den neuen Dateinamen, wie z.B. \'PIC_\' (nutze die \' um einen konstanten Text zu definieren), in das Muster ein.<br/>\n\'PIC_\'yyyyMMdd_HHmmss benennt die Datei um in PIC_20150729_212537.JPG . Datum und Uhrzeit werden hierbei aus den EXIF-Daten entnommen.<br/>\nWeiteres Beispiel:<br/>\nOriginaldatei: imag*.jpg<br/>\nUmbennen in: yyyy-MM-dd_HH\'h\'mm\'m\'ss\'s_Gerätename\'.jpg<br/>\nErgebnis sind chronologisch geordnete Dateinamen:<br/>\n2015-07-29_21h25m37s_Gerätename.jpg<br/>\nDie Angabe eines Gerätenamens ist sinnvoll, wenn man die Dateien unter mehreren Geräten synchronisiert, um doppelte Namen zu vermeiden.<br/>\n<br/>\nDer Rename Service, sofern aktiviert, startet automatisch, sobald eine Bilddatei im Medienverzeichnis des Gerätes gespeichert wird.<br/>\n<br/>\nDer automatische Start hängt davon ab, ob die Kamera-App folgendes sendet:<br/>\n<b>com.android.camera.NEW_PICTURE</b> oder<br/> <b>android.hardware.action.NEW_PICTURE</b>, ansonsten registriert der Dienst dieses Ereignis nicht automatisch und die Dateien werden nicht umbenannt.<br/>\nIn einigen Fällen sendet die Kamera-App keine Nachrichten, in diesen Fällen kann man wählen, dass umbeannt wird, sobald sich der Inhalt des Medienverzeichnisses ändert. Dieses startet allerdings einen permanent im Hintergrund laufenden zusätzlichen Dienst.<br/>\n<br/>\nFür mehr Details gehe bitte auf die Seite der App-Beschreibung: <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
 	<string name="add">Hinzufügen</string>
 	<string name="app_theme_desc">Wähle App-Theme: hell oder dunkel</string>
 	<string-array name="app_theme_labels">
@@ -10,7 +10,7 @@
 	</string-array>
 	<string name="app_theme_title">App-Theme:</string>
 	<string name="app_theme_title_param">App-Theme: %s</string>
-	<string name="append_original_name_desc">Originalnamen behalten und anfügen, beispielsweise, von DSC-09.jpg zu %s_DSC_09.jpg</string>
+	<string name="append_original_name_desc">Originalnamen behalten und anfügen, beispielsweise von DSC-09.jpg zu %s_DSC_09.jpg</string>
 	<string name="append_original_name_title">Ursprünglichen Namen anfügen</string>
 	<string name="build_version_title">Build Version</string>
 	<string name="cancel">Abbrechen</string>
@@ -23,10 +23,10 @@
 	<string name="confirmation_rename_dialog">Verstecke Bestätigungsdialog</string>
 	<string name="confirmation_rename_dialog_desc">Zeige oder verstecke den Bestätigungsdialog, wenn der DSC Rename Service von einem Lesezeichen aus gestartet wird.</string>
 	<string name="confirmation_rename_question">Soll das Umbenennen manuell gestartet werden?</string>
-	<string name="confirmation_rename_question_v19">Wenn sich die gewählte(n) Datei(en) nicht in einem ausgewähltem Verzeichnis befinden, dann wird die Umbennenung aufgrund der Android Sicherheitsbeschränkungen nicht vollständig durchgeführt.\nMöchtest du den Rename Service manuell starten?</string>
+	<string name="confirmation_rename_question_v19">Wenn sich die gewählte(n) Datei(en) nicht in einem ausgewähltem Verzeichnis befinden, dann wird die Umbenennung aufgrund der Android Sicherheitsbeschränkungen nicht vollständig durchgeführt.\nMöchtest du den Rename Service manuell starten?</string>
 	<string name="create_rename_shortcut">Erstelle DSC Rename Service Lesezeichen</string>
-	<string name="create_rename_shortcut_desc">Erstelle ein DSC Rename Service Lesezeichen auf dem Home Screen, um das Umbennen manuell starten zu können.</string>
-	<string name="define_file_name_pattern_desc">Das Dateinamenmuster welches zur Suche nach Dateien, die umbenannt werden sollen, genutzt wird (\"DSC_*.JPG\" or \"MOV_*.MP4\"), z.B. %s \nWildcards * und ? können auch genutzt werden.</string>
+	<string name="create_rename_shortcut_desc">Erstelle ein DSC Rename Service Lesezeichen auf dem Home Screen, um das Umbenennen manuell starten zu können.</string>
+	<string name="define_file_name_pattern_desc">Das Dateinamenmuster, welches zur Suche nach Dateien die umbenannt werden sollen genutzt wird (\"DSC_*.JPG\" or \"MOV_*.MP4\"), z.B. %s \nWildcards * und ? können auch genutzt werden.</string>
 	<string name="define_file_name_pattern_title">Dateinamenmuster definieren</string>
 	<string-array name="delay_units_labels">
 		<item>Sekunden</item>
@@ -38,25 +38,25 @@
 	<string name="donate_desc">Bitte spende, wenn dir die Anwendung gefällt.</string>
 	<string name="donate_title">Spenden</string>
 	<string name="enable_desc">Dateien werden automatisch nach festgelegtem Ereignis umbenannt.</string>
-	<string name="enable_filter_alert_v19">Aufgrund von Android KitKat Sicherheitsbeschränkungen darf diese App keine Daten auf der SD-Karte umbennen.\nSiehe folgenden Link für eine eventuelle Problembehebung: http://goo.gl/kJeED3\nDiese App kann nur Dateien auf dem internen Speicher umbennenen.\nStelle deine Kameraanwendung so ein, dass diese auf dem internen Speicher speichert.</string>
+	<string name="enable_filter_alert_v19">Aufgrund von Android KitKat Sicherheitsbeschränkungen darf diese App keine Daten auf der SD-Karte umbenennen.\nSiehe folgenden Link für eine eventuelle Problembehebung: http://goo.gl/kJeED3\nDiese App kann nur Dateien auf dem internen Speicher umbenennen.\nStelle deine Kameraanwendung so ein, dass diese auf dem internen Speicher speichert.</string>
 	<string name="enable_filter_alert_v21">Als Lollipop-User solltest du die Option \"Umbenennen innerhalb eines Verzeichnisses\" aktivieren und du solltest mindestens ein Verzeichnis in \"Zu scannende Verzeichnisse\" festlegen.</string>
 	<string name="enable_filter_folder_desc">Normalerweise scannt der Service alle Dateien deines Gerätes. Wenn diese Option gewählt wird, kannst du den Sevice auf 1 Verzeichnis begrenzen.</string>
-	<string name="enable_filter_folder_desc_v21">Als Android Lollipop User wähle bitte diese Option und gebe an, in welchem Verzeichnis deine Kameraapp die Dateien speichert.</string>
+	<string name="enable_filter_folder_desc_v21">Als Android Lollipop User wähle bitte diese Option und gebe an, in welchem Verzeichnis deine Kamera-App die Dateien speichert.</string>
 	<string name="enable_filter_folder_title">Umbenennen innerhalb eines Verzeichnisses</string>
-	<string name="enable_folder_scanning_desc">Normalweise wird dies NICHT AUSGEWÄHLT! Beim wählen dieser Option wird nach Dateien in oben festgelegten Ordnern gesucht. Wähle diese Option, wenn auf deinem Gerät der Medien-Scanner ausgeschaltet ist.</string>
-	<string name="enable_folder_scanning_title">Ordnersuche für Dateien</string>
-	<string name="enable_title">Autom. umbennen einschalten</string>
+	<string name="enable_folder_scanning_desc">Normalweise wird dies NICHT AUSGEWÄHLT! Beim Wählen dieser Option wird nach Dateien in oben festgelegten Ordnern gesucht. Wähle diese Option, wenn auf deinem Gerät der Medien-Scanner ausgeschaltet ist.</string>
+	<string name="enable_folder_scanning_title">Ordnersuche für Dateien.</string>
+	<string name="enable_title">Autom. Umbenennen einschalten.</string>
 	<string name="error_rename_file">Die Datei % konnte nicht umbenannt werden!</string>
 	<string name="error_rename_file_no_read_write">Datei kann nicht gelesen oder geschrieben werden</string>
 	<string name="file_extension_note">Die Dateierweiterung wird während des Prozesses erstellt.</string>
-	<string name="file_name_pattern_dialog_bottom">Beispiel für die altes Dateinamensmuster:\n\t %1$s\nBeispiel für Umbenannte Datei: \n\t %2$s</string>
+	<string name="file_name_pattern_dialog_bottom">Beispiel für das alte Dateinamenmuster:\n\t %1$s\nBeispiel für umbenannte Datei: \n\t %2$s</string>
 	<string name="file_name_pattern_dialog_from">Original Dateinamenmuster:</string>
 	<string name="file_name_pattern_dialog_title_add">Hinzufügen eines Dateinamenmusters</string>
 	<string name="file_name_pattern_dialog_title_editor">Editieren eines Dateinamenmusters</string>
-	<string name="file_name_pattern_dialog_to">Umbennen in folgendes Muster:</string>
+	<string name="file_name_pattern_dialog_to">Umbenennen in folgendes Muster:</string>
 	<string name="file_name_pattern_list_all_selected">Mindestens ein Dateinamenmuster sollte erhalten bleiben!</string>
 	<string name="file_name_pattern_list_confirmation">Soll das ausgewählte Dateinamenmuster gelöscht werden?</string>
-	<string name="file_name_pattern_list_no_selection">Wähle mindestens ein Dateinamenmuster zum löschen aus!</string>
+	<string name="file_name_pattern_list_no_selection">Wähle mindestens ein Dateinamenmuster zum Löschen aus!</string>
 	<string name="file_name_pattern_validation_error_generic">Das Dateinamenmuster ist zu allgemein. Dies würde einen Loop verursachen. Versuche das Muster mit mehr Zeichen einzuschränken.</string>
 	<string name="file_name_pattern_validation_error_new">Das Dateinamenmuster ist identisch mit dem Neuen!</string>
 	<string name="file_name_pattern_validation_error_new_empty">Dateinamenmuster darf nicht leer sein.</string>
@@ -71,32 +71,32 @@
 	<string name="file_rename_count_title">Anzahl umbenannter Dateien: %d</string>
 	<string name="filter_folder_no_folder">[Kein Ordner]</string>
 	<string name="filter_folder_title">Wähle ein Verzeichnis.</string>
-	<string name="first_time_alert">AUFMERKSAM LESEN:\nEs gibt keine \"Zurück-Funktion\" für umbenannte und verschobene Dateien!\nNutze diese App mit Vorsicht!\nBenutze individuelle Dateinamenmuster für Fotos oder Videos. Umbenannte Dateien können auch in ein anderes Verzeichnis verschoben werden. Ebenfalls können Wildcards * und ? genutzt werden.\nNutze keine zu allgemeinen Muster, wie *.jpg, um eine Endlosschleife zu vermeiden.\nUm eine Endlosschleife zu vermeiden empfiehlt es sich, dass man ? nutzt, um Stellen im Dateinamen zu definieren und diese in Kombination mit anderen konstaten Zeichen des Ursprungsnamens nutzt, wie z.B. _ .\nAls Beispiel:\nWenn der originale Name wie folgt aussieht: 20150729_212537.JPG\nDann nutze ein Muster wie z.B. diese: ????????_??????.JPG\nUnd setze ein Präfix für den neuen Dateinamen, wie z.B.: \'PIC_\' (nutze die \' um einen konstanten Text zu definieren), in das Muster ein.\n\'PIC_\'yyyyMMdd_HHmmss benennt die Datei um in PIC_20150729_212537.JPG . Datum und Uhrzeit werden hierbei aus den EXIF-Daten entnommen.\nWeiteres Beispiel:\nOriginaldatei: imag*.jpg\nUmbennen in: yyyy-MM-dd_HH\'h\'mm\'m\'ss\'s_Gerätename\'.jpg\nErgebnis sind chronologisch geordnete Dateinamen:\n2015-07-29_21h25m37s_Gerätename.jpg\nDie Angabe eines Gerätenamens macht Sinn, wenn man die Daten unter mehreren Geräten synchronisiert, um doppelte Namen zu vermeiden.</string>
+	<string name="first_time_alert">AUFMERKSAM LESEN:\nEs gibt keine \"Zurück-Funktion\" für umbenannte und verschobene Dateien!\nNutze diese App mit Vorsicht!\nBenutze individuelle Dateinamenmuster für Fotos oder Videos. Umbenannte Dateien können auch in ein anderes Verzeichnis verschoben werden. Ebenfalls können Wildcards * und ? genutzt werden.\nNutze keine zu allgemeinen Muster, wie *.jpg, um eine Endlosschleife zu vermeiden.\nUm eine Endlosschleife zu vermeiden empfiehlt es sich, dass man ? nutzt, um Stellen im Dateinamen zu definieren und diese in Kombination mit anderen konstaten Zeichen des Ursprungsnamens nutzt, wie z.B. _ .\nAls Beispiel:\nWenn der originale Name wie folgt aussieht: 20150729_212537.JPG\nDann nutze ein Muster wie z.B. dieses: ????????_??????.JPG\nUnd setze ein Präfix für den neuen Dateinamen, wie z.B. \'PIC_\' (nutze die \' um einen konstanten Text zu definieren), in das Muster ein.\n\'PIC_\'yyyyMMdd_HHmmss benennt die Datei um in PIC_20150729_212537.JPG . Datum und Uhrzeit werden hierbei aus den EXIF-Daten entnommen.\nWeiteres Beispiel:\nOriginaldatei: imag*.jpg\nUmbennen in: yyyy-MM-dd_HH\'h\'mm\'m\'ss\'s_Gerätename\'.jpg\nErgebnis sind chronologisch geordnete Dateinamen:\n2015-07-29_21h25m37s_Gerätename.jpg\nDie Angabe eines Gerätenamens ist sinnvoll, wenn man die Daten unter mehreren Geräten synchronisiert, um doppelte Namen zu vermeiden.</string>
 	<string name="folder_list_all_selected">Mindestens ein Verzeichnis sollte unausgewählt bleiben!</string>
 	<string name="folder_list_confirmation">Sollen die gewählten Ordner verschoben werden?</string>
 	<string name="folder_list_no_grant_permission_1">Das System verhindert den Zugriff auf den unten stehenden Ordner.\n\n%s\n\nBitte prüfen, wo der Ordner gewählt ist und versuche diesen erneut zu wählen!\n\nDu kannst diese Nachricht ignorieren, jedoch wird diese App nicht richtig funktionieren, bevor kein Zugriff auf obige Ordner möglich ist.</string>
 	<string name="folder_list_no_grant_permission_2">Das System verhindert den Zugriff auf die unten stehenden Ordner.\n\n%s\n\nBitte prüfen, wo die Ordner gewählt sind und versuche diese erneut zu wählen!\n\nDu kannst diese Nachricht ignorieren, jedoch wird diese App nicht richtig funktionieren, bevor kein Zugriff auf obige Ordner möglich ist.</string>
-	<string name="folder_list_no_open_document_tree_support">Deine Android Version unterstützt nicht das Auswählen von Ordnern.\n(ACTION_OPEN_DOCUMENT_TREE).\nWillst du den internen Dateimanager nutzen, um einen Ordner auszuwählen? Der interne Dateimanager hat nicht die Rechte um Dateien umzubennen oder zu verschieben!</string>
-	<string name="folder_list_no_selection">Wähle mindestens einen Ordner zum löschen aus!</string>
+	<string name="folder_list_no_open_document_tree_support">Deine Android Version unterstützt nicht das Auswählen von Ordnern.\n(ACTION_OPEN_DOCUMENT_TREE).\nWillst du den internen Dateimanager nutzen, um einen Ordner auszuwählen? Der interne Dateimanager hat nicht die Rechte um Dateien umzubenennen oder zu verschieben!</string>
+	<string name="folder_list_no_selection">Wähle mindestens einen Ordner zum Löschen aus!</string>
 	<string name="folder_list_title">Zu scannende Verzeichnisse</string>
 	<string name="general_settings">Einstellungen</string>
 	<string name="invoke_media_scanner_for_file_desc">Medien Scanner auffordern nach umbenannten Dateien zu suchen. Nutze dieses mit Vorsicht, normalerweise sollte diese Option nicht gewählt werden! Hiermit wird die Aktualisierung des MTP Caches erzwungen, was leider nicht immer funktioniert!</string>
 	<string name="invoke_media_scanner_for_file_title">Medien Scanner auffordern</string>
 	<string name="license_desc">Lizenzdetails für Open Source Software</string>
 	<string name="license_title">Open Source Lizenz</string>
-	<string name="list_info_press">Hinzufügen oder löschen von Dateien</string>
+	<string name="list_info_press">Hinzufügen oder Löschen von Dateien</string>
 	<string name="loading_wait">Lade - Bitte warten&#8230;.</string>
 	<string name="manually_file_rename_count_0">Keine Datei wurde umbenannt.</string>
 	<string name="manually_file_rename_count_1">Eine Datei wurde umbenannt.</string>
 	<string name="manually_file_rename_count_more">%d Dateien wurden umbenannt.</string>
 	<string name="manually_file_rename_progress_1">%1$d von %2$d Dateien wurden umbenannt.</string>
-	<string name="manually_file_rename_progress_more">%1$d von %2$d bisher umbenannte Dateien.</string>
-	<string name="manually_service_running">Manuelles Umbennen läuft</string>
+	<string name="manually_file_rename_progress_more">%1$d von %2$d Dateien sind umbenannt.</string>
+	<string name="manually_service_running">Manuelles Umbenennen läuft</string>
 	<string name="manually_start_desc">Drücke für manuellen Rename Service</string>
 	<string name="manually_start_title">Manuelles Umbenennen starten</string>
 	<string name="minutes_unit">Minuten</string>
 	<string name="move_file_enable">Verschiebe die umbenannte Datei in unten ausgewählten Ordner.</string>
-	<string name="move_file_text_no_folder">Es wurde kein Ordner ausgewählt. Drücke hier um einen auszuwählen.</string>
+	<string name="move_file_text_no_folder">Es wurde kein Ordner ausgewählt. Drücke hier, um einen auszuwählen.</string>
 	<string name="move_file_text_selected_folder">Gewählter Ordner: %s</string>
 	<string name="new_folder">Neuer Ordner</string>
 	<string name="no">Nein</string>
@@ -109,7 +109,7 @@
 	<string name="remove_rename_shortcut_desc">DSC Rename Service Lesezeichen vom Home Screen entfernen</string>
 	<string name="rename_file_delay_desc">Umbenennen der nächsten Datei nach</string>
 	<string name="rename_file_delay_title">Verzögerung der Umbenennung</string>
-	<string name="rename_file_using_desc">Datum und Zeit wann die Datei das letzte mal modifiziert wurde.</string>
+	<string name="rename_file_using_desc">Datum und Zeit wann die Datei das letzte Mal modifiziert wurde.</string>
 	<string-array name="rename_file_using_labels">
 		<item>Datum und Zeit der Erstellung.</item>
 		<item>Datum und Zeit der letzen Bearbeitung.</item>
@@ -117,10 +117,10 @@
 	</string-array>
 	<string name="rename_file_using_title">Datei umbenennen mit:</string>
 	<string name="rename_service_start_delay_desc">Starte Rename Service nach</string>
-	<string name="rename_service_start_delay_title">Rename Sevice Startverzögerung</string>
+	<string name="rename_service_start_delay_title">Rename Service Startverzögerung</string>
 	<string name="rename_shortcut">DSC Rename Service Lesezeichen</string>
 	<string name="rename_shortcut_name">DSC Rename Service</string>
-	<string name="rename_video_enabled_desc">Mit dieser Option werden ebenfalls automatisch Videos umbenannt. Es wird empfohlen nur Bilder umbennnen zu lassen.</string>
+	<string name="rename_video_enabled_desc">Mit dieser Option werden ebenfalls automatisch Videos umbenannt. Es wird empfohlen nur Bilder umbenennen zu lassen.</string>
 	<string name="rename_video_enabled_title">Aktiviere Umbenennung für Videodateien</string>
 	<string name="request_permissions_confirmation">Möchten Sie eine Rückmeldung über benötigte App Berechtigungen?</string>
 	<string name="request_permissions_desc">Wähle diese Option, um die nötigen Zugriffsrechte zu gewähren: Kamera (benötigt um eine Aufnahme zu registrieren), Speicher (benötigt um Dateien umzubenennen und zu verschieben)</string>
@@ -129,7 +129,7 @@
 	<string name="seconds_unit">Sekunden</string>
 	<string name="send_broadcast_msg_desc">Sende eine Broadcast-Nachricht mit den umbenannten Dateien. Diese Option benachrichtigt andere Apps, um umbenannte Dateien zu übernehmen.</string>
 	<string name="send_broadcast_msg_title">Broadcast-Nachricht senden</string>
-	<string name="send_debug_confirmation">Soll ein Fehlerbericht versandt werden?\nDer Standard eMail-Client wird eine eMail mit 2 Anhängen senden. Bitte der eMail eine kurze Fehlerbeschreibung auf Englisch hinzufügen.\nDanke!</string>
+	<string name="send_debug_confirmation">Soll ein Fehlerbericht versandt werden?\nDer Standard eMail-Client wird eine eMail mit zwei Anhängen senden. Bitte der eMail eine kurze Fehlerbeschreibung auf Englisch hinzufügen.\nDanke!</string>
 	<string name="send_debug_desc">Sende eine eMail mit dem Fehlerbericht</string>
 	<string name="send_debug_email_title">Fehlerbericht für DSC Auto Rename</string>
 	<string name="send_debug_title">Fehlerbericht senden</string>
@@ -138,13 +138,15 @@
 	<string name="service_choice_1">Der Auto Rename Service wird durch Kameraereignisse ausgelöst.</string>
 	<string name="service_choice_2">Der Auto Rename Service wird durch Medienereignisse ausgelöst.</string>
 	<string name="service_choice_3">Der Auto Rename Service wird ausgelöst, wenn dem ausgewählten Verzeichnis eine Datei hinzugefügt wird. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</string>
+	<string name="service_choice_4">Der Auto Rename Service läuft bereits im Hintergrund, jedoch werden die Dateien erst umbenannt, wenn die Kamera-App ein Ereignis sendet.</string>
 	<string-array name="service_type_labels">
 		<item>Deaktiviert</item>
 		<item>Kamera Ereignisse : Bilder oder Videos aufgenommen.</item>
 		<item>Medien Überwachung: Bilder oder Videos wurden gespeichert.</item>
 		<item>Datei Überwachung: Überwache die gewählten Verzeichnisse, ob Dateien hinzugefügt werden. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</item>
+		<item>Ein permanent laufender Dienst, um von der Kamera-App gesendete Ereignisse zu registrieren.</item>
 	</string-array>
-	<string name="thank_you_desc">Danke das Dir meine Arbeit gefällt und die Pro Version gekauft hast.</string>
+	<string name="thank_you_desc">Danke, dass Dir meine Arbeit gefällt und Du die Pro Version gekauft hast.</string>
 	<string name="thank_you_title">Danke für die Spende!</string>
 	<string name="ui_settings">UI Einstellungen</string>
 	<string name="yes">Ja</string>

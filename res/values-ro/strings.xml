@@ -135,11 +135,13 @@
 	<string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
 	<string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
 	<string name="service_choice_3">Serviciul de redenumire automata este declansat cand sunt adaugate fisiere in directoarele selectate.</string>
+	<string name="service_choice_4">Serviciul de redenumire automata a fisierelor ruleaza permanent, dar redenumirea fisierelor se face doar cand aplicatia de camera trimite notificari.</string>
 	<string-array name="service_type_labels">
 		<item>Dezactivat</item>
 		<item>Eveniment de camera: caputra de poze sau inregistrare de filme.</item>
 		<item>Notificare media: la salvarea de fisiere media.</item>
 		<item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
+		<item>Serviciu permanent folosit pentru receptionarea noficarilor transmise de aplicatia de camera.</item>
 	</string-array>
 	<string name="thank_you_desc">Multumesc pentru aprecierea realizata prin cumpararea aplicatiei PRO.</string>
 	<string name="thank_you_title">Multumesc pentru donatie!</string>

@@ -342,7 +342,7 @@ public class FileRenameThread implements Runnable {
     private boolean checkScanningFolders(File fileToCheck) {
         String folderTemp;
         for (SelectedFolderModel folder : mFoldersScanning) {
-            folderTemp = folder.getFullPath();
+            folderTemp = folder.getFullPath() + File.separatorChar;
             if (fileToCheck.getAbsolutePath().startsWith(folderTemp)) {
                 return true;
             }
