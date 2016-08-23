@@ -165,14 +165,14 @@ public class LogThread implements Runnable, Closeable {
 	}
 
 	/**
-	 * Check the log file size to not exceed the 5MB.
+	 * Check the log file size to not exceed the 10MB.
 	 *
-	 * @return True if the file size is larger than 5MB.
+	 * @return True if the file size is larger than 10MB.
 	 */
 	private boolean isLogFileSizeExceeded() {
 		if (logFile != null && logFile.exists()) {
 			long sizeInMB = logFile.length() / 1048576;
-			if (sizeInMB > 5) {
+			if (sizeInMB > 10) {
 				return true;
 			}
 		}

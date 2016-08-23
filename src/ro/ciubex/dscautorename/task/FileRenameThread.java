@@ -312,7 +312,7 @@ public class FileRenameThread implements Runnable {
                 mApplication.logE(TAG, "The file: " + currentFileName + " does not exist.");
             }
         } else {
-            mApplication.logE(TAG, "oldFileName is null.");
+            mApplication.logE(TAG, "currentFileName is null.");
         }
         return renamed;
     }
@@ -342,7 +342,7 @@ public class FileRenameThread implements Runnable {
     private boolean checkScanningFolders(File fileToCheck) {
         String folderTemp;
         for (SelectedFolderModel folder : mFoldersScanning) {
-            folderTemp = folder.getFullPath() + File.separatorChar;
+            folderTemp = correctFolderPath(folder.getFullPath());
             if (fileToCheck.getAbsolutePath().startsWith(folderTemp)) {
                 return true;
             }
@@ -416,7 +416,7 @@ public class FileRenameThread implements Runnable {
                 data.setParentFolder(newFile.getParentFile());
                 renameZeroFile(data);
             } else {
-                mApplication.logE(TAG, "Unable to rename: " + data);
+                mApplication.logE(TAG, "Unable to rename: " + getLogFileData(data));
             }
         } else {
             mApplication.logE(TAG, "The file cannot be renamed: " + oldFile.getAbsolutePath()
@@ -502,7 +502,7 @@ public class FileRenameThread implements Runnable {
         try {
             return renameFileApiLevelPriorKitKat(data, oldFile, newFile);
         } catch (Exception e) {
-            mApplication.logE(TAG, "Unable to rename file using KitKat method: " + data, e);
+            mApplication.logE(TAG, "Unable to rename file using KitKat method: " + getLogFileData(data), e);
         }
         return false;
     }
@@ -536,7 +536,7 @@ public class FileRenameThread implements Runnable {
                 result = renameFileApiLevelPriorKitKat(data, oldFile, newFile);
             }
         } catch (Exception e) {
-            mApplication.logE(TAG, "Unable to rename file using Lollipop method: " + data, e);
+            mApplication.logE(TAG, "Unable to rename file using Lollipop method: " + getLogFileData(data), e);
         }
         return result;
     }
@@ -889,7 +889,7 @@ public class FileRenameThread implements Runnable {
         } else if (mApplication.isEnabledScanForFiles()) {
             scanForFiles();
         } else {
-            scanMediaStore(null, null);
+            scanOnSelectedFoldersOnly();
         }
         mApplication.logD(TAG, "Found: " + mListFiles.size() + " files to be renamed.");
     }
@@ -984,6 +984,35 @@ public class FileRenameThread implements Runnable {
     }
 
     /**
+     * Scan for files from selected folders only.
+     */
+    private void scanOnSelectedFoldersOnly() {
+        StringBuilder selection = new StringBuilder();
+        String[] selectionArgs = new String[mFoldersScanning.length];
+        int i = 0;
+        for (SelectedFolderModel folder : mFoldersScanning) {
+            String folderTemp = correctFolderPath(folder.getFullPath());
+            if (selection.length() > 0) {
+                selection.append(" OR ");
+            }
+            selection.append(MediaStore.MediaColumns.DATA);
+            selection.append(" LIKE ?");
+            selectionArgs[i++] = folderTemp + "%";
+        }
+        scanMediaStore(selection.toString(), selectionArgs);
+    }
+
+    /**
+     * Add to the folder path string character / if is missing.
+     *
+     * @param folderPath The folder path, original string.
+     * @return The folder path with the / at the end.
+     */
+    private String correctFolderPath(String folderPath) {
+        return folderPath + (folderPath.endsWith("" + File.separatorChar) ? "" : File.separatorChar);
+    }
+
+    /**
      * Obtain a list with all files ready to be renamed.
      *
      * @param uri The URI, using the content:// scheme, for the content to
@@ -1007,7 +1036,6 @@ public class FileRenameThread implements Runnable {
                 MediaStore.MediaColumns.SIZE
         };
         try {
-//            doQuery(mContentResolver, uri);
             cursor = mContentResolver.query(uri, columns, selection, selectionArgs, null);
             if (cursor != null) {
                 int index, id;
@@ -1044,6 +1072,7 @@ public class FileRenameThread implements Runnable {
             } else {
                 mApplication.logD(TAG, "Method populateListFiles cursor is null!");
             }
+//            doQuery(mContentResolver, uri);
         } catch (Exception ex) {
             mApplication.logE(TAG, "getImageList Exception: " + ex.getMessage(), ex);
         } finally {
@@ -1257,5 +1286,15 @@ public class FileRenameThread implements Runnable {
             mApplication.logE(TAG, "Cannot be deleted the wrong record: "
                     + whereParam[0] + " Exception: " + ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Get human readable data.
+     *
+     * @param data Original rename data.
+     * @return Human readable data.
+     */
+    private String getLogFileData(FileRenameData data) {
+        return data.getId() + " " + data.getData();
     }
 }
