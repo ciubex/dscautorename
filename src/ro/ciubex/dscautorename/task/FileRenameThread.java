@@ -156,13 +156,11 @@ public class FileRenameThread implements Runnable {
             renameFileRequested = mApplication.isRenameFileRequested();
             mApplication.updateMountedVolumes();
             mApplication.updateSelectedFolders();
+            mFoldersScanning = mApplication.getSelectedFolders();
             mFileNameModels = mApplication.getOriginalFileNamePattern();
             renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
             renamePatternsUtilities.buildPatterns();
             populateMediaStoreURI();
-            if (mApplication.isEnabledFolderScanning()) {
-                mFoldersScanning = mApplication.getSelectedFolders();
-            }
             doGrantUriPermission();
             while (renameFileRequested) {
                 mApplication.setRenameFileRequested(false);
@@ -987,19 +985,24 @@ public class FileRenameThread implements Runnable {
      * Scan for files from selected folders only.
      */
     private void scanOnSelectedFoldersOnly() {
-        StringBuilder selection = new StringBuilder();
-        String[] selectionArgs = new String[mFoldersScanning.length];
+        StringBuilder selection = null;
+        String[] selectionArgs = null;
         int i = 0;
-        for (SelectedFolderModel folder : mFoldersScanning) {
-            String folderTemp = correctFolderPath(folder.getFullPath());
-            if (selection.length() > 0) {
-                selection.append(" OR ");
+        int size = mFoldersScanning.length;
+        if (size > 0) {
+            selection = new StringBuilder();
+            selectionArgs = new String[size];
+            for (SelectedFolderModel folder : mFoldersScanning) {
+                String folderTemp = correctFolderPath(folder.getFullPath());
+                if (selection.length() > 0) {
+                    selection.append(" OR ");
+                }
+                selection.append(MediaStore.MediaColumns.DATA);
+                selection.append(" LIKE ?");
+                selectionArgs[i++] = folderTemp + "%";
             }
-            selection.append(MediaStore.MediaColumns.DATA);
-            selection.append(" LIKE ?");
-            selectionArgs[i++] = folderTemp + "%";
         }
-        scanMediaStore(selection.toString(), selectionArgs);
+        scanMediaStore(selection != null ? selection.toString() : null, selectionArgs);
     }
 
     /**
