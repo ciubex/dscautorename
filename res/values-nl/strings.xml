@@ -1,2 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="app_name">DSC Auto Rename</string>
+
+    <string name="general_settings">Algemene instellingen</string>
+    <string name="enable_title">Auto-naamswijziging-trigger.</string>
+    <string name="enable_desc">Bestandsnamen worden automatisch gewijzigd nadat de trigger heeft plaatsgevonden.</string>
+
+    <string name="ui_settings">Uiterlijk-instellingen</string>
+    <string name="app_theme_title">Applicatiethema:</string>
+    <string name="app_theme_title_param">Applicatiethema: %s</string>
+    <string name="app_theme_desc">Stel het applicatiethema in: licht of donker.</string>
+    <string name="service_choice_0">De auto-naamwijzigingsdienst is uitgeschakeld.</string>
+    <string name="service_choice_1">De auto-naamwijzigingsdienst wordt getriggerd door camera-gebeurtenissen.</string>
+    <string name="service_choice_2">De auto-naamwijzigingsdienst wordt getriggerd door media-inhoudgebeurtenissen.</string>
+    <string name="service_choice_3">De auto-naamwijzigingsdienst wordt getriggered wanneer een bestand wordt toegevoegd aan geselecteerde mappen. U moet \"Naam wijzigen binnen een map\" aanvinken en minimaal 1 map hebben geselecteerd bij \"Selecteer een map\".</string>
+    <string name="rename_service_start_delay_title">Auto-naamwijzigingsdienst - Opstartvertraging</string>
+    <string name="rename_service_start_delay_desc">Auto-naamwijzigingsdienst starten na</string>
+    <string name="seconds_unit">seconden</string>
+    <string name="minutes_unit">minuten</string>
+
+    <string name="choose_units_title">Kies vertragingseenheden:</string>
+    <string name="choose_units_title_param">Gekozen vertragingseenheden: %s</string>
+    <string name="choose_units_desc">Deze optie stelt u in staat te kiezen tussen seconden en minuten.</string>
+    <string name="rename_video_enabled_title">Videobestandsnaamwijziging inschakelen</string>
+    <string name="rename_video_enabled_desc">Door deze optie aan te vinden worden videonamen ook automatisch gewijzigd; standaard geldt dit alleen voor afbeeldingen.</string>
+    <string name="enable_filter_folder_title">Naam wijzigen binnen een map</string>
+    <string name="enable_filter_folder_desc">Normaal scant de auto-naamwijzigingsdienst alle bestanden op uw apparaat. Door deze optie in te schakelen kunt dit beperken tot binnen een map.</string>
+    <string name="enable_filter_folder_desc_v21">Android Lollipop-gebruikers: schakel deze functie in en kies de mappen waar uw afbeeldingen worden opgeslagen.</string>
+    <string name="folder_list_title">Lijst van gescande mappen.</string>
+    <string name="folder_list_all_selected">Er moet op zijn minst één map niet worden aangevinkt!</string>
+    <string name="folder_list_no_selection">Selecteer op zijn minst één te verwijderen map!</string>
+    <string name="folder_list_confirmation">Wilt u de geselecteerde mappen verwijderen?</string>
+    </resources>
