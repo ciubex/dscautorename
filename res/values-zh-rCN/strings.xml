@@ -118,4 +118,5 @@
     <string name="app_theme_desc">设置界面主题：亮或暗。</string>
     <string name="do_not_show_again">不再显示</string>
     <string name="send_debug_confirmation">是否发送一份调试报告？\n将使用您的默认邮件程序发送一封电子邮件，其中附加两个文件。如果必要，请简单描述一下你的问题。\n感谢您的帮助！</string>
+    <string name="update_message_v70">請觀看一下選項\"%1$s\"，因為這個選項被移除了默認的分隔符號_，你應該用親自把它放在你想放的數字格式\"%2$s\"字元前面。</string>
     </resources>
