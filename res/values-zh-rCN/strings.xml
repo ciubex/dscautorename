@@ -98,7 +98,6 @@
 	<string name="seconds_unit">秒后</string>
 	<string name="send_debug_confirmation">是否发送一份调试报告？\n将使用您的默认邮件程序发送一封电子邮件，其中附加两个文件。如果必要，请简单描述一下你的问题。\n感谢您的帮助！</string>
 	<string name="send_debug_desc">发送电子邮件附上调试文件</string>
-	<string name="send_debug_email_title">DSC Auto Rename 的调试日志</string>
 	<string name="send_debug_title">发送调试日志</string>
 	<string name="send_report">发送报告…</string>
 	<string name="service_choice_0">自动重命名服务已禁用。</string>

@@ -112,6 +112,10 @@ public class FileRenameData {
 		return mDateAdded;
 	}
 
+	public void setDateAdded(long dateAdded) {
+		this.mDateAdded = dateAdded;
+	}
+
 	public String getFileNamePatternBefore() {
 		return mFileNamePatternBefore;
 	}

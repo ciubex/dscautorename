@@ -65,6 +65,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	private CheckBox mEnableMoveFiles;
 
 	private static final int CONFIRMATION_USE_INTERNAL_SELECT_FOLDER = 2;
+	private FileNameModel initModel;
 
 	public FileNamePatternEditorDialog(Context context, DSCApplication application,
 									   Activity parentActivity,
@@ -105,7 +106,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	@Override
 	protected void onStart() {
 		mNow = new Date();
-		mDefaultFileName = new FileNameModel(mApplication, mApplication.getApplicationContext().getString(R.string.default_file_name_pattern));
+		mDefaultFileName = new FileNameModel(mApplication.getApplicationContext().getString(R.string.default_file_name_pattern));
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
 		updateDialogTitle();
 		initValues();
@@ -163,12 +164,14 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	private void initValues() {
 		boolean isMoveFiles = false;
 		if (mPosition > -1) {
-			FileNameModel fileNameModel = mApplication.getOriginalFileNamePattern()[mPosition];
-			mEditFileNamePatternFrom.setText(fileNameModel.getBefore());
-			mEditFileNamePatternTo.setText(fileNameModel.getAfter());
-			isMoveFiles = Utilities.isMoveFiles(fileNameModel.getSelectedFolder());
+			initModel = mApplication.getOriginalFileNamePattern()[mPosition];
+		}
+		if (initModel != null) {
+			mEditFileNamePatternFrom.setText(initModel.getBefore());
+			mEditFileNamePatternTo.setText(initModel.getAfter());
+			isMoveFiles = Utilities.isMoveFiles(initModel.getSelectedFolder());
 			if (isMoveFiles) {
-				mDefaultSelectedFolder = fileNameModel.getSelectedFolder();
+				mDefaultSelectedFolder = initModel.getSelectedFolder();
 				mDefaultFileName.setSelectedFolder(mDefaultSelectedFolder);
 			} else {
 				mDefaultSelectedFolder = new SelectedFolderModel();
@@ -413,5 +416,9 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 		if (positive && CONFIRMATION_USE_INTERNAL_SELECT_FOLDER == confirmationId) {
 			useInternalSelectFolderDialog(0);
 		}
+	}
+
+	public void setInitModel(FileNameModel initModel) {
+		this.initModel = initModel;
 	}
 }

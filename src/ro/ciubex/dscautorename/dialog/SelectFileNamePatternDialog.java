@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 
 /**
@@ -38,18 +39,20 @@ import android.widget.ListView;
  * @author Claudiu Ciobotariu
  * 
  */
-public class SelectFileNamePatternDialog extends BaseDialog {
+public class SelectFileNamePatternDialog extends BaseDialog implements CompoundButton.OnCheckedChangeListener {
 	private Activity mParentActivity;
 	private FileNamePatternListAdapter mAdapter;
 	private ListView mListView;
 	private Button mBtnAdd, mBtnDelete;
 	private FileNamePatternEditorDialog mFileNamePatternEditorDialog;
+	private int mCheckedCounter;
 
 	public SelectFileNamePatternDialog(Context context, DSCApplication application, Activity parentActivity) {
 		super(context, application);
 		setContentView(R.layout.items_list_dialog_layout);
 		mParentActivity = parentActivity;
 		mAdapter = new FileNamePatternListAdapter(context, application);
+		mAdapter.setOnCheckedChangeListener(this);
 	}
 
 	/*
@@ -67,6 +70,13 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 		mBtnDelete = (Button) findViewById(R.id.btnDelete);
 		mBtnDelete.setOnClickListener(this);
 		initListView();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		mCheckedCounter = 0;
+		prepareButtons();
 	}
 
 	/**
@@ -97,6 +107,13 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 		if (mFileNamePatternEditorDialog == null) {
 			mFileNamePatternEditorDialog = new FileNamePatternEditorDialog(mContext, mApplication, mParentActivity, mAdapter);
 		}
+		if (position == -2) {
+			FileNameModel item = getFirstSelectedItem();
+			if (item != null) {
+				mFileNamePatternEditorDialog.setInitModel(item);
+			}
+			position = -1;
+		}
 		mFileNamePatternEditorDialog.setPosition(position);
 		mFileNamePatternEditorDialog.show();
 	}
@@ -120,12 +137,28 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 	@Override
 	public void onClick(View view) {
 		if (mBtnAdd == view) {
-			clickOnItem(-1);
+			clickOnItem(mCheckedCounter == 1 ? -2 : -1);
 		} else if (mBtnDelete == view) {
 			onDelete();
 		} else {
 			super.onClick(view);
 		}
+	}
+
+	/**
+	 * Obtain first selected item.
+	 *
+	 * @return First selected item or null.
+	 */
+	private FileNameModel getFirstSelectedItem() {
+		FileNameModel item;
+		for (int i = 0; i < mAdapter.getCount(); i++) {
+			item = mAdapter.getItem(i);
+			if (item.isSelected()) {
+				return item;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -162,7 +195,9 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 			FileNameModel item;
 			for (i = 0; i < len; i++) {
 				item = mAdapter.getItem(i);
-				if (!item.isSelected()) {
+				if (item.isSelected()) {
+					mCheckedCounter--;
+				} else {
 					if (sb.length() > 0) {
 						sb.append(',');
 					}
@@ -175,4 +210,21 @@ public class SelectFileNamePatternDialog extends BaseDialog {
 		}
 	}
 
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		if (isChecked) {
+			mCheckedCounter++;
+		} else if (mCheckedCounter > 0) {
+			mCheckedCounter--;
+		}
+		prepareButtons();
+	}
+
+	/**
+	 * Prepare the buttons.
+	 */
+	private void prepareButtons() {
+		mBtnDelete.setEnabled(mCheckedCounter > 0);
+		mBtnAdd.setText(mCheckedCounter == 1 ? R.string.copy : R.string.add);
+	}
 }

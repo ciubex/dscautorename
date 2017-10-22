@@ -23,6 +23,7 @@ import android.net.Uri;
 import java.io.File;
 
 import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.util.Utilities;
 
 /**
  * A model class used to handle selected folder info
@@ -31,6 +32,7 @@ import ro.ciubex.dscautorename.DSCApplication;
  */
 public class SelectedFolderModel {
 	private static final String TAG = SelectedFolderModel.class.getName();
+	private Uri mUri;
 	private String mSchema;
 	private String mAuthority;
 	private String mUuid;
@@ -39,7 +41,7 @@ public class SelectedFolderModel {
 	private int mFlags;
 	private boolean selected;
 
-	public void fromString(DSCApplication application, String value) {
+	public void fromString(String value) {
 		int idx = value.length();
 		if (idx > 0 && value.charAt(0) == '[' && value.charAt(idx-1) == ']') {
 			String[] values = value.substring(1, idx-1).split(":");
@@ -47,24 +49,15 @@ public class SelectedFolderModel {
 			mAuthority = values[1];
 			mUuid = values[2];
 			mPath = values[3];
-			mFlags = getIntValue(application, values[4], value);
+			mFlags = Utilities.parseToInt(values[4], 195);
 		} else {
 			mPath = value;
 			mFlags = 195;
 		}
 	}
 
-	private int getIntValue(DSCApplication application, String value, String fullValue) {
-		int result = 195;
-		try {
-			result = Integer.parseInt(value);
-		} catch (NumberFormatException e) {
-			application.logE(TAG, "Exception on parsing for: " + value + " fullValue: " + fullValue, e);
-		}
-		return result;
-	}
-
 	public void fromUri(Uri uri, int flags) {
+		mUri = uri;
 		mSchema = uri.getScheme();
 		mAuthority = uri.getAuthority();
 		String[] uriPathArr = uri.getPath().split(":");
@@ -134,6 +127,25 @@ public class SelectedFolderModel {
 		return mSchema != null && mSchema.length() > 0;
 	}
 
+	public boolean isValidPath() {
+		if (mPath == null || "null".equals(mPath) || mPath.length() < 1) {
+			return false;
+		}
+		if (android.os.Build.VERSION.SDK_INT > 21 && (mSchema == null || "null".equals(mSchema))) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean haveGrantUriPermission(DSCApplication application) {
+		if (android.os.Build.VERSION.SDK_INT < 21) {
+			return true;
+		} else if (getUri() != null) {
+			return application.doGrantUriPermission(application.getContentResolver(), mUri, mFlags);
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		final StringBuilder sb = new StringBuilder("[");
@@ -155,12 +167,15 @@ public class SelectedFolderModel {
 	}
 
 	public Uri getUri() {
-		return new Uri.Builder()
-				.scheme(mSchema)
-				.authority(mAuthority)
-				.appendPath("tree")
-				.appendPath(mUuid + ":" + mPath)
-				.build();
+		if (mUri == null) {
+			mUri = new Uri.Builder()
+					.scheme(mSchema)
+					.authority(mAuthority)
+					.appendPath("tree")
+					.appendPath(mUuid + ":" + mPath)
+					.build();
+		}
+		return mUri;
 	}
 
 	public String getFullPath() {

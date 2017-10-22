@@ -31,17 +31,17 @@ public class FileNameModel {
 	private boolean mSelected;
 	private SelectedFolderModel mSelectedFolder;
 
-	public FileNameModel(DSCApplication application, String string) {
+	public FileNameModel(String string) {
 		mSelectedFolder = new SelectedFolderModel();
-		fromString(application, string);
+		fromString(string);
 	}
 
-	private void fromString(DSCApplication application, String string) {
+	private void fromString(String string) {
 		String[] arr = string.split("\\|");
 		if (arr.length > 0) {
 			preparePatterns(arr[0]);
 			if (arr.length > 1) {
-				mSelectedFolder.fromString(application, arr[1]);
+				mSelectedFolder.fromString(arr[1]);
 			}
 		}
 	}

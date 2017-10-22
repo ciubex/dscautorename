@@ -57,6 +57,7 @@ public class FileRenameService extends Service implements FileRenameThread.Liste
     @Override
     public void onDestroy() {
         mStarted = false;
+        mApplication.resetCameraServiceInstanceCount();
         mApplication.logD(TAG, "Service destroyed!");
         super.onDestroy();
     }

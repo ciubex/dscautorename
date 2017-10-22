@@ -176,7 +176,7 @@ public class CameraRenameService extends Service {
             mAlreadyStarted = true;
             mApplication.logD(TAG, "onStartCommand: " + startId);
             registerReceivers();
-            if (mApplication.getCameraServiceInstanceCount() > 0) {
+            if (mApplication.getCameraServiceInstanceCount() < 1) {
                 mApplication.launchAutoRenameTask(null, true, null, false);
             }
             mApplication.increaseCameraServiceInstanceCount();

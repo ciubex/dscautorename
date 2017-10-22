@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  *
- * Copyright (C) 2016 Claudiu Ciobotariu
+ * Copyright (C) 2017 Claudiu Ciobotariu
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -44,7 +45,7 @@ import ro.ciubex.dscautorename.model.SelectedFolderModel;
  * @author Claudiu Ciobotariu
  */
 public class SelectFoldersListDialog extends BaseDialog implements
-		SelectFolderDialog.SelectFolderListener {
+		SelectFolderDialog.SelectFolderListener, CompoundButton.OnCheckedChangeListener {
 	private static final String TAG = SelectFoldersListDialog.class.getName();
 	private Activity mParentActivity;
 	private FolderListAdapter mAdapter;
@@ -52,6 +53,7 @@ public class SelectFoldersListDialog extends BaseDialog implements
 	private TextView mItemsListNote;
 	private Button mBtnAdd, mBtnDelete;
 	private int mSelectedIndex;
+    private int mCheckedCounter;
 
 	private static final int CONFIRMATION_DELETE_FOLDER = 1;
 	private static final int CONFIRMATION_USE_INTERNAL_SELECT_FOLDER = 2;
@@ -65,6 +67,7 @@ public class SelectFoldersListDialog extends BaseDialog implements
 		this.mParentActivity = parentActivity;
 		setContentView(R.layout.items_list_dialog_layout);
 		mAdapter = new FolderListAdapter(context, application);
+		mAdapter.setOnCheckedChangeListener(this);
 		mSelectedIndex = -1;
 	}
 
@@ -86,6 +89,12 @@ public class SelectFoldersListDialog extends BaseDialog implements
 		mItemsListNote.setVisibility(View.GONE);
 		initListView();
 	}
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mCheckedCounter = 0;
+    }
 
 	/**
 	 * Initialize the list view.
@@ -236,5 +245,15 @@ public class SelectFoldersListDialog extends BaseDialog implements
 	public void onFolderSelected(int folderIndex, SelectedFolderModel selectedFolder) {
 		mApplication.setFolderScanning(folderIndex, selectedFolder);
 		updateSelectedFolders();
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if (isChecked) {
+            mCheckedCounter++;
+        } else if (mCheckedCounter > 0) {
+            mCheckedCounter--;
+        }
+        mBtnDelete.setEnabled(mCheckedCounter > 0);
 	}
 }

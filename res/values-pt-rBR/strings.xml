@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_section">Sobre</string>
-	<string name="about_text"><Data><![CDATA[<b>Muito obrigado a Simon W pelo suporte no desenvolvimento da versão 4.0.0!</b><br/>\n<br/>\nEste aplicativo foi criado para renomear automaticamente fotos obtidas pela câmera baseado na data e hora de criação do arquivo.<br/>\n<br/>\nO formato usado para renomear os arquivos usa os parâmetros de data e hora do Java:<br/>\n- yyyy para anos;<br/>\n- MM para meses;<br/>\n- dd para dias;<br/>\n- HH para horas;<br/>\n- mm para minutos;<br/>\n- ss para segundos;<br/>\n- SSS para milissegundos.<br/>\nInfelizmente devido a especificações do EXIF e do Android os milissegundos não são usados internamente.<br/>\nVeja mais informações em: <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Classe Java SimpleDateFormat</a><br/>\n<br/>\nSe vários arquivos forem gerados ao mesmo tempo, os nomes gerados terão um contador no sufixo como _01 (dependendo de quantos digitos forem definidos nas configurações).<br/>\n<br/>\nDefinição de padrões de nome de arquivo individualmente para fotos ou vídeos. Coringas * ou ? também podem ser usados.<br/>\nNão usar padrão muito genérico como *.JPG para evitar um looping infinito de renomeamentos.<br/>\nMelhor usar ? para definir um caracter único possível em combinação com outro caracter fixo como _.<br/>\nPor exemplo se o nome original for 20150729_212537.JPG usar um padrão como ????????_??????.JPG e adicionar o prefixo \'PIC_\' (usar apóstrofes para definir textos fixos) no padrão como \"\'PIC_\'yyyyMMdd_HHmmss\" para renomear o arquivo para: PIC_20150729_212537.JPG<br/>\n<br/>\nO serviço de renomeamento, se habilitado, é automaticamente ativado quando um arquivo de imagem é salvo na pasta de mídia do dispositivo.<br/>\n<br/>\nO gatilho depende do aplicativo da câmera usado para obter as imagens. O aplicativo da câmera deve enviar <b>com.android.camera.NEW_PICTURE</b> ou <b>android.hardware.action.NEW_PICTURE</b>, caso contrário o gatilho do serviço de renomeamento não é ativado.<br/>\nEm alguns casos a câmera não envia nenhuma mensagem, então é possível definir como gatilho os eventos de mídia (o que implica em um serviço rodando permanentemente em segundo plano).<br/>\n<br/>\nPara mais detalhes, por favor verificar a página de descrição do aplicativo em <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
 	<string name="add">Adicionar</string>
 	<string name="app_theme_desc">Escolha o tema aplicativo: Leve ou Escuro.</string>
 	<string-array name="app_theme_labels">
@@ -24,6 +23,7 @@
 	<string name="confirmation_rename_dialog_desc">Mostrar ou não o diálogo de confirmação quando o serviço de renomeamento é executado pelo atalho.</string>
 	<string name="confirmation_rename_question">Você deseja iniciar manualmente o serviço de renomeamento?</string>
 	<string name="confirmation_rename_question_v19">Se o arquivo selecionado não estiver em uma pasta selecionada, em seguida, mudar o nome não será concluída devido a restrições de segurança do Android.\nVocê deseja iniciar manualmente o serviço de renomeamento?</string>
+	<string name="copy">Copiar</string>
 	<string name="create_rename_shortcut">Criar atalho para o serviço de renomeamento</string>
 	<string name="create_rename_shortcut_desc">Criar um atalho na tela principal para executar manualmente o serviço de renomeamento.</string>
 	<string name="define_file_name_pattern_desc">Os padrões de nome de arquivo usados para buscar arquivos para o renomeamento (\"DSC_*.JPG\" ou \"MOV_*.MP4\"), Info. %s\nCoringas * e ? também podem ser usados.</string>
@@ -71,7 +71,6 @@
 	<string name="file_rename_count_title">Número de arquivos renomeados: %d</string>
 	<string name="filter_folder_no_folder">[Nenhuma pasta]</string>
 	<string name="filter_folder_title">Selecione uma pasta.</string>
-	<string name="first_time_alert">LER ATENTAMENTE:\nRenomeamentos e movimentos de arquivos não podem ser desfeitos!\nUsar esse aplicativo com cuidado!\nDefinição de padrões de nome de arquivo individualmente para fotos ou vídeos. Arquivos renomeados também podem ser movidos para outra pasta. Coringas * ou ? podem ser usados.\nNão usar padrão muito genérico como *.JPG para evitar um looping de renomeamentos.\nMelhor usar ? para definir um caracter único possível em combinação com outro caracter fixo como _.\nPor exemplo se o nome original for 20150729_212537.JPG usar um padrão como ????????_??????.JPG e adicionar o prefixo \'PIC_\' (usar apóstrofes para definir textos fixos) no padrão como \"\'PIC_\'yyyyMMdd_HHmmss\" para renomear o arquivo para: PIC_20150729_212537.JPG</string>
 	<string name="folder_list_all_selected">Ao menos uma pasta deve permanecer desmarcada!</string>
 	<string name="folder_list_confirmation">Você realmente deseja excluir as pastas selecionadas?</string>
 	<string name="folder_list_no_grant_permission_1">Seu sistema revogado as permissões para pasta a seguir:\n\n%s\n\nVerifique onde esta pasta foi definida e tentar selecioná-lo novamente!</string>
@@ -105,6 +104,8 @@
 	<string name="please_wait">Aguarde&#8230;</string>
 	<string name="remove_rename_shortcut">Remover o atalho da tela principal</string>
 	<string name="remove_rename_shortcut_desc">Remover da tela principal o atalho para executar manualmente o serviço de renomeamento.</string>
+	<string name="rename_file_delay_desc">Renomear próximo arquivo após</string>
+	<string name="rename_file_delay_title">Atraso em renomear arquivos</string>
 	<string name="rename_file_using_desc">data e hora quando o arquivo foi modificado.</string>
 	<string-array name="rename_file_using_labels">
 		<item>data e hora quando o arquivo foi adicionada ao provedor de mídia;</item>
@@ -125,7 +126,6 @@
 	<string name="seconds_unit">seg.</string>
 	<string name="send_debug_confirmation">Você deseja enviar um relatório de depuração?\nSeu aplicativo de email padrão irá enviar um e-mail com dois arquivos anexados. Por favor, informar uma breve descrição do seu problema se necessário.\nObrigado!</string>
 	<string name="send_debug_desc">Enviar um e-mail com os arquivos de depuração</string>
-	<string name="send_debug_email_title">Logs de Depuração para DSC Auto Rename</string>
 	<string name="send_debug_title">Enviar Logs de Depuração</string>
 	<string name="send_report">Enviar relatório&#8230;</string>
 	<string name="service_choice_0">O serviço de auto-renomeamento está desabilitado.</string>
@@ -137,6 +137,7 @@
 		<item>Eventos da câmera: fotos ou vídeos capturados.</item>
 		<item>Observador de mídia: fotos ou vídeos salvos.</item>
 		<item>Observador de arquivos: monitora as pastas selecionadas quando arquivos são adicionados. Você deve checar \"Renomear arquivos na pasta\" e possuir ao menos uma pasta selecionada em \"Selecione uma pasta\".</item>
+		<item>A permanent running service used to catch camera application notification events.</item>
 	</string-array>
 	<string name="thank_you_desc">Obrigado por apreciar meu trabalho comprando a versão PRO.</string>
 	<string name="thank_you_title">Obrigado por sua doação!</string>

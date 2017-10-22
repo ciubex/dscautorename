@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Help page</title>
+</head>
+<body>
+
+<h3>Overview</h3>
+<p>Thank you for using this application, please take a moment to read bellow information.</p>
+<p style="color:red">Renamed and moved files using this application cannot be rolled back!</p>
+<p>The application was made to rename pictures and clips using creation time if are available. The application was designed to run on Sony devices which default camera application save files using a prefix followed by a numeric counter, the pictures prefix is DSC_ and clips prefix is MOV_, the counter is reset each time when the folder where are saved files is cleanup.</p>
+<p>e.g. DSC_0034.JPG and MOV_0045.MP4</p>
+<p>That's why is important to check, if your device is not a Sony device, what are the file name pattern, mostly (Samsung, LG etc.) use IMG_ for pictures and VID_ for clips, the file patterns are on the <b>Define file name patterns</b> section.</p>
+
+<h3>Auto rename service trigger</h3>
+<p>On early Android version the most common way to detect when a new picture and clips was taken was to "listen" some camera events, but that's was dependent by the developers which developed the camera application, because of that I let the user to check other options, but if nothing is not working the rename service can manually be invoked.</p>
+<p>Available options are:</p>
+<ol>
+    <li>Camera events. This trigger listen for camera events when pictures or videos taken. This option was removed from versions newest than Android Lollipop (5.x)</li>
+    <li>Media content observer. Normally the Android OS store into an internal data base all pictures and videos information, like an indexer.</li>
+    <li>File observer. This option will scan all selected folders and subfolders to register listeners for new files. You must check <b>Rename within a folder</b> and have a least one folder on <b>Select a folder</b>.</li>
+    <li>A permanent running service used to catch camera application notification events. This option was removed from versions newest than Android Lollipop (5.x)</li>
+</ol>
+<p>Because any above trigger is directly dependent by the Android OS developers and because none of them are reliable I suggest to create on the Home Screen a shortcut to launch manually the rename service directly when is necessary or as a backup. More details on <b>DSC Rename service shortcut</b> section.</p>
+
+<h3>Enable video file rename</h3>
+<p>The option offer the possibility to rename the video files too.</p>
+
+<h3>Rename service start delay</h3>
+<p>This option it is used only when the rename service is automatically invoked. The rename service can be delayed to let the phone to settle down. The value is ignored when the rename service is manually invoked.</p>
+
+<h3>Rename within a folder</h3>
+<p>If this option is enable will let you to select which folder should be scanned for files to be renamed, by default the application will scan for all files from the device, by enabling this and set a list of folders, will limit the rename service to check only selected folders. This option is mandatory for newest Android OS, starting with Android Lolipop (5.x), see more info on next section.</p>
+
+<h3>Select a folder</h3>
+<p>As I mentioned above on this section are all selected folders used by the application to check for files which should be renamed. This option is mandatory for newest Android OS version, newest than Android Lollipop (5.x).</p>
+<p>Normaly the default camera application on Sony devices saves files on a subfolder named <b>100ANDRO</b>, but I suggest to select the parent folder, <b>DCIM</b>. If you select this folder all subfolders will be available too.</p>
+<p>An example of selected folders:</p>
+<ol>
+    <li>/storage/F8E8-12B3/DCIM</li>
+    <li>/storage/emulator/0/DCIM</li>
+</ol>
+<p>The path "/storage/F8E8-12B3/DCIM" is normally a path to a DCIM folder located on the SD Card. The second path is the full path DCIM folder located on phone internal memory.</p>
+<p>Sometime the Android OS rejects application right over DCIM folders from SD Cards, mostly when the SD Card is changed or an error is detected by OS, that's why is necessary to reselect the DCIM folder form the SD card if you notice that the files from SD Card are not renamed. Use manually rename option to check if the files are renamed properly.</p>
+
+<h3>Enable folder scanning for files</h3>
+<p>This option is deprecated and in most of the time will not be necessary to be used. This option will set the application to scan for files by scanning paths (folders and subfolders) instead to check the Android OS indexer (data base). If is enabled this option the application will consume more resources (CPU and RAM) to search trough selected folders for files, the process time will be increased too.</p>
+
+<h3>Define files name patterns</h3>
+<p>As I mentioned, because the application was designed to work on Sony devices, by default are two predefined patterns:</p>
+<ol>
+    <li>Pictures: DSC_*.JPG</li>
+    <li>Clips: MOV_*.MP4</li>
+</ol>
+<p>The rename file name pattern by default contains some date time patterns like: "yyyyMMdd_HHmmss" where each letter case is important:</p>
+<ol>
+    <li>yyyy - this is the year number using 4 digits, e.g. 2017;</li>
+    <li>MM - this is the month number, using 2 digits, e.g. 07, it is important to be in UPPER CASE, otherwise will be interpreted as minutes;</li>
+    <li>dd - this is the day in month number, using 2 digits, e.g. 31;</li>
+    <li>_ this character is used as it is, as a separator;</li>
+    <li>HH - this is the day in hour representation, in 2 digits, from 00 to 23, it is important to be used UPPER CASE, otherwise will be interpreted in interval 00 - 12 (AM/PM version);</li>
+    <li>mm - this is used for minutes, using 2 digits, must be used lower case letters;</li>
+    <li>ss - this is used for seconds, also the case is important, should be used lower case letters.</li>
+</ol>
+<p>See more format information on: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a> page.</p>
+<p>Notes:</p>
+<ol>
+    <li>As can be noticed from the Java class the date time format is more flexible but it is important to respect letter case and repetition. For example the MM will return a number between 01 and 12 but if you use 3 of M, like MMM will obtain first three letterns from the month name, like: Jul, or MMMM will return the full month name: July</li>
+    <li>Unfortunately the milliseconds cannot be used (S upper case), the file date time info or EXIF data do not offer milliseconds support. See <b>Date and time (original)</b> Tag from the <a href="https://en.wikipedia.org/wiki/Exif#Example">EXIF documentation</a>.</li>
+</ol>
+<p>The file name extension it is preserved during rename process, also is case insensitive, JPG = jPg = jpg</p>
+
+<h3>Define file name extra suffix</h3>
+<p>By default the application will add a counter suffix to offer an unique file name, this is necessary when more than one picture is taken on the same second.</p>
+<p>Pattern explanation:</p>
+<ol>
+    <li>_ This character it is used as a separator like on the rename pattern;</li>
+    <li>%05d Define the numeric pattern used to add the numeric value, "d" mean digits, "0" mean preceded by zeros, "5" mean 5 digits number, e.g. 00003</li>
+</ol>
+
+<h3>Rename file using:</h3>
+<p>Using this option the user can define which information will be used to obtain the date and time in rename process.</p>
+<p>Available options:</p>
+<ol>
+    <li>date and time when the file was adde to the media provider, this is actually the date and time from the internal Android OS indexer (data base).</li>
+    <li>date and time when the file was last time modified. The Java and Android implicit do not offer information when the file was created, this is a well know issue. See <a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html#lastModified()">File class</a> documentation for more details.</li>
+    <li>EXIF or Metadata if available, otherwise will be used the date and time when the file was last time modified.</li>
+</ol>
+
+<h3>Append original name</h3>
+<p>Because the application is not implemented to rollback renamed files, using this option can be saved the original file name.</p>
+<p>The rollback rename file was not implemented because the original Camera application will reuse the counter so it will mess the file order.</p>
+
+<h3>DSC Rename service shortcut</h3>
+<p>Because the automatically trigger is not reliable, I must admit that, and because I did not identified a way to make it to work always, I suggest to create on your Home screen a shortcut to launch manually directly the rename service.</p>
+<p>Even my self I use the shortcut to rename files after each photo session. This could be helpfully because the rename process will not affect the camera processes.</p>
+
+<h3>Hide confirmation dialog</h3>
+<p>Using this option the user can disable the confirmation dialog used prior starting the manually rename service when the shortcut it is used to launch it.</p>
+
+<h3>Start manually the rename service</h3>
+<p>This option allow the user to launch manually the rename service from the main application, mostly this can be used to check if settings are properly set.</p>
+
+<h3>Number of renamed files</h3>
+<p>Here are shown a counter with renamed files number. If it is touched the counter can be reset.</p>
+
+<h3>Export and import settings</h3>
+<p>Using these options can be exported and imported application settings to and from a local folder. The file name is dsc_autorename.preferences. The file is actually a text file.</p>
+<p>On importing process the paths may not be included if the application do not have access rights. That's why you should check and select again folders if is necessary.</p>
+
+<h3>Send debbuging logs</h3>
+<p>Use this option to send some debugging information related with this application to me, it is important that the mail to contain an archive attached and a description with the issues in English or Romanian language.</p>
+
+<h3>Donate</h3>
+<p>You can make a donation if you appreciate the application by installing the Pro version, which actually act like a key, it is not an application.</p>
+<p>The donation is not required, the application is fully working in free version too.</p>
+
+<h3>Application sources</h3>
+<p>This application is an open source application and have sources published at the addrress: <a href="https://github.com/ciubex/dscautorename">https://github.com/ciubex/dscautorename</a></p>
+
+<h3>Translations and suggestions</h3>
+<p>Any translation and language suggestion is welcomed, you can use online page: <a href="https://www.localize.im/v/pn">Localize: DSC Auto Rename</a> for translations or send emails with any language suggestions.</p>
+<p>This help page source is available online at the address: <a href="https://github.com/ciubex/dscautorename/blob/master/assets/help-en.html">help-en.html</a>.</p>
+
+</body>

@@ -21,6 +21,16 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+    <string-array name="service_type_labels_v21">
+        <item>Disabled</item>
+        <item>Media content observer: pictures or videos saved.</item>
+        <item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
+    </string-array>
+    <string-array name="service_type_values_v21" translatable="false">
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 
     <!-- UI settings -->
     <string name="ui_settings">UI settings</string>
@@ -65,10 +75,9 @@
     <string name="enable_filter_folder_title">Rename within a folder</string>
     <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
     <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera application save files.</string>
-    <string name="first_time_alert">READ CAREFULLY:\nRenamed and moved files process cannot be rolled back!\nUse this software with caution!\nDefine file name patterns individually for pictures or clips, renamed files can be moved to another folder also. Wildcards * or ? can be used too.\nDo not use too generics pattern like *.JPG to avoid infinite renaming looping.\nBetter use ? to define a single possible character in combination with other constant existing character like _.\nFor example if original file name are like 20150729_212537.JPG use a pattern like ????????_??????.JPG and put a prefix \'PIC_\' (use the apostrophes to define constant texts) into the rename pattern like \"\'PIC_\'yyyyMMdd_HHmmss\" to rename the file to: PIC_20150729_212537.JPG</string>
     <string name="enable_filter_alert_v19">Because on Android KitKat are enabled some security constraints, this application will not be able to rename files from SD Card.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis application can rename files from internal memory only.\nSet your camera application to save on internal memory.</string>
-    <string name="enable_filter_alert_v21">As an Android Lollipop user, you should enable \"Rename within a folder\" option and you should define at least one folder to be scanned on \"List of scanned folders.\".</string>
-    <string name="update_message_v79" translatable="false">I\'m from Romania and my native language is not English or other languages, only Romanian, if you want to contribute and make better translations follow the link https://www.localize.im/v/pn many thanks to the volunteer\'s which helped me till now!\nFor some languages the translation is not completed, English is used for missing translations.</string>
+    <string name="enable_filter_alert_v21">Please enable \"Rename within a folder\" option and select which folder should be scanned for pictures and clips to be renaming using option \"List of scanned folders.\".</string>
+    <string name="update_message_v91" translatable="false">Please read Help section from the bottom of application settings!</string>
     <string name="folder_list_title">List of scanned folders.</string>
     <string name="folder_list_all_selected">At least one folder should be left unchecked!</string>
     <string name="folder_list_no_selection">Select at least one folder to delete!</string>
@@ -135,6 +144,9 @@
     <string name="create_rename_shortcut_desc">Create on your home screen a DSC rename service shortcut to launch the rename service manually.</string>
     <string name="remove_rename_shortcut">Remove DSC rename service shortcut</string>
     <string name="remove_rename_shortcut_desc">Remove from your home screen the DSC rename service shortcut</string>
+    <string name="remove_rename_shortcut_v26">Disable DSC rename service shortcut</string>
+    <string name="remove_rename_shortcut_v26_desc">Disable the DSC rename service shortcut from your home screen. If you want to create it again, then manually remove the existing icon from you home screen.</string>
+    <string name="create_rename_shortcut_v26_error">Unable to create DSC rename service shortcut, please try to manually remove created shortcut!</string>
     <string name="confirmation_rename_dialog">Hide confirmation dialog</string>
     <string name="confirmation_rename_dialog_desc">Show or not the confirmation dialog when the DSC rename service is launched from shortcut.</string>
     <string name="confirmation_rename_question">Do you want to start manually the rename service?</string>
@@ -143,11 +155,13 @@
     <string name="manually_start_title">Start manually rename service</string>
     <string name="manually_start_desc">Touch to start manually rename service</string>
     <string name="manually_service_running">Manually rename service is running.</string>
-    <string name="manually_file_rename_count_0">No file was renamed.</string>
+    <string name="manually_file_rename_count_0">No file was renamed. Please verify:\n-where are saved camera files and select (again) theses folders;\n- defined file name patterns!</string>
     <string name="manually_file_rename_count_1">One file was renamed.</string>
     <string name="manually_file_rename_count_more">%d files were renamed.</string>
-    <string name="manually_file_rename_progress_1">%1$d of %2$d files was renamed.</string>
-    <string name="manually_file_rename_progress_more">%1$d of %2$d files were renamed.</string>
+    <string name="manually_file_rename_progress_1">%1$d of %2$d files was processed.</string>
+    <string name="manually_file_rename_progress_more">%1$d of %2$d files were processed.</string>
+    <string name="manually_file_rename_minus_1">The application was not able to rename one file due to folders access rights, please select again folders where are stored files.</string>
+    <string name="manually_file_rename_minus_more">The application was not able to rename %d files, please select again folders where are stored files.</string>
     <string name="file_rename_count_title">Number of renamed files: %d</string>
     <string name="file_rename_count_desc">Touch to reset the number of renamed files.</string>
     <string name="file_rename_count_confirmation">Do you want to reset the renamed files counter?</string>
@@ -157,6 +171,7 @@
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="add">Add</string>
+    <string name="copy">Duplicate</string>
     <string name="delete">Delete</string>
     <string name="please_wait">Please wait&#8230;</string>
     <string name="loading_wait">Loading&#8230;</string>
@@ -182,11 +197,12 @@
         <item>Chinese (Simplified) - 中文</item>
         <item>French - Français</item>
         <item>German - Deutsch</item>
+        <item>Hungarian - Magyar</item>
         <item>Italian - Italiano</item>
         <item>Japanese - 日本語</item>
         <item>Polish - Polski</item>
         <item>Portuguese (Brasil) - Português</item>
-        <item>Romanian - Romana</item>
+        <item>Romanian - Română</item>
         <item>Russian - Русский</item>
         <item>Spanish - Español</item>
         <item>Thai - ไทย</item>
@@ -196,6 +212,7 @@
         <item>zh_CN</item>
         <item>fr</item>
         <item>de</item>
+        <item>hu</item>
         <item>it</item>
         <item>ja</item>
         <item>pl</item>
@@ -219,7 +236,20 @@
     <string name="send_debug_title">Send debugging logs</string>
     <string name="send_debug_desc">Send an e-mail with debugging files</string>
     <string name="send_debug_confirmation">Do you want to send a debugging report?\nYour default e-mail application will send an e-mail with two files attached, please fill a short description of your issues if is necessary.\nThank you!</string>
-    <string name="send_debug_email_title">Debugging logs for DSC Auto Rename</string>
+    <string name="send_debug_email_title" translatable="false">Debugging logs for DSC Auto Rename</string>
+    <string name="export_import_settings_group">Export / import settings</string>
+    <string name="export_settings_title">Export settings</string>
+    <string name="export_settings_desc">Export settings to a local folder.</string>
+    <string name="export_settings_confirmation">Do you want to export application settings?</string>
+    <string name="export_settings_success">Successfully exported settings to file: %s</string>
+    <string name="export_settings_error">Unable to export settings to a local folder.\nError: %s</string>
+    <string name="import_settings_title">Import settings</string>
+    <string name="import_settings_desc">Import settings from a local folder, existing settings will be overwritten.</string>
+    <string name="import_settings_desc_v21">Import settings from a local folder, existing settings will be overwritten. Not all paths will be imported, you should manually check paths to gain access from Android OS.</string>
+    <string name="import_settings_confirmation">Do you want to import application settings? Existing settings will be overwritten, the application will restart after the import process!</string>
+    <string name="import_settings_error">Unable to import settings from file.\nError: %s</string>
+    <string name="help_title">Help</string>
+    <string name="help_desc">See some help information</string>
     <string name="license_title">Open source licenses</string>
     <string name="license_desc">License details for open source software</string>
     <string name="donate_title">Donate</string>
@@ -228,45 +258,21 @@
     <string name="donate_url" translatable="false"><Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data></string>
     <string name="thank_you_title">Thank you for donation!</string>
     <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="privacy_policy_desc">See the Privacy Policy terms</string>
     <string name="about_text_translations" translatable="false"><Data>
 <![CDATA[I\'m from Romania and my native language is not English or other languages, only Romanian, if you want to contribute and make better translations follow the link <a href="https://www.localize.im/v/pn">https://www.localize.im/v/pn</a> many thanks to the volunteer\'s which helped me till now!<br/>
 <br/>
 <b>Many thanks for translations to:</b><br/>
 - Chawalit for <b>Thai</b><br/>
 - Runels for 4PDA for <b>Russian</b><br/>
-- Leo Manias for <b>Portuguese</b> (Brazil)<br/>
+- Leo Manias and Jonatas for <b>Portuguese</b> (Brazil)<br/>
 - Dave for <b>Spanish</b><br/>
 - Naofumi for <b>Japanese</b><br/>
 - Andreas Hauff for <b>German</b><br/>
 - RobertoDS for <b>Italian</b><br/>
+- Jacsasoft (Medovarszki János) for <b>Hungarian</b><br/>
+<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>
 <br/>]]></Data></string>
-    <string name="about_text"><Data><![CDATA[<b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/>
-<br/>
-This application was made to automatically change the name of images files taken by the camera based on the date and time when the file was created.<br/>
-<br/>
-The file rename format use Java date and time format parameters:<br/>
-- yyyy for years;<br/>
-- MM for month;<br/>
-- dd for day;<br/>
-- HH for hour;<br/>
-- mm for minutes;<br/>
-- ss for seconds;<br/>
-- SSS for milliseconds.<br/>
-Unfortunately due to EXIF specifications and Android file name date time the milliseconds are not used internally.<br/>
-See more format information on: <a href="http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html">Java SimpleDateFormat class</a><br/>
-<br/>
-If more files were generated on the same time, like on the burst case, the files will have a counting suffix like _01. Depending how many digits are defined on the settings.<br/>
-<br/>
-Define file name patterns individually for pictures or clips. Wildcards * or ? can be used too.<br/>
-Do not use too generics pattern like *.JPG to avoid infinite renaming looping.<br/>
-Better use ? to define a single possible character in combination with other constant existing character like _.<br/>
-For example if original file name are like 20150729_212537.JPG use a pattern like ????????_??????.JPG and put a prefix \'PIC_\' (use the apostrophes to define constant texts) into the rename pattern like \"\'PIC_\'yyyyMMdd_HHmmss\" to rename the file to: PIC_20150729_212537.JPG<br/>
-<br/>
-The rename service, if is enabled, automatically is triggered when the image file is saved on the device media storage.<br/>
-<br/>
-The trigger depends on the camera application used to take the pictures. The camera application must send <b>com.android.camera.NEW_PICTURE</b> or <b>android.hardware.action.NEW_PICTURE</b>, otherwise, the rename service is not triggered.<br/>
-In some cases, the camera do not send any message, so is possible to select as a trigger the media content events, but this imply a permanently running service in background.<br/>
-<br/>
-For more details, please see application description page on <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data></string>
-
+    <string name="about_text"><Data><![CDATA[<br/>For more details, please see <b>Help</b> section or application description page from <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data></string>
 </resources>

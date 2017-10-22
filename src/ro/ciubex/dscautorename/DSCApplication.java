@@ -18,6 +18,34 @@
  */
 package ro.ciubex.dscautorename;
 
+import android.annotation.TargetApi;
+import android.app.Application;
+import android.app.ProgressDialog;
+import android.app.backup.BackupManager;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
+import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.util.Log;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -38,37 +66,14 @@ import ro.ciubex.dscautorename.model.FileNameModel;
 import ro.ciubex.dscautorename.model.MountVolume;
 import ro.ciubex.dscautorename.model.SelectedFolderModel;
 import ro.ciubex.dscautorename.receiver.FolderObserver;
+import ro.ciubex.dscautorename.service.CameraRenameService;
 import ro.ciubex.dscautorename.service.FileRenameService;
 import ro.ciubex.dscautorename.service.FolderObserverService;
+import ro.ciubex.dscautorename.service.MediaContentJobService;
 import ro.ciubex.dscautorename.service.MediaStorageObserverService;
-import ro.ciubex.dscautorename.service.CameraRenameService;
 import ro.ciubex.dscautorename.task.LogThread;
 import ro.ciubex.dscautorename.task.RenameFileAsyncTask;
 import ro.ciubex.dscautorename.util.Utilities;
-
-import android.annotation.TargetApi;
-import android.app.Application;
-import android.app.ProgressDialog;
-import android.app.backup.BackupManager;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.os.Message;
-import android.os.Messenger;
-import android.os.RemoteException;
-import android.preference.PreferenceManager;
-import android.provider.DocumentsContract;
-import android.util.Log;
 
 /**
  * This is the application class for the DSC Auto Rename application.
@@ -98,7 +103,7 @@ public class DSCApplication extends Application {
 	private static LogThread logFileThread;
 
 	public static final String KEY_SERVICE_TYPE = "serviceType";
-	private static final String KEY_FOLDER_SCANNING = "folderScanning";
+	public static final String KEY_FOLDER_SCANNING = "folderScanning";
 	public static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
 	private static final String KEY_ENABLED_SCAN_FILES = "enableScanForFiles";
 	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
@@ -106,7 +111,7 @@ public class DSCApplication extends Application {
 	private static final String KEY_FILE_NAME_FORMAT = "fileNameFormat";
 	private static final String KEY_FILE_NAME_SUFFIX_FORMAT = "fileNameSuffixFormat";
 	private static final String KEY_RENAME_VIDEO_ENABLED = "renameVideoEnabled";
-	private static final String KEY_ORIGINAL_FILE_NAME_PATTERN = "originalFileNamePattern";
+	public static final String KEY_ORIGINAL_FILE_NAME_PATTERN = "originalFileNamePattern";
 	private static final String KEY_FILE_RENAME_COUNT = "fileRenameCount";
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
 	public static final String KEY_DELAY_UNIT = "delayUnit";
@@ -139,6 +144,7 @@ public class DSCApplication extends Application {
 	public static final String PERMISSION_FOR_INSTALL_SHORTCUT = "com.android.launcher.permission.INSTALL_SHORTCUT";
 	public static final String PERMISSION_FOR_UNINSTALL_SHORTCUT = "com.android.launcher.permission.UNINSTALL_SHORTCUT";
 	public static final String PERMISSION_FOR_LOGS = "android.permission.READ_LOGS";
+	public static final String ID_SHORTCUT_RENAME = "ro.ciubex.dscautorename.RENAME_SHORTCUT";
 
 	public static final String SKIP_RENAME = "SKIP_RENAME";
 	public static final String KEY_SEND_BROADCAST = "sendBroadcastEnabled";
@@ -197,7 +203,7 @@ public class DSCApplication extends Application {
 		if (SERVICE_TYPE_CAMERA == serviceType ||
 				SERVICE_TYPE_CONTENT == serviceType ||
 				SERVICE_TYPE_FILE_OBSERVER == serviceType) {
-			checkRegisteredServiceType(true);
+			checkRegisteredServiceType(android.os.Build.VERSION.SDK_INT < 21);
 		}
 		mFolderObserverMap = new HashMap<>();
 		if (SERVICE_TYPE_FILE_OBSERVER == serviceType) {
@@ -225,6 +231,10 @@ public class DSCApplication extends Application {
 		}
 	}
 
+	public String getLanguageCode() {
+		return mSharedPreferences.getString(KEY_LANGUAGE_CODE, "en");
+	}
+
 	/**
 	 * Get the locale from the shared preference or device default locale.
 	 *
@@ -232,7 +242,7 @@ public class DSCApplication extends Application {
 	 */
 	private Locale getLocaleSharedPreferences() {
 		Locale locale = Locale.getDefault();
-		String language = mSharedPreferences.getString(KEY_LANGUAGE_CODE, "en");
+		String language = getLanguageCode();
 		if (!Utilities.isEmpty(language)) {
 			String[] arr = language.split("_");
 			try {
@@ -444,7 +454,7 @@ public class DSCApplication extends Application {
 			items = new SelectedFolderModel[folders.length];
 			for (int i = 0; i < folders.length; i++) {
 				items[i] = new SelectedFolderModel();
-				items[i].fromString(this, folders[i]);
+				items[i].fromString(folders[i]);
 			}
 		}
 		return items;
@@ -597,7 +607,7 @@ public class DSCApplication extends Application {
 		String[] arr = value.split(",");
 		FileNameModel[] fp = new FileNameModel[arr.length];
 		for (int i = 0; i < arr.length; i++) {
-			fp[i] = new FileNameModel(this, arr[i]);
+			fp[i] = new FileNameModel(arr[i]);
 			updateSelectedFolderModel(fp[i].getSelectedFolder());
 		}
 		return fp;
@@ -958,7 +968,11 @@ public class DSCApplication extends Application {
 	 */
 	private void registerMediaStorageContentObserver() {
 		try {
-			startService(new Intent(this, MediaStorageObserverService.class));
+			if (mSdkInt > Build.VERSION_CODES.N) {
+				registerMediaContentJobService(this);
+			} else {
+				startService(new Intent(this, MediaStorageObserverService.class));
+			}
 		} catch (Exception e) {
 			logE(TAG, "registerMediaStorageContentObserver: " + e.getMessage(),
 					e);
@@ -982,8 +996,13 @@ public class DSCApplication extends Application {
 	 * Method used to unregister the content observer service.
 	 */
 	private void unregisterMediaStorageContentObserver() {
+		logD(TAG, "unregisterMediaStorageContentObserver");
 		try {
-			stopService(new Intent(this, MediaStorageObserverService.class));
+			if (mSdkInt > Build.VERSION_CODES.N) {
+				cancelMediaContentJobService(this);
+			} else {
+				stopService(new Intent(this, MediaStorageObserverService.class));
+			}
 		} catch (Exception e) {
 			logE(TAG,
 					"unregisterMediaStorageContentObserver: " + e.getMessage(),
@@ -1215,7 +1234,7 @@ public class DSCApplication extends Application {
 	 *
 	 * @param type Type of the event, uninstall or install.
 	 */
-	private void updateShortcutPref(RenameShortcutUpdateListener.TYPE type) {
+	public void updateShortcutPref(RenameShortcutUpdateListener.TYPE type) {
 		RenameShortcutUpdateListener listener = getShortcutUpdateListener();
 		boolean update = false;
 		if (RenameShortcutUpdateListener.TYPE.INSTALL == type) {
@@ -1402,7 +1421,7 @@ public class DSCApplication extends Application {
 	 * @return The Mount Service.
 	 */
 	public Object getMountService() {
-		if (mMountService == null) {
+		if (mMountService == null && mSdkInt < Build.VERSION_CODES.N) {
 			mMountService = Utilities.MountService.getService();
 		}
 		return mMountService;
@@ -1530,15 +1549,15 @@ public class DSCApplication extends Application {
 			File[] files = null;
 			try {
 				files = file.listFiles();
-			} catch (Exception e) {
-				logE(TAG, "Exception on registerRecursivelyPath: " + path, e);
-			}
-			if (files != null) {
-				for (File subfolder : files) {
-					if (isValidFolder(subfolder)) {
-						registerRecursivelyPath(subfolder, startWatching);
+				if (files != null) {
+					for (File subfolder : files) {
+						if (isValidFolder(subfolder)) {
+							registerRecursivelyPath(subfolder, startWatching);
+						}
 					}
 				}
+			} catch (Exception e) {
+				logE(TAG, "Exception on registerRecursivelyPath: " + path, e);
 			}
 		}
 	}
@@ -1917,6 +1936,81 @@ public class DSCApplication extends Application {
 						"sendMessageToService(" + messageKey + "," + messageValue + "): " +
 								e.getMessage(), e);
 			}
+		}
+	}
+
+
+	/**
+	 * Method used to verify if the job service is registered.
+	 *
+	 * @param context Application context.
+	 * @return True if the service is registered.
+	 */
+	@TargetApi(Build.VERSION_CODES.N)
+	public boolean isMediaContentJobServiceRegistered(Context context) {
+		if (MediaContentJobService.JOB_INFO != null) {
+			JobScheduler js = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+			List<JobInfo> jobs = js != null ? js.getAllPendingJobs() : null;
+			if (jobs != null && !jobs.isEmpty()) {
+				for (JobInfo jobInfo : jobs) {
+					if (jobInfo.getId() == MediaContentJobService.JOB_ID) {
+						ComponentName componentName = jobInfo.getService();
+						if (MediaContentJobService.class.getName().equals(componentName.getClassName())) {
+							return MediaContentJobService.JOB_INFO.equals(jobInfo);
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Method used to cancel this service.
+	 *
+	 * @param context The application context.
+	 */
+	@TargetApi(Build.VERSION_CODES.N)
+	public void cancelMediaContentJobService(Context context) {
+		JobScheduler js = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+		js.cancel(MediaContentJobService.JOB_ID);
+	}
+
+	/**
+	 * Method used to register this service on the context.
+	 *
+	 * @param context The application context.
+	 */
+	@TargetApi(Build.VERSION_CODES.N)
+	public void registerMediaContentJobService(Context context) {
+		if (mSdkInt > Build.VERSION_CODES.N) {
+			if (!isMediaContentJobServiceRegistered(context)) {
+				JobInfo.Builder builder = new JobInfo.Builder(MediaContentJobService.JOB_ID, new ComponentName(context, MediaContentJobService.class.getName()));
+				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Images.Media.INTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Video.Media.INTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+				builder.setTriggerContentMaxDelay(100);
+				MediaContentJobService.JOB_INFO = builder.build();
+				logD(TAG, "registerMediaContentJobService");
+				scheduleMediaContentJobService(context);
+			}
+		}
+	}
+
+	/**
+	 * Method used to schedule this job service.
+	 *
+	 * @param context The application context.
+	 */
+	@TargetApi(Build.VERSION_CODES.N)
+	public void scheduleMediaContentJobService(Context context) {
+		JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+		int result = scheduler.schedule(MediaContentJobService.JOB_INFO);
+		if (result == JobScheduler.RESULT_SUCCESS) {
+			logD(TAG, "JobScheduler OK");
+		} else {
+			logD(TAG, "JobScheduler fails: " + result);
 		}
 	}
 }

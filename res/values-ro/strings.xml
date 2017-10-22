@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_section">Despre</string>
-	<string name="about_text"><Data><![CDATA[<b>Multumiri lui Simon W pentru suportul adus la dezvoltarea versiunii 4.0.0!</b><br/>\n<br/>\nScopul acestei aplicatieii este acela de a redenumit automat fisierele multimedia, imagini si clipuri, in functie de data si timpul cand acestea au fost create.<br/>\n<br/>\nPentru redenumirea fisierelor sunt folosite niste marcatori specifici limbajului de programare Java:<br/>\n- yyyy pentru ani;<br/>\n- MM pentru luna;<br/>\n- dd pentru zi;<br/>\n- HH pentru ora;<br/>\n- mm pentru minute;<br/>\n- ss pentru secunde;<br/>\n- SSS pentru milisecunde.<br/>\nDeoarece din specificatiile EXIF pentru redenumirea unui fisier nu pot fi folosite milisecundele.<br/>\nMai multe detalii poti obtine de la adresa: <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Java SimpleDateFormat class</a><br/>\n<br/>\nIn cazul in care mai multe imagini sunt luate in acelasi timp, precum in modul \"burst\", se va adauga la numele redenumit un sufix numeric _01. Depinde cate pozitii sunt definite in cazul sufixului numeric.<br/>\n<br/>\nDefineste modele separate pentru imagini si pentru clipuri. Semnele * or ? pot fi de asemenea folosite.<br/>\nNu folosi modele generice precum *.JPG pentru a evita intrarea in bulca infinita a procesului de redenumire.<br/>\nEste indicat a se folosi semnul ? in combinatie cu caractere constante precum _ in definirea de modele pentru numele originale.<br/>\nSpre exemplu pentru un fisier ce are denumirea originala de genul 20150729_212537.JPG se poate folosi un model precum ????????_??????.JPG pentru redenumire se poate pune prefixul \'PIC_\' (utilizati apostroful pentru evitarea conversiei in data/timp) precum \"\'PIC_\'yyyyMMdd_HHmmss\" astfel fisierul va fi redenumit in: PIC_20150729_212537.JPG<br/>\n<br/>\nDaca serviciul de redenumit fisiere este activ, acesta va functiona in fundal pentru redenumirea fisierelor media.<br/>\n<br/>\nDeclansatorii depinde de aplicatia folosita pentru camera. Aplicatia de camera trebuie sa trimita un mesaj boradcast <b>com.android.camera.NEW_PICTURE</b> sau <b>android.hardware.action.NEW_PICTURE</b>, altfel, serviciul de redenumire atomanta nu poate fi declansat.<br/>\nDaca asemenea mesaje nu sunt trimise de aplicatia folosita pentru camera, se pot folosi ca declansatori notificarile media, dar acest aspect presupune rularea unui alt serviciu in fundal.<br/>\n<br/>\nPentru mai multe detalii viziteaza pagina aplicatiei <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
 	<string name="add">Adauga</string>
 	<string name="app_theme_desc">Seateaza tema aplicatiei: luminoasa sau inchisa.</string>
 	<string-array name="app_theme_labels">
@@ -23,8 +22,10 @@
 	<string name="confirmation_rename_dialog_desc">Ascunde sau nu fereastra de confirmare a redenumirii manuale a fisierelor.</string>
 	<string name="confirmation_rename_question">Doresti redenumirea fisierelor pornind manual serviciul de redenumire?</string>
 	<string name="confirmation_rename_question_v19">Daca fisierul(le) selectat(e) nu se afla intr-un director selectat atunci procesul de redenumire a fisierelor nu va fi realizat din motive de securitate specifice versiunii de Android avute.\nDoresti redenumirea fisierelor pornind manual serviciul de redenumire?</string>
+	<string name="copy">Copie</string>
 	<string name="create_rename_shortcut">Creaza scurtatura pentru serviciul de redenumire DSC rename</string>
 	<string name="create_rename_shortcut_desc">Creaza-ti o scurtatura pentru lansarea manuala a serviciului de redenumit fisiere.</string>
+	<string name="create_rename_shortcut_v26_error">Imposibil sa fie creat shortcut pentru lansarea serviciului de redenumire. Incearca sa stergi manual shortcutul existent.</string>
 	<string name="define_file_name_pattern_desc">Modelele de nume de fisiere folosite pentru redenumiri (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nPot fi folosite semnele * si ? de asemenea.</string>
 	<string name="define_file_name_pattern_title">Modele de nume de fisiere</string>
 	<string-array name="delay_units_labels">
@@ -47,6 +48,12 @@
 	<string name="enable_title">Declansator serviciu redenumire.</string>
 	<string name="error_rename_file">Fisierul %s nu poate fi redenumit!</string>
 	<string name="error_rename_file_no_read_write">Fisierul nu poate fi citit sau scris.</string>
+	<string name="export_import_settings_group">Exportare / importare setari</string>
+	<string name="export_settings_confirmation">Doresti exportarea seterilor aplicatiei?</string>
+	<string name="export_settings_desc">Exporta setarile intr-un director local</string>
+	<string name="export_settings_error">A aparut o eroare la exportarea setarilor! Eroare: %s</string>
+	<string name="export_settings_success">Setarile au fost salvate in fisierul: %s</string>
+	<string name="export_settings_title">Exporta setarile</string>
 	<string name="file_extension_note">Extensia fisierului este pastrata in urma redenumirii.</string>
 	<string name="file_name_pattern_dialog_bottom">Exemplu nume de fisier vechi:\n\t %1$s\nExemplu redenumire nume de fisier:\n\t %2$s</string>
 	<string name="file_name_pattern_dialog_from">1. Modelul original:</string>
@@ -70,7 +77,6 @@
 	<string name="file_rename_count_title">Numar de fisiere redenumite: %d</string>
 	<string name="filter_folder_no_folder">[Nici un director]</string>
 	<string name="filter_folder_title">Selecteaza un director.</string>
-	<string name="first_time_alert">ATENTIE:\nRedenumirea si mutarea fisierelor nu este reversibila!\nUtilizati aceasta aplicatie cu precautie!\nDefineste formate de redenumire individuale pentru poze si pentru filme, de asemenea fisierele pot fi mutate intr-un director ales. Se pot folosi de asemenea * sau ? .\nNu folositi formate asemanatoare sau generice precum *.JPG pentru a evita blocarea aplicatiei in functia de redenumire.\nMai bine folositi semnul ? in combinatie cu alte caractere fixe precum _ pentru un mai bun control al numelor de fisiere ce urmeaza a fi redenumite.\nDe exemplu pentru un fisier cu numele original in forma 20150729_212537.JPG se poate folosi un format de genul ????????_??????.JPG si se poate adauga un prefix ca \'PIC_\' (se poate folosi apostroful pentru evitarea transformarilor in data sau ora) astfel in acest caz formatul de redenumire poate fi de forma \"\'PIC_\'yyyyMMdd_HHmmss\" iar fisierul redenumit va avea numele: PIC_20150729_212537.JPG</string>
 	<string name="folder_list_all_selected">Trebuie lasat cel putin un director neselectat!</string>
 	<string name="folder_list_confirmation">Doresti sa stergi directoarele selectate?</string>
 	<string name="folder_list_no_grant_permission_1">Sistemul de operare a revocat permisiunile de acces pentru directorul de mai jos:\n\n%s\n\nVerifica unde este definit si selecteaza-l din nou!</string>
@@ -79,13 +85,20 @@
 	<string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
 	<string name="folder_list_title">Lista directoarelor selectate.</string>
 	<string name="general_settings">Setari generale</string>
+	<string name="import_settings_confirmation">Doresti sa importi setarile aplicatiei? Setarile existente vor fi suprascrise cu cele importate!</string>
+	<string name="import_settings_desc">Importa setarile dintr-un director local, setarile actuale vor fi suprascrise.</string>
+	<string name="import_settings_desc_v21">Importa setarile dintr-un fisier aflat intr-un director local. Nu toate directoarele vor fi importate, ar trebui ca manual sa se verifice din nou directoarele selectate.</string>
+	<string name="import_settings_error">A aparut o eroare la importarea setarilor din fisier.\nEroare: %s</string>
+	<string name="import_settings_title">Importa setarile</string>
 	<string name="invoke_media_scanner_for_file_desc">Invoca Media Scanner pentru a scana fisierul redenumit, utilizeaza aceasta optiune cu grija, in mod normal nu ar trebui activata! Utilizeaza aceasta optiune pentru a forta actualizarea cache-ului MTP-ului, insa din pacate nu intotdeauna functioneaza.</string>
 	<string name="invoke_media_scanner_for_file_title">Invoca Media Scanner</string>
 	<string name="list_info_press">Adauga sau sterge elemente.</string>
 	<string name="loading_wait">Se incarca&#8230;</string>
-	<string name="manually_file_rename_count_0">Nici un fisier nu a fost redenumit.</string>
+	<string name="manually_file_rename_count_0">Nici un fisier nu a fost redenumit. Verificati:\n- unde sunt salvate fisierele aplicatiei de camera;\n- definitiile numelor de fisiere!</string>
 	<string name="manually_file_rename_count_1">Un fisier a fost redenumit.</string>
 	<string name="manually_file_rename_count_more">%d fisiere au fost redenumite.</string>
+	<string name="manually_file_rename_minus_1">Nu a putut fi redenumit un fisier din cauza drepturilor legate de accesul la directoare, selectati din nou directoarele la care sa aiba aplicatia acces.</string>
+	<string name="manually_file_rename_minus_more">Aplicatia nu a putut redenumi %d fisiere, selectati din nou directoarele la care sa aiba acces aplicatia.</string>
 	<string name="manually_file_rename_progress_1">%1$d fisier din %2$d a fost redenumit.</string>
 	<string name="manually_file_rename_progress_more">%1$d fisiere din %2$d au fost redenumite.</string>
 	<string name="manually_service_running">Ruleaza serviciul de redenumit fisiere.</string>
@@ -102,8 +115,12 @@
 	<string name="obtain_logs">Genereaza fisierele de log-uri pentru raport&#8230;</string>
 	<string name="other_settings">Alte setari</string>
 	<string name="please_wait">Te rog asteata&#8230;</string>
+	<string name="privacy_policy">Politica de confidentialitate</string>
+	<string name="privacy_policy_desc">Vezi termenii politicii de confidentialitate</string>
 	<string name="remove_rename_shortcut">Sterge scurtatura de lansare a serviciului de redenumire fisiere.</string>
 	<string name="remove_rename_shortcut_desc">Sterge scurtatura creata pentru lansarea manuala a serviciului de redenumit fisiere.</string>
+	<string name="remove_rename_shortcut_v26">Dezactiveaza shortcut-ul de lansare a serviciului de redenumire</string>
+	<string name="remove_rename_shortcut_v26_desc">Dezactiveaza shortcut-ul la serviciul de redenumire a fisierelor. Daca doresti crearea unui alt shortcut, stergeti-l pe cel existent inainte.</string>
 	<string name="rename_file_delay_desc">Redenumeste urmatorul fisier dupa</string>
 	<string name="rename_file_delay_title">Intarziere redenumire fisiere</string>
 	<string name="rename_file_using_desc">data si timpul cand a fost ultima oara modificat fisierul.</string>
@@ -128,7 +145,6 @@
 	<string name="send_broadcast_msg_title">Trimite mesaj broadcast</string>
 	<string name="send_debug_confirmation">Doresti sa trimiti un raport pentru investigare?\nAplicatia folosita in mod normal pentru a trimite mesaje va trimite un e-mail avand atasate niste fisiere folosite pentru investigarea posibilelor probleme. Scrie o scurta descriere a problemei intampinate in timpul folosirii aplicatiei.\nMultumesc!</string>
 	<string name="send_debug_desc">Trimite un e-mail cu logurile pentru investigare</string>
-	<string name="send_debug_email_title">Loguri pentru investigare DSC Auto Rename</string>
 	<string name="send_debug_title">Trimite logurile pentru investigare</string>
 	<string name="send_report">Trimitere raport&#8230;</string>
 	<string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
@@ -142,6 +158,11 @@
 		<item>Notificare media: la salvarea de fisiere media.</item>
 		<item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
 		<item>Serviciu permanent folosit pentru receptionarea noficarilor transmise de aplicatia de camera.</item>
+	</string-array>
+	<string-array name="service_type_labels_v21">
+		<item>Dezactivat</item>
+		<item>Notificare media: la salvarea de fisiere media.</item>
+		<item>Notificare bazata pe adaugarea de fisiere in directoarele selectate mai jos.</item>
 	</string-array>
 	<string name="thank_you_desc">Multumesc pentru aprecierea realizata prin cumpararea aplicatiei PRO.</string>
 	<string name="thank_you_title">Multumesc pentru donatie!</string>

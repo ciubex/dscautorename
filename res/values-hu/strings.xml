@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="about_section">A programról</string>
+	<string name="add">Hozzáadás</string>
+	<string name="app_theme_desc">Válassz egy alkalmazás témát: világos vagy sötét</string>
+	<string-array name="app_theme_labels">
+		<item>Világos</item>
+		<item>Sötét</item>
+	</string-array>
+	<string name="app_theme_title">Alkalmazás témája:</string>
+	<string name="app_theme_title_param">Alkalmazás témája: %s</string>
+	<string name="append_original_name_desc">Tartsd meg az eredeti fájl nevet,(pl: DSC_09.JPG) és illeszd a fájl név végére. Azu új fájl át lessz nevezve %s_DSC_09.JPG</string>
+	<string name="append_original_name_title">Hozzáfűzi az eredeti nevet</string>
+	<string name="build_version_title">Build verzió</string>
+	<string name="cancel">Mélgse</string>
+	<string name="change_language_desc">Az alkalmazás ujraindul a kiválasztott nyelven.</string>
+	<string name="change_language_title">Nyelv: Alkalmazás nyelve</string>
+	<string name="choose_units_desc">Ez az opció lehetővé teszi hogy kiválaszd a késleltetés mértékegységét,</string>
+	<string name="choose_units_title">Válassz késleltetés mértékegységet:</string>
+	<string name="choose_units_title_param">Kiválasztott késleltetés ergysége: %s</string>
+	<string name="close">Bezár</string>
+	<string name="confirmation_rename_dialog">Megerősítési ablak elrejtése</string>
+	<string name="confirmation_rename_dialog_desc">Megjelenjen, vagy ne, a megerősítő üzenet mikor a DSC átnevezési szolgáltatás parancsikonról lessz indítva.</string>
+	<string name="confirmation_rename_question">Szeretnéd manuálisan elindítani az átnevezési szolgáltatást?</string>
+	<string name="confirmation_rename_question_v19">Ha a kiválasztott fájl (ok) nem szerepelnek a kiválasztott mappában, akkor az átnevezés nem hajtható végre az Android biztonsági korlátozások miatt.\nSzeretnéd elindítani kézzel az átnevezés szolgáltatást?</string>
+	<string name="create_rename_shortcut">DSC átnevezési szolgáltatás parancsikon létrehozása</string>
+	<string name="create_rename_shortcut_desc">Jelenítse meg a kezdőképernyőn a DSC átnevezési szolgáltatás parancsikont, hogy lehetősége legyen elindítani az átnevezés szolgáltatást manuálisan.</string>
+	<string name="define_file_name_pattern_desc">A fájl név minta használata segítségével a fájlok átnevezésre kerülnek (DSC_*.JPG\" vagy \"MOV_*.MP4\"), pl: %s\nHasználhatod még a Wildcard karaktereket is. (* ?)</string>
+	<string name="define_file_name_pattern_title">Fájl név minták megadása</string>
+	<string-array name="delay_units_labels">
+		<item>másodperc</item>
+		<item>perc</item>
+	</string-array>
+	<string name="delete">Törlés</string>
+	<string name="do_not_show_again">Ne mutasd újra</string>
+	<string name="donate_confirmation">Ha tetszik ez az alkalmazás, kérjük támogasson minket a pro verzió megvásárlásával. Az igen gomb megnyomásával le tudja tölteni a DSC automatikus átnevezés PRO -t a Google Play áruházból.\nKöszönjük, hogy használja ezt az alkalmazást!</string>
+	<string name="donate_desc">Ha tetszik az alkalmazás, kérjük támogasson minket.</string>
+	<string name="donate_title">Támogatás</string>
+	<string name="enable_desc">Fájlok automatikusan átnevezésre kerülnek, miután egy esemény elindítja azt.</string>
+	<string name="enable_filter_alert_v19">Mivel az Android KitKat néhány biztonsági korlátozással rendelkezik, ez az alkalmazás nem lesz képes átnevezni fájlokat az SD kártyán.\nLásd a linket http://goo.gl/kJeED3 egy esetleges javításért.\nEz az alkalmazás csak a belső memóriában képes átnevezni fájlokat.\nÁllítsd be a kamera alkalmazást, hogy a belső memóriát használja tárhelynek.</string>
+	<string name="enable_filter_alert_v21">Android Lollipop felhasználóknak engedélyezni kell az \"átnevezés mappában\" opciót, és meg kell adni legalább egy mappát a \"keresési könyvtárak\" -ban ahol a program dolgozik.</string>
+	<string name="enable_filter_folder_desc">Normál esetben az átnevezési szolgáltatás minden fájlt megkeres az eszközön, ha engedélyezed ezt az opciót. Mappák megadásával korlátozhatod a kersést.</string>
+	<string name="enable_filter_folder_desc_v21">Android lollipop felhasználóknak engedélyezni kell ezt az opciót, és választani egy mappát, ahova a kamera alkalmazás menti a fájlokat.</string>
+	<string name="enable_filter_folder_title">Átnevezés mappában</string>
+	<string name="enable_folder_scanning_desc">Normális esetben ezt nem kell kiválasztani! Ezen opció kiválasztásával az átnevezési szolgáltatás keresni fog médiafájlokat a fenti kijelölt mappákban. Válassza ezt, ha a készülékben a média tartalmak keresése le van tiltva.</string>
+	<string name="enable_folder_scanning_title">Fájl keresés mappában engedélyezve.</string>
+	<string name="enable_title">Automatikus átnevezés szolgáltatás elindítva</string>
+	<string name="error_rename_file">A file-t %s nem lehet átnevezni!</string>
+	<string name="error_rename_file_no_read_write">Fájl nem írható és olvasható</string>
+	<string name="file_extension_note">A fájl kiterjesztést megtartja az átnevezés során</string>
+	<string name="file_name_pattern_dialog_bottom">Régi fájl név példa:\n\t %1$s\nÁtnevezett fájl név példa:\n\t %2$s</string>
+	<string name="file_name_pattern_dialog_from">1. eredeti fájl név minta:</string>
+	<string name="file_name_pattern_dialog_title_add">Fájl név minta hozzáadása</string>
+	<string name="file_name_pattern_dialog_title_editor">Fájl név minta szerkesztése</string>
+	<string name="file_name_pattern_dialog_to">2 átnevezett Fájl név minta:</string>
+	<string name="file_name_pattern_list_all_selected">Legalább egy fájlnév mintának maradni kell!</string>
+	<string name="file_name_pattern_list_confirmation">Biztos eltávolítod a kiválasztott mintát?</string>
+	<string name="file_name_pattern_list_no_selection">A törléshez legalább egy fájl név mintát válassz ki!</string>
+	<string name="file_name_pattern_validation_error_generic">Az eredeti minta alkalmaása, a fájlok újra és újra átnevezését okozza.\nMegpróbálsz egy másik mintát?</string>
+	<string name="file_name_pattern_validation_error_new">Az eredeti, és az átnevezési minta megeggyezik!</string>
+	<string name="file_name_pattern_validation_error_new_empty">Fájl átnevezési minta nem lehet üres.</string>
+	<string name="file_name_pattern_validation_error_old">Az eredeti fájlnév minta már meg van adva. Változtasd meg a szöveget egy másikra.</string>
+	<string name="file_name_pattern_validation_error_old_empty">Az eredeti minta nem lehet üres.</string>
+	<string name="file_name_pattern_validation_error_original">Az eredeti minta megeggyezik az átnevezési mintával. Adj meg egy másikat.</string>
+	<string name="file_name_pattern_validation_error_rename">Az átnevezés minta megeggyezik az eredeti mintával, amit máshol adtál meg!</string>
+	<string name="file_name_suffix_format_desc">Ezt az utótagot akkor használjuk, ha egynél több fájl azonos nevű. Alapértelmezésben a számláló már 5 számjegy.\nPélda:\n%s</string>
+	<string name="file_name_suffix_format_title">Extra fájl név utótag használata</string>
+	<string name="file_rename_count_confirmation">Szeretnéd visszaállítani az átnevezett fájl számlálót?</string>
+	<string name="file_rename_count_desc">Érintsd meg az átnevezett fájl számláló visszaállításához.</string>
+	<string name="file_rename_count_title">Átnevezett fájlok száma: %d</string>
+	<string name="filter_folder_no_folder">[Nincs mappa]</string>
+	<string name="filter_folder_title">Válassz egy könyvtárat.</string>
+	<string name="folder_list_all_selected">Legalább egy mappának maradnia kell!</string>
+	<string name="folder_list_confirmation">szeretnéd eltávolítani a kijelölt mappát?</string>
+	<string name="folder_list_no_grant_permission_1">A rendszer visszavonta az engedélyt az alábbi mappától:\n\n%s\n\nEllenőrizd hova mutat a mappa, és próbáld kiválasztani mégegyszer!\n\nFigyelmen kívül hagyhatod ezt az üzenetet, de az alkalmazás nem működik megfelelően amíg az alkalmazás nrm tud hozzáférni a mappához.</string>
+	<string name="folder_list_no_grant_permission_2">A rendszer visszavonta az engedélyeket az alábbi mappákban:\n\n%s\n\nEllenőrizd ezeknek a mappáknak a helyét, majd próbáld meg kijelölni újra!\nMegpróbálhatod ezt az üzenetet figyelmen kívül hagyni, de az alkalmazás nem működik megfelelően, amíg a program nem fér hozzá a fenti mappákhoz.</string>
+	<string name="folder_list_no_open_document_tree_support">Az android verzíód nem támogatja a könyvtárak kiválasztását\n(ACTION_OPEN_DOCUMENT_TREE).\nA belső tárhely használatához az alkalmazás nem fog jogosultságot kérni a fájlok átnevezéséhez és mozgatásához.</string>
+	<string name="folder_list_no_selection">A törléshez legalább egy mappát jelöljön ki</string>
+	<string name="folder_list_title">Beolvasott mappák listája.</string>
+	<string name="general_settings">Általános beállítások</string>
+	<string name="invoke_media_scanner_for_file_desc">Média scennelés kérése, az átnevezett fájlok beolvasásához. Használd körültekintően ezt az opciót, normál esetben álltalában nem szükséges kijelölni! Ezt használva rákényszerítheted az MTP cache-t a frissítésre, de sajnos nem mindig működik.</string>
+	<string name="invoke_media_scanner_for_file_title">Fájlok beolvasásának kérése</string>
+	<string name="license_desc">Nyílt forrású licensz részletei</string>
+	<string name="license_title">Nyílt forrású licenszek</string>
+	<string name="list_info_press">Elemek hozzáadása vagy törlése.</string>
+	<string name="loading_wait">Betöltés&#8230;</string>
+	<string name="manually_file_rename_count_0">Nem lett átnevezve egy fájl sem.</string>
+	<string name="manually_file_rename_count_1">Egy fájl átnevezve.</string>
+	<string name="manually_file_rename_count_more">%d fájl átnevezve.</string>
+	<string name="manually_file_rename_progress_1">%1$d fájl a %2$d -ből átnevezve.</string>
+	<string name="manually_file_rename_progress_more">%1$d fájl a %2$d -ből átnevezve.</string>
+	<string name="manually_service_running">Manuális átnevezés folyamatban</string>
+	<string name="manually_start_desc">Koppints a manuális átnevezési folyamat indításához</string>
+	<string name="manually_start_title">Az átnevezési folyamat manuális indítása</string>
+	<string name="minutes_unit">perc</string>
+	<string name="move_file_enable">Az átnevezett fájlokat másolja a kiválasztott könyvtárba.</string>
+	<string name="move_file_text_no_folder">Nincs mappa kiválasztva, koppints a szövegre mappaválasztáshoz</string>
+	<string name="move_file_text_selected_folder">Kiválasztott mappa: %s</string>
+	<string name="new_folder">Új mappa</string>
+	<string name="no">Nem</string>
+	<string name="no_file_name_pattern">Fájl név minta nincs megadva</string>
+	<string name="no_folders">Nincsenek mappák</string>
+	<string name="obtain_logs">Log fájl készítése jelentéshez</string>
+	<string name="other_settings">További beállítások</string>
+	<string name="please_wait">Kérem várjon&#8230;</string>
+	<string name="remove_rename_shortcut">DSC átnevezési folyamat eltávolítása</string>
+	<string name="remove_rename_shortcut_desc">DSC rename szolgáltatás eltávolítása a kezdőképernyőről</string>
+	<string name="rename_file_delay_desc">A következő fájl átnevezése</string>
+	<string name="rename_file_delay_title">Fájl átnevezés késleltetése</string>
+	<string name="rename_file_using_desc">Dátum és idő amikor a fájl módoítva lett.</string>
+	<string-array name="rename_file_using_labels">
+		<item>dátum és idő amikor a fájlok bekerültek a média kiszolgálóba;</item>
+		<item>dátum és idő, amikor a fájl utoljára módosítva;</item>
+		<item>EXIF or Meta adat ha elérhető.</item>
+	</string-array>
+	<string name="rename_file_using_title">Fájl átnevezés használata ezzel:</string>
+	<string name="rename_service_start_delay_desc">Szolgáltatás indítása miután</string>
+	<string name="rename_service_start_delay_title">Átnevezési szolgáltatás indításának késleltetése</string>
+	<string name="rename_shortcut">DSC átnevezési szolgáltatás parancsikonja</string>
+	<string name="rename_shortcut_name">DSC átnevezési szolgáltatás</string>
+	<string name="rename_video_enabled_desc">Az opció kiválasztásával A videó fájlok is átnevezésre kerülnek. Alapértelmezés szerint, pedig csak a képek.</string>
+	<string name="rename_video_enabled_title">Video fájl átnevezés engedélyezése</string>
+	<string name="request_permissions_confirmation">Szeretnél enghedélyt adni  az alkalmazás számára?</string>
+	<string name="request_permissions_desc">Kapcsold be ezt az pciót, hoghy az alkalmazás megkapja a szükséges engedélyeket: kamera(szükséges, hogy megkapja a fényképezés pillanatát) Tároló(Szükséges a fájlok tárolásához és mozgatásához)</string>
+	<string name="request_permissions_ok">Minden szükséges engedély megadva!</string>
+	<string name="request_permissions_title">Az alkalmazás száméra engedély szükséges.</string>
+	<string name="seconds_unit">másodperc</string>
+	<string name="send_broadcast_msg_desc">Ezzel az opcióva értesítést küld alkalmazások számára az átnevezett fájlról.</string>
+	<string name="send_broadcast_msg_title">Értesítési üzenet küldése</string>
+	<string name="send_debug_confirmation">Szeretnél hibakeresési jelentést küldeni?\nAz alapértelmezett E-mail alkalmazás egy emailt küld két csatolt fájlal. Kérlek írj egy rövid hibaleírást a problémáról, ha szükséges.\nKöszönöm!</string>
+	<string name="send_debug_desc">E-mail küldése hibakeresési fájlokkal</string>
+	<string name="send_debug_title">Hibanapló jelentés küldése</string>
+	<string name="send_report">Jelentés küldése&#8230;</string>
+	<string name="service_choice_0">Az automatikus átnevezési folyamat letiltva. Nem lesznek fájlok átnevezve.</string>
+	<string name="service_choice_1">Az automata átnevezési folyamatot, a kamera eseményértesítése váltja ki, ha van ilyen.</string>
+	<string name="service_choice_2">Az automata átnevezési folyamatot, a média tároló eseményértesítése váltja ki, ha van ilyen.</string>
+	<string name="service_choice_3">Az automata átnevezési folyamat elindul, mikor egy fájl bekerül a kiválasztott mappába. Ellenőrizd, az \"Átnevezés mappán belül \" opciót, és legyen legalább egy mappa a \"Mappa kiválasztása\" opcióban.</string>
+	<string name="service_choice_4">Az automata átnevezési szolgáltatás mindig fut a háttérben, De fájlok csak akkor lesznek átnevezve, amint a kamera küld egy esemény értesítést az alkalmazásnak.</string>
+	<string-array name="service_type_labels">
+		<item>Letiltva</item>
+		<item>Kamera esemény: kép vagy videó felvétel történt.</item>
+		<item>Médiatartalom figyelő: Kép vagy videó lett mentve.</item>
+		<item>Fájl figyelő: Figyeli a kiválasztott mappát, amit megadtál. Ellenőrizd, az \"Átnevezés mappán belül \" opciót, és legyen legalább egy mappa a \"Mappa kiválasztása\" opcióban.</item>
+		<item>A permanent running service used to catch camera application notification events.</item>
+	</string-array>
+	<string name="thank_you_desc">Köszönöm a munkám iránti elismerést, az \"pro\" verzió megvásárlásával.</string>
+	<string name="thank_you_title">Köszönöm a Támogatást!</string>
+	<string name="ui_settings">Felhasználói felület kiválasztása</string>
+	<string name="yes">Igen</string>
+</resources>

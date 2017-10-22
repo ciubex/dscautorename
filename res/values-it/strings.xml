@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_section">Info</string>
-	<string name="about_text"><Data><![CDATA[<b>I miei ringraziamenti a Simon W per il pieno supporto allo sviluppo della versione 4.0.0!</b><br/>\n<br/>\nQuesta applicazione è stata creata per cambiare automaticamente il nome delle foto scattate dalla vostra fotocamera sulla base della data e del tempo di quando il file è stato creato.<br/>\n<br/>\nIl formato di rinomina del file usa Java con la data e il tempo come parametri:<br/>\n- yyyy per gli anni;<br/>\n- MM per i mesi;<br/>\n- dd per i giorni;<br/>\n- HH per le ore;<br/>\n- mm per i minuti;<br/>\n- ss per i secondi;<br/>\n- SSS per i millisecondi.<br/>\nSfortunatamente, per via delle specifiche EXIF e Android, i millisecondi non sono usati internamente.<br/>\nVedere di più per maggiori informazioni sui formati su: <a href=\"http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html\">Java SimpleDateFormat class</a><br/>\n<br/>\nSe più file sono stati generati allo stesso tempo, come nel caso di foto Timeshift, i file avranno un suffisso finale come _01. Ciò dipende da quante cifre sono state definite nelle impostazioni.<br/>\n.<br/>\nDefinire la rinomina dei file individualmente per le immagini e/o i video. Possono essere usati anche caratteri speciali come */?.<br/>\nNon usare caratteri generici come *.JPG per evitare un processo infinito di rinomina.<br/>\né meglio usare \"?\" per definire un possibile carattere singolo in combinazione con altri caratteri esistenti come _.<br/>\nPer esempio, se il nome del file originale è 20150729_212537.JPG, usare un modello come ????????_??????.JPG e inserire un prefisso \'Foto_\' (usare l\'apostrofo per definire testi costanti) nel modello di rinomina come  \"\'Foto_\'yyyyMMdd_HHmmss\" per rinominare il file in: Foto_20150729_212537.JPG<br/>\n<br/>\nIl servizio di rinomina, se abilitato, è automaticamente attivato quando l\'immagine è salvata sulla memoria del dispositivo.<br/>\n<br/>\nL\'attivazione dipende dall\'applicazione Fotocamera usata per scattare fotografie. L\'applicazione Fotocamera deve inviare <b>com.android.camera.NEW_PICTURE</b> oppure <b>android.hardware.action.NEW_PICTURE</b>, altrimenti, il servizio di rinomina non è attivato.<br/>\nIn alcuni casi, la fotocamera non manda alcun messaggio, cosi è possibilie selezionare come attivatore Gli Eventi di contenuto multimediale, ma questo implica un processo perennemente in background.<br/>\n<br/>\nPer maggiori dettagli, sei pregato di vedere la descrizione dell\'applicazione su <a href=\"https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename\">Google Play - DSC Auto Rename</a>.]]></Data></string>
 	<string name="add">Aggiungere</string>
 	<string name="app_theme_desc">Imposta il tema: Chiaro o Scuro</string>
 	<string-array name="app_theme_labels">
@@ -71,7 +70,6 @@
 	<string name="file_rename_count_title">Numero di file rinominati: %d</string>
 	<string name="filter_folder_no_folder">[Nessuna cartella]</string>
 	<string name="filter_folder_title">Selezionare una cartella</string>
-	<string name="first_time_alert">LEGGERE ATTENTAMENTE:\nI file rinominati e spostati dal processo non possono essere rigenerati!\nUsare questo programma con attenzione!\nDefinire la rinomina dei file individualmente per le immagini e/o i video; i file rinominati possono essere spostati anche in un\'altra cartella. Possono essere usati anche caratteri speciali come */?.\nNon usare caratteri generici come *.JPG per evitare un processo infinito di rinomina.\né meglio usare \"?\" per definire un possibile carattere singolo in combinazione con altri caratteri esistenti come _.\nPer esempio, se il nome del file originale è 20150729_212537.JPG, usare un modello come ????????_??????.JPG e inserire un prefisso \'Foto_\' (usa l\'apostrofo per definire testi costanti) nel modello di rinomina come \'\'Foto_\'yyyyMMdd_HHmmss\"  per rinominare il file in: Foto_20150729_212537.JPG</string>
 	<string name="folder_list_all_selected">Almeno una cartella deve essere deselezionata!</string>
 	<string name="folder_list_confirmation">Vuoi rimuovere le cartelle selezionate?</string>
 	<string name="folder_list_no_grant_permission_1">Il tuo sistema ha revocato i permessi per la seguente cartella:\n\n%s\n\n Controlla dov\'è la tua cartella e prova a riselezionarla!\n\n Puoi ignorare questo messaggio, ma l\'applicazione non funzionerà bene fino a che non ci sarà pieno accesso alla cartella selezionata.</string>
@@ -130,7 +128,6 @@
 	<string name="send_broadcast_msg_title">Inviare messaggio broadcast</string>
 	<string name="send_debug_confirmation">Vuoi inviare un report di Debug?\nLa tua applicazione predefinita di E-mail invierà una e-mail con due file allegati; sei pregato di inviarci anche una piccola descrizione dei tuoi problemi se è necessario.\nGrazie!</string>
 	<string name="send_debug_desc">Invia una e-mail con il file di Debug</string>
-	<string name="send_debug_email_title">Registri di debug per DSC Auto Rename</string>
 	<string name="send_debug_title">Inviare i log di Debug</string>
 	<string name="send_report">Inviare una segnalazione&#8230;</string>
 	<string name="service_choice_0">Il servizio di auto rinomina è disabilitato.</string>
@@ -142,6 +139,7 @@
 		<item>Eventi della fotocamera: Foto o video scattati.</item>
 		<item>Osservatore di contenuti multimediali: Foto o video salvati.</item>
 		<item>Osservatore di file: Controlla le cartelle selezionate quando vengono aggiunti dei file. È necessario attivare \"Rinomina all\'interno della cartella\" e avere almeno una cartella in \"selezionare cartella\".</item>
+		<item>A permanent running service used to catch camera application notification events.</item>
 	</string-array>
 	<string name="thank_you_desc">Puoi ringraziarmi per l\'apprezzamento del mio lavoro comprando l\'applicazione PRO.</string>
 	<string name="thank_you_title">Grazie per la tua donazione!</string>

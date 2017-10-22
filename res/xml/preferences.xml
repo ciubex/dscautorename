@@ -149,6 +149,18 @@
             android:summary="@string/request_permissions_desc"
             android:title="@string/request_permissions_title"/>
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/export_import_settings_group">
+        <Preference
+            android:key="exportSettings"
+            android:persistent="false"
+            android:summary="@string/export_settings_desc"
+            android:title="@string/export_settings_title"/>
+        <Preference
+            android:key="importSettings"
+            android:persistent="false"
+            android:summary="@string/import_settings_desc"
+            android:title="@string/import_settings_title"/>
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/about_section">
         <Preference
             android:key="buildVersion"
@@ -166,10 +178,20 @@
             android:summary="@string/license_desc"
             android:title="@string/license_title"/>
         <Preference
+            android:key="privacyPolicyPref"
+            android:persistent="false"
+            android:summary="@string/privacy_policy_desc"
+            android:title="@string/privacy_policy"/>
+        <Preference
             android:key="donatePref"
             android:persistent="false"
             android:summary="@string/donate_desc"
             android:title="@string/donate_title"/>
+        <Preference
+            android:key="showHelpPage"
+            android:persistent="false"
+            android:summary="@string/help_desc"
+            android:title="@string/help_title"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

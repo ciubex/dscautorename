@@ -42,6 +42,7 @@
 		<item>Camera events: pictures or videos taken.</item>
 		<item>Media content observer: pictures or videos saved.</item>
 		<item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
+		<item>A permanent running service used to catch camera application notification events.</item>
 	</string-array>
 	<string name="yes">Tak</string>
 </resources>

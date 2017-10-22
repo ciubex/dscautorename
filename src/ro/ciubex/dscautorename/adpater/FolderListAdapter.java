@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 /**
@@ -38,6 +39,7 @@ public class FolderListAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private DSCApplication mApplication;
 	private SelectedFolderModel[] mFolders;
+	private CompoundButton.OnCheckedChangeListener mListener;
 
 	/**
 	 * 
@@ -65,6 +67,10 @@ public class FolderListAdapter extends BaseAdapter {
 	public int getCount() {
 		return mFolders.length;
 	}
+
+    public void setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
+        this.mListener = listener;
+    }
 
 	/*
 	 * (non-Javadoc)
@@ -104,6 +110,9 @@ public class FolderListAdapter extends BaseAdapter {
 					false);
 			viewHolder = initViewHolder(view, item);
 			view.setTag(viewHolder);
+            if (mListener != null) {
+                viewHolder.checkBoxItem.setOnCheckedChangeListener(mListener);
+            }
 		} else {
 			viewHolder = (ViewHolder) view.getTag();
 			viewHolder.checkBoxItem.setTag(item);

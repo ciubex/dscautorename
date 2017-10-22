@@ -265,18 +265,22 @@ public class RenameDlgActivity extends Activity implements
 	public void onTaskFinished(int count) {
 		String message;
 		switch (count) {
-		case 0:
-			message = mApplication.getApplicationContext()
-					.getString(R.string.manually_file_rename_count_0);
-			break;
-		case 1:
-			message = mApplication.getApplicationContext()
-					.getString(R.string.manually_file_rename_count_1);
-			break;
-		default:
-			message = mApplication.getApplicationContext()
-					.getString(R.string.manually_file_rename_count_more, count);
-			break;
+			case -1:
+				message = mApplication.getApplicationContext().getString(R.string.manually_file_rename_minus_1);
+				break;
+			case 0:
+				message = mApplication.getApplicationContext()
+						.getString(R.string.manually_file_rename_count_0);
+				break;
+			case 1:
+				message = mApplication.getApplicationContext()
+						.getString(R.string.manually_file_rename_count_1);
+				break;
+			default:
+				message = count > 0 ?
+						mApplication.getApplicationContext().getString(R.string.manually_file_rename_count_more, count) :
+						mApplication.getApplicationContext().getString(R.string.manually_file_rename_minus_more, (count * -1));
+				break;
 		}
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
 				.setTitle(R.string.app_name)

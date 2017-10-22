@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 /**
@@ -42,6 +43,7 @@ public class FileNamePatternListAdapter extends BaseAdapter {
 	private DSCApplication mApplication;
 	private FileNameModel[] mFileNameModels;
 	private Date mNow;
+    private CompoundButton.OnCheckedChangeListener mListener;
 
 	public FileNamePatternListAdapter(Context context, DSCApplication application) {
 		mInflater = (LayoutInflater) context
@@ -68,11 +70,15 @@ public class FileNamePatternListAdapter extends BaseAdapter {
 		return mFileNameModels.length;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.widget.Adapter#getItem(int)
-	 */
+    public void setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
+        this.mListener = listener;
+    }
+
+    /*
+         * (non-Javadoc)
+         *
+         * @see android.widget.Adapter#getItem(int)
+         */
 	@Override
 	public FileNameModel getItem(int position) {
 		if (position > -1 && position < getCount()) {
@@ -106,6 +112,9 @@ public class FileNamePatternListAdapter extends BaseAdapter {
 					false);
 			viewHolder = initViewHolder(view, fileNameModel);
 			view.setTag(viewHolder);
+            if (mListener != null) {
+                viewHolder.checkBoxItem.setOnCheckedChangeListener(mListener);
+            }
 		} else {
 			viewHolder = (ViewHolder) view.getTag();
 			viewHolder.checkBoxItem.setTag(fileNameModel);

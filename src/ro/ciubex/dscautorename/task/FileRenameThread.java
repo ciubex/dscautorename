@@ -93,6 +93,7 @@ public class FileRenameThread implements Runnable {
     public FileRenameThread(DSCApplication application, Listener listener, boolean noDelay, List<Uri> fileUris) {
         this.mApplication = application;
         this.mListener = new WeakReference<>(listener);
+        mListFiles = new ArrayList<>();
         mFilesToUpdate = new TreeSet<>();
         mBroadcastingMessages = new TreeSet<>();
         mNoDelay = noDelay;
@@ -135,10 +136,7 @@ public class FileRenameThread implements Runnable {
                 listener.onThreadFinished(count);
             }
         }
-        if (mListFiles != null) {
-            mListFiles.clear();
-        }
-        mListFiles = null;
+        mListFiles.clear();
         mApplication.setRenameFileTaskCanceled(false);
     }
 
@@ -150,10 +148,8 @@ public class FileRenameThread implements Runnable {
         onPreExecute();
         mContentResolver = mApplication.getContentResolver();
         int total = 0;
-        boolean renameFileRequested;
         if (mContentResolver != null) {
             mApplication.setRenameFileTaskRunning(true);
-            renameFileRequested = mApplication.isRenameFileRequested();
             mApplication.updateMountedVolumes();
             mApplication.updateSelectedFolders();
             mFoldersScanning = mApplication.getSelectedFolders();
@@ -161,39 +157,9 @@ public class FileRenameThread implements Runnable {
             renamePatternsUtilities = new RenamePatternsUtilities(mApplication);
             renamePatternsUtilities.buildPatterns();
             populateMediaStoreURI();
-            doGrantUriPermission();
-            while (renameFileRequested) {
-                mApplication.setRenameFileRequested(false);
-                int count = 0;
-                if (!mNoDelay) {
-                    executeDelay();
-                }
-                populateAllListFiles();
-                if (!mListFiles.isEmpty()
-                        && !mApplication.isRenameFileTaskCanceled()) {
-                    mPreviousFileNameModelCount = 0;
-                    mPreviousFileModelId = -1;
-                    int max = mListFiles.size();
-                    int i = 0;
-                    onProgressUpdate(i++, max);
-                    for (FileRenameData data : mListFiles) {
-                        if (renameCurrentFile(data)) {
-                            count++;
-                        }
-                        onProgressUpdate(i++, max);
-                        if (!mNoDelay) {
-                            executeFileRenameDelay();
-                        }
-                        if (mApplication.isRenameFileTaskCanceled()) {
-                            break;
-                        }
-                    }
-                    if (count > 0) {
-                        total += count;
-                        mApplication.increaseFileRenameCount(count);
-                    }
-                }
-                renameFileRequested = mApplication.isRenameFileRequested();
+            if (!mApplication.isRenameFileTaskCanceled()) {
+                doGrantUriPermission();
+                total = runLoopRename();
             }
             mApplication.setRenameFileTaskRunning(false);
             if (!mFilesToUpdate.isEmpty() && mApplication.isInvokeMediaScannerEnabled()) {
@@ -205,6 +171,51 @@ public class FileRenameThread implements Runnable {
         }
         mApplication.logD(TAG, "Finished run()");
         onPostExecute(total);
+    }
+
+    /**
+     * Method used to invoke all rename necessary methods.
+     *
+     * @return Number of renamed files.
+     */
+    private int runLoopRename() {
+        int total = 0;
+        int negatives = 0;
+        while (mApplication.isRenameFileRequested() && !mApplication.isRenameFileTaskCanceled()) {
+            mApplication.setRenameFileRequested(false);
+            int count = 0;
+            if (!mNoDelay) {
+                executeDelay();
+            }
+            populateAllListFiles();
+            if (!mListFiles.isEmpty()
+                    && !mApplication.isRenameFileTaskCanceled()) {
+                mPreviousFileNameModelCount = 0;
+                mPreviousFileModelId = -1;
+                int max = mListFiles.size();
+                int i = 0;
+                onProgressUpdate(i++, max);
+                for (FileRenameData data : mListFiles) {
+                    if (renameCurrentFile(data)) {
+                        count++;
+                    } else {
+                        negatives--;
+                    }
+                    onProgressUpdate(i++, max);
+                    if (!mNoDelay) {
+                        executeFileRenameDelay();
+                    }
+                    if (mApplication.isRenameFileTaskCanceled()) {
+                        break;
+                    }
+                }
+                if (count > 0) {
+                    total += count;
+                    mApplication.increaseFileRenameCount(count);
+                }
+            }
+        }
+        return total + negatives;
     }
 
     /**
@@ -248,7 +259,7 @@ public class FileRenameThread implements Runnable {
     private void doGrantUriPermission() {
         if (!isGrantUriPermissionRequested) {
             isGrantUriPermissionRequested = true;
-            if (mApplication.getSdkInt() >= 21) {
+            if (mApplication.getSdkInt() >= Build.VERSION_CODES.LOLLIPOP) {
                 prepareSelectedFolders();
                 List<String> list = mApplication.doGrantUriPermission(mContentResolver, mSelectedFolders);
                 mIsUriPermissionGranted = list.isEmpty(); // no rejected folder.
@@ -456,11 +467,11 @@ public class FileRenameThread implements Runnable {
      */
     private boolean renameFileUseApiLevel(FileRenameData data, File oldFile, File newFile) {
         int sdkInt = mApplication.getSdkInt();
-        if (sdkInt < 19) {
+        if (sdkInt < Build.VERSION_CODES.KITKAT) {
             return renameFileApiLevelPriorKitKat(data, oldFile, newFile);
-        } else if (sdkInt < 21) {
+        } else if (sdkInt < Build.VERSION_CODES.LOLLIPOP) {
             return renameFileApiLevelKitKat(data, oldFile, newFile);
-        } else if (sdkInt >= 21) {
+        } else if (sdkInt >= Build.VERSION_CODES.LOLLIPOP) {
             return renameFileApiLevelLollipop(data, oldFile, newFile);
         }
         return false;
@@ -483,6 +494,9 @@ public class FileRenameThread implements Runnable {
         }
         if (success) {
             success = oldFile.renameTo(newFile);
+            if (success) {
+                newFile.setLastModified(data.getDateAdded());
+            }
         }
         return success;
     }
@@ -495,7 +509,7 @@ public class FileRenameThread implements Runnable {
      * @param newFile New file reference.
      * @return True, if the rename process succeeded.
      */
-    @TargetApi(19)
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     private boolean renameFileApiLevelKitKat(FileRenameData data, File oldFile, File newFile) {
         try {
             return renameFileApiLevelPriorKitKat(data, oldFile, newFile);
@@ -513,7 +527,7 @@ public class FileRenameThread implements Runnable {
      * @param newFile New file reference.
      * @return True, if the rename process succeeded.
      */
-    @TargetApi(21)
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private boolean renameFileApiLevelLollipop(FileRenameData data, File oldFile, File newFile) {
         boolean result = false;
         try {
@@ -522,8 +536,15 @@ public class FileRenameThread implements Runnable {
                 boolean moveFile = mustMoveFile(oldFile, newFile);
                 Uri newUri = doRenameFilesNewAPI(data, oldFile, newFile);
                 result = newUri != null;
+                if (!moveFile && result && newFile.exists()) {
+                    newFile.setLastModified(data.getDateAdded());
+                }
                 if (result && moveFile) {
-                    result = doMoveFilesNewAPI(newUri, data, oldFile, newFile);
+                    if (mApplication.getSdkInt() < Build.VERSION_CODES.N) {
+                        result = doMoveFilesAPI21(newUri, data, oldFile, newFile);
+                    } else {
+                        result = doMoveFilesAPI24(newUri, data, oldFile, newFile);
+                    }
                 }
                 if (!result) {
                     mApplication.logD(TAG, "Can not be renamed using new API, rename using old Java File API: " + fullFilePath);
@@ -564,8 +585,8 @@ public class FileRenameThread implements Runnable {
      * @param newFile New file reference.
      * @return New file URI.
      */
-    @TargetApi(21)
-    private Uri doRenameFilesNewAPI(FileRenameData data, File oldFile, File newFile) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private Uri doRenameFilesNewAPI(FileRenameData data, File oldFile, File newFile) throws FileNotFoundException {
         Uri oldUri = mApplication.getDocumentUri(mSelectedFolders, oldFile.getAbsolutePath());
         Uri newUri = null;
         if (oldUri != null) {
@@ -575,15 +596,15 @@ public class FileRenameThread implements Runnable {
     }
 
     /**
-     * Move a file using the new API methods.
+     * Move a file using the new API 21 methods.
      *
      * @param data    File rename data info.
      * @param oldFile Old file reference.
      * @param newFile New file reference.
      * @return True if the file was moved.
      */
-    @TargetApi(21)
-    private boolean doMoveFilesNewAPI(Uri oldUri, FileRenameData data, File oldFile, File newFile) {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private boolean doMoveFilesAPI21(Uri oldUri, FileRenameData data, File oldFile, File newFile) throws FileNotFoundException {
         File newParent = newFile.getParentFile();
         Uri newParentUri = mApplication.getDocumentUri(mSelectedFolders, newParent.getAbsolutePath());
         Uri newUri = DocumentsContract.createDocument(mContentResolver, newParentUri,
@@ -600,8 +621,36 @@ public class FileRenameThread implements Runnable {
         }
         if (result) {
             result = DocumentsContract.deleteDocument(mContentResolver, oldUri);
+            if (result && newFile.exists()) {
+                newFile.setLastModified(data.getDateAdded());
+            }
         }
         return result;
+    }
+
+    /**
+     * Move a file using the API 24 methods.
+     *
+     * @param data    File rename data info.
+     * @param oldFile Old file reference.
+     * @param newFile New file reference.
+     * @return True if the file was moved.
+     */
+    @TargetApi(Build.VERSION_CODES.N)
+    private boolean doMoveFilesAPI24(Uri oldUri, FileRenameData data, File oldFile, File newFile) throws FileNotFoundException {
+        File oldParent = oldFile.getParentFile();
+        File newParent = newFile.getParentFile();
+        Uri oldParentUri = mApplication.getDocumentUri(mSelectedFolders, oldParent.getAbsolutePath());
+        Uri newParentUri = mApplication.getDocumentUri(mSelectedFolders, newParent.getAbsolutePath());
+        Uri result = DocumentsContract.moveDocument(mContentResolver, oldUri, oldParentUri, newParentUri);
+        boolean success = result != null && newFile.exists() && newFile.length() > 0;
+        if (success) {
+            newFile.setLastModified(data.getDateAdded());
+        } else {
+            mApplication.logD(TAG, "Unable to move file using API24 fallback to API21");
+            success = doMoveFilesAPI21(oldUri, data, oldFile, newFile);
+        }
+        return success;
     }
 
     /**
@@ -611,8 +660,8 @@ public class FileRenameThread implements Runnable {
      * @param destination The destination file URI.
      * @return The copy size.
      */
-    @TargetApi(19)
-    private long copyFileWithStreams(Uri source, Uri destination) {
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    private long copyFileWithStreams(Uri source, Uri destination) throws FileNotFoundException {
         ParcelFileDescriptor sourceFileDesc = null;
         ParcelFileDescriptor destFileDesc = null;
         FileChannel inChannel = null;
@@ -687,6 +736,7 @@ public class FileRenameThread implements Runnable {
             default:
                 milliseconds = file.lastModified();
         }
+        data.setDateAdded(milliseconds);
         String newFileName = mApplication.getFileNameFormatted(data.getFileNamePatternAfter(), new Date(milliseconds));
         if (newFileName.equals(mPreviousFileNameModel)) {
             data.setPreviousFileName(newFileName + extension);
@@ -877,12 +927,8 @@ public class FileRenameThread implements Runnable {
      * Populate the list files accordingly with user choice.
      */
     private void populateAllListFiles() {
-        if (mListFiles == null) {
-            mListFiles = new ArrayList<>();
-        } else {
-            mListFiles.clear();
-        }
-        if (mFileUris != null && !mFileUris.isEmpty()) {
+        mListFiles.clear();
+        if (!mFileUris.isEmpty()) {
             scanSelectedFiles();
         } else if (mApplication.isEnabledScanForFiles()) {
             scanForFiles();
@@ -1075,7 +1121,6 @@ public class FileRenameThread implements Runnable {
             } else {
                 mApplication.logD(TAG, "Method populateListFiles cursor is null!");
             }
-//            doQuery(mContentResolver, uri);
         } catch (Exception ex) {
             mApplication.logE(TAG, "getImageList Exception: " + ex.getMessage(), ex);
         } finally {
@@ -1126,46 +1171,6 @@ public class FileRenameThread implements Runnable {
             }
         }
         return null;
-    }
-
-    /**
-     * This is an utility method used to show columns and values from a table.
-     *
-     * @param cr  The application ContentResolver
-     * @param uri The database URI path.
-     */
-    private void doQuery(ContentResolver cr, Uri uri) {
-        Cursor cursor = cr.query(uri, null, null, null, null);
-        mApplication.logD(TAG, "Do query for URI: " + uri);
-        if (cursor != null) {
-            cursor.moveToFirst();
-            int rows = cursor.getCount();
-            int cols = cursor.getColumnCount();
-            int i, j;
-            String rowVal;
-            mApplication.logD(TAG, uri.getPath());
-            for (i = 0; i < rows; i++) {
-                rowVal = "row[" + i + "]:";
-                for (j = 0; j < cols; j++) {
-                    if (j > 0) {
-                        rowVal += ", ";
-                    }
-                    try {
-                        rowVal += cursor.getColumnName(j) + ": "
-                                + cursor.getString(j);
-                    } catch (Exception e) {
-                        mApplication.logE(TAG, "[" + j + "]:" + e.getMessage());
-                    }
-                }
-                mApplication.logD(TAG, rowVal);
-                cursor.moveToNext();
-            }
-            if (!cursor.isClosed()) {
-                cursor.close();
-            }
-        } else {
-            mApplication.logD(TAG, "No cursor found for the URI: " + uri);
-        }
     }
 
     /**

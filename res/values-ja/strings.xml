@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="about_section">アプリについて</string>
-	<string name="about_text"><Data><![CDATA[<b>Simon W の 4.0.0 バージョン開発へのフルサポートに大変感謝します!</b><br/><br/>このアプリケーションは、自動的にファイルが作成されたときの日時に基づき、カメラで撮影した画像ファイルの名前を変更します。<br/> <br/> ファイルの名前を変更する形式は Java の日付と時刻の形式のパラメーターを使用します:<br/> - 年の yyyy;<br/> - 月の MM<br/> - 日の dd<br/> - 時のHH;<br/> - 分の mm;<br/> - 秒の ss;<br/> - ミリ秒の SSS。<br/> 残念ながら EXIF による仕様と Android ファイル名日付時刻のため、内部的にミリ秒は使用されません。<br/> 形式の詳細な情報は、次を参照してください: <a href=http://docs.oracle.com/javase/6/docs/api/java/text/SimpleDateFormat.html>Java SimpleDateFormat クラス</a><br/> <br/> 複数のファイルが同時に生成された場合、ファイルは _01 のようなカウントのサフィックスを持ちます。設定で定義された桁数に依存します。<br/><br/> 写真やクリップのファイル名のパターンを個別に定義します。ワイルドカード * または ? も使用することができます。<br/> 名前変更の無限ループを避けるために、*.JPG のようなあまりにも包括的なパターンは使用しないでください。<br/> ? を活用して、_ など他の定数の既存の文字との組み合わせで 1 つで可能な文字を定義するようにしてください。 <br/> たとえば、元のファイル名が 20150729_212537.JPG のようなパターンを使用している場合、????????_??????.JPG のようなパターンを使用して、名前の変更パターンに \"\'PIC_\' yyyyMMdd_HHmmss\" のようにプレフィックス \'PIC_\' をつけて (定数のテキストを定義するアポストロフィを使用して) ファイルの名前を変更します: PIC_20150729_212537.JPG <br/> <br/> リネームサービスが有効な場合、デバイスのメディア ストレージにイメージ ファイルを保存されると、リネームサービスが自動的にトリガーされます。<br/> <br/> トリガーは、写真を撮るカメラ アプリケーションによって異なります。カメラ アプリケーションは <b>com.android.camera.NEW_PICTURE</b> または <b>android.hardware.action.NEW_PICTURE</b> を送信する必要があります。それ以外の場合、リネームサービスはトリガーされません。<br/> 一部のケースでカメラは何のメッセージも送信しないため、メディア コンテンツ イベントをトリガーとして選択することが可能です、しかし、これは完全にバックグラウンドでサービスを実行することを意味します。 <br/> <br/> 詳細は、アプリケーションの説明ページを参照してください <a href=https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename>Google Play - DSC 自動リネーム</a>.]]></Data></string>
 	<string name="add">追加</string>
 	<string name="app_theme_desc">アプリケーション テーマを設定します: ライトまたはダーク。</string>
 	<string-array name="app_theme_labels">
@@ -71,7 +70,6 @@
 	<string name="file_rename_count_title">名前を変更したファイルの数: %d</string>
 	<string name="filter_folder_no_folder">[フォルダーなし]</string>
 	<string name="filter_folder_title">フォルダーを選択。</string>
-	<string name="first_time_alert">熟読の上ご注意ください:\n名前の変更、ファイルの移動プロセスは元に戻すことはできません!\n注意してこのソフトウェアをご利用ください!\n写真やクリップを個別にファイル名のパターンを定義したり、名前を変更したファイルを別のフォルダーに移動することもできます。ワイルドカード * または ? も使用できます。\n名前の変更の無限ループを避けるために、*.JPG のような全般的なパターンは使用しないでください。\n_ などその他の一定の既存の文字との組み合わせて、 1 つ可能な文字を定義することが ? の良い使用方法です。\n例えば、元のファイル名が 20150729_212537.JPG の場合、????????_??????.JPG のようなパターンを使用して、名前変更のパターンに \"\'PIC_\'yyyyMMdd_HHmmss\" のようにプレフィックス \'PIC_\' をつけると (定数のテキストを定義するためアポストロフィを使用して) ファイルの名前を次のように変更します: PIC_20150729_212537.JPG</string>
 	<string name="folder_list_all_selected">少なくとも 1 つのフォルダーはオフのままにする必要があります!</string>
 	<string name="folder_list_confirmation">選択したフォルダーを削除しますか?</string>
 	<string name="folder_list_no_grant_permission_1">お使いのシステムで次のフォルダーの権限が無効になりました:\n\n%s\n\nこのフォルダーが定義されている場所を確認して、再度選択してください!\n\nこのメッセージを無視することはできますが、上のフォルダーのアクセスを取得するまで、アプリケーションは正しく動作しません。</string>
@@ -80,6 +78,8 @@
 	<string name="folder_list_no_selection">少なくとも 1 つ削除するフォルダーを選択してください!</string>
 	<string name="folder_list_title">スキャンしたフォルダーの一覧。</string>
 	<string name="general_settings">全般設定</string>
+	<string name="invoke_media_scanner_for_file_desc">リネームしたファイルをスキャンするようにメディアスキャナーに要求します。これは慎重に使用してください。通常は選択しないでください!  これを使用すると強制的にMTPキャッシュを更新します。残念ながら常に動作するとはかぎりません!</string>
+	<string name="invoke_media_scanner_for_file_title">メディアスキャナー要求</string>
 	<string name="license_desc">オープンソース ソフトウェアのライセンス詳細</string>
 	<string name="license_title">オープンソース ライセンス</string>
 	<string name="list_info_press">アイテムを追加または削除。</string>
@@ -105,6 +105,8 @@
 	<string name="please_wait">お待ちください…</string>
 	<string name="remove_rename_shortcut">DSC リネーム サービスのショートカットを削除</string>
 	<string name="remove_rename_shortcut_desc">DSC リネーム サービス ショートカットをホーム画面から削除します</string>
+	<string name="rename_file_delay_desc">次のファイルのリネームを待機する時間</string>
+	<string name="rename_file_delay_title">ファイルのリネームを待機</string>
 	<string name="rename_file_using_desc">ファイルが最後に変更された、日付と時刻。</string>
 	<string-array name="rename_file_using_labels">
 		<item>メディアプロバイダーにファイルが追加された日付と時刻。</item>
@@ -123,20 +125,23 @@
 	<string name="request_permissions_ok">必要なすべての権限が与えられました!</string>
 	<string name="request_permissions_title">必要なアプリケーションのアクセス許可を要求。</string>
 	<string name="seconds_unit">秒</string>
+	<string name="send_broadcast_msg_desc">リネームしたファイルでブロードキャストメッセージを送信します。このオプションを使用すると、他のアプリケーションにアナウンスされて、リネームした新しいファイルを選択することができます。</string>
+	<string name="send_broadcast_msg_title">ブロードキャスト メッセージを送信</string>
 	<string name="send_debug_confirmation">デバッグ報告を送信しますか?\nデフォルトのメール アプリケーションが、2 つのファイルを添付してメールを送信します。必要な問題の簡単な説明を記入してください。\nありがとうございます!</string>
 	<string name="send_debug_desc">デバッグ ファイルをメールで送信します</string>
-	<string name="send_debug_email_title">DSC 自動リネームのデバッグ ログ</string>
 	<string name="send_debug_title">デバッグ ログを送信</string>
 	<string name="send_report">報告を送信…</string>
 	<string name="service_choice_0">自動リネーム サービスは無効です。</string>
 	<string name="service_choice_1">カメラのイベントによって、自動リネーム サービスはトリガーされます。</string>
 	<string name="service_choice_2">メディア コンテンツのイベントによって、自動リネームサービスはトリガーされます。</string>
 	<string name="service_choice_3">選択したフォルダーにファイルが追加されたときに、自動リネーム サービスはトリガーされます。\"フォルダー内のリネーム\" をチェックし、\"フォルダーを選択\" で少なくとも 1 つのフォルダーを選択する必要があります。</string>
+	<string name="service_choice_4">自動リネームサービスは常にバックグラウンドで実行されますが、カメラアプリケーションがイベント通知を送信したときにのみファイルがリネームされます。</string>
 	<string-array name="service_type_labels">
 		<item>無効</item>
 		<item>カメライベント: 写真またはビデオを撮影しました。</item>
 		<item>メディアコンテンツ オブザーバー: 写真またはビデオを保存しました。</item>
 		<item>ファイル オブザーバー: 選択したフォルダーでファイルが追加されるのを監視します。「フォルダ内の名前を変更」をチェックし、「フォルダを選択」で少なくとも一つのフォルダを選択している必要があります。</item>
+		<item>A permanent running service used to catch camera application notification events.</item>
 	</string-array>
 	<string name="thank_you_desc">Pro アプリケーションのご購入と、私の作業へのご理解をいただき、ありがとうございました。</string>
 	<string name="thank_you_title">寄付をいただき、ありがとうございます!</string>
