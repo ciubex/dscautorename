@@ -928,7 +928,7 @@ public class FileRenameThread implements Runnable {
      */
     private void populateAllListFiles() {
         mListFiles.clear();
-        if (!mFileUris.isEmpty()) {
+        if (mFileUris != null && !mFileUris.isEmpty()) {
             scanSelectedFiles();
         } else if (mApplication.isEnabledScanForFiles()) {
             scanForFiles();
