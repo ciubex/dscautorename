@@ -77,7 +77,7 @@
     <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera application save files.</string>
     <string name="enable_filter_alert_v19">Because on Android KitKat are enabled some security constraints, this application will not be able to rename files from SD Card.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis application can rename files from internal memory only.\nSet your camera application to save on internal memory.</string>
     <string name="enable_filter_alert_v21">Please enable \"Rename within a folder\" option and select which folder should be scanned for pictures and clips to be renaming using option \"List of scanned folders.\".</string>
-    <string name="update_message_v91" translatable="false">Please read Help section from the bottom of application settings!</string>
+    <string name="update_message_v93" translatable="false">Please read Help section from the bottom of application settings!</string>
     <string name="folder_list_title">List of scanned folders.</string>
     <string name="folder_list_all_selected">At least one folder should be left unchecked!</string>
     <string name="folder_list_no_selection">Select at least one folder to delete!</string>

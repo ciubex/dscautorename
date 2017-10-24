@@ -200,10 +200,8 @@ public class DSCApplication extends Application {
 		initLocale();
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
 		int serviceType = getServiceType();
-		if (SERVICE_TYPE_CAMERA == serviceType ||
-				SERVICE_TYPE_CONTENT == serviceType ||
-				SERVICE_TYPE_FILE_OBSERVER == serviceType) {
-			checkRegisteredServiceType(android.os.Build.VERSION.SDK_INT < 21);
+		if (DSCApplication.SERVICE_TYPE_DISABLED != serviceType) {
+			checkRegisteredServiceType(false);
 		}
 		mFolderObserverMap = new HashMap<>();
 		if (SERVICE_TYPE_FILE_OBSERVER == serviceType) {
@@ -861,6 +859,10 @@ public class DSCApplication extends Application {
 		int serviceType = getServiceType();
 		int regServiceType = getRegisteredServiceType();
 		boolean changed = force || (serviceType != regServiceType);
+		if (!changed && SERVICE_TYPE_CONTENT == serviceType && mSdkInt > Build.VERSION_CODES.N) {
+			changed = !isMediaContentJobServiceRegistered(this);
+		}
+		logD(TAG, "checkRegisteredServiceType force: " + force + " changed: " + changed);
 		if (changed) {
 			updateRegisteredServiceType(serviceType, regServiceType);
 		}
@@ -1948,17 +1950,12 @@ public class DSCApplication extends Application {
 	 */
 	@TargetApi(Build.VERSION_CODES.N)
 	public boolean isMediaContentJobServiceRegistered(Context context) {
-		if (MediaContentJobService.JOB_INFO != null) {
-			JobScheduler js = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-			List<JobInfo> jobs = js != null ? js.getAllPendingJobs() : null;
-			if (jobs != null && !jobs.isEmpty()) {
-				for (JobInfo jobInfo : jobs) {
-					if (jobInfo.getId() == MediaContentJobService.JOB_ID) {
-						ComponentName componentName = jobInfo.getService();
-						if (MediaContentJobService.class.getName().equals(componentName.getClassName())) {
-							return MediaContentJobService.JOB_INFO.equals(jobInfo);
-						}
-					}
+		JobScheduler js = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
+		List<JobInfo> jobs = js != null ? js.getAllPendingJobs() : null;
+		if (jobs != null && !jobs.isEmpty()) {
+			for (JobInfo jobInfo : jobs) {
+				if (jobInfo.getId() == MediaContentJobService.JOB_ID) {
+					return true;
 				}
 			}
 		}
@@ -1984,17 +1981,17 @@ public class DSCApplication extends Application {
 	@TargetApi(Build.VERSION_CODES.N)
 	public void registerMediaContentJobService(Context context) {
 		if (mSdkInt > Build.VERSION_CODES.N) {
-			if (!isMediaContentJobServiceRegistered(context)) {
-				JobInfo.Builder builder = new JobInfo.Builder(MediaContentJobService.JOB_ID, new ComponentName(context, MediaContentJobService.class.getName()));
-				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Images.Media.INTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
-				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Video.Media.INTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
-				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
-				builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
-				builder.setTriggerContentMaxDelay(100);
-				MediaContentJobService.JOB_INFO = builder.build();
-				logD(TAG, "registerMediaContentJobService");
-				scheduleMediaContentJobService(context);
-			}
+			JobInfo.Builder builder = new JobInfo.Builder(MediaContentJobService.JOB_ID, new ComponentName(context, MediaContentJobService.class.getName()));
+			builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Images.Media.INTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+			builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Video.Media.INTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+			builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+			builder.addTriggerContentUri(new JobInfo.TriggerContentUri(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, JobInfo.TriggerContentUri.FLAG_NOTIFY_FOR_DESCENDANTS));
+			builder.setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY);
+			builder.setTriggerContentMaxDelay(1000);
+			builder.setTriggerContentUpdateDelay(1000);
+			builder.setRequiresDeviceIdle(false);
+			logD(TAG, "registerMediaContentJobService");
+			scheduleMediaContentJobService(context, builder.build());
 		}
 	}
 
@@ -2004,13 +2001,23 @@ public class DSCApplication extends Application {
 	 * @param context The application context.
 	 */
 	@TargetApi(Build.VERSION_CODES.N)
-	public void scheduleMediaContentJobService(Context context) {
+	public void scheduleMediaContentJobService(Context context, JobInfo jobInfo) {
 		JobScheduler scheduler = (JobScheduler) context.getSystemService(Context.JOB_SCHEDULER_SERVICE);
-		int result = scheduler.schedule(MediaContentJobService.JOB_INFO);
+		int result = scheduler.schedule(jobInfo);
 		if (result == JobScheduler.RESULT_SUCCESS) {
 			logD(TAG, "JobScheduler OK");
 		} else {
 			logD(TAG, "JobScheduler fails: " + result);
+		}
+	}
+
+	/**
+	 * Reschedule the media content job service.
+	 */
+	public void rescheduleMediaContentJobService() {
+		if (mSdkInt > Build.VERSION_CODES.N && SERVICE_TYPE_CONTENT == getServiceType()) {
+			cancelMediaContentJobService(this);
+			registerMediaContentJobService(this);
 		}
 	}
 }

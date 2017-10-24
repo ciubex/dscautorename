@@ -110,6 +110,7 @@ public class FileRenameService extends Service implements FileRenameThread.Liste
     public void onThreadFinished(int count) {
         mStarted = false;
         mApplication.logD(TAG, "Service invoked onThreadFinished.");
+        mApplication.rescheduleMediaContentJobService();
         stopSelf();
     }
 

@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2016 Claudiu Ciobotariu
+ * Copyright (C) 2017 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -48,9 +48,7 @@ public class BootEventReceiver extends BroadcastReceiver {
 			DSCApplication application = (DSCApplication) appCtx;
 			application.logD(TAG, "onReceive: " + intent.getAction() + ":" + intent.getDataString());
 			int serviceType = application.getServiceType();
-			if (DSCApplication.SERVICE_TYPE_CONTENT == serviceType ||
-					DSCApplication.SERVICE_TYPE_FILE_OBSERVER == serviceType ||
-					DSCApplication.SERVICE_TYPE_CAMERA_SERVICE == serviceType) {
+			if (DSCApplication.SERVICE_TYPE_DISABLED != serviceType) {
 				application.checkRegisteredServiceType(true);
 			}
 		}

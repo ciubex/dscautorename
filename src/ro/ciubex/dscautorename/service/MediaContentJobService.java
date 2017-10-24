@@ -38,8 +38,6 @@ import ro.ciubex.dscautorename.DSCApplication;
 public class MediaContentJobService extends JobService {
     private static final String TAG = MediaContentJobService.class.getName();
     public static final int JOB_ID = 681979;
-    public static JobInfo JOB_INFO;
-    private JobParameters mParams;
 
     /**
      * Log method used by static methods.
@@ -67,11 +65,9 @@ public class MediaContentJobService extends JobService {
         if (appCtx instanceof DSCApplication) {
             DSCApplication application = (DSCApplication) appCtx;
             MediaContentJobService.log(appCtx, Log.DEBUG, TAG, "onStartJob()");
-            mParams = params;
             if (!application.isRenameFileTaskRunning()) {
                 application.launchAutoRenameTask(null, false, null, true);
             }
-            application.registerMediaContentJobService(appCtx);
         }
         return true;
     }
@@ -80,9 +76,5 @@ public class MediaContentJobService extends JobService {
     public boolean onStopJob(JobParameters params) {
         MediaContentJobService.log(getApplicationContext(), Log.DEBUG, TAG, "onStopJob()");
         return true;
-    }
-
-    public void callJobFinished(boolean needsReschedule) {
-        jobFinished(mParams, needsReschedule);
     }
 }

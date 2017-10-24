@@ -22,7 +22,9 @@
     <li>File observer. This option will scan all selected folders and subfolders to register listeners for new files. You must check <b>Rename within a folder</b> and have a least one folder on <b>Select a folder</b>.</li>
     <li>A permanent running service used to catch camera application notification events. This option was removed from versions newest than Android Lollipop (5.x)</li>
 </ol>
-<p>Because any above trigger is directly dependent by the Android OS developers and because none of them are reliable I suggest to create on the Home Screen a shortcut to launch manually the rename service directly when is necessary or as a backup. More details on <b>DSC Rename service shortcut</b> section.</p>
+<p>Regarding media content observer and file observer, on developing process I noticed that the delay between the moment of trigger and the moment when the Android OS invoke registered observer to launch the rename service can take more than 5 minutes.</p>
+<p>Sometime I noticed that the service trigger must be registered again, by disable it and then selecting back.</p>
+<p>That's why I do not consider any of available trigger reliable because of that I suggest to create on the Home Screen a shortcut to launch manually the rename service directly when is necessary or as a backup. More details on <b>DSC Rename service shortcut</b> section.</p>
 
 <h3>Enable video file rename</h3>
 <p>The option offer the possibility to rename the video files too.</p>
@@ -111,9 +113,10 @@
 
 <h3>Send debbuging logs</h3>
 <p>Use this option to send some debugging information related with this application to me, it is important that the mail to contain an archive attached and a description with the issues in English or Romanian language.</p>
+<p>The logs will contain the mount paths to identify which partitions are available on your device and most important the content of <a href="https://developer.android.com/reference/android/provider/MediaStore.Images.html">MediaStore.Images</a> and <a href="https://developer.android.com/reference/android/provider/MediaStore.Video.html">MediaStore.Video</a> databases which contain meta data for all available images and clips, mostly to identify what are the file names patterns.</p>
 
 <h3>Donate</h3>
-<p>You can make a donation if you appreciate the application by installing the Pro version, which actually act like a key, it is not an application.</p>
+<p>You can make a donation if you appreciate the application by installing the <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro">Pro version</a>, which actually act like a key, it is not an application.</p>
 <p>The donation is not required, the application is fully working in free version too.</p>
 
 <h3>Application sources</h3>
@@ -122,5 +125,8 @@
 <h3>Translations and suggestions</h3>
 <p>Any translation and language suggestion is welcomed, you can use online page: <a href="https://www.localize.im/v/pn">Localize: DSC Auto Rename</a> for translations or send emails with any language suggestions.</p>
 <p>This help page source is available online at the address: <a href="https://github.com/ciubex/dscautorename/blob/master/assets/help-en.html">help-en.html</a>.</p>
+
+<h3>User feedback</h3>
+<p>I appreciate any <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play feedback</a>, but to be honest if you have issues I prefer to contact me directly using the "Send debbuging logs" option using this option I will be aware about any issues, to find possible solutions or workarounds.</p>
 
 </body>
