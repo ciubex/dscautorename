@@ -277,7 +277,7 @@ public class Utilities {
 
         private static String getFilePath(List<String> fileList, String uuid) {
             for (String path : fileList) {
-                if (path.endsWith(uuid)) {
+                if (path.endsWith("/" + uuid)) {
                     return path;
                 }
             }
@@ -316,16 +316,29 @@ public class Utilities {
                 if (file.exists()) {
                     lnr = new LineNumberReader(new FileReader(file));
                     while ((line = lnr.readLine()) != null) {
-                        if (line.contains("rw") && !line.contains("runtime") && (line.contains("primary") || line.contains("fsuid")  || line.contains("emulated") || line.contains("removable"))) {
-                            String[] parts = line.split(" ");
-                            if (parts.length > 5) {
-                                String mountPoint = parts[1];
-                                File mountPath = new File(mountPoint);
-                                if (!mountPath.isHidden()) {
-                                    fileList.add(mountPoint);
+                        String[] parts = line.split(" ");
+                        if (parts.length > 5) {
+                            String mountPoint = parts[1];
+                            List<String> pathList = getListOfStrings(mountPoint, "/");
+                            // check the paths
+                            if (pathList.contains("runtime") || pathList.contains("knox")) {
+                                continue;
+                            }
+                            String partitionType = parts[2];
+                            // check partition type
+                            if ("fuse".equals(partitionType) ||
+                                    "sdcardfs".equals(partitionType) ||
+                                    "vfat".equals(partitionType)) {
+                                List<String> options = getListOfStrings(parts[3], ",");
+                                // check the options
+                                if (options.contains("rw")) {
+                                    File mountPath = new File(mountPoint);
+                                    if (!mountPath.isHidden()) {
+                                        fileList.add(mountPoint);
+                                    }
+                                    Log.d(TAG, line);
                                 }
                             }
-                            Log.d(TAG, line);
                         }
                     }
                 } else {
@@ -338,6 +351,22 @@ public class Utilities {
                 doClose(lnr);
             }
             return fileList;
+        }
+
+        /**
+         * Obtain a list of items from an string which have a character as an separator.
+         *
+         * @param original  The original string, e.g. /mnt/media_rw/161B-1018
+         * @param separator The separator character, e.g. /
+         * @return The list of items, e.g. [mnt,media_rw,161B-1018]
+         */
+        public static List<String> getListOfStrings(String original, String separator) {
+            String[] arr = original.split(separator);
+            List<String> list = new ArrayList<String>(arr.length);
+            for (String item : arr) {
+                list.add(item.trim());
+            }
+            return list;
         }
 
         private static List<MountVolume> prepareMountVolumes(Object mountService, Object[] arr, Context context) {

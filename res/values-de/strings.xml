@@ -23,8 +23,10 @@
 	<string name="confirmation_rename_dialog_desc">Zeige oder verstecke den Bestätigungsdialog, wenn der DSC Rename Service von einem Lesezeichen aus gestartet wird.</string>
 	<string name="confirmation_rename_question">Soll das Umbenennen manuell gestartet werden?</string>
 	<string name="confirmation_rename_question_v19">Wenn sich die gewählte(n) Datei(en) nicht in einem ausgewähltem Verzeichnis befinden, dann wird die Umbenennung aufgrund der Android Sicherheitsbeschränkungen nicht vollständig durchgeführt.\nMöchtest du den Rename Service manuell starten?</string>
+	<string name="copy">Dupliziere</string>
 	<string name="create_rename_shortcut">Erstelle DSC Rename Service Lesezeichen</string>
 	<string name="create_rename_shortcut_desc">Erstelle ein DSC Rename Service Lesezeichen auf dem Home Screen, um das Umbenennen manuell starten zu können.</string>
+	<string name="create_rename_shortcut_v26_error">Erstellung der Verknüfung zum DSC Rename Service nicht möglich. Bitte versuche die manuell erstellte Verknüpfung zu löschen!</string>
 	<string name="define_file_name_pattern_desc">Das Dateinamenmuster, welches zur Suche nach Dateien die umbenannt werden sollen genutzt wird (\"DSC_*.JPG\" or \"MOV_*.MP4\"), z.B. %s \nWildcards * und ? können auch genutzt werden.</string>
 	<string name="define_file_name_pattern_title">Dateinamenmuster definieren</string>
 	<string-array name="delay_units_labels">
@@ -47,6 +49,12 @@
 	<string name="enable_title">Autom. Umbenennen einschalten.</string>
 	<string name="error_rename_file">Die Datei % konnte nicht umbenannt werden!</string>
 	<string name="error_rename_file_no_read_write">Datei kann nicht gelesen oder geschrieben werden</string>
+	<string name="export_import_settings_group">Export / Import Einstellungen</string>
+	<string name="export_settings_confirmation">Möchtest du die Anwendungseinstellungen exportieren?</string>
+	<string name="export_settings_desc">Exportiere Einstellungen in ein lokales Verzeichnis</string>
+	<string name="export_settings_error">Export zu einem lokalem Verzeichnis nicht möglich.\nError: %s</string>
+	<string name="export_settings_success">Einstellungen erfolgreich exportiert in Datei: %s</string>
+	<string name="export_settings_title">Einstellungen exportieren</string>
 	<string name="file_extension_note">Die Dateierweiterung wird während des Prozesses erstellt.</string>
 	<string name="file_name_pattern_dialog_bottom">Beispiel für das alte Dateinamenmuster:\n\t %1$s\nBeispiel für umbenannte Datei: \n\t %2$s</string>
 	<string name="file_name_pattern_dialog_from">Original Dateinamenmuster:</string>
@@ -78,15 +86,25 @@
 	<string name="folder_list_no_selection">Wähle mindestens einen Ordner zum Löschen aus!</string>
 	<string name="folder_list_title">Zu scannende Verzeichnisse</string>
 	<string name="general_settings">Einstellungen</string>
+	<string name="help_desc">Einige Hilfestellungen</string>
+	<string name="help_title">Hilfe</string>
+	<string name="import_settings_confirmation">Möchtest Du die Anwendungseinstellungen importieren? Existierende Einstellungen werden überschrieben. Die App wird nach dem Import neu starten.</string>
+	<string name="import_settings_desc">Importiere Einstellungen von einem lokalen Verzeichnis. Existierende Einstellungen werden überschrieben.</string>
+	<string name="import_settings_desc_v21">Importiere Einstellungen von einem lokalen Verzeichnis, existierende Einstellungen werden überschrieben. Es werden nicht alle Pfade importiert, Sie sollten Pfade manuell überprüfen, um Zugriff von Android OS zu erhalten.</string>
+	<string name="import_settings_error">Die Einstellungen können nicht aus der Datei importiert werden.\nError: %s</string>
+	<string name="import_settings_title">Importiere Einstellungen</string>
 	<string name="invoke_media_scanner_for_file_desc">Medien Scanner auffordern nach umbenannten Dateien zu suchen. Nutze dieses mit Vorsicht, normalerweise sollte diese Option nicht gewählt werden! Hiermit wird die Aktualisierung des MTP Caches erzwungen, was leider nicht immer funktioniert!</string>
 	<string name="invoke_media_scanner_for_file_title">Medien Scanner auffordern</string>
 	<string name="license_desc">Lizenzdetails für Open Source Software</string>
 	<string name="license_title">Open Source Lizenz</string>
 	<string name="list_info_press">Hinzufügen oder Löschen von Dateien</string>
 	<string name="loading_wait">Lade - Bitte warten&#8230;.</string>
-	<string name="manually_file_rename_count_0">Keine Datei wurde umbenannt.</string>
+	<string name="localization_translator_name">Andreas Hauff</string>
+	<string name="manually_file_rename_count_0">Keine Datei wurde umbenannt. Bitte überprüfe :\n- wo Kameradateien gespeichert sind und wählen Sie (nocheinmal) diesen Ordner ;\n- definierte Dateinamensmuster!</string>
 	<string name="manually_file_rename_count_1">Eine Datei wurde umbenannt.</string>
 	<string name="manually_file_rename_count_more">%d Dateien wurden umbenannt.</string>
+	<string name="manually_file_rename_minus_1">Die Anwendung konnte eine Datei aufgrund von Ordnerzugriffsrechten nicht umbenennen, bitte wähle erneut Ordner aus, in denen Daten gespeichert sind.</string>
+	<string name="manually_file_rename_minus_more">Die Anwendung konnte %d Dateien nicht umbenennen. Wähle erneut Ordner aus, in denen sich Dateien befinden.</string>
 	<string name="manually_file_rename_progress_1">%1$d von %2$d Dateien wurden umbenannt.</string>
 	<string name="manually_file_rename_progress_more">%1$d von %2$d Dateien sind umbenannt.</string>
 	<string name="manually_service_running">Manuelles Umbenennen läuft</string>
@@ -103,8 +121,12 @@
 	<string name="obtain_logs">Erstelle Logdatei für Fehlerbericht</string>
 	<string name="other_settings">Andere Einstellungen</string>
 	<string name="please_wait">Bitte warten&#8230;</string>
+	<string name="privacy_policy">Datenschutzbestimmungen</string>
+	<string name="privacy_policy_desc">Siehe Datenschutzbestimmungen</string>
 	<string name="remove_rename_shortcut">Entferne DSC Rename Service Lesezeichen</string>
 	<string name="remove_rename_shortcut_desc">DSC Rename Service Lesezeichen vom Home Screen entfernen</string>
+	<string name="remove_rename_shortcut_v26">Deaktiviere die DSC Rename Service Verknüpfung</string>
+	<string name="remove_rename_shortcut_v26_desc">Deaktiviere die DSC Rename Service Verknüpfung von deinem Startbildschirm. Wenn Du diese wieder erstellen möchtest, entferne das vorhandene Symbol von dem Startbildschirm.</string>
 	<string name="rename_file_delay_desc">Umbenennen der nächsten Datei nach</string>
 	<string name="rename_file_delay_title">Verzögerung der Umbenennung</string>
 	<string name="rename_file_using_desc">Datum und Zeit wann die Datei das letzte Mal modifiziert wurde.</string>
@@ -140,8 +162,13 @@
 		<item>Deaktiviert</item>
 		<item>Kamera Ereignisse : Bilder oder Videos aufgenommen.</item>
 		<item>Medien Überwachung: Bilder oder Videos wurden gespeichert.</item>
-		<item>Datei Überwachung: Überwache die gewählten Verzeichnisse, ob Dateien hinzugefügt werden. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</item>
+		<item>Datei Überwachung: Überwache die gewählten Verzeichnisse, ob Dateien hinzugefügt werden. Es muss \\"Umbenennen innerhalb eines Verzeichnisses\\" und mindestens ein Verzeichnis in \\"Wähle ein Verzeichnis\\" gewählt sein.</item>
 		<item>Ein permanent laufender Dienst, um von der Kamera-App gesendete Ereignisse zu registrieren.</item>
+	</string-array>
+	<string-array name="service_type_labels_v21">
+		<item>Deaktiviert</item>
+		<item>Medieninhaltsbeobachter: Bilder oder Videos werden gespeichert.</item>
+		<item>Dateibeobachter: Beobachtet, ob dem gewählten Verzeichnis Dateien hinzugefügt wurden. Du musst \\"Umbennen innerhalb eines Verzeichnisses\\" wählen und mindestens ein Verzeichnis unter \\"Wähle ein Verzeichnis\\"</item>
 	</string-array>
 	<string name="thank_you_desc">Danke, dass Dir meine Arbeit gefällt und Du die Pro Version gekauft hast.</string>
 	<string name="thank_you_title">Danke für die Spende!</string>

@@ -196,7 +196,7 @@ public class DSCApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-		mBackupManager = new BackupManager(getApplicationContext());
+		mBackupManager = new BackupManager(this);
 		initLocale();
 		mSdkInt = android.os.Build.VERSION.SDK_INT;
 		int serviceType = getServiceType();

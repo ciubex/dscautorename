@@ -123,7 +123,7 @@
         <provider
             android:name="ro.ciubex.dscautorename.provider.CachedFileProvider"
             android:authorities="ro.ciubex.dscautorename.provider"
-            android:exported="false"
+            android:exported="true"
             android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
