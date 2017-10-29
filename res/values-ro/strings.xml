@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 	<string name="about_section">Despre</string>
 	<string name="add">Adauga</string>
@@ -25,7 +25,7 @@
 	<string name="copy">Copie</string>
 	<string name="create_rename_shortcut">Creaza scurtatura pentru serviciul de redenumire DSC rename</string>
 	<string name="create_rename_shortcut_desc">Creaza-ti o scurtatura pentru lansarea manuala a serviciului de redenumit fisiere.</string>
-	<string name="create_rename_shortcut_v26_error">Imposibil sa fie creat shortcut pentru lansarea serviciului de redenumire. Incearca sa stergi manual shortcutul existent.</string>
+	<string name="create_rename_shortcut_v26_error">Imposibil sa fie creat shortcut pentru lansarea serviciului de redenumire. Incearca sa stergi manual shortcutul existent!</string>
 	<string name="define_file_name_pattern_desc">Modelele de nume de fisiere folosite pentru redenumiri (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nPot fi folosite semnele * si ? de asemenea.</string>
 	<string name="define_file_name_pattern_title">Modele de nume de fisiere</string>
 	<string-array name="delay_units_labels">
@@ -47,10 +47,10 @@
 	<string name="enable_folder_scanning_title">Scaneaza fisiere doar in directoare.</string>
 	<string name="enable_title">Declansator serviciu redenumire.</string>
 	<string name="error_rename_file">Fisierul %s nu poate fi redenumit!</string>
-	<string name="error_rename_file_no_read_write">Fisierul nu poate fi citit sau scris.</string>
+	<string name="error_rename_file_no_read_write">Fisierul nu poate fi citit sau scris</string>
 	<string name="export_import_settings_group">Exportare / importare setari</string>
 	<string name="export_settings_confirmation">Doresti exportarea seterilor aplicatiei?</string>
-	<string name="export_settings_desc">Exporta setarile intr-un director local</string>
+	<string name="export_settings_desc">Exporta setarile intr-un director local.</string>
 	<string name="export_settings_error">A aparut o eroare la exportarea setarilor! Eroare: %s</string>
 	<string name="export_settings_success">Setarile au fost salvate in fisierul: %s</string>
 	<string name="export_settings_title">Exporta setarile</string>
@@ -90,10 +90,10 @@
 	<string name="import_settings_desc_v21">Importa setarile dintr-un fisier aflat intr-un director local. Nu toate directoarele vor fi importate, ar trebui ca manual sa se verifice din nou directoarele selectate.</string>
 	<string name="import_settings_error">A aparut o eroare la importarea setarilor din fisier.\nEroare: %s</string>
 	<string name="import_settings_title">Importa setarile</string>
-	<string name="invoke_media_scanner_for_file_desc">Invoca Media Scanner pentru a scana fisierul redenumit, utilizeaza aceasta optiune cu grija, in mod normal nu ar trebui activata! Utilizeaza aceasta optiune pentru a forta actualizarea cache-ului MTP-ului, insa din pacate nu intotdeauna functioneaza.</string>
+	<string name="invoke_media_scanner_for_file_desc">Invoca Media Scanner pentru a scana fisierul redenumit, utilizeaza aceasta optiune cu grija, in mod normal nu ar trebui activata! Utilizeaza aceasta optiune pentru a forta actualizarea cache-ului MTP, insa din pacate nu intotdeauna functioneaza.</string>
 	<string name="invoke_media_scanner_for_file_title">Invoca Media Scanner</string>
 	<string name="list_info_press">Adauga sau sterge elemente.</string>
-	<string name="loading_wait">Se incarca&#8230;</string>
+	<string name="loading_wait">Se incarca…</string>
 	<string name="manually_file_rename_count_0">Nici un fisier nu a fost redenumit. Verificati:\n- unde sunt salvate fisierele aplicatiei de camera;\n- definitiile numelor de fisiere!</string>
 	<string name="manually_file_rename_count_1">Un fisier a fost redenumit.</string>
 	<string name="manually_file_rename_count_more">%d fisiere au fost redenumite.</string>
@@ -102,7 +102,7 @@
 	<string name="manually_file_rename_progress_1">%1$d fisier din %2$d a fost redenumit.</string>
 	<string name="manually_file_rename_progress_more">%1$d fisiere din %2$d au fost redenumite.</string>
 	<string name="manually_service_running">Ruleaza serviciul de redenumit fisiere.</string>
-	<string name="manually_start_desc">Porneste manual serviciul de redenumit fisiere.</string>
+	<string name="manually_start_desc">Porneste manual serviciul de redenumit fisiere</string>
 	<string name="manually_start_title">Porneste manual serviciul de redenumire</string>
 	<string name="minutes_unit">minute</string>
 	<string name="move_file_enable">Muta fisierul redenumit in directorul selectat mai jos.</string>
@@ -112,9 +112,9 @@
 	<string name="no">Nu</string>
 	<string name="no_file_name_pattern">Nici un model definit</string>
 	<string name="no_folders">Nici un director</string>
-	<string name="obtain_logs">Genereaza fisierele de log-uri pentru raport&#8230;</string>
+	<string name="obtain_logs">Genereaza fisierele de log-uri pentru raport…</string>
 	<string name="other_settings">Alte setari</string>
-	<string name="please_wait">Te rog asteata&#8230;</string>
+	<string name="please_wait">Te rog asteata…</string>
 	<string name="privacy_policy">Politica de confidentialitate</string>
 	<string name="privacy_policy_desc">Vezi termenii politicii de confidentialitate</string>
 	<string name="remove_rename_shortcut">Sterge scurtatura de lansare a serviciului de redenumire fisiere.</string>
@@ -134,7 +134,7 @@
 	<string name="rename_service_start_delay_title">Intarzierea declansarii serviciului de redenumire</string>
 	<string name="rename_shortcut">Scurtatura pentru serviciul DSC Rename</string>
 	<string name="rename_shortcut_name">Serviciu de redenumire DSC rename</string>
-	<string name="rename_video_enabled_desc">Prin selectarea acestei optiuni sunt redenumite si filmele. Altfel sunt redenumite doar pozele</string>
+	<string name="rename_video_enabled_desc">Prin selectarea acestei optiuni sunt redenumite si filmele, altfel sunt redenumite doar pozele</string>
 	<string name="rename_video_enabled_title">Redenumeste inclusiv filmele</string>
 	<string name="request_permissions_confirmation">Solicitati acordarea permisiunilor necesare aplicatiei?</string>
 	<string name="request_permissions_desc">Atinge aceasta optiune pentru a solicita acordarea permisiunilor necesare aplicatiei: Camera (folosit pentru capturarea noilor fisiere media), Storage (folosit pentru redenumirea fisierelor).</string>
@@ -146,8 +146,8 @@
 	<string name="send_debug_confirmation">Doresti sa trimiti un raport pentru investigare?\nAplicatia folosita in mod normal pentru a trimite mesaje va trimite un e-mail avand atasate niste fisiere folosite pentru investigarea posibilelor probleme. Scrie o scurta descriere a problemei intampinate in timpul folosirii aplicatiei.\nMultumesc!</string>
 	<string name="send_debug_desc">Trimite un e-mail cu logurile pentru investigare</string>
 	<string name="send_debug_title">Trimite logurile pentru investigare</string>
-	<string name="send_report">Trimitere raport&#8230;</string>
-	<string name="service_choice_0">Serviciul de redenumire automata este dezactivat.</string>
+	<string name="send_report">Trimitere raport…</string>
+	<string name="service_choice_0">Serviciul de redenumire automata este dezactivat. Nici un fisier nu va fi redenumit.</string>
 	<string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
 	<string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
 	<string name="service_choice_3">Serviciul de redenumire automata este declansat cand sunt adaugate fisiere in directoarele selectate.</string>
