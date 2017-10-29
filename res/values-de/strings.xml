@@ -99,7 +99,6 @@
 	<string name="license_title">Open Source Lizenz</string>
 	<string name="list_info_press">Hinzufügen oder Löschen von Dateien</string>
 	<string name="loading_wait">Lade - Bitte warten&#8230;.</string>
-	<string name="localization_translator_name">Andreas Hauff</string>
 	<string name="manually_file_rename_count_0">Keine Datei wurde umbenannt. Bitte überprüfe :\n- wo Kameradateien gespeichert sind und wählen Sie (nocheinmal) diesen Ordner ;\n- definierte Dateinamensmuster!</string>
 	<string name="manually_file_rename_count_1">Eine Datei wurde umbenannt.</string>
 	<string name="manually_file_rename_count_more">%d Dateien wurden umbenannt.</string>
