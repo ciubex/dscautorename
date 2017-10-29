@@ -263,6 +263,6 @@
     <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
     <string name="thank_you_title">Thank you for donation!</string>
     <string name="ui_settings">UI settings</string>
-    <string name="update_message_v95" translatable="false">Please read Help section from the bottom of application settings!</string>
+    <string name="update_message_v96" translatable="false">Please read Help section from the bottom of application settings!</string>
     <string name="yes">Yes</string>
 </resources>

@@ -331,6 +331,9 @@ public class Utilities {
                                     "vfat".equals(partitionType)) {
                                 List<String> options = getListOfStrings(parts[3], ",");
                                 // check the options
+                                if (options.contains("relatime")) {
+                                    continue;
+                                }
                                 if (options.contains("rw")) {
                                     File mountPath = new File(mountPoint);
                                     if (!mountPath.isHidden()) {
