@@ -1,42 +1,38 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<resources><string name="app_name">DSC ناولێنانەوەی خۆکار</string>
-
-    <string name="general_settings">ڕێکخستنە گشتییەکان</string>
-    <string name="ui_settings">ڕێکخستنەکانی UI</string>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<resources>
+    <string name="about_section">دەربارە</string>
+    <string name="add">زیادکردن</string>
+    <string name="app_theme_desc">دانانی سێمی نەرمەواڵە: ڕووناک یان تاریک.</string>
     <string name="app_theme_title">سێمی نەرمەواڵە:</string>
     <string name="app_theme_title_param">سێمی نەرمەواڵە: %s</string>
-    <string name="app_theme_desc">دانانی سێمی نەرمەواڵە: ڕووناک یان تاریک.</string>
-    <string name="service_choice_0">خزمەتگوزاری ناولێنانەوەی خۆکار ناچالاکە.</string>
-    <string name="rename_service_start_delay_desc">دەستپێکردنی خزمەتگوزاری ناولێنانەوە پاش</string>
-    <string name="seconds_unit">چرکە</string>
-    <string name="minutes_unit">خولەک</string>
-
-    <string name="rename_video_enabled_title">چالاککردنی ناولێنانەوەی پەڕگەی ڤیدیۆیی</string>
-    <string name="filter_folder_title">بوخچەیەک دیاربکە.</string>
-    <string name="thank_you_title">سوپاس بۆ بەخشینەکت!</string>
-    <string name="donate_title">پێشکەشکردن</string>
-    <string name="license_title">مۆڵەتی سەرچاوەکراوە</string>
-    <string name="license_desc">وردەکاری مۆڵەت بۆ نەرمەکاڵایی سەرچاوەکراوە</string>
-    <string name="send_debug_desc">ئیمەیڵێک بنێرە لەگەڵ پەڕگەی هەڵەدۆزین</string>
     <string name="build_version_title">وەشانی بونیاتنان</string>
-    <string name="about_section">دەربارە</string>
-    <string name="error_rename_file">پەڕگەکە %s نەتوانرا ناولێنانەوەی بۆ بکرێت!</string>
-    <string name="report_body">"پێناسە: "</string>
-    <string name="send_report">ناردنی هەواڵلێدان…</string>
-
-    <string name="change_language_title">زمان: زمانی نەرمەواڵە</string>
-    <string name="change_language_desc">پێویستە نەرمەواڵەکە دابخەی پاشان بیکەیەوە بۆ جێبەجێبوونی گۆڕینی زمان.</string>
-    <string name="file_rename_count_title">ژمارەی ئەو پەڕگانەی ناولێنانەوەی بۆ کراوە: %d</string>
-    <string name="ok">باشە</string>
-    <string name="yes">بەڵێ</string>
-    <string name="no">نەخێر</string>
     <string name="cancel">هەڵوەشاندنەوە</string>
+    <string name="change_language_desc">پێویستە نەرمەواڵەکە دابخەی پاشان بیکەیەوە بۆ جێبەجێبوونی گۆڕینی زمان.</string>
+    <string name="change_language_title">زمان: زمانی نەرمەواڵە</string>
     <string name="close">داخستن</string>
-    <string name="add">زیادکردن</string>
     <string name="delete">سڕینەوە</string>
-    <string name="please_wait">تکایە چاوەڕێکە…</string>
-    <string name="loading_wait">بارکردن…</string>
-    <string name="no_folders">هیچ بوخچەیەک نییە</string>
-    <string name="list_info_press">زیادکردن یان سڕینەوەی بڕگە.</string>
     <string name="do_not_show_again">دووبارە پیشانی مەدەوە</string>
-    </resources>
+    <string name="donate_title">پێشکەشکردن</string>
+    <string name="error_rename_file">پەڕگەکە %s نەتوانرا ناولێنانەوەی بۆ بکرێت!</string>
+    <string name="file_rename_count_title">ژمارەی ئەو پەڕگانەی ناولێنانەوەی بۆ کراوە: %d</string>
+    <string name="filter_folder_title">بوخچەیەک دیاربکە.</string>
+    <string name="general_settings">ڕێکخستنە گشتییەکان</string>
+    <string name="license_desc">وردەکاری مۆڵەت بۆ نەرمەکاڵایی سەرچاوەکراوە</string>
+    <string name="license_title">مۆڵەتی سەرچاوەکراوە</string>
+    <string name="list_info_press">زیادکردن یان سڕینەوەی بڕگە.</string>
+    <string name="loading_wait">بارکردن…</string>
+    <string name="minutes_unit">خولەک</string>
+    <string name="no">نەخێر</string>
+    <string name="no_folders">هیچ بوخچەیەک نییە</string>
+    <string name="ok">باشە</string>
+    <string name="please_wait">تکایە چاوەڕێکە…</string>
+    <string name="rename_service_start_delay_desc">دەستپێکردنی خزمەتگوزاری ناولێنانەوە پاش</string>
+    <string name="rename_video_enabled_title">چالاککردنی ناولێنانەوەی پەڕگەی ڤیدیۆیی</string>
+    <string name="seconds_unit">چرکە</string>
+    <string name="send_debug_desc">ئیمەیڵێک بنێرە لەگەڵ پەڕگەی هەڵەدۆزین</string>
+    <string name="send_report">ناردنی هەواڵلێدان…</string>
+    <string name="service_choice_0">خزمەتگوزاری ناولێنانەوەی خۆکار ناچالاکە.</string>
+    <string name="thank_you_title">سوپاس بۆ بەخشینەکت!</string>
+    <string name="ui_settings">ڕێکخستنەکانی UI</string>
+    <string name="yes">بەڵێ</string>
+</resources>

@@ -22,9 +22,8 @@ android {
         applicationId "ro.ciubex.dscautorename"
         minSdkVersion 9
         targetSdkVersion 26
-        versionCode 93
-        versionName "6.0.2"
-        project.ext.set("archivesBaseName", "DSCAutoRename.apk");
+        versionCode 95
+        versionName "6.0.3"
     }
 
     sourceSets {
@@ -47,6 +46,11 @@ android {
         release {
             lintOptions {
                 disable 'MissingTranslation'
+            }
+            android.applicationVariants.all { variant ->
+                variant.outputs.all {
+                    outputFileName = "DSCAutoRename.apk"
+                }
             }
         }
         debug {
