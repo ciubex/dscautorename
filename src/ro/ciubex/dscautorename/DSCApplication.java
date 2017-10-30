@@ -575,10 +575,22 @@ public class DSCApplication extends Application {
 	private void startFileRenameService() {
 		logD(TAG, "startFileRenameService");
 		try {
-			startService(new Intent(this, FileRenameService.class));
+			if (mSdkInt >= Build.VERSION_CODES.O) {
+				startForegroundServiceAPI26();
+			} else { // old service start
+				startService(new Intent(this, FileRenameService.class));
+			}
 		} catch (Exception e) {
 			logE(TAG, "startFileRenameService: " + e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * Starting a foreground service is required from Android O.
+	 */
+	@TargetApi(Build.VERSION_CODES.O)
+	private void startForegroundServiceAPI26() {
+		startForegroundService(new Intent(this, FileRenameService.class));
 	}
 
 	/**

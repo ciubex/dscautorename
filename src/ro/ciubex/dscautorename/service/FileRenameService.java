@@ -18,12 +18,20 @@
  */
 package ro.ciubex.dscautorename.service;
 
+import android.annotation.TargetApi;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.RequiresApi;
 
 import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.task.FileRenameThread;
 
 /**
@@ -33,9 +41,15 @@ import ro.ciubex.dscautorename.task.FileRenameThread;
  */
 public class FileRenameService extends Service implements FileRenameThread.Listener {
     private static final String TAG = FileRenameService.class.getName();
+    public static final String APP_CHANNEL_ID = "ro.ciubex.dscautorename.service.FileRenameService";
+    public static final String APP_CHANNEL_NAME = "DSC Auto Rename";
+
     private DSCApplication mApplication;
     private FileRenameThread mFileRenameThread;
     private boolean mStarted;
+    private NotificationManager mManager;
+    private Notification mNotification;
+    private static final int NOTIFICATION_ID = 84555;
 
     /**
      * Called by the system when the service is first created.
@@ -47,7 +61,29 @@ public class FileRenameService extends Service implements FileRenameThread.Liste
         if (appCtx instanceof DSCApplication) {
             mApplication = (DSCApplication) appCtx;
             mFileRenameThread = new FileRenameThread(mApplication, this, false, null);
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                createChannels();
+            }
         }
+    }
+
+    /**
+     * Create a notification channel, needed to attach a notification in Android O.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void createChannels() {
+        NotificationChannel androidChannel = new NotificationChannel(APP_CHANNEL_ID,
+                APP_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+        // Sets whether notifications posted to this channel should display notification lights
+        androidChannel.enableLights(true);
+        // Sets whether notification posted to this channel should vibrate.
+        androidChannel.enableVibration(true);
+        // Sets the notification light color for notifications posted to this channel
+        androidChannel.setLightColor(Color.BLUE);
+        // Sets whether notifications posted to this channel appear on the lockscreen or not
+        androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+
+        getManager().createNotificationChannel(androidChannel);
     }
 
     /**
@@ -78,10 +114,58 @@ public class FileRenameService extends Service implements FileRenameThread.Liste
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (!mStarted) {
             mStarted = true;
-            new Thread(mFileRenameThread).start();
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startNotificationForAPI26();
+            }
+            startRenameThread();
             mApplication.logD(TAG, "Service started!");
+
         }
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    /**
+     * Start foreground service and put a notification up, as a requirement for Android O.
+     */
+    @TargetApi(Build.VERSION_CODES.O)
+    private void startNotificationForAPI26() {
+        startForeground(NOTIFICATION_ID, getNotification());
+    }
+
+    /**
+     * Get the notification manager.
+     *
+     * @return The notification manager.
+     */
+    private NotificationManager getManager() {
+        if (mManager == null) {
+            mManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+        return mManager;
+    }
+
+    /**
+     * Build the notification to be used for this foreground service.
+     * @return The notification created.
+     */
+    @TargetApi(Build.VERSION_CODES.O)
+    private Notification getNotification() {
+        if (mNotification == null) {
+            Notification.Builder builder = new Notification.Builder(getApplicationContext(), APP_CHANNEL_ID)
+                    .setContentTitle(getString(R.string.app_name))
+                    .setContentText(getString(R.string.rename_service_started_foreground))
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setAutoCancel(true);
+            mNotification = builder.build();
+        }
+        return mNotification;
+    }
+
+    /**
+     * Start the rename thread.
+     */
+    private void startRenameThread() {
+        new Thread(mFileRenameThread).start();
     }
 
     /**

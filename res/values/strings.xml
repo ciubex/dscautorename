@@ -213,6 +213,7 @@
     </string-array>
     <string name="rename_service_start_delay_desc">Start rename service after</string>
     <string name="rename_service_start_delay_title">Rename service start delay</string>
+    <string name="rename_service_started_foreground">Rename service started in foreground…</string>
     <string name="rename_shortcut">DSC Rename service shortcut</string>
     <string name="rename_shortcut_name">DSC rename service</string>
     <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
