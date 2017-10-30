@@ -22,7 +22,7 @@ android {
         applicationId "ro.ciubex.dscautorename"
         minSdkVersion 9
         targetSdkVersion 26
-        versionCode 97
+        versionCode 98
         versionName "6.0.5"
     }
 
