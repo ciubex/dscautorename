@@ -73,16 +73,11 @@ public class FileRenameService extends Service implements FileRenameThread.Liste
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void createChannels() {
         NotificationChannel androidChannel = new NotificationChannel(APP_CHANNEL_ID,
-                APP_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
-        // Sets whether notifications posted to this channel should display notification lights
-        androidChannel.enableLights(true);
-        // Sets whether notification posted to this channel should vibrate.
-        androidChannel.enableVibration(true);
-        // Sets the notification light color for notifications posted to this channel
+                APP_CHANNEL_NAME, NotificationManager.IMPORTANCE_NONE);
+        androidChannel.enableLights(false);
+        androidChannel.enableVibration(false);
         androidChannel.setLightColor(Color.BLUE);
-        // Sets whether notifications posted to this channel appear on the lockscreen or not
-        androidChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
-
+        androidChannel.setLockscreenVisibility(Notification.VISIBILITY_SECRET);
         getManager().createNotificationChannel(androidChannel);
     }
 

@@ -34,6 +34,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -155,6 +156,7 @@ public class DSCApplication extends Application {
 	private Messenger mService = null;
 	private boolean mBound;
 	private Intent mCameraRenameService;
+	private AssetManager mAssetManager;
 
 	public static final List<String> FUNCTIONAL_PERMISSIONS = Arrays.asList(
 			PERMISSION_FOR_CAMERA,
@@ -2031,5 +2033,17 @@ public class DSCApplication extends Application {
 			cancelMediaContentJobService(this);
 			registerMediaContentJobService(this);
 		}
+	}
+
+	/**
+	 * Get application assets.
+	 *
+	 * @return Application assets.
+	 */
+	public AssetManager getAppAssets() {
+		if (mAssetManager == null) {
+			mAssetManager = getApplicationContext().getAssets();
+		}
+		return mAssetManager;
 	}
 }

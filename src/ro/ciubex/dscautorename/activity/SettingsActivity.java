@@ -395,7 +395,7 @@ public class SettingsActivity extends PreferenceActivity implements
                 .registerOnSharedPreferenceChangeListener(this);
         mApplication.updateShortcutUpdateListener(this);
         prepareSummaries();
-        checkAndroidVersion();
+        checkUpdateMessage();
         checkForPermissions();
         setColorPreferencesSummary(mEnableScanForFiles, Color.RED);
         checkAllSelectedFolders();
@@ -417,7 +417,7 @@ public class SettingsActivity extends PreferenceActivity implements
     /**
      * Check if is first time when the used open this application
      */
-    private void checkAndroidVersion() {
+    private void checkUpdateMessage() {
         if (mApplication.isFirstTime()) {
             String message = getUpdateMessage();
             if (message != null) { // show the message only if is necessary
@@ -433,7 +433,7 @@ public class SettingsActivity extends PreferenceActivity implements
      */
     private String getUpdateMessage() {
         String message = null;
-        String key = "update_message_v" + mApplication.getVersionCode();
+        String key = "update_message";
         int id = mApplication.getApplicationContext().getResources().getIdentifier(key,
                 "string", mApplication.getPackageName());
         if (id > 0) {
@@ -745,7 +745,7 @@ public class SettingsActivity extends PreferenceActivity implements
         String language = mApplication.getLanguageCode();
         String fileName = "help-"+ language +".html";
         try {
-            if (!Arrays.asList(getResources().getAssets().list("")).contains(fileName)) {
+            if (!Arrays.asList(mApplication.getAppAssets().list("")).contains(fileName)) {
                 fileName = "help-en.html";
             }
         } catch (IOException e) {
@@ -1271,7 +1271,7 @@ public class SettingsActivity extends PreferenceActivity implements
             writer.write("Android version: " + Build.VERSION.SDK_INT +
                     " (" + Build.VERSION.CODENAME + ")" + LS);
             writer.write("Device: " + model + LS);
-            writer.write("Device name: " + DevicesUtils.getDeviceName(getAssets()) + LS);
+            writer.write("Device name: " + DevicesUtils.getDeviceName(mApplication.getAppAssets()) + LS);
             writer.write("App version: " + mApplication.getVersionName() +
                     " (" + mApplication.getVersionCode() + ")" + LS);
             mApplication.writeSharedPreferences(writer);

@@ -33,6 +33,8 @@ import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -49,7 +51,7 @@ public class InfoActivity extends Activity {
 	public static final String MESSAGE = "message";
 	public static final String MESSAGE_CONTENT = "message_content";
 	public static final String HTML_MESSAGE = "html_message";
-	private TextView mInfoTextView;
+	private WebView mInfoTextView;
 	private String mBufferedText;
 	private Button mOkButton;
 	private boolean mIsHtmlMessage;
@@ -124,7 +126,7 @@ public class InfoActivity extends Activity {
 				finish();
 			}
 		});
-		mInfoTextView = (TextView) findViewById(R.id.infoTextView);
+		mInfoTextView = (WebView) findViewById(R.id.infoTextView);
 	}
 
 	/**
@@ -134,12 +136,7 @@ public class InfoActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		if (mBufferedText != null) {
-			if (mIsHtmlMessage) {
-				mInfoTextView.setMovementMethod(LinkMovementMethod.getInstance());
-				mInfoTextView.setText(Html.fromHtml(mBufferedText));
-			} else {
-				mInfoTextView.setText(mBufferedText);
-			}
+			mInfoTextView.loadData(mBufferedText,"text/html","utf-8");
 		}
 	}
 
@@ -151,11 +148,10 @@ public class InfoActivity extends Activity {
 	 * @return The license text
 	 */
 	private String getStreamText(String fileName) {
-		AssetManager assetManager = getAssets();
 		StringBuilder sb = new StringBuilder();
 		InputStream in = null;
 		try {
-			in = assetManager.open(fileName);
+			in = mApplication.getAppAssets().open(fileName);
 			if (in != null && in.available() > 0) {
 				char c;
 				while (in.available() > 0) {
