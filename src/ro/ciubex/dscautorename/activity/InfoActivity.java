@@ -51,10 +51,8 @@ public class InfoActivity extends Activity {
 	public static final String MESSAGE = "message";
 	public static final String MESSAGE_CONTENT = "message_content";
 	public static final String HTML_MESSAGE = "html_message";
-	private WebView mInfoTextView;
+	private WebView mInfoView;
 	private String mBufferedText;
-	private Button mOkButton;
-	private boolean mIsHtmlMessage;
 
 	/**
 	 * The method invoked when the activity is creating
@@ -108,9 +106,6 @@ public class InfoActivity extends Activity {
 			} else if (b.containsKey(MESSAGE_CONTENT)) {
 				mBufferedText = b.getString(MESSAGE_CONTENT);
 			}
-			if (b.containsKey(HTML_MESSAGE)) {
-				mIsHtmlMessage = b.getBoolean(HTML_MESSAGE);
-			}
 		}
 	}
 
@@ -118,15 +113,9 @@ public class InfoActivity extends Activity {
 	 * Initialize controls
 	 */
 	private void initControls() {
-		mOkButton = (Button) findViewById(R.id.okButton);
-		mOkButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
-		mInfoTextView = (WebView) findViewById(R.id.infoTextView);
+		mInfoView = (WebView) findViewById(R.id.infoView);
+		mInfoView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_INSET);
+		mInfoView.setScrollbarFadingEnabled(true);
 	}
 
 	/**
@@ -136,7 +125,7 @@ public class InfoActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		if (mBufferedText != null) {
-			mInfoTextView.loadData(mBufferedText,"text/html","utf-8");
+			mInfoView.loadData(mBufferedText,"text/html","utf-8");
 		}
 	}
 

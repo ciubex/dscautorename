@@ -23,10 +23,12 @@ import android.app.job.JobInfo;
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Build;
 import android.util.Log;
 
 import ro.ciubex.dscautorename.DSCApplication;
+import ro.ciubex.dscautorename.util.Utilities;
 
 /**
  * This is a media content job service which will replace the CameraRenameService for the
@@ -65,8 +67,13 @@ public class MediaContentJobService extends JobService {
         if (appCtx instanceof DSCApplication) {
             DSCApplication application = (DSCApplication) appCtx;
             MediaContentJobService.log(appCtx, Log.DEBUG, TAG, "onStartJob()");
-            if (!application.isRenameFileTaskRunning()) {
-                application.launchAutoRenameTask(null, false, null, true);
+            Uri[] uris = params.getTriggeredContentUris();
+            if (Utilities.isEmpty(uris)) {
+                application.rescheduleMediaContentJobService();
+            } else {
+                if (!application.isRenameFileTaskRunning()) {
+                    application.launchAutoRenameTask(null, false, null, true);
+                }
             }
         }
         return true;
