@@ -705,15 +705,7 @@ public class SettingsActivity extends PreferenceActivity implements
      * Show about pop up dialog message.
      */
     private void onBuildVersion() {
-        String messageContent = mApplication.getApplicationContext().getString(R.string.about_text_translations);
-        messageContent += mApplication.getApplicationContext().getString(R.string.about_text);
-        Intent intent = new Intent(getBaseContext(), InfoActivity.class);
-        Bundle b = new Bundle();
-        b.putInt(InfoActivity.TITLE, R.string.about_section);
-        b.putString(InfoActivity.MESSAGE_CONTENT, messageContent);
-        b.putBoolean(InfoActivity.HTML_MESSAGE, true);
-        intent.putExtras(b);
-        startActivity(intent);
+        displayLocalizedAssets(R.string.about_section, "about");
     }
 
     /**
@@ -742,15 +734,25 @@ public class SettingsActivity extends PreferenceActivity implements
      * Show the help file.
      */
     private void onShowHelpPage() {
+        displayLocalizedAssets(R.string.help_title, "help");
+    }
+
+    /**
+     * Search for localized resources files.
+     *
+     * @param titleId        The title id from the resources.
+     * @param fileNamePrefix The file name prefix used to identify the file form the assets folder.
+     */
+    private void displayLocalizedAssets(int titleId, String fileNamePrefix) {
         String language = mApplication.getLanguageCode();
-        String fileName = "help-"+ language +".html";
+        String fileName = fileNamePrefix + language + ".html";
         try {
             if (!Arrays.asList(mApplication.getAppAssets().list("")).contains(fileName)) {
-                fileName = "help-en.html";
+                fileName = fileNamePrefix + "-en.html";
             }
         } catch (IOException e) {
         }
-        displayAssets(R.string.help_title, fileName);
+        displayAssets(titleId, fileName);
     }
 
     /**

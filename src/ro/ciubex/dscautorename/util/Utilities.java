@@ -321,7 +321,8 @@ public class Utilities {
                             String mountPoint = parts[1];
                             List<String> pathList = getListOfStrings(mountPoint, "/");
                             // check the paths
-                            if (pathList.contains("runtime") || pathList.contains("knox")) {
+                            if (pathList.contains("runtime") ||
+                                    pathList.contains("knox")) {
                                 continue;
                             }
                             String partitionType = parts[2];
@@ -331,7 +332,8 @@ public class Utilities {
                                     "vfat".equals(partitionType)) {
                                 List<String> options = getListOfStrings(parts[3], ",");
                                 // check the options
-                                if (options.contains("relatime")) {
+                                if (options.contains("relatime") ||
+                                        options.contains("dirsync")) {
                                     continue;
                                 }
                                 if (options.contains("rw")) {

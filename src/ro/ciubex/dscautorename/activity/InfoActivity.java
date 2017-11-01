@@ -25,16 +25,19 @@ import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.util.Utilities;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -53,6 +56,7 @@ public class InfoActivity extends Activity {
 	public static final String HTML_MESSAGE = "html_message";
 	private WebView mInfoView;
 	private String mBufferedText;
+	private String mFileName;
 
 	/**
 	 * The method invoked when the activity is creating
@@ -101,8 +105,7 @@ public class InfoActivity extends Activity {
 				resId = b.getInt(MESSAGE);
 				mBufferedText = mApplication.getApplicationContext().getString(resId);
 			} else if (b.containsKey(FILE_NAME)) {
-				bundleValue = b.getString(FILE_NAME);
-				mBufferedText = getStreamText(bundleValue);
+				mFileName = b.getString(FILE_NAME);
 			} else if (b.containsKey(MESSAGE_CONTENT)) {
 				mBufferedText = b.getString(MESSAGE_CONTENT);
 			}
@@ -114,8 +117,16 @@ public class InfoActivity extends Activity {
 	 */
 	private void initControls() {
 		mInfoView = (WebView) findViewById(R.id.infoView);
-		mInfoView.setScrollBarStyle(WebView.SCROLLBARS_INSIDE_INSET);
-		mInfoView.setScrollbarFadingEnabled(true);
+		mInfoView.getSettings().setRenderPriority(WebSettings.RenderPriority.LOW);
+		mInfoView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+		if (Build.VERSION_CODES.HONEYCOMB >= mApplication.getSdkInt()) {
+			initNewControls();
+		}
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	private void initNewControls() {
+		mInfoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 	}
 
 	/**
@@ -124,9 +135,23 @@ public class InfoActivity extends Activity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		if (mBufferedText != null) {
-			mInfoView.loadData(mBufferedText,"text/html","utf-8");
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if (mFileName != null) {
+			mInfoView.loadUrl("file:///android_asset/" + mFileName);
+		} else if (mBufferedText != null) {
+			mInfoView.loadData(mBufferedText,"text/html", "UTF-8");
 		}
+	}
+
+	@Override
+	protected void onPause() {
+		mBufferedText = null;
+		mInfoView.loadUrl("about:blank");
+		super.onPause();
 	}
 
 	/**

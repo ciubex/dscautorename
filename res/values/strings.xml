@@ -1,20 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="about_section">About</string>
-    <string name="about_text">
-        <Data><![CDATA[<br/>For more details, please see <b>Help</b> section or application description page from <a href="https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename">Google Play - DSC Auto Rename</a>.]]></Data>
-    </string>
-    <string name="about_text_translations" translatable="false">
-        <Data><![CDATA[I\'m from Romania and my native language is not English or other languages, only Romanian, if you want to contribute and make better translations follow the link <a href="https://hosted.weblate.org/projects/dsc-auto-rename/strings/">https://hosted.weblate.org/projects/dsc-auto-rename/strings/</a> many thanks to the volunteer\'s which helped me till now!<br/><br/><b>Many thanks for translations to:</b><br/>
-- Chawalit for <b>Thai</b><br/>
-- Runels for 4PDA for <b>Russian</b><br/>
-- Leo Manias and Jonatas for <b>Portuguese</b> (Brazil)<br/>
-- Dave for <b>Spanish</b><br/>
-- Naofumi for <b>Japanese</b><br/>
-- Andreas Hauff for <b>German</b><br/>
-- RobertoDS for <b>Italian</b><br/>
-- Jacsasoft (Medovarszki János) for <b>Hungarian</b><br/><b>Many thanks to Simon W for full support for 4.0.0 version development!</b><br/><br/>]]></Data>
-    </string>
     <string name="add">Add</string>
     <string name="app_name" translatable="false">DSC Auto Rename</string>
     <string name="app_theme_desc">Set the application theme: light or dark.</string>
