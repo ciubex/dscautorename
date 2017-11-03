@@ -174,4 +174,5 @@
     <string name="remove_rename_shortcut_v26">DSC リネームサービスのショートカットを無効にする</string>
     <string name="remove_rename_shortcut_v26_desc">ホーム画面から DSC リネームサービスのショートカットを無効にします。もう一度作成する場合は、ホーム画面から既存のアイコンを手動で削除してください。</string>
     <string name="rename_service_started_foreground">リネームサービスがフォアグラウンドで開始しました…</string>
+    <string name="enable_folder_scanning_confirmation">選択したフォルダーからファイルを有効にしてもよろしいですか? デバイスがroot化されており、メディアコンテンツスキャナーを無効にした場合にのみ、これを有効にしてください。このオプションを有効にした場合、アプリケーションは上記の選択したフォルダーをすべて再帰的にスキャンするため、リソースを消費します!</string>
     </resources>
