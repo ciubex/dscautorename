@@ -4,7 +4,7 @@ This is an Android application which was made to automatically change the name o
 The application is available at Google Play Store - DSC Auto Rename
 link: https://play.google.com/store/apps/details?id=ro.ciubex.dscautorename
 
-#Licence:
+# Licence:
 GNU General Public License v3.0 - GNU Project - Free Software Foundation (FSF)
 Full licence text: https://github.com/ciubex/dscautorename/blob/master/assets/gpl-3.0-standalone.html
 
