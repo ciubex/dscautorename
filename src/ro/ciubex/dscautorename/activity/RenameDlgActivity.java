@@ -20,6 +20,7 @@ package ro.ciubex.dscautorename.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -31,6 +32,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,6 +49,7 @@ import ro.ciubex.dscautorename.util.Utilities;
  */
 public class RenameDlgActivity extends Activity implements
 		RenameFileAsyncTask.Listener {
+	private static final String TAG = RenameDlgActivity.class.getName();
 	private DSCApplication mApplication;
 	private TextView mRenameProgressMessage;
 	private ProgressBar mRenameProgressBar;
@@ -178,28 +181,30 @@ public class RenameDlgActivity extends Activity implements
 	 * This method will show a confirmation popup.
 	 */
 	private void showServiceStartConfirmationDialog() {
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.app_name)
-				.setMessage(mApplication.getSdkInt() > 18 ?
-						R.string.confirmation_rename_question_v19
-						: R.string.confirmation_rename_question)
-				.setIcon(android.R.drawable.ic_dialog_info)
-				.setPositiveButton(R.string.yes,
-						new DialogInterface.OnClickListener() {
+		if (!isFinishing()) {
+			new AlertDialog.Builder(RenameDlgActivity.this)
+					.setTitle(R.string.app_name)
+					.setMessage(mApplication.getSdkInt() > 18 ?
+							R.string.confirmation_rename_question_v19
+							: R.string.confirmation_rename_question)
+					.setIcon(android.R.drawable.ic_dialog_info)
+					.setPositiveButton(R.string.yes,
+							new DialogInterface.OnClickListener() {
 
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								doStartRenameService();
-							}
-						})
-				.setNegativeButton(R.string.no,
-						new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+													int whichButton) {
+									doStartRenameService();
+								}
+							})
+					.setNegativeButton(R.string.no,
+							new DialogInterface.OnClickListener() {
 
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								doFinish();
-							}
-						}).show();
+								public void onClick(DialogInterface dialog,
+													int whichButton) {
+									doFinish();
+								}
+							}).show();
+		}
 	}
 
 	/**
@@ -282,19 +287,23 @@ public class RenameDlgActivity extends Activity implements
 						mApplication.getApplicationContext().getString(R.string.manually_file_rename_minus_more, (count * -1));
 				break;
 		}
-		AlertDialog.Builder dialog = new AlertDialog.Builder(this)
-				.setTitle(R.string.app_name)
-				.setMessage(message)
-				.setIcon(android.R.drawable.ic_dialog_alert)
-				.setNeutralButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
+		if (!isFinishing()) {
+			AlertDialog.Builder dialog = new AlertDialog.Builder(RenameDlgActivity.this)
+					.setTitle(R.string.app_name)
+					.setMessage(message)
+					.setIcon(android.R.drawable.ic_dialog_alert)
+					.setNeutralButton(R.string.ok,
+							new DialogInterface.OnClickListener() {
 
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								doFinish();
-							}
-						});
-		dialog.show();
+								public void onClick(DialogInterface dialog,
+													int whichButton) {
+									dialog.dismiss();
+								}
+							});
+			if (!isFinishing()) {
+				dialog.show();
+			}
+		}
 	}
 
 }

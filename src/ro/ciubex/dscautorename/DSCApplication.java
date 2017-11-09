@@ -111,7 +111,7 @@ public class DSCApplication extends Application {
 	private static final String KEY_RENAME_SERVICE_START_CONFIRMATION = "hideRenameServiceStartConfirmation";
 	private static final String KEY_FILE_NAME_FORMAT = "fileNameFormat";
 	private static final String KEY_FILE_NAME_SUFFIX_FORMAT = "fileNameSuffixFormat";
-	private static final String KEY_RENAME_VIDEO_ENABLED = "renameVideoEnabled";
+	public static final String KEY_RENAME_VIDEO_ENABLED = "renameVideoEnabled";
 	public static final String KEY_ORIGINAL_FILE_NAME_PATTERN = "originalFileNamePattern";
 	private static final String KEY_FILE_RENAME_COUNT = "fileRenameCount";
 	private static final String KEY_RENAME_SERVICE_START_DELAY = "renameServiceStartDelay";
@@ -1058,7 +1058,7 @@ public class DSCApplication extends Application {
 	 * @param key   The shared preference key.
 	 * @param value The boolean value to be saved.
 	 */
-	private void saveBooleanValue(String key, boolean value) {
+	public void saveBooleanValue(String key, boolean value) {
 		Editor editor = mSharedPreferences.edit();
 		editor.putBoolean(key, value);
 		editor.commit();
@@ -1585,7 +1585,13 @@ public class DSCApplication extends Application {
 	 * @return True if the folder can be watched.
 	 */
 	private boolean isValidFolder(File folder) {
-		return folder != null && folder.exists() && folder.isDirectory() && !isHidden(folder);
+		boolean result = false;
+		try {
+			result = folder != null && folder.exists() && folder.isDirectory() && !isHidden(folder);
+		} catch (Exception e) {
+			logE(TAG, "isValidFolder: "  + String.valueOf(folder) + " : " + e.getMessage(), e);
+		}
+		return result;
 	}
 
 	/**
@@ -1595,7 +1601,13 @@ public class DSCApplication extends Application {
 	 * @return True if the file is hidden
 	 */
 	private boolean isHidden(File file) {
-		return file != null ? file.isHidden() || file.getName().charAt(0) == '.' : true;
+		boolean result = false;
+		try {
+			result = file != null ? file.isHidden() || file.getName().charAt(0) == '.' : true;
+		} catch (Exception e) {
+			logE(TAG, "isHidden: "  + String.valueOf(file) + " : " + e.getMessage(), e);
+		}
+		return result;
 	}
 
 	/**

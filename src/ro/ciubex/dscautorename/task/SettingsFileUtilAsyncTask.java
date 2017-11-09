@@ -70,11 +70,11 @@ public class SettingsFileUtilAsyncTask extends AsyncTask<Void, Void, AsyncTaskRe
      * The listener should implement this interface
      */
     public interface Responder {
-        public DSCApplication getDSCApplication();
+        DSCApplication getDSCApplication();
 
-        public void startFileAsynkTask(Operation operationType);
+        void startFileAsynkTask(Operation operationType);
 
-        public void endFileAsynkTask(Operation operationType,
+        void endFileAsynkTask(Operation operationType,
                                      AsyncTaskResult result);
     }
 
@@ -182,11 +182,11 @@ public class SettingsFileUtilAsyncTask extends AsyncTask<Void, Void, AsyncTaskRe
         } catch (FileNotFoundException e) {
             taskResult.resultId = AsyncTaskResult.ERROR;
             taskResult.resultMessage = e.getMessage();
-            Log.e(TAG, "writeToFileUsingJavaAPI FileNotFoundException: " + e.getMessage(), e);
+            responder.getDSCApplication().logE(TAG, "writeToFileUsingJavaAPI FileNotFoundException: " + e.getMessage(), e);
         } catch (IOException e) {
             taskResult.resultId = AsyncTaskResult.ERROR;
             taskResult.resultMessage = e.getMessage();
-            Log.e(TAG, "writeToFileUsingJavaAPI IOException: " + e.getMessage(), e);
+            responder.getDSCApplication().logE(TAG, "writeToFileUsingJavaAPI IOException: " + e.getMessage(), e);
         } finally {
             Utilities.doClose(outFile);
             Utilities.doClose(fos);
@@ -239,11 +239,15 @@ public class SettingsFileUtilAsyncTask extends AsyncTask<Void, Void, AsyncTaskRe
         } catch (FileNotFoundException e) {
             taskResult.resultId = AsyncTaskResult.ERROR;
             taskResult.resultMessage = e.getMessage();
-            Log.e(TAG, "writeToFileUsingApi21 FileNotFoundException: " + e.getMessage(), e);
+            responder.getDSCApplication().logE(TAG, "writeToFileUsingApi21 FileNotFoundException: " + e.getMessage(), e);
         } catch (IOException e) {
             taskResult.resultId = AsyncTaskResult.ERROR;
             taskResult.resultMessage = e.getMessage();
-            Log.e(TAG, "writeToFileUsingApi21 IOException: " + e.getMessage(), e);
+            responder.getDSCApplication().logE(TAG, "writeToFileUsingApi21 IOException: " + e.getMessage(), e);
+        } catch (Exception e) {
+            taskResult.resultId = AsyncTaskResult.ERROR;
+            taskResult.resultMessage = e.getMessage();
+            responder.getDSCApplication().logE(TAG, "writeToFileUsingApi21 Exception: " + e.getMessage(), e);
         } finally {
             Utilities.doClose(fos);
             Utilities.doClose(destFileDesc);
@@ -277,11 +281,11 @@ public class SettingsFileUtilAsyncTask extends AsyncTask<Void, Void, AsyncTaskRe
         } catch (FileNotFoundException e) {
             taskResult.resultId = AsyncTaskResult.ERROR;
             taskResult.resultMessage = e.getMessage();
-            Log.e(TAG, "importFromFile: " + e.getMessage(), e);
+            responder.getDSCApplication().logE(TAG, "importFromFile: " + e.getMessage(), e);
         } catch (IOException e) {
             taskResult.resultId = AsyncTaskResult.ERROR;
             taskResult.resultMessage = e.getMessage();
-            Log.e(TAG, "importFromFile: " + e.getMessage(), e);
+            responder.getDSCApplication().logE(TAG, "importFromFile: " + e.getMessage(), e);
         } finally {
             Utilities.doClose(fileReader);
         }

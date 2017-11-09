@@ -19,6 +19,7 @@
 package ro.ciubex.dscautorename.activity;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -466,12 +467,20 @@ public class SettingsActivity extends PreferenceActivity implements
         if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
             mApplication.resetCameraServiceInstanceCount();
             mApplication.checkRegisteredServiceType(false);
+            mApplication.sharedPreferencesDataChanged();
         } else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
             mApplication.updateFolderObserverList();
+            mApplication.saveBooleanValue(DSCApplication.KEY_ENABLED_FOLDER_SCANNING,
+                    mApplication.isEnabledFolderScanning());
+            mApplication.sharedPreferencesDataChanged();
+        } else if (DSCApplication.KEY_RENAME_VIDEO_ENABLED.equals(key)) {
+            mApplication.saveBooleanValue(DSCApplication.KEY_RENAME_VIDEO_ENABLED,
+                    mApplication.isRenameVideoEnabled());
             mApplication.sharedPreferencesDataChanged();
         } else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key) ||
                 DSCApplication.KEY_APP_THEME.equals(key)) {
             doPrepareSummaries = false;
+            mApplication.sharedPreferencesDataChanged();
             restartActivity();
         } else {
             mApplication.sharedPreferencesDataChanged();
@@ -950,29 +959,31 @@ public class SettingsActivity extends PreferenceActivity implements
      */
     private void showAlertDialog(int iconId, String message, final int doNotShowAgainId) {
         final Context context = SettingsActivity.this;
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
-        final LayoutInflater layoutInflater = LayoutInflater.from(context);
-        final View view = layoutInflater.inflate(R.layout.do_not_show_again, null);
+        if (isFinishing()) {
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            final LayoutInflater layoutInflater = LayoutInflater.from(context);
+            final View view = layoutInflater.inflate(R.layout.do_not_show_again, null);
 
-        if (doNotShowAgainId != DO_NOT_SHOW_IGNORED) {
-            dialog.setView(view);
-        }
-        dialog.setTitle(R.string.app_name)
-                .setMessage(message)
-                .setIcon(iconId)
-                .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+            if (doNotShowAgainId != DO_NOT_SHOW_IGNORED) {
+                dialog.setView(view);
+            }
+            dialog.setTitle(R.string.app_name)
+                    .setMessage(message)
+                    .setIcon(iconId)
+                    .setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog,
-                                        int whichButton) {
-                        boolean flag = false;
-                        View dlgView = view.findViewById(R.id.skip);
-                        if (dlgView instanceof CheckBox) {
-//							flag = ((CheckBox)dlgView).isChecked();
+                        public void onClick(DialogInterface dialog,
+                                            int whichButton) {
+                            boolean flag = false;
+                            View dlgView = view.findViewById(R.id.skip);
+                            if (dlgView instanceof CheckBox) {
+                                flag = ((CheckBox)dlgView).isChecked();
+                            }
+                            doShowAlertDialog(doNotShowAgainId, flag);
                         }
-                        doShowAlertDialog(doNotShowAgainId, flag);
-                    }
-                });
-        dialog.show();
+                    });
+            dialog.show();
+        }
     }
 
     /**
