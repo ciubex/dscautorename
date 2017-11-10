@@ -297,12 +297,10 @@ public class RenameDlgActivity extends Activity implements
 
 								public void onClick(DialogInterface dialog,
 													int whichButton) {
-									dialog.dismiss();
+									doFinish();
 								}
 							});
-			if (!isFinishing()) {
-				dialog.show();
-			}
+			dialog.show();
 		}
 	}
 

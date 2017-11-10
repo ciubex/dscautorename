@@ -155,6 +155,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private final static int DO_NOT_SHOW_GRANT_URI_PERMISSION = 1;
 
     private boolean doNotDisplayNotGrantUriPermission;
+    private boolean modifiedPreferences;
 
     /**
      * Method called when the activity is created
@@ -392,6 +393,7 @@ public class SettingsActivity extends PreferenceActivity implements
     @Override
     protected void onResume() {
         super.onResume();
+        modifiedPreferences = false;
         getPreferenceScreen().getSharedPreferences()
                 .registerOnSharedPreferenceChangeListener(this);
         mApplication.updateShortcutUpdateListener(this);
@@ -449,6 +451,9 @@ public class SettingsActivity extends PreferenceActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        if (modifiedPreferences) {
+            mApplication.sharedPreferencesDataChanged();
+        }
         mApplication.updateShortcutUpdateListener(null);
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
@@ -467,23 +472,17 @@ public class SettingsActivity extends PreferenceActivity implements
         if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
             mApplication.resetCameraServiceInstanceCount();
             mApplication.checkRegisteredServiceType(false);
-            mApplication.sharedPreferencesDataChanged();
+            modifiedPreferences = true;
         } else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
             mApplication.updateFolderObserverList();
-            mApplication.saveBooleanValue(DSCApplication.KEY_ENABLED_FOLDER_SCANNING,
-                    mApplication.isEnabledFolderScanning());
-            mApplication.sharedPreferencesDataChanged();
-        } else if (DSCApplication.KEY_RENAME_VIDEO_ENABLED.equals(key)) {
-            mApplication.saveBooleanValue(DSCApplication.KEY_RENAME_VIDEO_ENABLED,
-                    mApplication.isRenameVideoEnabled());
-            mApplication.sharedPreferencesDataChanged();
+            modifiedPreferences = true;
         } else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key) ||
                 DSCApplication.KEY_APP_THEME.equals(key)) {
             doPrepareSummaries = false;
-            mApplication.sharedPreferencesDataChanged();
+            modifiedPreferences = true;
             restartActivity();
         } else {
-            mApplication.sharedPreferencesDataChanged();
+            modifiedPreferences = true;
         }
         if (doPrepareSummaries) {
             prepareSummaries();
@@ -959,7 +958,7 @@ public class SettingsActivity extends PreferenceActivity implements
      */
     private void showAlertDialog(int iconId, String message, final int doNotShowAgainId) {
         final Context context = SettingsActivity.this;
-        if (isFinishing()) {
+        if (!isFinishing()) {
             final AlertDialog.Builder dialog = new AlertDialog.Builder(context);
             final LayoutInflater layoutInflater = LayoutInflater.from(context);
             final View view = layoutInflater.inflate(R.layout.do_not_show_again, null);

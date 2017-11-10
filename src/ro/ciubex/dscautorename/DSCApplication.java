@@ -1638,11 +1638,9 @@ public class DSCApplication extends Application {
 	 * Method used to update the observer list.
 	 */
 	public void updateFolderObserverList() {
-		if (mFolderObserverMap != null) {
+		if (mFolderObserverMap != null && SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
 			cleanupObservers();
-			if (SERVICE_TYPE_FILE_OBSERVER == getServiceType()) {
-				initFolderObserverList(true);
-			}
+			initFolderObserverList(true);
 		}
 	}
 

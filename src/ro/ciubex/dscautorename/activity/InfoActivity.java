@@ -1,7 +1,7 @@
 /**
  * This file is part of DSCAutoRename application.
  * 
- * Copyright (C) 2014 Claudiu Ciobotariu
+ * Copyright (C) 2017 Claudiu Ciobotariu
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,11 @@
  */
 package ro.ciubex.dscautorename.activity;
 
+import android.app.Activity;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Bundle;
+
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -25,22 +30,6 @@ import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.util.Utilities;
 import ro.ciubex.dscautorename.widget.HtmlView;
-
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
-import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.view.View;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.TextView;
 
 /**
  * This is the info activity. Usually is used for about and license activities.
@@ -118,14 +107,6 @@ public class InfoActivity extends Activity {
 	 */
 	private void initControls() {
 		mInfoView = (HtmlView) findViewById(R.id.infoView);
-		if (Build.VERSION_CODES.HONEYCOMB >= mApplication.getSdkInt()) {
-			initNewControls();
-		}
-	}
-
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void initNewControls() {
-		mInfoView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 	}
 
 	/**
@@ -144,7 +125,6 @@ public class InfoActivity extends Activity {
 		} else if (mBufferedText != null) {
 			mInfoView.setHtml(mBufferedText);
 		}
-
 	}
 
 	@Override
