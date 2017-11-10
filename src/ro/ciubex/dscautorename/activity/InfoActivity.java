@@ -24,6 +24,7 @@ import java.io.InputStream;
 import ro.ciubex.dscautorename.DSCApplication;
 import ro.ciubex.dscautorename.R;
 import ro.ciubex.dscautorename.util.Utilities;
+import ro.ciubex.dscautorename.widget.HtmlView;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -54,7 +55,7 @@ public class InfoActivity extends Activity {
 	public static final String MESSAGE = "message";
 	public static final String MESSAGE_CONTENT = "message_content";
 	public static final String HTML_MESSAGE = "html_message";
-	private WebView mInfoView;
+	private HtmlView mInfoView;
 	private String mBufferedText;
 	private String mFileName;
 
@@ -116,9 +117,7 @@ public class InfoActivity extends Activity {
 	 * Initialize controls
 	 */
 	private void initControls() {
-		mInfoView = (WebView) findViewById(R.id.infoView);
-		mInfoView.getSettings().setRenderPriority(WebSettings.RenderPriority.LOW);
-		mInfoView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+		mInfoView = (HtmlView) findViewById(R.id.infoView);
 		if (Build.VERSION_CODES.HONEYCOMB >= mApplication.getSdkInt()) {
 			initNewControls();
 		}
@@ -141,16 +140,16 @@ public class InfoActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		if (mFileName != null) {
-			mInfoView.loadUrl("file:///android_asset/" + mFileName);
+			mInfoView.setHtml(getStreamText(mFileName));
 		} else if (mBufferedText != null) {
-			mInfoView.loadData(mBufferedText,"text/html", "UTF-8");
+			mInfoView.setHtml(mBufferedText);
 		}
+
 	}
 
 	@Override
 	protected void onPause() {
 		mBufferedText = null;
-		mInfoView.loadUrl("about:blank");
 		super.onPause();
 	}
 

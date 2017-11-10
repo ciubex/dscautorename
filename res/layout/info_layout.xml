@@ -4,9 +4,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <WebView
-        android:id="@+id/infoView"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="0dp"
+        android:padding="2dp"
+        android:layout_weight="1" >
+
+        <ro.ciubex.dscautorename.widget.HtmlView
+            android:id="@+id/infoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:linksClickable="true"
+            android:text="@string/app_name" />
+    </ScrollView>
 
 </LinearLayout>
