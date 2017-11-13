@@ -58,6 +58,7 @@
     <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
     <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera application save files.</string>
     <string name="enable_filter_folder_title">Rename within a folder</string>
+    <string name="enable_folder_scanning_confirmation">Are you sure to enable the files from selected folders? Enable this only if your device is ROOT-ed and you disabled the Media Content scanner. If you enable this option the application will consume resources to scan recursively all above selected folders!</string>
     <string name="enable_folder_scanning_desc">Normally this should NOT BE SELECTED! By selecting this option the rename service will scan for media files on the above selected folders. Select this if your device have media content scanner disabled.</string>
     <string name="enable_folder_scanning_title">Enable folder scanning for files.</string>
     <string name="enable_title">Auto rename service trigger.</string>

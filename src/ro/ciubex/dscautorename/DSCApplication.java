@@ -45,6 +45,7 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import java.io.File;
@@ -106,7 +107,7 @@ public class DSCApplication extends Application {
 	public static final String KEY_SERVICE_TYPE = "serviceType";
 	public static final String KEY_FOLDER_SCANNING = "folderScanning";
 	public static final String KEY_ENABLED_FOLDER_SCANNING = "enabledFolderScanning";
-	private static final String KEY_ENABLED_SCAN_FILES = "enableScanForFiles";
+	public static final String KEY_ENABLED_SCAN_FILES = "enableScanForFiles";
 	private static final String KEY_RENAME_SHORTCUT_CREATED = "renameShortcutCreated";
 	private static final String KEY_RENAME_SERVICE_START_CONFIRMATION = "hideRenameServiceStartConfirmation";
 	private static final String KEY_FILE_NAME_FORMAT = "fileNameFormat";
@@ -210,6 +211,17 @@ public class DSCApplication extends Application {
 			initVolumes();
 			initFolderObserverList(false);
 		}
+	}
+
+	/**
+	 * Method used to configure the MutiDex support.
+	 *
+	 * @param base The base context to be attached to this application.
+	 */
+	@Override
+	protected void attachBaseContext(Context base) {
+		super.attachBaseContext(base);
+		MultiDex.install(this);
 	}
 
 	/**
@@ -368,7 +380,15 @@ public class DSCApplication extends Application {
 	 * @return True if is enabled file scanning on selected folders.
 	 */
 	public boolean isEnabledScanForFiles() {
-		return isEnabledFolderScanning() && mSharedPreferences.getBoolean(KEY_ENABLED_SCAN_FILES, false);
+		return isEnabledFolderScanning() && isEnabledFolderScanningForFiles();
+	}
+
+	/**
+	 * Verify if the option "Enable folder scanning for files" is enabled.
+	 * @return
+	 */
+	public boolean isEnabledFolderScanningForFiles() {
+		return mSharedPreferences.getBoolean(KEY_ENABLED_SCAN_FILES, false);
 	}
 
 	/**

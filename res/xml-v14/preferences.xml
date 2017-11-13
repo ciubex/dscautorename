@@ -73,10 +73,11 @@
             android:summary="@string/filter_folder_no_folder"
             android:title="@string/filter_folder_title"/>
 
-        <SwitchPreference
+        <ro.ciubex.dscautorename.widget.CustomSwitchPreference
             android:defaultValue="false"
             android:dependency="enabledFolderScanning"
-            android:key="enableScanForFiles"
+            android:key="enableScanForFilesCheck"
+            android:persistent="false"
             android:summary="@string/enable_folder_scanning_desc"
             android:title="@string/enable_folder_scanning_title"/>
 

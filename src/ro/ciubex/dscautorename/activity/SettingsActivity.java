@@ -19,7 +19,6 @@
 package ro.ciubex.dscautorename.activity;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
@@ -42,6 +41,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.preference.TwoStatePreference;
 import android.provider.MediaStore;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -114,7 +114,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private EditTextPreference mFileNameSuffixFormat;
     private Preference mEnabledFolderScanning;
     private Preference mFolderScanningPref;
-    private Preference mEnableScanForFiles;
+    private TwoStatePreference mEnableScanForFiles;
     private Preference mToggleRenameShortcut;
     private Preference mHideRenameServiceStartConfirmation;
     private Preference mManuallyStartRename;
@@ -142,6 +142,7 @@ public class SettingsActivity extends PreferenceActivity implements
     private static final int ID_CONFIRMATION_EXPORT_SETTINGS = 5;
     private static final int ID_CONFIRMATION_IMPORT_SETTINGS = 6;
     private static final int ID_CONFIRMATION_USE_INTERNAL_SELECT_FOLDER = 7;
+    private static final int ID_CONFIRMATION_ENABLE_FOLDER_FILES_SCANNING = 8;
     private int confirmedActionId = -1;
     private static final int REQUEST_SEND_REPORT = 1;
     public static final int REQUEST_OPEN_DOCUMENT_TREE = 42;
@@ -211,7 +212,7 @@ public class SettingsActivity extends PreferenceActivity implements
         mFileNameSuffixFormat = (EditTextPreference) findPreference("fileNameSuffixFormat");
         mEnabledFolderScanning = findPreference("enabledFolderScanning");
         mFolderScanningPref = findPreference("folderScanningPref");
-        mEnableScanForFiles = findPreference("enableScanForFiles");
+        mEnableScanForFiles = (TwoStatePreference) findPreference("enableScanForFilesCheck");
         mToggleRenameShortcut = findPreference("toggleRenameShortcut");
         mHideRenameServiceStartConfirmation = findPreference("hideRenameServiceStartConfirmation");
         mAppendOriginalName = findPreference("appendOriginalName");
@@ -248,6 +249,15 @@ public class SettingsActivity extends PreferenceActivity implements
                     @Override
                     public boolean onPreferenceClick(Preference preference) {
                         onFolderScanningPref();
+                        return true;
+                    }
+                });
+        mEnableScanForFiles
+                .setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+                    @Override
+                    public boolean onPreferenceClick(Preference preference) {
+                        onEnableScanForFilesPref();
                         return true;
                     }
                 });
@@ -469,20 +479,16 @@ public class SettingsActivity extends PreferenceActivity implements
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
                                           String key) {
         boolean doPrepareSummaries = true;
+        modifiedPreferences = true;
         if (DSCApplication.KEY_SERVICE_TYPE.equals(key)) {
             mApplication.resetCameraServiceInstanceCount();
             mApplication.checkRegisteredServiceType(false);
-            modifiedPreferences = true;
         } else if (DSCApplication.KEY_ENABLED_FOLDER_SCANNING.equals(key)) {
             mApplication.updateFolderObserverList();
-            modifiedPreferences = true;
         } else if (DSCApplication.KEY_LANGUAGE_CODE.equals(key) ||
                 DSCApplication.KEY_APP_THEME.equals(key)) {
             doPrepareSummaries = false;
-            modifiedPreferences = true;
             restartActivity();
-        } else {
-            modifiedPreferences = true;
         }
         if (doPrepareSummaries) {
             prepareSummaries();
@@ -577,6 +583,7 @@ public class SettingsActivity extends PreferenceActivity implements
         }
         updateRenameShortcut();
         updateSelectedFolders();
+        updateEnableScanForFilesCheckBox();
         // renameFileDateType
         String arr[] = mApplication.getResources().getStringArray(
                 R.array.rename_file_using_labels);
@@ -588,6 +595,13 @@ public class SettingsActivity extends PreferenceActivity implements
                 R.string.file_rename_count_title,
                 mApplication.getFileRenameCount()));
         mBuildVersion.setSummary(mApplication.getVersionName());
+    }
+
+    /**
+     * Update the checkbox state for the option "Enable folder scanning for files."
+     */
+    private void updateEnableScanForFilesCheckBox() {
+        mEnableScanForFiles.setChecked(mApplication.isEnabledFolderScanningForFiles());
     }
 
     /**
@@ -629,6 +643,22 @@ public class SettingsActivity extends PreferenceActivity implements
             selectFoldersListDialog.updateSelectedFolders();
         }
         selectFoldersListDialog.show();
+    }
+
+    /**
+     * Method used when the user choose the option: Enable folder scanning for files.
+     */
+    private void onEnableScanForFilesPref() {
+        if (!mApplication.isEnabledFolderScanningForFiles()) {
+            mEnableScanForFiles.setChecked(false);
+            showConfirmationDialog(mApplication.getApplicationContext().getString(R.string.enable_folder_scanning_confirmation),
+                    false,
+                    ID_CONFIRMATION_ENABLE_FOLDER_FILES_SCANNING);
+        } else {
+            modifiedPreferences = true;
+            mApplication.saveBooleanValue(DSCApplication.KEY_ENABLED_SCAN_FILES, false);
+            updateEnableScanForFilesCheckBox();
+        }
     }
 
     /**
@@ -862,6 +892,11 @@ public class SettingsActivity extends PreferenceActivity implements
                 break;
             case ID_CONFIRMATION_USE_INTERNAL_SELECT_FOLDER:
                 useInternalSelectFolderDialog(0);
+                break;
+            case ID_CONFIRMATION_ENABLE_FOLDER_FILES_SCANNING:
+                mApplication.saveBooleanValue(DSCApplication.KEY_ENABLED_SCAN_FILES, true);
+                updateEnableScanForFilesCheckBox();
+                modifiedPreferences = true;
                 break;
             case ID_CONFIRMATION_REQUEST_PERMISSIONS: {
                 String[] permissions = mApplication.getNotGrantedPermissions();
