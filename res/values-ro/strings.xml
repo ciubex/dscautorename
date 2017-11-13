@@ -79,8 +79,18 @@
 	<string name="filter_folder_title">Selecteaza un director.</string>
 	<string name="folder_list_all_selected">Trebuie lasat cel putin un director neselectat!</string>
 	<string name="folder_list_confirmation">Doresti sa stergi directoarele selectate?</string>
-	<string name="folder_list_no_grant_permission_1">Sistemul de operare a revocat permisiunile de acces pentru directorul de mai jos:\n\n%s\n\nVerifica unde este definit si selecteaza-l din nou!</string>
-	<string name="folder_list_no_grant_permission_2">Sistemul de operare a revocat permisiunile de acces pentru directoarele de mai jos:\n\n%s\n\nVerifica unde au fost definite si selecteaza-le din nou!</string>
+	<string name="folder_list_no_grant_permission_1">Sistemul de operare a revocat permisiunile de acces pentru directorul de mai jos:
+\n
+\n%s
+\n
+\nVerifica unde este definit si selecteaza-l din nou!
+\nPoti ignora acest mesaj, insa aplicatia nu va rula corect daca permisiunile nu sunt acordate.</string>
+	<string name="folder_list_no_grant_permission_2">Sistemul de operare a revocat permisiunile de acces pentru directoarele de mai jos:
+\n
+\n%s
+\n
+\nVerifica unde au fost definite si selecteaza-le din nou!
+\nPoti ignora acest mesaj, dar aplicatia nu va rula corespunzator pana nu-i vor fi acordate privilegiile necesare.</string>
 	<string name="folder_list_no_open_document_tree_support">Versiunea de Android folosita nu are suport pentru selectarea de directoare. (ACTION_OPEN_DOCUMENT_TREE).\nDoriti folosirea selectorului intern de directoare? Folosirea acestuia nu garanteaza drepturile aplicatiei pentru directorul selectat, fara aceste drepturi este posibil ca aplicatia sa nu poata redenumi sau muta fisiere!</string>
 	<string name="folder_list_no_selection">Selecteaza cel putin un director pentru a fi sters!</string>
 	<string name="folder_list_title">Lista directoarelor selectate.</string>
@@ -90,7 +100,7 @@
 	<string name="import_settings_desc_v21">Importa setarile dintr-un fisier aflat intr-un director local. Nu toate directoarele vor fi importate, ar trebui ca manual sa se verifice din nou directoarele selectate.</string>
 	<string name="import_settings_error">A aparut o eroare la importarea setarilor din fisier.\nEroare: %s</string>
 	<string name="import_settings_title">Importa setarile</string>
-	<string name="invoke_media_scanner_for_file_desc">Invoca Media Scanner pentru a scana fisierul redenumit, utilizeaza aceasta optiune cu grija, in mod normal nu ar trebui activata! Utilizeaza aceasta optiune pentru a forta actualizarea cache-ului MTP, insa din pacate nu intotdeauna functioneaza.</string>
+	<string name="invoke_media_scanner_for_file_desc">Invoca Media Scanner pentru a scana fisierul redenumit, utilizeaza aceasta optiune cu grija, in mod normal nu ar trebui activata! Utilizeaza aceasta optiune pentru a forta actualizarea cache-ului MTP, insa din pacate nu intotdeauna functioneaza!</string>
 	<string name="invoke_media_scanner_for_file_title">Invoca Media Scanner</string>
 	<string name="list_info_press">Adauga sau sterge elemente.</string>
 	<string name="loading_wait">Se incarca…</string>
@@ -99,14 +109,14 @@
 	<string name="manually_file_rename_count_more">%d fisiere au fost redenumite.</string>
 	<string name="manually_file_rename_minus_1">Nu a putut fi redenumit un fisier din cauza drepturilor legate de accesul la directoare, selectati din nou directoarele la care sa aiba aplicatia acces.</string>
 	<string name="manually_file_rename_minus_more">Aplicatia nu a putut redenumi %d fisiere, selectati din nou directoarele la care sa aiba acces aplicatia.</string>
-	<string name="manually_file_rename_progress_1">%1$d fisier din %2$d a fost redenumit.</string>
-	<string name="manually_file_rename_progress_more">%1$d fisiere din %2$d au fost redenumite.</string>
+	<string name="manually_file_rename_progress_1">%1$d fisier din %2$d a fost procesat.</string>
+	<string name="manually_file_rename_progress_more">%1$d fisiere din %2$d au fost procesate.</string>
 	<string name="manually_service_running">Ruleaza serviciul de redenumit fisiere.</string>
 	<string name="manually_start_desc">Porneste manual serviciul de redenumit fisiere</string>
 	<string name="manually_start_title">Porneste manual serviciul de redenumire</string>
 	<string name="minutes_unit">minute</string>
 	<string name="move_file_enable">Muta fisierul redenumit in directorul selectat mai jos.</string>
-	<string name="move_file_text_no_folder">Nici un director selectat, atinge acest text pentru a selecta un director</string>
+	<string name="move_file_text_no_folder">Nici un director selectat, atinge acest text pentru a selecta un director.</string>
 	<string name="move_file_text_selected_folder">Director selectat: %s</string>
 	<string name="new_folder">Director nou</string>
 	<string name="no">Nu</string>
@@ -117,8 +127,8 @@
 	<string name="please_wait">Te rog asteata…</string>
 	<string name="privacy_policy">Politica de confidentialitate</string>
 	<string name="privacy_policy_desc">Vezi termenii politicii de confidentialitate</string>
-	<string name="remove_rename_shortcut">Sterge scurtatura de lansare a serviciului de redenumire fisiere.</string>
-	<string name="remove_rename_shortcut_desc">Sterge scurtatura creata pentru lansarea manuala a serviciului de redenumit fisiere.</string>
+	<string name="remove_rename_shortcut">Sterge scurtatura de lansare a serviciului de redenumire fisiere</string>
+	<string name="remove_rename_shortcut_desc">Sterge scurtatura creata pentru lansarea manuala a serviciului de redenumit fisiere</string>
 	<string name="remove_rename_shortcut_v26">Dezactiveaza shortcut-ul de lansare a serviciului de redenumire</string>
 	<string name="remove_rename_shortcut_v26_desc">Dezactiveaza shortcut-ul la serviciul de redenumire a fisierelor. Daca doresti crearea unui alt shortcut, stergeti-l pe cel existent inainte.</string>
 	<string name="rename_file_delay_desc">Redenumeste urmatorul fisier dupa</string>
@@ -134,7 +144,7 @@
 	<string name="rename_service_start_delay_title">Intarzierea declansarii serviciului de redenumire</string>
 	<string name="rename_shortcut">Scurtatura pentru serviciul DSC Rename</string>
 	<string name="rename_shortcut_name">Serviciu de redenumire DSC rename</string>
-	<string name="rename_video_enabled_desc">Prin selectarea acestei optiuni sunt redenumite si filmele, altfel sunt redenumite doar pozele</string>
+	<string name="rename_video_enabled_desc">Prin selectarea acestei optiuni sunt redenumite si filmele, in mod normal sunt redenumit doar pozele.</string>
 	<string name="rename_video_enabled_title">Redenumeste inclusiv filmele</string>
 	<string name="request_permissions_confirmation">Solicitati acordarea permisiunilor necesare aplicatiei?</string>
 	<string name="request_permissions_desc">Atinge aceasta optiune pentru a solicita acordarea permisiunilor necesare aplicatiei: Camera (folosit pentru capturarea noilor fisiere media), Storage (folosit pentru redenumirea fisierelor).</string>
@@ -148,8 +158,8 @@
 	<string name="send_debug_title">Trimite logurile pentru investigare</string>
 	<string name="send_report">Trimitere raport…</string>
 	<string name="service_choice_0">Serviciul de redenumire automata este dezactivat. Nici un fisier nu va fi redenumit.</string>
-	<string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera.</string>
-	<string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media.</string>
+	<string name="service_choice_1">Serviciul de redenumire automata este declansat de evenimentele aplicatiei de camera, daca exista.</string>
+	<string name="service_choice_2">Serviciul de redenumire automata este declansat de notificarile media, daca exista.</string>
 	<string name="service_choice_3">Serviciul de redenumire automata este declansat cand sunt adaugate fisiere in directoarele selectate.</string>
 	<string name="service_choice_4">Serviciul de redenumire automata a fisierelor ruleaza permanent, dar redenumirea fisierelor se face doar cand aplicatia de camera trimite notificari.</string>
 	<string-array name="service_type_labels">
@@ -168,4 +178,12 @@
 	<string name="thank_you_title">Multumesc pentru donatie!</string>
 	<string name="ui_settings">Setari interfata</string>
 	<string name="yes">Da</string>
-</resources>
+<string name="build_version_title">Versiunea curenta</string>
+    <string name="enable_folder_scanning_confirmation">"Esti sigur ca vrei sa activezi aceasta optiune? Aceasta optiune trebuie activata daca ai dispozitivul ROOT-at si ai dezactivat manual serviciu de  indexare Media Content. Daca activezi aceasta optiune, aplicatia va consuma din resursele dispozitivului pentru a scana recursiv directoarele selectate mai sus!"</string>
+    <string name="help_desc">Vizualizeaza informatii de ajutor</string>
+    <string name="help_title">Ajutor</string>
+    <string name="license_desc">Detalii legate de licenta Open Source</string>
+    <string name="license_title">Licenta Open Source</string>
+    <string name="ok">OK</string>
+    <string name="rename_service_started_foreground">Serviciul de redenumit fisiere ruleaza in fundal…</string>
+    </resources>
