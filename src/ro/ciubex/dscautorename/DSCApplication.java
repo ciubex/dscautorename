@@ -198,6 +198,7 @@ public class DSCApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		checkApplicationResources();
 		mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 		mBackupManager = new BackupManager(this);
 		initLocale();
@@ -210,6 +211,15 @@ public class DSCApplication extends Application {
 		if (SERVICE_TYPE_FILE_OBSERVER == serviceType) {
 			initVolumes();
 			initFolderObserverList(false);
+		}
+	}
+
+	/**
+	 * Workaround to handle cases when the application do not have access to resources.
+	 */
+	private void checkApplicationResources() {
+		if (getResources() == null) {
+			android.os.Process.killProcess(android.os.Process.myPid());
 		}
 	}
 
