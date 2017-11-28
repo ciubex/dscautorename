@@ -3,13 +3,13 @@
     <string name="about_section">About</string>
     <string name="add">Add</string>
     <string name="app_name" translatable="false">DSC Auto Rename</string>
-    <string name="app_theme_desc">Set the application theme: light or dark.</string>
+    <string name="app_theme_desc">Set the app theme: Light or dark.</string>
     <string-array name="app_theme_labels">
         <item>Light</item>
         <item>Dark</item>
     </string-array>
-    <string name="app_theme_title">Application theme:</string>
-    <string name="app_theme_title_param">Application theme: %s</string>
+    <string name="app_theme_title">App theme:</string>
+    <string name="app_theme_title_param">App theme: %s</string>
     <string-array name="app_theme_values" translatable="false">
         <item>light</item>
         <item>dark</item>
@@ -19,8 +19,8 @@
     <string name="build_version_desc" translatable="false">1</string>
     <string name="build_version_title">Build version</string>
     <string name="cancel">Cancel</string>
-    <string name="change_language_desc">The application should be restarted to be applied selected language.</string>
-    <string name="change_language_title">Language: Application language</string>
+    <string name="change_language_desc">Restart the app to apply the selected language.</string>
+    <string name="change_language_title">Language: App language</string>
     <string name="choose_units_desc">This option allow you to choose above delay units between seconds and minutes.</string>
     <string name="choose_units_title">Choose delay units:</string>
     <string name="choose_units_title_param">Chosen delay units: %s</string>
@@ -28,14 +28,14 @@
     <string name="confirmation_rename_dialog">Hide confirmation dialog</string>
     <string name="confirmation_rename_dialog_desc">Show or not the confirmation dialog when the DSC rename service is launched from shortcut.</string>
     <string name="confirmation_rename_question">Do you want to start manually the rename service?</string>
-    <string name="confirmation_rename_question_v19">If selected file(s) are not on a selected folder then rename will not be completed due to Android security restrictions.\nDo you want to start manually the rename service?</string>
+    <string name="confirmation_rename_question_v19">If selected file(s) are not in a selected folder, they can not be renamed to comply with Android security restrictions.\nDo you want to start manually renaming them?</string>
     <string name="copy">Duplicate</string>
-    <string name="create_rename_shortcut">Create DSC rename service shortcut</string>
-    <string name="create_rename_shortcut_desc">Create on your home screen a DSC rename service shortcut to launch the rename service manually.</string>
-    <string name="create_rename_shortcut_v26_error">Unable to create DSC rename service shortcut, please try to manually remove created shortcut!</string>
+    <string name="create_rename_shortcut">Create DSC renaming shortcut</string>
+    <string name="create_rename_shortcut_desc">Create a DSC file renaming shortcut on your home screen, to start renaming files manually.</string>
+    <string name="create_rename_shortcut_v26_error">Unable to create DSC file renaming shortcut, please try to manually remove the created shortcut.</string>
     <string name="default_file_name_pattern" translatable="false">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="define_file_name_pattern_desc">The file name patterns used to search files for rename (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nWildcards * and ? can be used too.</string>
-    <string name="define_file_name_pattern_title">Define files name patterns</string>
+    <string name="define_file_name_pattern_desc">Extentions for file renaming candidates to search for: (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nWildcards \"*\" and \"?\" can be used too.</string>
+    <string name="define_file_name_pattern_title">Define filename patterns</string>
     <string-array name="delay_units_labels">
         <item>seconds</item>
         <item>minutes</item>
@@ -46,49 +46,49 @@
     </string-array>
     <string name="delete">Delete</string>
     <string name="do_not_show_again">Don\'t show again</string>
-    <string name="donate_confirmation">If you appreciate this application, please do a donation buying DSC Auto Rename PRO!\nPressing YES button, you will be sent to DSC Auto Rename PRO from Google Play Store.\nThank you for using this application!</string>
-    <string name="donate_desc">Please make a donation if you appreciate this application.</string>
+    <string name="donate_confirmation">If you appreciate this application, you can donate to show your support with DSC Auto Rename PRO!\nPressing \"Yes\" will take you to the Google Play Store.\nThank you for using this app!</string>
+    <string name="donate_desc">Please make a donation if you appreciate this app.</string>
     <string name="donate_title">Donate</string>
     <string name="donate_url" translatable="false">
         <Data><![CDATA[https://play.google.com/store/apps/details?id=ro.ciubex.dscautorenamepro]]></Data>
     </string>
-    <string name="enable_desc">Files are automatically renamed after the trigger occur.</string>
-    <string name="enable_filter_alert_v19">Because on Android KitKat are enabled some security constraints, this application will not be able to rename files from SD Card.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis application can rename files from internal memory only.\nSet your camera application to save on internal memory.</string>
-    <string name="enable_filter_alert_v21">Please enable \"Rename within a folder\" option and select which folder should be scanned for pictures and clips to be renaming using option \"List of scanned folders.\".</string>
-    <string name="enable_filter_folder_desc">Normally the rename service will scan all files from your device, by enabling this option you can limit the rename service within a folder.</string>
-    <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera application save files.</string>
-    <string name="enable_filter_folder_title">Rename within a folder</string>
-    <string name="enable_folder_scanning_confirmation">Are you sure to enable the files from selected folders? Enable this only if your device is ROOT-ed and you disabled the Media Content scanner. If you enable this option the application will consume resources to scan recursively all above selected folders!</string>
-    <string name="enable_folder_scanning_desc">Normally this should NOT BE SELECTED! By selecting this option the rename service will scan for media files on the above selected folders. Select this if your device have media content scanner disabled.</string>
-    <string name="enable_folder_scanning_title">Enable folder scanning for files.</string>
-    <string name="enable_title">Auto rename service trigger.</string>
-    <string name="error_rename_file">The file %s cannot be renamed!</string>
-    <string name="error_rename_file_no_read_write">File can not be read and write</string>
-    <string name="export_import_settings_group">Export / import settings</string>
-    <string name="export_settings_confirmation">Do you want to export application settings?</string>
+    <string name="enable_desc">Files are automatically renamed after conditions to do so are met.</string>
+    <string name="enable_filter_alert_v19">Because of security constraints on Android KitKat, if you are running that, this app will not be able to rename files on external SD cards.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis app can only rename files from internal memory, so your camera app must be set to only save files there.</string>
+    <string name="enable_filter_alert_v21">Please enable \"Rename one folder\" option and select which folder should be scanned for pictures and clips to be renamed, using \"List of scanned folders.\".</string>
+    <string name="enable_filter_folder_desc">Lets you restrict file renaming to one folder, as opposed to normally scanning all files on device.</string>
+    <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera app saves files.</string>
+    <string name="enable_filter_folder_title">Rename one folder</string>
+    <string name="enable_folder_scanning_confirmation">Are you sure you want to add files from selected folders? Your device must be be able to grant superuser permissions, and the MediaScanner service must be disabled. If you enable this option the app will recursively scan all the selected folders above!</string>
+    <string name="enable_folder_scanning_desc">Only select this if your have turned off the MediaScanner service on your device. The file renaming will also scan for media files in the selected folders above.</string>
+    <string name="enable_folder_scanning_title">Also scan external files.</string>
+    <string name="enable_title">Run automatic file renaming.</string>
+    <string name="error_rename_file">The file %s can not be renamed.</string>
+    <string name="error_rename_file_no_read_write">A file can not be read or written to</string>
+    <string name="export_import_settings_group">Export or import settings</string>
+    <string name="export_settings_confirmation">Do you want to export app settings?</string>
     <string name="export_settings_desc">Export settings to a local folder.</string>
     <string name="export_settings_error">Unable to export settings to a local folder.\nError: %s</string>
-    <string name="export_settings_success">Successfully exported settings to file: %s</string>
+    <string name="export_settings_success">Settings exported to the file: %s</string>
     <string name="export_settings_title">Export settings</string>
-    <string name="file_extension_note">The file extension is preserved during rename process.</string>
+    <string name="file_extension_note">The file extension will be kept.</string>
     <string name="file_name_format" translatable="false">yyyyMMdd_HHmmss</string>
     <string name="file_name_pattern_dialog_bottom">Old file name example:\n\t %1$s\nRenamed file name example:\n\t %2$s</string>
-    <string name="file_name_pattern_dialog_from">1. Original file name pattern:</string>
-    <string name="file_name_pattern_dialog_title_add">Add file name patterns</string>
-    <string name="file_name_pattern_dialog_title_editor">Edit file name patterns</string>
-    <string name="file_name_pattern_dialog_to">2. Renamed file name pattern:</string>
-    <string name="file_name_pattern_list_all_selected">At least one file name pattern should be left unchecked!</string>
-    <string name="file_name_pattern_list_confirmation">Do you want to remove selected file name pattern?</string>
-    <string name="file_name_pattern_list_no_selection">Select at least one file name pattern to delete!</string>
-    <string name="file_name_pattern_validation_error_generic">Original pattern is too generic causing to rename files over and over again. Try to define a more restrictive pattern using ? and other used characters.</string>
+    <string name="file_name_pattern_dialog_from">1. Original filename pattern:</string>
+    <string name="file_name_pattern_dialog_title_add">Add filename patterns</string>
+    <string name="file_name_pattern_dialog_title_editor">Edit filename patterns</string>
+    <string name="file_name_pattern_dialog_to">2. Renamed filename pattern:</string>
+    <string name="file_name_pattern_list_all_selected">At least one filename pattern should be left unchecked.</string>
+    <string name="file_name_pattern_list_confirmation">Do you want to remove the selected filename pattern?</string>
+    <string name="file_name_pattern_list_no_selection">Select at least one filename pattern to delete.</string>
+    <string name="file_name_pattern_validation_error_generic">The original pattern is too generic, causing files to be renamed over and over again. Try to define a more restrictive pattern using \"?"\ and other used characters.</string>
     <string name="file_name_pattern_validation_error_new">The original and rename pattern are matching!</string>
-    <string name="file_name_pattern_validation_error_new_empty">Rename filename pattern cannot be empty.</string>
-    <string name="file_name_pattern_validation_error_old">Original file name pattern already exist, change the text with a new one.</string>
+    <string name="file_name_pattern_validation_error_new_empty">Renamed filename pattern cannot be empty.</string>
+    <string name="file_name_pattern_validation_error_old">Original filename pattern already exists, change the text to get a new one.</string>
     <string name="file_name_pattern_validation_error_old_empty">Original pattern cannot be empty.</string>
-    <string name="file_name_pattern_validation_error_original">The original pattern is matching with a rename pattern defined on other case!</string>
-    <string name="file_name_pattern_validation_error_rename">The rename pattern is matching with an original pattern defined on other case!</string>
-    <string name="file_name_suffix_format_desc">This suffix is used when more than one file have same name, like in burst case. By default the counter have 5 digits.\nExample:\n%s</string>
-    <string name="file_name_suffix_format_title">Define file name extra suffix</string>
+    <string name="file_name_pattern_validation_error_original">The original pattern matches a rename pattern defined earlier!</string>
+    <string name="file_name_pattern_validation_error_rename">The rename pattern matches an original pattern defined earlier!</string>
+    <string name="file_name_suffix_format_desc">This suffix is used when more than one file has same name, like in \"burst"\ cases. By default the counter has 5 digits.\nExample:\n%s</string>
+    <string name="file_name_suffix_format_title">Define extra filename suffix</string>
     <string name="file_name_suffix_format_value" translatable="false">_%05d</string>
     <string name="file_rename_count_confirmation">Do you want to reset the renamed files counter?</string>
     <string name="file_rename_count_desc">Touch to reset the number of renamed files.</string>
@@ -96,23 +96,23 @@
     <string name="filter_folder_desc" translatable="false">/</string>
     <string name="filter_folder_no_folder">[No folder]</string>
     <string name="filter_folder_title">Select a folder.</string>
-    <string name="folder_list_all_selected">At least one folder should be left unchecked!</string>
-    <string name="folder_list_confirmation">Do you want to remove selected folders?</string>
-    <string name="folder_list_no_grant_permission_1">Your system revoked permissions for below folder:\n\n%s\n\nCheck where this folder was defined and try to select it again!\n\nYou may ignore this message, but the application will not work properly till it\'s gain access over above folder.</string>
-    <string name="folder_list_no_grant_permission_2">Your system revoked permissions for below folders:\n\n%s\n\nCheck where these folders were defined and try to select them again!\n\nYou may ignore this message, but the application will not work properly till it\'s gain access over above folders.</string>
-    <string name="folder_list_no_open_document_tree_support">Your Android version do not have support to chose folders (ACTION_OPEN_DOCUMENT_TREE).\nDo you want to use internal folder picker to select a folder? Using internal folder picker the application will not have granted rights to rename and move files!</string>
-    <string name="folder_list_no_selection">Select at least one folder to delete!</string>
+    <string name="folder_list_all_selected">At least one folder should be left unchecked.</string>
+    <string name="folder_list_confirmation">Do you want to remove the selected folders?</string>
+    <string name="folder_list_no_grant_permission_1">Your system revoked permissions for the folder below:\n\n%s\n\nCheck where this folder was defined and try to select it again.\n\nYou may ignore this message, but the app will not work properly till it has gained access to the folder above.</string>
+    <string name="folder_list_no_grant_permission_2">Your system revoked permissions for the folders below:\n\n%s\n\nCheck where these folders were defined and try to select them again.\n\nYou may ignore this message, but the app will not work properly till it has gained access to the folders above.</string>
+    <string name="folder_list_no_open_document_tree_support">Your Android version does not have support for choosing folders (ACTION_OPEN_DOCUMENT_TREE).\nDo you want to use the internal folder picker to select a folder? It can not rename and move files.</string>
+    <string name="folder_list_no_selection">Select at least one folder to delete.</string>
     <string name="folder_list_title">List of scanned folders.</string>
     <string name="general_settings">General settings</string>
-    <string name="help_desc">See some help information</string>
+    <string name="help_desc">View some helpful information</string>
     <string name="help_title">Help</string>
-    <string name="import_settings_confirmation">Do you want to import application settings? Existing settings will be overwritten, the application will restart after the import process!</string>
+    <string name="import_settings_confirmation">Do you want to import app settings? Existing settings will be overwritten, the app will restart after the import finishes.</string>
     <string name="import_settings_desc">Import settings from a local folder, existing settings will be overwritten.</string>
     <string name="import_settings_desc_v21">Import settings from a local folder, existing settings will be overwritten. Not all paths will be imported, you should manually check paths to gain access from Android OS.</string>
     <string name="import_settings_error">Unable to import settings from file.\nError: %s</string>
-    <string name="import_settings_title">Import settings</string>
-    <string name="invoke_media_scanner_for_file_desc">Request the media scanner to scan renamed file, use this with caution, normally should not be selected! Use this to force the MTP cache to be updated, unfortunately not always is working!</string>
-    <string name="invoke_media_scanner_for_file_title">Request the media scanner</string>
+    <string name="import_settings_title">Import app settings</string>
+    <string name="invoke_media_scanner_for_file_desc">Uses the MediaScanner service to scan renamed files, use this with caution, normally it should not be selected! Use it force updating of the MTP cache, unfortunately it does not always work!</string>
+    <string name="invoke_media_scanner_for_file_title">Scan using MediaScanner</string>
     <string-array name="language_labels" translatable="false">
         <item>English</item>
         <item>Chinese (Simplified) - 中文</item>
@@ -122,7 +122,7 @@
         <item>Hungarian - Magyar</item>
         <item>Italian - Italiano</item>
         <item>Japanese - 日本語</item>
-        <item>Norway - Norge</item>
+        <item>Norwegian Bokmål - Bokmål</item>
         <item>Polish - Polski</item>
         <item>Portuguese (Brasil) - Português</item>
         <item>Romanian - Română</item>
@@ -149,27 +149,27 @@
         <item>es</item>
         <item>th</item>
     </string-array>
-    <string name="license_desc">License details for open source software</string>
-    <string name="license_title">Open source licenses</string>
+    <string name="license_desc">License details for libre software</string>
+    <string name="license_title">Libre software licenses</string>
     <string name="list_info_press">Add or delete items.</string>
     <string name="loading_wait">Loading…</string>
-    <string name="manually_file_rename_count_0">No file was renamed. Please verify:\n-where are saved camera files and select (again) theses folders;\n- defined file name patterns!</string>
+    <string name="manually_file_rename_count_0">No files were renamed. Please verify:\n-Find out where the camera files are saved, and make sure they are selected,;\n-and that the defined filename patterns are correct.</string>
     <string name="manually_file_rename_count_1">One file was renamed.</string>
     <string name="manually_file_rename_count_more">%d files were renamed.</string>
-    <string name="manually_file_rename_minus_1">The application was not able to rename one file due to folders access rights, please select again folders where are stored files.</string>
-    <string name="manually_file_rename_minus_more">The application was not able to rename %d files, please select again folders where are stored files.</string>
-    <string name="manually_file_rename_progress_1">%1$d of %2$d files was processed.</string>
+    <string name="manually_file_rename_minus_1">The app was not able to rename one file due to missing folder access rights, please select the folder the stored file is in again.</string>
+    <string name="manually_file_rename_minus_more">The app was not able to rename %d files, please select the folders the are stored files are in again.</string>
+    <string name="manually_file_rename_progress_1">%1$d of %2$d file was processed.</string>
     <string name="manually_file_rename_progress_more">%1$d of %2$d files were processed.</string>
-    <string name="manually_service_running">Manually rename service is running.</string>
-    <string name="manually_start_desc">Touch to start manually rename service</string>
-    <string name="manually_start_title">Start manually rename service</string>
+    <string name="manually_service_running">The manual renaming service is running.</string>
+    <string name="manually_start_desc">Touch to start manually renaming files</string>
+    <string name="manually_start_title">Start manually renaming files</string>
     <string name="minutes_unit">minutes</string>
-    <string name="move_file_enable">Move the renamed file to below selected folder.</string>
+    <string name="move_file_enable">Move the renamed file to the selected folder below.</string>
     <string name="move_file_text_no_folder">No folder selected, touch this text to select a folder.</string>
     <string name="move_file_text_selected_folder">Selected folder: %s</string>
     <string name="new_folder">New Folder</string>
     <string name="no">No</string>
-    <string name="no_file_name_pattern">No file name pattern defined</string>
+    <string name="no_file_name_pattern">No filename pattern defined</string>
     <string name="no_folders">No folders</string>
     <string name="obtain_logs">Generate log file for report…</string>
     <string name="ok">OK</string>
@@ -179,18 +179,18 @@
     <string name="other_settings">Other settings</string>
     <string name="please_wait">Please wait…</string>
     <string name="privacy_policy">Privacy Policy</string>
-    <string name="privacy_policy_desc">See the Privacy Policy terms</string>
-    <string name="remove_rename_shortcut">Remove DSC rename service shortcut</string>
-    <string name="remove_rename_shortcut_desc">Remove from your home screen the DSC rename service shortcut</string>
-    <string name="remove_rename_shortcut_v26">Disable DSC rename service shortcut</string>
-    <string name="remove_rename_shortcut_v26_desc">Disable the DSC rename service shortcut from your home screen. If you want to create it again, then manually remove the existing icon from you home screen.</string>
+    <string name="privacy_policy_desc">View the terms of the privacy policy</string>
+    <string name="remove_rename_shortcut">Remove DSC shortcut</string>
+    <string name="remove_rename_shortcut_desc">Remove the DSC file renaming shortcut from your home screen</string>
+    <string name="remove_rename_shortcut_v26">Disable DSC shortcut</string>
+    <string name="remove_rename_shortcut_v26_desc">Remove the DSC file renaming shortcut on your home screen. If you want to enable it again, manually remove the existing icon from you home screen.</string>
     <string name="rename_file_delay_desc">Rename next file after</string>
-    <string name="rename_file_delay_title">Rename files delay</string>
-    <string name="rename_file_using_desc">date and time when file was last time modified.</string>
+    <string name="rename_file_delay_title">File renaming delay</string>
+    <string name="rename_file_using_desc">date and time the file was last modified.</string>
     <string-array name="rename_file_using_labels">
-        <item>date and time when file was added to media provider;</item>
-        <item>date and time when file was last time modified;</item>
-        <item>EXIF or Metadata if available.</item>
+        <item>date and time the file was added to media provider;</item>
+        <item>date and time the file was last modified;</item>
+        <item>EXIF or metadata, if available.</item>
     </string-array>
     <string name="rename_file_using_title">Rename file using:</string>
     <string-array name="rename_file_using_values" translatable="false">
@@ -198,43 +198,43 @@
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string name="rename_service_start_delay_desc">Start rename service after</string>
-    <string name="rename_service_start_delay_title">Rename service start delay</string>
-    <string name="rename_service_started_foreground">Rename service started in foreground…</string>
+    <string name="rename_service_start_delay_desc">Start file renaming after</string>
+    <string name="rename_service_start_delay_title">Postpone renaming start</string>
+    <string name="rename_service_started_foreground">File renaming started in foreground…</string>
     <string name="rename_shortcut">DSC Rename service shortcut</string>
     <string name="rename_shortcut_name">DSC rename service</string>
-    <string name="rename_video_enabled_desc">By checking this option, the video are automatically renamed too, default are renamed only pictures.</string>
-    <string name="rename_video_enabled_title">Enable video file rename</string>
-    <string name="report_body" translatable="false">Description: (in english)</string>
+    <string name="rename_video_enabled_desc">By checking this option, videos are automatically renamed too, by default only pictures are renamed.</string>
+    <string name="rename_video_enabled_title">Enable renaming of video files</string>
+    <string name="report_body" translatable="false">Description: (in English)</string>
     <string name="report_subject" translatable="false">Report for DSC Auto Rename</string>
-    <string name="request_permissions_confirmation">Do you want to request for required application permissions?</string>
-    <string name="request_permissions_desc">Touch this option to request for required application permissions: Camera (used to receive the capture moment), Storage (used to rename and move files).</string>
-    <string name="request_permissions_ok">All required permissions are granted!</string>
-    <string name="request_permissions_title">Request required application permission.</string>
+    <string name="request_permissions_confirmation">Do you want to request the required app permissions?</string>
+    <string name="request_permissions_desc">Touch this to ask the system for the priviliges the app needs to function: Camera (used to receive the time the image was shot), Storage (used to rename and move files).</string>
+    <string name="request_permissions_ok">All required permissions have been granted.</string>
+    <string name="request_permissions_title">Request required app permissions.</string>
     <string name="seconds_unit">seconds</string>
-    <string name="send_broadcast_msg_desc">Send broadcast message with renamed file, using this option other application could be announced to pick new renamed file.</string>
+    <string name="send_broadcast_msg_desc">Broadcast message of renamed files, using this option other apps could pick up the renamed file, or the event of doing so.</string>
     <string name="send_broadcast_msg_title">Send broadcast message</string>
-    <string name="send_debug_confirmation">Do you want to send a debugging report?\nYour default e-mail application will send an e-mail with two files attached, please fill a short description of your issues if is necessary.\nThank you!</string>
+    <string name="send_debug_confirmation">Do you want to send a debugging report?\nYour default e-mail app will send an e-mail with two files attached, please fill out a short description of your issues, if necessary.\nThank you.</string>
     <string name="send_debug_desc">Send an e-mail with debugging files</string>
     <string name="send_debug_email_title" translatable="false">Debugging logs for DSC Auto Rename</string>
     <string name="send_debug_title">Send debugging logs</string>
     <string name="send_report">Send report…</string>
-    <string name="service_choice_0">The auto rename service is disabled. No file will be renamed.</string>
-    <string name="service_choice_1">The auto rename service is triggered by camera events notifications, if any.</string>
-    <string name="service_choice_2">The auto rename service is triggered by media content events notifications, if any.</string>
-    <string name="service_choice_3">The auto rename service is triggered when a file is added on selected folders. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</string>
-    <string name="service_choice_4">The auto rename service is always running in background, but the files are renamed only when camera application send events notifications.</string>
+    <string name="service_choice_0">The auto rename service is disabled. No files will be renamed.</string>
+    <string name="service_choice_1">The auto rename service is triggered by notifications of camera events, if any.</string>
+    <string name="service_choice_2">The auto rename service is triggered by notifications of media content events, if any.</string>
+    <string name="service_choice_3">The auto rename service is triggered when a file is added for selected folders. You must check \"Rename one folder\" and have a least one folder under watch with \"Select a folder\".</string>
+    <string name="service_choice_4">The auto rename service is always running in the background, but the files are renamed only when the camera app sends out events notifications.</string>
     <string-array name="service_type_labels">
         <item>Disabled</item>
-        <item>Camera events: pictures or videos taken.</item>
-        <item>Media content observer: pictures or videos saved.</item>
-        <item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
-        <item>A permanent running service used to catch camera application notification events.</item>
+        <item>Camera events: Pictures or videos taken.</item>
+        <item>Media content observer: Pictures or videos saved.</item>
+        <item>File observer: Watch selected folders for added files. You must check \"Rename one folder\" and have a least one folder under watch with \"Select a folder\".</item>
+        <item>A permanently running service, used to catch notification events from the camera app.</item>
     </string-array>
     <string-array name="service_type_labels_v21">
         <item>Disabled</item>
-        <item>Media content observer: pictures or videos saved.</item>
-        <item>File observer: watch on selected folders when files are added. You must check \"Rename within a folder\" and have a least one folder on \"Select a folder\".</item>
+        <item>Media content observer: Pictures or videos saved.</item>
+        <item>File observer: Watch selected folders for added files. You must check \"Rename one folder\" and have a least one folder under watch with \"Select a folder\".</item>
     </string-array>
     <string-array name="service_type_values" translatable="false">
         <item>0</item>
@@ -248,9 +248,9 @@
         <item>2</item>
         <item>3</item>
     </string-array>
-    <string name="thank_you_desc">Thank you for the appreciation of my work, buying pro application.</string>
-    <string name="thank_you_title">Thank you for donation!</string>
+    <string name="thank_you_desc">Thank you for the appreciation of my work, in buying the \"PRO"\ version.</string>
+    <string name="thank_you_title">Thank you for donating.</string>
     <string name="ui_settings">UI settings</string>
-    <string name="update_message" translatable="false">Please read Help section from bellow!</string>
+    <string name="update_message" translatable="false">Please read the Help section below!</string>
     <string name="yes">Yes</string>
 </resources>
