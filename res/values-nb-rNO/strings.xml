@@ -1,2 +1,32 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<?xml version='1.0' encoding='UTF-8'?>
+<resources><string name="about_section">Om</string>
+    <string name="add">Legg til</string>
+    <string name="app_theme_desc">Velg programdrakt: Lys eller mørk.</string>
+    <string name="app_theme_title">Programdrakt:</string>
+    <string name="app_theme_title_param">Programdrakt: %s</string>
+    <string name="append_original_name_desc">Behold og legg til opprinnelig navn, for eksempel, fra DSC_09.JPG vil nytt navn bli %s_DSC_09.JPG</string>
+    <string name="append_original_name_title">Legg til i opprinnelig navn</string>
+    <string name="build_version_title">Byggversjon</string>
+    <string name="cancel">Avbryt</string>
+    <string name="change_language_desc">Start programmet på nytt for å legge til valgt språk.</string>
+    <string name="change_language_title">Språk: Programspråk</string>
+    <string name="choose_units_desc">Dette valget lar deg velge overnevnt forsinkelse, enten sekunder eller minutter.</string>
+    <string name="choose_units_title">Velg forsinkelsesenhet:</string>
+    <string name="choose_units_title_param">Valgt forsinkelsesenhet: %s</string>
+    <string name="close">Lukk</string>
+    <string name="confirmation_rename_dialog">Skjul bekreftelsesdialog</string>
+    <string name="delete">Slett</string>
+    <string name="do_not_show_again">Ikke vis igjen</string>
+    <string name="donate_desc">Doner hvis du setter pris på dette programmet.</string>
+    <string name="donate_title">Doner</string>
+    <string name="error_rename_file">Kan ikke gi nytt navn til fila %s.</string>
+    <string name="error_rename_file_no_read_write">Ei fil kan ikke leses eller endres</string>
+    <string name="filter_folder_title">Velg ei mappe.</string>
+    <string name="folder_list_confirmation">Ønsker du å fjerne valgte mapper?</string>
+    <string name="folder_list_no_selection">Velg minst ei mappe å slette.</string>
+    <string name="folder_list_title">Liste over skannede mapper.</string>
+    <string name="general_settings">Hovedinnstillinger</string>
+    <string name="help_title">Hjelp</string>
+    <string name="import_settings_title">Importer programinntillinger</string>
+    <string name="loading_wait">Laster…</string>
+    </resources>
