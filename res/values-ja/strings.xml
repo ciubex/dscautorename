@@ -2,19 +2,19 @@
 <resources>
 	<string name="about_section">アプリについて</string>
 	<string name="add">追加</string>
-	<string name="app_theme_desc">アプリケーション テーマを設定します: ライトまたはダーク。</string>
+	<string name="app_theme_desc">アプリのテーマを設定します: ライトまたはダーク。</string>
 	<string-array name="app_theme_labels">
 		<item>ライト</item>
 		<item>ダーク</item>
 	</string-array>
-	<string name="app_theme_title">アプリケーション テーマ:</string>
-	<string name="app_theme_title_param">アプリケーション テーマ: %s</string>
+	<string name="app_theme_title">アプリのテーマ:</string>
+	<string name="app_theme_title_param">アプリのテーマ: %s</string>
 	<string name="append_original_name_desc">元の名前を維持して追加します。例えば、DSC_09.JPG から、新しい名前は %s_DSC_09.JPG になります</string>
 	<string name="append_original_name_title">元の名前を追加</string>
 	<string name="build_version_title">ビルドバージョン</string>
 	<string name="cancel">キャンセル</string>
-	<string name="change_language_desc">選択した言語を適用するには、アプリケーションを再起動する必要があります。</string>
-	<string name="change_language_title">言語: アプリケーションの言語</string>
+	<string name="change_language_desc">アプリを再起動して選択した言語を適用します。</string>
+	<string name="change_language_title">言語: アプリの言語</string>
 	<string name="choose_units_desc">このオプションでは、秒と分の間で遅延の単位を選択することができます。</string>
 	<string name="choose_units_title">遅延の単位を選択:</string>
 	<string name="choose_units_title_param">指定された遅延の単位: %s</string>
@@ -22,10 +22,12 @@
 	<string name="confirmation_rename_dialog">確認のダイアログ ボックスを非表示</string>
 	<string name="confirmation_rename_dialog_desc">ショートカットから DSC リネーム サービスが起動されたときに、確認のダイアログ ボックスを表示します。</string>
 	<string name="confirmation_rename_question">リネーム サービスを手動で開始しますか?</string>
-	<string name="confirmation_rename_question_v19">選択したファイルが選択したフォルダーにない場合、Android のセキュリティ制限のため名前の変更は完了できません。\nリネーム サービスを手動で開始しますか?</string>
-	<string name="create_rename_shortcut">DSC リネーム サービスのショートカットを作成</string>
-	<string name="create_rename_shortcut_desc">リネーム サービスを手動で起動する DSC リネーム サービスのショートカットをホーム画面に作成します。</string>
-	<string name="define_file_name_pattern_desc">ファイル名のパターンは、名前を変更するファイルを検索するために使用します (\"DSC_*.JPG\" or \"MOV_*.MP4\")。例えば %s\nワイルドカード * と ? も使用できます。</string>
+	<string name="confirmation_rename_question_v19">選択したファイルが選択したフォルダーにない場合、Android のセキュリティ制限のため名前の変更を完了できません。
+\nリネーム サービスを手動で開始しますか?</string>
+	<string name="create_rename_shortcut">DSC リネームのショートカットを作成</string>
+	<string name="create_rename_shortcut_desc">ファイルのリネームを手動で開始する DSC リネームのショートカットをホーム画面に作成します。</string>
+	<string name="define_file_name_pattern_desc">名前を変更するファイルを検索する拡張子: (\"DSC_*.JPG\" or \"MOV_*.MP4\")。例えば %s
+\nワイルドカード \"*\" と \"?\" も使用できます。</string>
 	<string name="define_file_name_pattern_title">ファイル名のパターンを定義</string>
 	<string-array name="delay_units_labels">
 		<item>秒</item>
@@ -150,7 +152,7 @@
 	<string name="ui_settings">UI 設定</string>
 	<string name="yes">はい</string>
 <string name="copy">複製</string>
-    <string name="create_rename_shortcut_v26_error">DSC リネームサービスのショートカットを作成できません。手動で作成したショートカットを削除してみてください!</string>
+    <string name="create_rename_shortcut_v26_error">DSC ファイルリネームのショートカットを作成できません。作成したショートカットを手動で削除してみてください。</string>
     <string name="export_import_settings_group">設定をエクスポート / インポート</string>
     <string name="export_settings_confirmation">アプリケーションの設定をエクスポートしますか?</string>
     <string name="export_settings_desc">設定をローカルフォルダーにエクスポートします。</string>
