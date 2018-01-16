@@ -108,6 +108,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 		mNow = new Date();
 		mDefaultFileName = new FileNameModel(mApplication.getApplicationContext().getString(R.string.default_file_name_pattern));
 		mFileNameModels = mApplication.getOriginalFileNamePattern();
+
 		updateDialogTitle();
 		initValues();
 		updateMoveFilesFields();
@@ -163,6 +164,7 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	 */
 	private void initValues() {
 		boolean isMoveFiles = false;
+		mDefaultSelectedFolder = null;
 		if (mPosition > -1) {
 			initModel = mApplication.getOriginalFileNamePattern()[mPosition];
 		}
@@ -174,14 +176,12 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 				mDefaultSelectedFolder = initModel.getSelectedFolder();
 				mDefaultFileName.setSelectedFolder(mDefaultSelectedFolder);
 			} else {
-				mDefaultSelectedFolder = new SelectedFolderModel();
-				mDefaultSelectedFolder.setPath(mApplication.getDefaultFolderScanning());
+				mDefaultFileName.setSelectedFolder(null);
 			}
 		} else {
 			mEditFileNamePatternFrom.setText("");
 			mEditFileNamePatternTo.setText("");
-			mDefaultSelectedFolder = new SelectedFolderModel();
-			mDefaultSelectedFolder.setPath(mApplication.getDefaultFolderScanning());
+			mDefaultFileName.setSelectedFolder(null);
 		}
 		mEnableMoveFiles.setChecked(isMoveFiles);
 	}
@@ -190,10 +190,10 @@ public class FileNamePatternEditorDialog extends BaseDialog implements
 	 * Update move files fields: the checkbox and textview.
 	 */
 	private void updateMoveFilesFields() {
-		boolean isMoveFiles = Utilities.isMoveFiles(mDefaultFileName.getSelectedFolder());
-		if (isMoveFiles) {
+		if (mEnableMoveFiles.isChecked()) {
 			mSelectedFolderField.setVisibility(View.VISIBLE);
-			String path = mDefaultFileName.getSelectedFolder().getFullPath();
+			String path = mDefaultFileName.getSelectedFolder() != null ?
+					mDefaultFileName.getSelectedFolder().getFullPath() : "";
 			String text;
 			if (Utilities.isEmpty(path)) {
 				text = mApplication.getApplicationContext().getString(R.string.move_file_text_no_folder);
