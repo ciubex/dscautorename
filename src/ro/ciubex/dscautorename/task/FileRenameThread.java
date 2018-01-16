@@ -536,17 +536,14 @@ public class FileRenameThread implements Runnable {
                 boolean moveFile = mustMoveFile(oldFile, newFile);
                 Uri newUri = doRenameFilesNewAPI(data, oldFile, newFile);
                 result = newUri != null;
-                if (!moveFile && result && newFile.exists()) {
-                    newFile.setLastModified(data.getDateAdded());
-                }
-                if (result && moveFile) {
-                    if (mApplication.getSdkInt() < Build.VERSION_CODES.N) {
+
+                if (result) {
+                    if (moveFile) {
                         result = doMoveFilesAPI21(newUri, data, oldFile, newFile);
                     } else {
-                        result = doMoveFilesAPI24(newUri, data, oldFile, newFile);
+                        newFile.setLastModified(data.getDateAdded());
                     }
-                }
-                if (!result) {
+                } else {
                     mApplication.logD(TAG, "Can not be renamed using new API, rename using old Java File API: " + fullFilePath);
                     result = renameFileApiLevelPriorKitKat(data, oldFile, newFile);
                 }

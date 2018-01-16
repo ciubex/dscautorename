@@ -115,6 +115,7 @@
     <string name="invoke_media_scanner_for_file_title">Scan using MediaScanner</string>
     <string-array name="language_labels" translatable="false">
         <item>English</item>
+        <item>Arabic - عربى</item>
         <item>Chinese (Simplified) - 中文</item>
         <item>Dutch - Nederlandse taal</item>
         <item>French - Français</item>
@@ -133,6 +134,7 @@
     </string-array>
     <string-array name="language_values" translatable="false">
         <item>en</item>
+        <item>ar</item>
         <item>zh_CN</item>
         <item>nl</item>
         <item>fr</item>

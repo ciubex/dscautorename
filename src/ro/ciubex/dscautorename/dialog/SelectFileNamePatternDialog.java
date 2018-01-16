@@ -107,6 +107,7 @@ public class SelectFileNamePatternDialog extends BaseDialog implements CompoundB
 		if (mFileNamePatternEditorDialog == null) {
 			mFileNamePatternEditorDialog = new FileNamePatternEditorDialog(mContext, mApplication, mParentActivity, mAdapter);
 		}
+		mFileNamePatternEditorDialog.setInitModel(null);
 		if (position == -2) {
 			FileNameModel item = getFirstSelectedItem();
 			if (item != null) {
