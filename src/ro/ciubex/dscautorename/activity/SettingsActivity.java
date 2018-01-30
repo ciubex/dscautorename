@@ -101,6 +101,7 @@ public class SettingsActivity extends PreferenceActivity implements
         SelectFolderDialog.SelectFolderListener, SettingsFileUtilAsyncTask.Responder {
     private static final String TAG = SettingsActivity.class.getName();
     private DSCApplication mApplication;
+    private Preference mAppLanguage;
     private Preference mAppTheme;
     private ListPreference mServiceTypeList;
     private Preference mRenameVideoEnabled;
@@ -199,6 +200,7 @@ public class SettingsActivity extends PreferenceActivity implements
      * Initialize preferences controls.
      */
     private void initPreferences() {
+        mAppLanguage = findPreference("languageCode");
         mAppTheme = findPreference("appTheme");
         mServiceTypeList = (ListPreference) findPreference("serviceType");
         mRenameVideoEnabled = findPreference("renameVideoEnabled");
@@ -522,6 +524,26 @@ public class SettingsActivity extends PreferenceActivity implements
     }
 
     /**
+     * Get the application selected language.
+     * @return Selected application language.
+     */
+    private String getSelectedLanguage() {
+        String[] labels = mApplication.getApplicationContext().getResources().
+                getStringArray(R.array.language_labels);
+        String[] values = mApplication.getApplicationContext().getResources().
+                getStringArray(R.array.language_values);
+        String langCode = mApplication.getLanguageCode();
+        int position = 0;
+        for(int i=0; i< values.length; i++) {
+            if (langCode.equals(values[i])) {
+                position = i;
+                break;
+            }
+        }
+        return labels[position];
+    }
+
+    /**
      * Restart this activity.
      */
     private void restartActivity() {
@@ -569,6 +591,10 @@ public class SettingsActivity extends PreferenceActivity implements
                 mServiceTypeList.setSummary(R.string.service_choice_0);
                 break;
         }
+        label = mApplication.getApplicationContext().getString(R.string.change_language_title_param,
+                getSelectedLanguage());
+        mAppLanguage.setTitle(label);
+
         label = mApplication.getApplicationContext().getString(R.string.app_theme_title_param,
                 getSelectedThemeLabel());
         mAppTheme.setTitle(label);
