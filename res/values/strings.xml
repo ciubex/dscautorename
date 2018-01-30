@@ -21,7 +21,7 @@
     <string name="cancel">Cancel</string>
     <string name="change_language_desc">Restart the app to apply the selected language.</string>
     <string name="change_language_title">Language: App language</string>
-    <string name="change_language_title_param">Language: %</string>
+    <string name="change_language_title_param">Language: %s</string>
     <string name="choose_units_desc">This option allow you to choose above delay units between seconds and minutes.</string>
     <string name="choose_units_title">Choose delay units:</string>
     <string name="choose_units_title_param">Chosen delay units: %s</string>
