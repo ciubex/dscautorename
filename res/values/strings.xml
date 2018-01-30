@@ -35,7 +35,8 @@
     <string name="create_rename_shortcut_desc">Create a DSC file renaming shortcut on your home screen, to start renaming files manually.</string>
     <string name="create_rename_shortcut_v26_error">Unable to create DSC file renaming shortcut, please try to manually remove the created shortcut.</string>
     <string name="default_file_name_pattern" translatable="false">DSC_*.JPG:\'PIC_\'yyyyMMdd_HHmmss</string>
-    <string name="define_file_name_pattern_desc">Extentions for file renaming candidates to search for: (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s\nWildcards \"*\" and \"?\" can be used too.</string>
+    <string name="define_file_name_pattern_desc">Extensions for file renaming candidates to search for: (\"DSC_*.JPG\" or \"MOV_*.MP4\"), e.g. %s
+\nWildcards \"*\" and \"?\" can be used too.</string>
     <string name="define_file_name_pattern_title">Define filename patterns</string>
     <string-array name="delay_units_labels">
         <item>seconds</item>
