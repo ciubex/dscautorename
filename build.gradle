@@ -24,8 +24,8 @@ android {
         applicationId "ro.ciubex.dscautorename"
         minSdkVersion 14
         targetSdkVersion 26
-        versionCode 101
-        versionName "6.0.8"
+        versionCode 102
+        versionName "6.0.9"
         multiDexEnabled true
     }
 
