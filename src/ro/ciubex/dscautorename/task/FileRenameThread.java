@@ -539,7 +539,11 @@ public class FileRenameThread implements Runnable {
 
                 if (result) {
                     if (moveFile) {
-                        result = doMoveFilesAPI21(newUri, data, oldFile, newFile);
+                        if (mApplication.getSdkInt() < Build.VERSION_CODES.N) {
+                            result = doMoveFilesAPI21(newUri, data, oldFile, newFile);
+                        } else {
+                            result = doMoveFilesAPI24(newUri, data, oldFile, newFile);
+                        }
                     } else {
                         newFile.setLastModified(data.getDateAdded());
                     }
@@ -607,18 +611,17 @@ public class FileRenameThread implements Runnable {
         Uri newUri = DocumentsContract.createDocument(mContentResolver, newParentUri,
                 data.getMimeType(), newFile.getName());
         boolean result = false;
-        long size = 0;
         try {
             if (oldUri != null && newUri != null) {
-                size = copyFileWithStreams(oldUri, newUri);
+                copyFileWithStreams(oldUri, newUri);
             }
-            result = (size > 0);
+            result = newFile.exists() && newFile.length() > 0;
         } catch (Exception e) {
             mApplication.logE(TAG, "doMoveFilesNewAPI " + oldFile + " to " + newFile, e);
         }
         if (result) {
             result = DocumentsContract.deleteDocument(mContentResolver, oldUri);
-            if (result && newFile.exists()) {
+            if (result) {
                 newFile.setLastModified(data.getDateAdded());
             }
         }
