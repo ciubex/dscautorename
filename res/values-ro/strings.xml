@@ -186,4 +186,5 @@
     <string name="license_title">Licenta Open Source</string>
     <string name="ok">OK</string>
     <string name="rename_service_started_foreground">Serviciul de redenumit fisiere ruleaza in fundal…</string>
+    <string name="change_language_title_param">Limba: %s</string>
     </resources>
