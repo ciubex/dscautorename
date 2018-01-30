@@ -58,11 +58,11 @@
     <string name="enable_filter_alert_v19">Because of security constraints on Android KitKat, if you are running that, this app will not be able to rename files on external SD cards.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis app can only rename files from internal memory, so your camera app must be set to only save files there.</string>
     <string name="enable_filter_alert_v21">Please enable \"Rename one folder\" option and select which folder should be scanned for pictures and clips to be renamed, using \"List of scanned folders.\".</string>
     <string name="enable_filter_folder_desc">Lets you restrict file renaming to selected folders, as opposed to normally scanning all files on device.</string>
-    <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera app saves files.</string>
-    <string name="enable_filter_folder_title">Select rename folders</string>
+    <string name="enable_filter_folder_desc_v21">Enable this feature and chose folders where your camera app saves files.</string>
+    <string name="enable_filter_folder_title">Enable rename within selected folders</string>
     <string name="enable_folder_scanning_confirmation">Are you sure you want to scan for files from selected folders? This option is necessary if you disabled the MediaScanner. If you enable this option the app will recursively scan all the selected folders above!</string>
     <string name="enable_folder_scanning_desc">Only select this if your have turned off the MediaScanner service on your device. The file renaming will also scan for media files in the selected folders above.</string>
-    <string name="enable_folder_scanning_title">Also scan external files.</string>
+    <string name="enable_folder_scanning_title">Scan for files recursively on selected folders</string>
     <string name="enable_title">Run automatic file renaming.</string>
     <string name="error_rename_file">The file %s can not be renamed.</string>
     <string name="error_rename_file_no_read_write">A file can not be read or written to</string>
@@ -113,7 +113,7 @@
     <string name="import_settings_desc_v21">Import settings from a local folder, existing settings will be overwritten. Not all paths will be imported, you should manually check paths to gain access from Android OS.</string>
     <string name="import_settings_error">Unable to import settings from file.\nError: %s</string>
     <string name="import_settings_title">Import app settings</string>
-    <string name="invoke_media_scanner_for_file_desc">Uses the MediaScanner service to scan renamed files, use this with caution, normally it should not be selected! Use it force updating of the MTP cache, unfortunately it does not always work!</string>
+    <string name="invoke_media_scanner_for_file_desc">Use the MediaScanner service to scan renamed files, use this with caution, normally it should not be selected! Use it force updating of the MTP cache, unfortunately it does not always work!</string>
     <string name="invoke_media_scanner_for_file_title">Scan using MediaScanner</string>
     <string-array name="language_labels" translatable="false">
         <item>English</item>
@@ -153,8 +153,8 @@
         <item>es</item>
         <item>th</item>
     </string-array>
-    <string name="license_desc">License details for libre software</string>
-    <string name="license_title">Libre software licenses</string>
+    <string name="license_desc">Open source license details</string>
+    <string name="license_title">Open source license</string>
     <string name="list_info_press">Add or delete items.</string>
     <string name="loading_wait">Loading…</string>
     <string name="manually_file_rename_count_0">No files were renamed. Please verify:\n-Find out where the camera files are saved, and make sure they are selected,;\n-and that the defined filename patterns are correct.</string>
