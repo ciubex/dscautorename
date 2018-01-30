@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="about_section">About</string>
     <string name="add">Add</string>
@@ -55,10 +55,10 @@
     <string name="enable_desc">Files are automatically renamed after conditions to do so are met.</string>
     <string name="enable_filter_alert_v19">Because of security constraints on Android KitKat, if you are running that, this app will not be able to rename files on external SD cards.\nSee the link http://goo.gl/kJeED3 for a possible fix.\nThis app can only rename files from internal memory, so your camera app must be set to only save files there.</string>
     <string name="enable_filter_alert_v21">Please enable \"Rename one folder\" option and select which folder should be scanned for pictures and clips to be renamed, using \"List of scanned folders.\".</string>
-    <string name="enable_filter_folder_desc">Lets you restrict file renaming to one folder, as opposed to normally scanning all files on device.</string>
+    <string name="enable_filter_folder_desc">Lets you restrict file renaming to selected folders, as opposed to normally scanning all files on device.</string>
     <string name="enable_filter_folder_desc_v21">For Android Lollipop users, please enable this feature and chose folders where your camera app saves files.</string>
-    <string name="enable_filter_folder_title">Rename one folder</string>
-    <string name="enable_folder_scanning_confirmation">Are you sure you want to add files from selected folders? Your device must be be able to grant superuser permissions, and the MediaScanner service must be disabled. If you enable this option the app will recursively scan all the selected folders above!</string>
+    <string name="enable_filter_folder_title">Select rename folders</string>
+    <string name="enable_folder_scanning_confirmation">Are you sure you want to scan for files from selected folders? This option is necessary if you disabled the MediaScanner. If you enable this option the app will recursively scan all the selected folders above!</string>
     <string name="enable_folder_scanning_desc">Only select this if your have turned off the MediaScanner service on your device. The file renaming will also scan for media files in the selected folders above.</string>
     <string name="enable_folder_scanning_title">Also scan external files.</string>
     <string name="enable_title">Run automatic file renaming.</string>
