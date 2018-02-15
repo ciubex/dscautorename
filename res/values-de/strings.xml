@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 	<string name="about_section">Über</string>
 	<string name="add">Hinzufügen</string>
-	<string name="app_theme_desc">Wähle App-Theme: hell oder dunkel</string>
+	<string name="app_theme_desc">App-Thema wählen: hell oder dunkel</string>
 	<string-array name="app_theme_labels">
 		<item>Hell</item>
 		<item>Dunkel</item>
 	</string-array>
-	<string name="app_theme_title">App-Theme:</string>
-	<string name="app_theme_title_param">App-Theme: %s</string>
+	<string name="app_theme_title">App-Thema:</string>
+	<string name="app_theme_title_param">App-Thema: %s</string>
 	<string name="append_original_name_desc">Originalnamen behalten und anfügen, beispielsweise von DSC-09.jpg zu %s_DSC_09.jpg</string>
 	<string name="append_original_name_title">Ursprünglichen Namen anfügen</string>
 	<string name="build_version_title">Build Version</string>
 	<string name="cancel">Abbrechen</string>
-	<string name="change_language_desc">Die Anwendung wird neu gestartet, um die ausgewählte Sprache nutzen zu können.</string>
-	<string name="change_language_title">Sprache: Oberflächensprache</string>
+	<string name="change_language_desc">Starten Sie die Anwendung neu, um die gewählte Sprache anzuwenden.</string>
+	<string name="change_language_title">Sprache: App-Sprache</string>
 	<string name="choose_units_desc">Diese Option erlaubt die Auswahl der Einheit der Verzögerungszeit zwischen Sekunden und Minuten.</string>
 	<string name="choose_units_title">Wähle die Einheit der Verzögerung:</string>
 	<string name="choose_units_title_param">Einheit: %s</string>
@@ -22,141 +22,160 @@
 	<string name="confirmation_rename_dialog">Verstecke Bestätigungsdialog</string>
 	<string name="confirmation_rename_dialog_desc">Zeige oder verstecke den Bestätigungsdialog, wenn der DSC Rename Service von einem Lesezeichen aus gestartet wird.</string>
 	<string name="confirmation_rename_question">Soll das Umbenennen manuell gestartet werden?</string>
-	<string name="confirmation_rename_question_v19">Wenn sich die gewählte(n) Datei(en) nicht in einem ausgewähltem Verzeichnis befinden, dann wird die Umbenennung aufgrund der Android Sicherheitsbeschränkungen nicht vollständig durchgeführt.\nMöchtest du den Rename Service manuell starten?</string>
+	<string name="confirmation_rename_question_v19">Wenn sich die ausgewählten Dateien nicht in einem ausgewählten Ordner befinden, können sie nicht umbenannt werden, um den Sicherheitsrestriktionen von Android zu entsprechen.
+\nMöchten Sie diese manuell umbenennen?</string>
 	<string name="copy">Dupliziere</string>
-	<string name="create_rename_shortcut">Erstelle DSC Rename Service Lesezeichen</string>
-	<string name="create_rename_shortcut_desc">Erstelle ein DSC Rename Service Lesezeichen auf dem Home Screen, um das Umbenennen manuell starten zu können.</string>
-	<string name="create_rename_shortcut_v26_error">Erstellung der Verknüfung zum DSC Rename Service nicht möglich. Bitte versuche die manuell erstellte Verknüpfung zu löschen!</string>
-	<string name="define_file_name_pattern_desc">Das Dateinamenmuster, welches zur Suche nach Dateien die umbenannt werden sollen genutzt wird (\"DSC_*.JPG\" or \"MOV_*.MP4\"), z.B. %s \nWildcards * und ? können auch genutzt werden.</string>
-	<string name="define_file_name_pattern_title">Dateinamenmuster definieren</string>
+	<string name="create_rename_shortcut">DSC-Umbenennungsverknüpfung erstellen</string>
+	<string name="create_rename_shortcut_desc">Erstellen Sie auf dem Startbildschirm eine Verknüpfung zum Umbenennen von DSC-Dateien, um Dateien manuell umzubenennen.</string>
+	<string name="create_rename_shortcut_v26_error">Da es nicht möglich war, eine Verknüpfung zum Umbenennen von DSC-Dateien zu erstellen, versuchen Sie bitte, die erstellte Verknüpfung manuell zu entfernen.</string>
+	<string name="define_file_name_pattern_desc">Erweiterungen für die Dateiumbenennung von Kandidaten für die Suche nach: (\"DSC_*.JPG\" oder \"MOV_*.MP4\"), z.B. %s 
+\nPlatzhalter „*” und „?” können ebenfalls verwendet werden.</string>
+	<string name="define_file_name_pattern_title">Dateinamensmustern festlegen</string>
 	<string-array name="delay_units_labels">
 		<item>Sekunden</item>
 		<item>Minuten</item>
 	</string-array>
 	<string name="delete">Löschen</string>
 	<string name="do_not_show_again">Nicht erneut anzeigen</string>
-	<string name="donate_confirmation">Wenn Dir die App gefällt, würde ich mich über eine kleine Spende freuen, indem Du die Pro Version kaufst!\nWenn Du den \"Ja\"-Button drückst, wirst Du zu DSC Auto Rename PRO von Google Play Store weitergeleitet.\nVielen Dank für die Verwendung der App.</string>
-	<string name="donate_desc">Bitte spende, wenn dir die Anwendung gefällt.</string>
+	<string name="donate_confirmation">Wenn Ihnen diese Anwendung gefällt, können Sie spenden, um „DSC Auto Rename PRO” zu Unterstützung!
+\nDurch Drücken auf „Ja” gelangen Sie in den Google Play Store.
+\nVielen Dank, dass Sie diese App verwenden!</string>
+	<string name="donate_desc">Bitte spenden Sie, wenn Ihnen die Anwendung gefällt.</string>
 	<string name="donate_title">Spenden</string>
-	<string name="enable_desc">Dateien werden automatisch nach festgelegtem Ereignis umbenannt.</string>
-	<string name="enable_filter_alert_v19">Aufgrund von Android KitKat Sicherheitsbeschränkungen darf diese App keine Daten auf der SD-Karte umbenennen.\nSiehe folgenden Link für eine eventuelle Problembehebung: http://goo.gl/kJeED3\nDiese App kann nur Dateien auf dem internen Speicher umbenennen.\nStelle deine Kameraanwendung so ein, dass diese auf dem internen Speicher speichert.</string>
-	<string name="enable_filter_alert_v21">Als Lollipop-User solltest du die Option \"Umbenennen innerhalb eines Verzeichnisses\" aktivieren und du solltest mindestens ein Verzeichnis in \"Zu scannende Verzeichnisse\" festlegen.</string>
-	<string name="enable_filter_folder_desc">Normalerweise scannt der Service alle Dateien deines Gerätes. Wenn diese Option gewählt wird, kannst du den Sevice auf 1 Verzeichnis begrenzen.</string>
-	<string name="enable_filter_folder_desc_v21">Als Android Lollipop User wähle bitte diese Option und gebe an, in welchem Verzeichnis deine Kamera-App die Dateien speichert.</string>
-	<string name="enable_filter_folder_title">Umbenennen innerhalb eines Verzeichnisses</string>
-	<string name="enable_folder_scanning_desc">Normalweise wird dies NICHT AUSGEWÄHLT! Beim Wählen dieser Option wird nach Dateien in oben festgelegten Ordnern gesucht. Wähle diese Option, wenn auf deinem Gerät der Medien-Scanner ausgeschaltet ist.</string>
-	<string name="enable_folder_scanning_title">Ordnersuche für Dateien.</string>
-	<string name="enable_title">Autom. Umbenennen einschalten.</string>
-	<string name="error_rename_file">Die Datei % konnte nicht umbenannt werden!</string>
-	<string name="error_rename_file_no_read_write">Datei kann nicht gelesen oder geschrieben werden</string>
-	<string name="export_import_settings_group">Export / Import Einstellungen</string>
-	<string name="export_settings_confirmation">Möchtest du die Anwendungseinstellungen exportieren?</string>
-	<string name="export_settings_desc">Exportiere Einstellungen in ein lokales Verzeichnis</string>
+	<string name="enable_desc">Dateien werden automatisch umbenannt, wenn die entsprechenden Bedingungen erfüllt sind.</string>
+	<string name="enable_filter_alert_v19">Aufgrund von Sicherheitseinschränkungen auf Android KitKat kann diese Anwendung Dateien auf externen SD-Karten nicht umbenennen.
+\nFolgen Sie diesem Link http://goo.gl/kJeED3 (engl.) für eine mögliche Lösung.
+\nDiese Anwendung kann nur Dateien aus dem internen Speicher umbenennen, daher muss Ihre Kamera-App auf so eingestellt werden, dass nur dort Dateien gespeichert werden.</string>
+	<string name="enable_filter_alert_v21">Aktivieren Sie die Option „Einen Ordner umbenennen” und wählen Sie aus, welcher Ordner nach Bildern und Videoclips durchsucht werden soll, indem Sie „Liste der geprüften Ordner” wählen.</string>
+	<string name="enable_filter_folder_desc">Ermöglicht es Ihnen, das Umbenennen von Dateien auf ausgewählte Ordner zu beschränken, im Gegensatz zum normalen Durchsuchen aller Dateien auf dem Gerät.</string>
+	<string name="enable_filter_folder_desc_v21">Aktivieren Sie diese Funktion und wählen Sie Ordner aus, in denen Ihre Kamera-App Dateien speichert.</string>
+	<string name="enable_filter_folder_title">Umbenennen in ausgewählten Ordnern aktivieren</string>
+	<string name="enable_folder_scanning_desc">Wählen Sie diese Option nur, wenn Sie den MediaScanner-Dienst auf Ihrem Gerät ausgeschaltet haben. Beim Umbenennen der Datei wird auch nach Mediendateien in den oben ausgewählten Ordnern gesucht.</string>
+	<string name="enable_folder_scanning_title">Rekursiv nach Dateien in ausgewählten Ordnern suchen</string>
+	<string name="enable_title">Automatisches Umbenennen von Dateien ausführen</string>
+	<string name="error_rename_file">Die Datei „%” konnte nicht umbenannt werden.</string>
+	<string name="error_rename_file_no_read_write">Datei konnte nicht gelesen oder geschrieben werden</string>
+	<string name="export_import_settings_group">Ex-/Import-Einstellungen</string>
+	<string name="export_settings_confirmation">Möchten Sie die Einstellungen der App exportieren?</string>
+	<string name="export_settings_desc">Einstellungen in einen lokalen Ordner exportieren</string>
 	<string name="export_settings_error">Export zu einem lokalem Verzeichnis nicht möglich.\nError: %s</string>
-	<string name="export_settings_success">Einstellungen erfolgreich exportiert in Datei: %s</string>
+	<string name="export_settings_success">Einstellungen in Datei exportiert: %s</string>
 	<string name="export_settings_title">Einstellungen exportieren</string>
-	<string name="file_extension_note">Die Dateierweiterung wird während des Prozesses erstellt.</string>
+	<string name="file_extension_note">Die Dateierweiterung wird beibehalten.</string>
 	<string name="file_name_pattern_dialog_bottom">Beispiel für das alte Dateinamenmuster:\n\t %1$s\nBeispiel für umbenannte Datei: \n\t %2$s</string>
-	<string name="file_name_pattern_dialog_from">Original Dateinamenmuster:</string>
-	<string name="file_name_pattern_dialog_title_add">Hinzufügen eines Dateinamenmusters</string>
-	<string name="file_name_pattern_dialog_title_editor">Editieren eines Dateinamenmusters</string>
-	<string name="file_name_pattern_dialog_to">Umbenennen in folgendes Muster:</string>
-	<string name="file_name_pattern_list_all_selected">Mindestens ein Dateinamenmuster sollte erhalten bleiben!</string>
-	<string name="file_name_pattern_list_confirmation">Soll das ausgewählte Dateinamenmuster gelöscht werden?</string>
-	<string name="file_name_pattern_list_no_selection">Wähle mindestens ein Dateinamenmuster zum Löschen aus!</string>
-	<string name="file_name_pattern_validation_error_generic">Das Dateinamenmuster ist zu allgemein. Dies würde einen Loop verursachen. Versuche das Muster mit mehr Zeichen einzuschränken.</string>
+	<string name="file_name_pattern_dialog_from">1. Original-Dateinamensmuster:</string>
+	<string name="file_name_pattern_dialog_title_add">Dateinamenmuster hinzufügen</string>
+	<string name="file_name_pattern_dialog_title_editor">Dateinamenmuster bearbeiten</string>
+	<string name="file_name_pattern_dialog_to">2. Umbenanntes Dateinamensmuster:</string>
+	<string name="file_name_pattern_list_all_selected">Mindestens ein Dateinamensmuster sollte nicht ausgewählt werden.</string>
+	<string name="file_name_pattern_list_confirmation">Möchten Sie das ausgewählte Dateinamensmuster entfernen?</string>
+	<string name="file_name_pattern_list_no_selection">Mindestens ein zu löschendes Dateinamensmuster auswählen.</string>
+	<string name="file_name_pattern_validation_error_generic">Das ursprüngliche Muster ist zu allgemein, was dazu führt, dass Dateien immer wieder umbenannt werden. Versuche das Muster mit mehr Zeichen einzuschränken.</string>
 	<string name="file_name_pattern_validation_error_new">Das Dateinamenmuster ist identisch mit dem Neuen!</string>
-	<string name="file_name_pattern_validation_error_new_empty">Dateinamenmuster darf nicht leer sein.</string>
-	<string name="file_name_pattern_validation_error_old">Dateinamenmuster mit dem selben Namen bereits vorhanden, ändere den Namen.</string>
+	<string name="file_name_pattern_validation_error_new_empty">Umbenennungs-Dateinamensmuster dürfen nicht leer sein.</string>
+	<string name="file_name_pattern_validation_error_old">Original-Dateinamensmuster existiert bereits, ändern Sie den Text, um ein neues zu erstellen.</string>
 	<string name="file_name_pattern_validation_error_old_empty">Orignal Dateinamenmuster darf nicht leer sein.</string>
-	<string name="file_name_pattern_validation_error_original">Das Muster zur Ermittlung der Originaldatei stimmt mit einem Muster zur Umbenennung von Dateien einer anderen Regel überein!</string>
-	<string name="file_name_pattern_validation_error_rename">Das Muster zur Umbenennung stimmt mit einem Muster zur Ermittlung der Originaldatei in einer anderen Regel überein!</string>
-	<string name="file_name_suffix_format_desc">Dieser Suffix wird verwendet, wenn Dateien den gleichen Namen haben. Normalerweise hat der Zähler 5 Stellen.\nBeispiel:\n%s</string>
-	<string name="file_name_suffix_format_title">Dateinamensuffix definieren</string>
+	<string name="file_name_pattern_validation_error_original">Das Originalmuster entspricht einem zuvor definierten Umbenennungsmuster!</string>
+	<string name="file_name_pattern_validation_error_rename">Das Umbenennungsmuster entspricht einem zuvor definierten Originalmuster!</string>
+	<string name="file_name_suffix_format_desc">Dieses Endung wird verwendet, wenn mehr als eine Datei denselben Namen hat, wie in Fällen von Serienaufnahme. Standardmäßig ist der Zähler 5-stellig.
+\nBeispiel:
+\n%s</string>
+	<string name="file_name_suffix_format_title">Zusätzliche Dateinamenendung festlegen</string>
 	<string name="file_rename_count_confirmation">Willst du den Zähler zurücksetzen?</string>
 	<string name="file_rename_count_desc">Drücken, um den Zähler zurückzusetzen.</string>
 	<string name="file_rename_count_title">Anzahl umbenannter Dateien: %d</string>
 	<string name="filter_folder_no_folder">[Kein Ordner]</string>
 	<string name="filter_folder_title">Wähle ein Verzeichnis.</string>
-	<string name="folder_list_all_selected">Mindestens ein Verzeichnis sollte unausgewählt bleiben!</string>
-	<string name="folder_list_confirmation">Sollen die gewählten Ordner verschoben werden?</string>
-	<string name="folder_list_no_grant_permission_1">Das System verhindert den Zugriff auf den unten stehenden Ordner.\n\n%s\n\nBitte prüfen, wo der Ordner gewählt ist und versuche diesen erneut zu wählen!\n\nDu kannst diese Nachricht ignorieren, jedoch wird diese App nicht richtig funktionieren, bevor kein Zugriff auf obige Ordner möglich ist.</string>
+	<string name="folder_list_all_selected">Mindestens ein Ordner sollte nicht markiert sein.</string>
+	<string name="folder_list_confirmation">Sollen die gewählten Ordner entfernt werden?</string>
+	<string name="folder_list_no_grant_permission_1">Ihr System hat die Berechtigungen für den unten genannten Ordner widerrufen:
+\n
+\n%s
+\n
+\nÜberprüfen Sie, wie dieser Ordner festgelegt wurde, und versuchen Sie, ihn erneut auszuwählen.
+\n
+\nSie können diese Meldung ignorieren, aber die Anwendung wird nicht richtig funktionieren, bis diese Zugriff auf den oben genannten Ordner erhalten hat.</string>
 	<string name="folder_list_no_grant_permission_2">Das System verhindert den Zugriff auf die unten stehenden Ordner.\n\n%s\n\nBitte prüfen, wo die Ordner gewählt sind und versuche diese erneut zu wählen!\n\nDu kannst diese Nachricht ignorieren, jedoch wird diese App nicht richtig funktionieren, bevor kein Zugriff auf obige Ordner möglich ist.</string>
-	<string name="folder_list_no_open_document_tree_support">Deine Android Version unterstützt nicht das Auswählen von Ordnern.\n(ACTION_OPEN_DOCUMENT_TREE).\nWillst du den internen Dateimanager nutzen, um einen Ordner auszuwählen? Der interne Dateimanager hat nicht die Rechte um Dateien umzubenennen oder zu verschieben!</string>
-	<string name="folder_list_no_selection">Wähle mindestens einen Ordner zum Löschen aus!</string>
-	<string name="folder_list_title">Zu scannende Verzeichnisse</string>
+	<string name="folder_list_no_open_document_tree_support">Ihre Android-Version bietet keine Unterstützung für die Auswahl von Ordnern (ACTION_OPEN_DOCUMENT_TREE).
+\nMöchten Sie den internen Ordnerauswahldialog verwenden, um einen Ordner auszuwählen? Dieser kann keine Dateien umbenennen und verschieben.</string>
+	<string name="folder_list_no_selection">Wählen Sie mindestens einen zu löschenden Ordner aus.</string>
+	<string name="folder_list_title">Liste der überprüften Ordner.</string>
 	<string name="general_settings">Einstellungen</string>
-	<string name="help_desc">Einige Hilfestellungen</string>
+	<string name="help_desc">Einige hilfreiche Informationen anzeigen</string>
 	<string name="help_title">Hilfe</string>
-	<string name="import_settings_confirmation">Möchtest Du die Anwendungseinstellungen importieren? Existierende Einstellungen werden überschrieben. Die App wird nach dem Import neu starten.</string>
+	<string name="import_settings_confirmation">Möchten Sie App-Einstellungen importieren? Bestehende Einstellungen werden überschrieben, die App wird nach dem Import neu gestartet.</string>
 	<string name="import_settings_desc">Importiere Einstellungen von einem lokalen Verzeichnis. Existierende Einstellungen werden überschrieben.</string>
 	<string name="import_settings_desc_v21">Importiere Einstellungen von einem lokalen Verzeichnis, existierende Einstellungen werden überschrieben. Es werden nicht alle Pfade importiert, Sie sollten Pfade manuell überprüfen, um Zugriff von Android OS zu erhalten.</string>
 	<string name="import_settings_error">Die Einstellungen können nicht aus der Datei importiert werden.\nError: %s</string>
-	<string name="import_settings_title">Importiere Einstellungen</string>
-	<string name="invoke_media_scanner_for_file_desc">Medien Scanner auffordern nach umbenannten Dateien zu suchen. Nutze dieses mit Vorsicht, normalerweise sollte diese Option nicht gewählt werden! Hiermit wird die Aktualisierung des MTP Caches erzwungen, was leider nicht immer funktioniert!</string>
-	<string name="invoke_media_scanner_for_file_title">Medien Scanner auffordern</string>
-	<string name="license_desc">Lizenzdetails für Open Source Software</string>
+	<string name="import_settings_title">App-Einstellungen importieren</string>
+	<string name="invoke_media_scanner_for_file_desc">Verwenden Sie den MediaScanner-Dienst zum Durchsuchen von umbenannten Dateien. Verwenden Sie dies mit Vorsicht, normalerweise sollte es nicht ausgewählt werden! Verwenden Sie es für die Zwangsaktualisierung des MTP-Cache, leider funktioniert dies nicht immer!</string>
+	<string name="invoke_media_scanner_for_file_title">Mit MediaScanner durchsuchen</string>
+	<string name="license_desc">Details zur Open-Source-Lizenz</string>
 	<string name="license_title">Open Source Lizenz</string>
-	<string name="list_info_press">Hinzufügen oder Löschen von Dateien</string>
-	<string name="loading_wait">Lade - Bitte warten&#8230;.</string>
-	<string name="manually_file_rename_count_0">Keine Datei wurde umbenannt. Bitte überprüfe :\n- wo Kameradateien gespeichert sind und wählen Sie (nocheinmal) diesen Ordner ;\n- definierte Dateinamensmuster!</string>
+	<string name="list_info_press">Elemente hinzufügen oder löschen</string>
+	<string name="loading_wait">Wird geladen …</string>
+	<string name="manually_file_rename_count_0">Es wurden keine Dateien umbenannt. Bitte überprüfen Sie Folgendes:
+\n• Finden Sie heraus, wo die Kameradateien gespeichert sind, und vergewissern Sie sich, dass sie ausgewählt sind,
+\n• und dass die definierten Dateinamensmuster korrekt sind.</string>
 	<string name="manually_file_rename_count_1">Eine Datei wurde umbenannt.</string>
 	<string name="manually_file_rename_count_more">%d Dateien wurden umbenannt.</string>
-	<string name="manually_file_rename_minus_1">Die Anwendung konnte eine Datei aufgrund von Ordnerzugriffsrechten nicht umbenennen, bitte wähle erneut Ordner aus, in denen Daten gespeichert sind.</string>
-	<string name="manually_file_rename_minus_more">Die Anwendung konnte %d Dateien nicht umbenennen. Wähle erneut Ordner aus, in denen sich Dateien befinden.</string>
-	<string name="manually_file_rename_progress_1">%1$d von %2$d Dateien wurden umbenannt.</string>
+	<string name="manually_file_rename_minus_1">Die App konnte eine Datei aufgrund fehlender Ordnerzugriffsrechte nicht umbenennen. Bitte wählen Sie den Ordner aus, in dem sich die gespeicherte Datei befindet.</string>
+	<string name="manually_file_rename_minus_more">Die App konnte %d Dateien nicht umbenennen. Bitte wählen Sie die Ordner aus, in denen sich die gespeicherten Dateien befinden.</string>
+	<string name="manually_file_rename_progress_1">%1$d von %2$d Dateien wurden verarbeitet.</string>
 	<string name="manually_file_rename_progress_more">%1$d von %2$d Dateien sind umbenannt.</string>
-	<string name="manually_service_running">Manuelles Umbenennen läuft</string>
-	<string name="manually_start_desc">Drücke für manuellen Rename Service</string>
-	<string name="manually_start_title">Manuelles Umbenennen starten</string>
+	<string name="manually_service_running">Der manuelle Umbenennungsdienst wird ausgeführt.</string>
+	<string name="manually_start_desc">Tippen Sie hier, um die manuelle Umbenennung von Dateien zu beginnen.</string>
+	<string name="manually_start_title">Manuelles Umbenennen von Dateien starten</string>
 	<string name="minutes_unit">Minuten</string>
-	<string name="move_file_enable">Verschiebe die umbenannte Datei in unten ausgewählten Ordner.</string>
+	<string name="move_file_enable">Umbenannte Datei in den unten ausgewählten Ordner verschieben.</string>
 	<string name="move_file_text_no_folder">Es wurde kein Ordner ausgewählt. Drücke hier, um einen auszuwählen.</string>
 	<string name="move_file_text_selected_folder">Gewählter Ordner: %s</string>
 	<string name="new_folder">Neuer Ordner</string>
 	<string name="no">Nein</string>
-	<string name="no_file_name_pattern">Kein Dateinamenmuster ausgewählt</string>
+	<string name="no_file_name_pattern">Kein Dateinamenmuster festgelegt</string>
 	<string name="no_folders">Keine Ordner</string>
-	<string name="obtain_logs">Erstelle Logdatei für Fehlerbericht</string>
+	<string name="obtain_logs">Protokolldatei für Fehlerbericht erstellen …</string>
 	<string name="other_settings">Andere Einstellungen</string>
-	<string name="please_wait">Bitte warten&#8230;</string>
+	<string name="please_wait">Bitte warten…</string>
 	<string name="privacy_policy">Datenschutzbestimmungen</string>
-	<string name="privacy_policy_desc">Siehe Datenschutzbestimmungen</string>
-	<string name="remove_rename_shortcut">Entferne DSC Rename Service Lesezeichen</string>
-	<string name="remove_rename_shortcut_desc">DSC Rename Service Lesezeichen vom Home Screen entfernen</string>
-	<string name="remove_rename_shortcut_v26">Deaktiviere die DSC Rename Service Verknüpfung</string>
-	<string name="remove_rename_shortcut_v26_desc">Deaktiviere die DSC Rename Service Verknüpfung von deinem Startbildschirm. Wenn Du diese wieder erstellen möchtest, entferne das vorhandene Symbol von dem Startbildschirm.</string>
+	<string name="privacy_policy_desc">Bedingungen der Datenschutzerklärung anzeigen</string>
+	<string name="remove_rename_shortcut">DSC-Verknüpfung entfernen</string>
+	<string name="remove_rename_shortcut_desc">Verknüpfung zum Umbenennen von DSC-Dateien von Ihrem Startbildschirm entfernen</string>
+	<string name="remove_rename_shortcut_v26">DSC-Verknüpfung deaktivieren</string>
+	<string name="remove_rename_shortcut_v26_desc">Entfernen Sie die Verknüpfung zum Umbenennen von DSC-Dateien auf dem Startbildschirm. Wenn Sie diese Funktion wieder aktivieren möchten, entfernen Sie das vorhandene Symbol manuell von Ihrem Startbildschirm.</string>
 	<string name="rename_file_delay_desc">Umbenennen der nächsten Datei nach</string>
-	<string name="rename_file_delay_title">Verzögerung der Umbenennung</string>
-	<string name="rename_file_using_desc">Datum und Zeit wann die Datei das letzte Mal modifiziert wurde.</string>
+	<string name="rename_file_delay_title">Verzögerung beim Umbenennen von Dateien</string>
+	<string name="rename_file_using_desc">Datum und Uhrzeit der letzten Dateiänderung.</string>
 	<string-array name="rename_file_using_labels">
 		<item>Datum und Zeit der Erstellung.</item>
 		<item>Datum und Zeit der letzen Bearbeitung.</item>
 		<item>EXIF oder Metadaten, wenn verfügbar.</item>
 	</string-array>
 	<string name="rename_file_using_title">Datei umbenennen mit:</string>
-	<string name="rename_service_start_delay_desc">Starte Rename Service nach</string>
-	<string name="rename_service_start_delay_title">Rename Service Startverzögerung</string>
+	<string name="rename_service_start_delay_desc">Dateiumbenennung starten nach</string>
+	<string name="rename_service_start_delay_title">Umbenennungsstart verzögern</string>
 	<string name="rename_shortcut">DSC Rename Service Lesezeichen</string>
 	<string name="rename_shortcut_name">DSC Rename Service</string>
-	<string name="rename_video_enabled_desc">Mit dieser Option werden ebenfalls automatisch Videos umbenannt. Es wird empfohlen nur Bilder umbenennen zu lassen.</string>
-	<string name="rename_video_enabled_title">Aktiviere Umbenennung für Videodateien</string>
-	<string name="request_permissions_confirmation">Möchten Sie eine Rückmeldung über benötigte App Berechtigungen?</string>
-	<string name="request_permissions_desc">Wähle diese Option, um die nötigen Zugriffsrechte zu gewähren: Kamera (benötigt um eine Aufnahme zu registrieren), Speicher (benötigt um Dateien umzubenennen und zu verschieben)</string>
-	<string name="request_permissions_ok">Alle nötigen Rechte wurden erteilt!</string>
-	<string name="request_permissions_title">Erwarte benötigte Berechtigungen</string>
+	<string name="rename_video_enabled_desc">Wenn Sie diese Option aktivieren, werden auch Videos automatisch umbenannt, standardmäßig werden nur Bilder umbenannt.</string>
+	<string name="rename_video_enabled_title">Umbenennen von Videodateien aktivieren</string>
+	<string name="request_permissions_confirmation">Möchten Sie die erforderlichen Berechtigungen abfragen?</string>
+	<string name="request_permissions_desc">Antippen, um das System nach den Berechtigungen zu fragen, die die Anwendung benötigt, um zu funktionieren: Kamera (zum Empfang der Aufnahmezeit), Speicher (zum Umbenennen und Verschieben von Dateien).</string>
+	<string name="request_permissions_ok">Alle erforderlichen Berechtigungen sind erteilt.</string>
+	<string name="request_permissions_title">Erforderliche App-Berechtigungen anfordern.</string>
 	<string name="seconds_unit">Sekunden</string>
-	<string name="send_broadcast_msg_desc">Sende eine Broadcast-Nachricht mit den umbenannten Dateien. Diese Option benachrichtigt andere Apps, um umbenannte Dateien zu übernehmen.</string>
+	<string name="send_broadcast_msg_desc">Broadcast-Nachricht von umbenannten Dateien, mit dieser Option können andere Apps die umbenannte Datei oder das Ereignis davon übernehmen.</string>
 	<string name="send_broadcast_msg_title">Broadcast-Nachricht senden</string>
-	<string name="send_debug_confirmation">Soll ein Fehlerbericht versandt werden?\nDer Standard eMail-Client wird eine eMail mit zwei Anhängen senden. Bitte der eMail eine kurze Fehlerbeschreibung auf Englisch hinzufügen.\nDanke!</string>
+	<string name="send_debug_confirmation">Möchten Sie einen Fehlerbericht versenden?
+\nIhre Standard-E-Mail-Anwendung sendet eine Nachricht mit zwei angehängten Dateien. Bitte geben Sie eine kurze Beschreibung Ihrer Probleme ein, falls erforderlich.
+\nVielen Dank.</string>
 	<string name="send_debug_desc">Sende eine eMail mit dem Fehlerbericht</string>
 	<string name="send_debug_title">Fehlerbericht senden</string>
-	<string name="send_report">Sende Fehlerbericht&#8230;</string>
-	<string name="service_choice_0">Auto Rename Service ist deaktiviert</string>
-	<string name="service_choice_1">Der Auto Rename Service wird durch Kameraereignisse ausgelöst.</string>
-	<string name="service_choice_2">Der Auto Rename Service wird durch Medienereignisse ausgelöst.</string>
-	<string name="service_choice_3">Der Auto Rename Service wird ausgelöst, wenn dem ausgewählten Verzeichnis eine Datei hinzugefügt wird. Es muss \"Umbenennen innerhalb eines Verzeichnisses\" und mindestens ein Verzeichnis in \"Wähle ein Verzeichnis\" gewählt sein.</string>
-	<string name="service_choice_4">Der Auto Rename Service läuft bereits im Hintergrund, jedoch werden die Dateien erst umbenannt, wenn die Kamera-App ein Ereignis sendet.</string>
+	<string name="send_report">Sende Fehlerbericht…</string>
+	<string name="service_choice_0">Der Dienst zum automatischen Umbenennen ist deaktiviert. Es werden keine Dateien umbenannt.</string>
+	<string name="service_choice_1">Der Dienst zum automatischen Umbenennen wird durch Benachrichtigungen über Kameraereignisse ausgelöst, falls vorhanden.</string>
+	<string name="service_choice_2">Der automatische Umbenennungsdienst wird durch Benachrichtigungen über Ereignisse von Medieninhalten ausgelöst, falls vorhanden.</string>
+	<string name="service_choice_3">Der Dienst zum automatischen Umbenennen wird ausgelöst, wenn eine Datei für ausgewählte Ordner hinzugefügt wird. Sie müssen „Einen Ordner umbenennen” ankreuzen und mindestens einen Ordner unter Beobachtung mit „Ordner auswählen” haben.</string>
+	<string name="service_choice_4">Der Dienst zum automatischen Umbenennen läuft immer im Hintergrund, aber die Dateien werden nur dann umbenannt, wenn die Kamera-Anwendung Ereignisbenachrichtigungen versendet.</string>
 	<string-array name="service_type_labels">
 		<item>Deaktiviert</item>
 		<item>Kamera Ereignisse : Bilder oder Videos aufgenommen.</item>
@@ -169,8 +188,12 @@
 		<item>Medieninhaltsbeobachter: Bilder oder Videos werden gespeichert.</item>
 		<item>Dateibeobachter: Beobachtet, ob dem gewählten Verzeichnis Dateien hinzugefügt wurden. Du musst \\"Umbennen innerhalb eines Verzeichnisses\\" wählen und mindestens ein Verzeichnis unter \\"Wähle ein Verzeichnis\\"</item>
 	</string-array>
-	<string name="thank_you_desc">Danke, dass Dir meine Arbeit gefällt und Du die Pro Version gekauft hast.</string>
-	<string name="thank_you_title">Danke für die Spende!</string>
+	<string name="thank_you_desc">Vielen Dank für die Anerkennung meiner Arbeit durch den Kauf der PRO-Version.</string>
+	<string name="thank_you_title">Vielen Dank für die Spende.</string>
 	<string name="ui_settings">UI Einstellungen</string>
 	<string name="yes">Ja</string>
-</resources>
+<string name="change_language_title_param">Sprache: %s</string>
+    <string name="enable_folder_scanning_confirmation">Möchten Sie wirklich nach Dateien aus ausgewählten Ordnern suchen? Diese Option ist notwendig, wenn Sie den MediaScanner deaktiviert haben. Wenn Sie diese Option aktivieren, wird die Anwendung alle ausgewählten Ordner rekursiv durchsuchen!</string>
+    <string name="ok">OK</string>
+    <string name="rename_service_started_foreground">Umbenennen der Datei(en) wurde im Vordergrund ausgeführt …</string>
+    </resources>
