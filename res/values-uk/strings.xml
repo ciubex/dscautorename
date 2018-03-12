@@ -1,4 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources><string name="about_section">Про програму</string>
     <string name="add">Додати</string>
-    </resources>
+    <string name="app_theme_desc">Встановити тему додатка: світла або темна.</string>
+    <string name="app_theme_title">Тема додатка:</string>
+    <string name="app_theme_title_param">Тема додатка: %s</string>
+    <string name="cancel">Скасувати</string>
+    <string name="delete">Видалити</string>
+    <string name="do_not_show_again">Більше не показувати</string>
+    <string name="donate_title">Пожертвувати</string>
+    <string name="loading_wait">Завантаження…</string>
+    <string name="minutes_unit">хвилин</string>
+    <string name="no">Ні</string>
+    <string name="ok">Гаразд</string>
+    <string name="seconds_unit">секунд</string>
+    <string name="send_report">Надіслати звіт…</string>
+    <string name="thank_you_title">Дякуємо вам за пожертвування.</string>
+    <string name="ui_settings">Налаштування інтерфейсу користувача</string>
+    <string name="yes">Так</string>
+</resources>
