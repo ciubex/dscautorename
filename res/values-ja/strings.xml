@@ -36,9 +36,9 @@
 	<string name="delete">削除</string>
 	<string name="do_not_show_again">次回から表示しない</string>
 	<string name="donate_confirmation">このアプリケーションをご理解いただいた場合、DSC 自動リネーム PRO を購入して寄付をお願いします!\nはいボタンを押すと、Google Play ストアから、DSC 自動リネーム PRO が送られます。\nこのアプリケーションをご利用いただき、ありがとうございます!</string>
-	<string name="donate_desc">このアプリケーションをご理解いただいた場合、寄付をお願いします。</string>
+	<string name="donate_desc">このアプリをご理解いただいた場合、寄付をお願いします。</string>
 	<string name="donate_title">寄付</string>
-	<string name="enable_desc">トリガーが発生した後、ファイルが自動的にリネームされます。</string>
+	<string name="enable_desc">条件に一致した後、ファイルが自動的にリネームされます。</string>
 	<string name="enable_filter_alert_v19">Android KitKat ではいくつかのセキュリティの制約が有効になるため、このアプリケーションは SD カードからファイルの名前を変更することができません。\n可能な修正は http://goo.gl/kJeED3 のリンクを参照してください。\nこのアプリケーションは、内蔵メモリのみファイルの名前を変更できます。\nカメラ アプリケーションで内蔵メモリに保存する設定をしてください。</string>
 	<string name="enable_filter_alert_v21">オプション \"スキャン対象フォルダーのリスト\" を使用して名前を変更するには、\"フォルダー内の名前を変更\" オプションを有効にして、写真やクリップをスキャンするフォルダーを選択してください。</string>
 	<string name="enable_filter_folder_desc">通常、リネーム サービスはお使いのデバイスからすべてのファイルをスキャンします。このオプションを有効にすると、リネーム サービスをフォルダー内に限定することができます。</string>
