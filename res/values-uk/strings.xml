@@ -17,4 +17,18 @@
     <string name="thank_you_title">Дякуємо вам за пожертвування.</string>
     <string name="ui_settings">Налаштування інтерфейсу користувача</string>
     <string name="yes">Так</string>
-</resources>
+<string name="change_language_title_param">Мова: %s</string>
+    <string name="close">Закрити</string>
+    <string name="filter_folder_title">Вибрати теку.</string>
+    <string name="folder_list_title">Список відсканованих тек.</string>
+    <string name="general_settings">Загальні налаштування</string>
+    <string name="help_title">Довідка</string>
+    <string name="import_settings_title">Імпорт параметрів застосунку</string>
+    <string name="move_file_text_selected_folder">Вибрана тека: %s</string>
+    <string name="other_settings">Інші параметри</string>
+    <string name="please_wait">Будь ласка, зачекайте…</string>
+    <string name="service_choice_2">Служба автоматичного перейменування спрацьовує за допомогою сповіщень про події медіа-вмісту, якщо такі є.</string>
+    <string name="service_choice_3">Служба автоматичного перейменування спрацьовує, коли додається файл для вибраних тек. Ви повинні перевірити \"Перейменувати одну теку\" і мати принаймні одну теку під час перегляду за допомогою \"Вибрати теку\".</string>
+    <string name="service_choice_4">Служба автоматичного перейменування завжди працює у фоновому режимі, але файли перейменовуються лише тоді, коли додаток камери надсилає сповіщення про події.</string>
+    <string name="thank_you_desc">Дякую за оцінку моєї роботи, купуючи \"PRO-версію\".</string>
+    </resources>
