@@ -31,4 +31,15 @@
     <string name="service_choice_3">Служба автоматичного перейменування спрацьовує, коли додається файл для вибраних тек. Ви повинні перевірити \"Перейменувати одну теку\" і мати принаймні одну теку під час перегляду за допомогою \"Вибрати теку\".</string>
     <string name="service_choice_4">Служба автоматичного перейменування завжди працює у фоновому режимі, але файли перейменовуються лише тоді, коли додаток камери надсилає сповіщення про події.</string>
     <string name="thank_you_desc">Дякую за оцінку моєї роботи, купуючи \"PRO-версію\".</string>
+    <string name="append_original_name_desc">Зберегти та додати оригінальне ім\'я, наприклад, з DSC_09.JPG на %s_DSC_09.JPG</string>
+    <string name="append_original_name_title">Додати оригінальне ім\'я</string>
+    <string name="build_version_title">Версія збірки</string>
+    <string name="change_language_desc">Перезапустіть програму, щоб застосувати вибрану мову.</string>
+    <string name="change_language_title">Мова: мова застосунку</string>
+    <string name="confirmation_rename_dialog">Сховати вікно підтвердження</string>
+    <string name="copy">Дублювати</string>
+    <string name="define_file_name_pattern_title">Визначення шаблонів імен файлів</string>
+    <string name="donate_desc">Будь ласка, зробіть пожертву, якщо вам подобається цей додаток.</string>
+    <string name="enable_desc">Файли автоматично перейменовуються після виконання умов.</string>
+    <string name="enable_filter_folder_title">Увімкнути перейменування у вибраних теках</string>
     </resources>
