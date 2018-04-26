@@ -74,7 +74,7 @@
 	<string name="file_rename_count_desc">Toccare per azzerare il numero di file rinominati.</string>
 	<string name="file_rename_count_title">Numero di file rinominati: %d</string>
 	<string name="filter_folder_no_folder">[Nessuna cartella]</string>
-	<string name="filter_folder_title">Selezionare una cartella</string>
+	<string name="filter_folder_title">Seleziona una cartella.</string>
 	<string name="folder_list_all_selected">Almeno una cartella deve essere deselezionata!</string>
 	<string name="folder_list_confirmation">Vuoi rimuovere le cartelle selezionate?</string>
 	<string name="folder_list_no_grant_permission_1">Il tuo sistema ha revocato i permessi per la seguente cartella:
