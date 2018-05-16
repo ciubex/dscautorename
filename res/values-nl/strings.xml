@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
     <string name="app_theme_desc">Stel het applicatiethema in: licht of donker.</string>
     <string name="app_theme_title">Applicatiethema:</string>
@@ -27,4 +27,6 @@
     <string name="service_choice_2">De auto-naamwijzigingsdienst wordt getriggerd door media-inhoudgebeurtenissen.</string>
     <string name="service_choice_3">De auto-naamwijzigingsdienst wordt getriggered wanneer een bestand wordt toegevoegd aan geselecteerde mappen. U moet \"Naam wijzigen binnen een map\" aanvinken en minimaal 1 map hebben geselecteerd bij \"Selecteer een map\".</string>
     <string name="ui_settings">Uiterlijk-instellingen</string>
-</resources>
+<string name="about_section">Over</string>
+    <string name="add">Toevoegen</string>
+    </resources>
