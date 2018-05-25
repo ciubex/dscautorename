@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <resources>
 	<string name="about_section">A propos</string>
 	<string name="add">Ajouter</string>
@@ -7,8 +7,8 @@
 		<item>Clair</item>
 		<item>Foncé</item>
 	</string-array>
-	<string name="app_theme_title">Thème de l\'application</string>
-	<string name="app_theme_title_param">Thème de l\'application %s</string>
+	<string name="app_theme_title">"Thème de l\'app : "</string>
+	<string name="app_theme_title_param">Thème de l\'app : %s</string>
 	<string name="append_original_name_desc">Conserver et ajouter le nom original, par exemple, pour DSC_09.JPG, le nouveau nom serait %s_DSC_09.JPG</string>
 	<string name="append_original_name_title">Ajouter le nom original</string>
 	<string name="build_version_title">Version de Build</string>
@@ -67,7 +67,7 @@
 	<string name="license_desc">Détail des licences pour les logiciels open source</string>
 	<string name="license_title">Licences open source</string>
 	<string name="list_info_press">Ajouter ou supprimer des éléments</string>
-	<string name="loading_wait">Chargement&#8230;</string>
+	<string name="loading_wait">Chargement…</string>
 	<string name="manually_file_rename_count_0">Aucun fichier renommé.</string>
 	<string name="manually_file_rename_count_1">Un fichier renommé.</string>
 	<string name="manually_file_rename_count_more">%d fichiers renommés.</string>
@@ -83,9 +83,9 @@
 	<string name="no">Non</string>
 	<string name="no_file_name_pattern">Aucun modèle de nom défini</string>
 	<string name="no_folders">Aucun dossier</string>
-	<string name="obtain_logs">Générer un ficher de log pour rapport&#8230;</string>
+	<string name="obtain_logs">Générer un ficher de log pour rapport…</string>
 	<string name="other_settings">Autres paramètres</string>
-	<string name="please_wait">Attendre merci&#8230;</string>
+	<string name="please_wait">Attendre merci…</string>
 	<string name="remove_rename_shortcut">Supprimer le raccourci du service DSC</string>
 	<string name="remove_rename_shortcut_desc">Supprimer le raccourci du service DSC de votre écran d\'accueil</string>
 	<string name="rename_file_delay_desc">Les fichiers suivants seront renommés après</string>
@@ -110,7 +110,7 @@
 	<string name="send_debug_confirmation">Voulez-vous envoyer un rapport de débug ?\nVotre application courriel par défaut va créer un courriel avec deux fichiers attachés, merci d\'ajouter une description de votre problème si nécessaire.\nMerci !</string>
 	<string name="send_debug_desc">Envoyer un courriel avec les fichiers de débug</string>
 	<string name="send_debug_title">Envoyer rapport de bug</string>
-	<string name="send_report">Envoyer rapport&#8230;</string>
+	<string name="send_report">Envoyer rapport…</string>
 	<string name="service_choice_0">Le service DSC est désactivé</string>
 	<string name="service_choice_1">Le service est activé par les événements de l\'appareil photo.</string>
 	<string name="service_choice_2">Le service de renommage est déclenché par l\'observateur de médias.</string>
