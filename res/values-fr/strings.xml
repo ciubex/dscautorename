@@ -56,7 +56,7 @@
 	<string name="file_name_pattern_list_no_selection">Sélectionnez au moins un modèle de nom à supprimer !</string>
 	<string name="file_name_suffix_format_desc">Ce suffixe est utilisé pour éviter des erreurs dues à des doublons dans les noms de fichiers, par exemple pour des photos prises en mode rafale. Le suffixe est un compteur avec 5 digits par défaut. Exemple:\n%s</string>
 	<string name="file_name_suffix_format_title">Définir un suffixe pour les doublons</string>
-	<string name="filter_folder_title">Sélectionner les dossiers</string>
+	<string name="filter_folder_title">Sélectionner un dossier.</string>
 	<string name="folder_list_confirmation">Voulez-vous supprimer les dossiers sélectionnés ?</string>
 	<string name="folder_list_no_grant_permission_1">Votre système a révoqué les permissions pour le dossier suivant.\n\n%s\n\nVérifier où est défini ce dossier et réessayer de l\'ajouter !</string>
 	<string name="folder_list_no_grant_permission_2">Votre système a révoqué les permissions pour les dossiers suivants.\n\n%s\n\nVérifier où sont définis ces dossiers et réessayer de les ajouter !</string>
@@ -66,7 +66,7 @@
 	<string name="general_settings">Paramètres généraux</string>
 	<string name="license_desc">Détail des licences pour les logiciels open source</string>
 	<string name="license_title">Licences open source</string>
-	<string name="list_info_press">Ajouter ou supprimer des éléments</string>
+	<string name="list_info_press">Ajouter ou supprimer des éléments.</string>
 	<string name="loading_wait">Chargement…</string>
 	<string name="manually_file_rename_count_0">Aucun fichier renommé.</string>
 	<string name="manually_file_rename_count_1">Un fichier renommé.</string>
@@ -125,4 +125,12 @@
 	<string name="thank_you_desc">Merci pour l\'appréciation de mon travail en achetant l\'application pro.</string>
 	<string name="thank_you_title">Merci pour votre donation !</string>
 	<string name="yes">Oui</string>
-</resources>
+<string name="change_language_title_param">Langue: %s</string>
+    <string name="error_rename_file">Le fichier %s ne peut pas être renommé.</string>
+    <string name="error_rename_file_no_read_write">Un fichier ne peut pas être lu ou écrit dans</string>
+    <string name="export_import_settings_group">Exporter ou importer les paramètres de configuration</string>
+    <string name="export_settings_desc">Exporter les paramètres dans un dossier local.</string>
+    <string name="export_settings_error">"Impossible d\'exporter les paraèmtres dans un dossier local.
+\nErreur : %s "</string>
+    <string name="export_settings_success">Paramètres exportés dans le fichier : %s</string>
+    </resources>
